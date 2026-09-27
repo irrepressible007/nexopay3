@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Deploy/update Nexopay on the cPanel server. Run over SSH (cPanel › Terminal):
-#     bash ~/nexopay/deploy/deploy.sh            # production
-#     APP_DIR=~/nexopay-staging bash ~/nexopay-staging/deploy/deploy.sh
+#     bash ~/nexopay3/deploy/deploy.sh
+#     (APP_DIR=/path/to/other/install to deploy a different copy)
 set -euo pipefail
 
-APP_DIR="${APP_DIR:-$HOME/nexopay}"
+APP_DIR="${APP_DIR:-$HOME/nexopay3}"
 APP_NAME="$(basename "$APP_DIR")"
 VENV="${VENV:-$(ls -d "$HOME"/virtualenv/"$APP_NAME"/3.* 2>/dev/null | sort -V | tail -1)}"
 export DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE:-nexopay.settings.production}"

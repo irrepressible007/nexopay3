@@ -23,6 +23,8 @@ DEBUG = env.bool("DEBUG", default=False)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 SITE_URL = env("SITE_URL", default="http://localhost:8000").rstrip("/")
+# Staging only: offer the fake "Test payment" gateway. Never enable on the live site.
+ALLOW_MOCK_PAYMENTS = env.bool("ALLOW_MOCK_PAYMENTS", default=False)
 
 INSTALLED_APPS = [
     # modeltranslation must precede django.contrib.admin
