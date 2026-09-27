@@ -12,3 +12,7 @@ db.sqlite3
 node_modules/
 tailwindcss*.exe
 tailwindcss-*
+
+# Local notes (server outputs etc.)
+outputscpanel.md
+*.local.md
