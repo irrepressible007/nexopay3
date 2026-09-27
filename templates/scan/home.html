@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n nexo %}
+{% block title %}{% translate "Scan tickets" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block content %}
+<div class="container-x max-w-2xl py-10">
+  <h1 class="font-display text-3xl font-extrabold">{% translate "Scan tickets" %}</h1>
+  <p class="mt-2 text-muted">{% translate "Choose the event you're checking guests in for." %}</p>
+  <ul class="mt-8 space-y-3">
+    {% for e in events %}
+    <li>
+      <a href="{% url 'scan:event' e.slug %}" class="card flex items-center gap-4 p-4 transition hover:ring-line-strong">
+        <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-brand text-white">{% icon "scan" "w-6 h-6" %}</span>
+        <div class="min-w-0 flex-1"><p class="truncate font-semibold">{{ e.title }}</p><p class="text-sm text-muted">{{ e.starts_at|date:"D, j M · g:i A" }} · {{ e.venue_name }}</p></div>
+        {% icon "chevron-right" "w-5 h-5 text-subtle" %}
+      </a>
+    </li>
+    {% empty %}
+    <li class="card p-10 text-center text-muted">{% translate "You don't have scanner access for any current event. Ask the organizer to add your email as gate staff." %}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

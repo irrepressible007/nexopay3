@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+  {% for block in sections %}
+    {% with section=block.section %}
+      {% if section.kind == "hero" %}{% include "cms/sections/hero.html" %}
+      {% elif section.kind == "categories" %}{% include "cms/sections/categories.html" %}
+      {% elif section.kind == "promo_banner" %}{% include "cms/sections/promo_banner.html" %}
+      {% elif section.kind == "organizer_cta" %}{% include "cms/sections/organizer_cta.html" %}
+      {% elif section.kind == "partners" %}{% include "cms/sections/partners.html" %}
+      {% elif section.kind == "faq" %}{% include "cms/sections/faq.html" %}
+      {% elif section.kind == "featured" %}{% include "cms/sections/featured.html" %}
+      {% else %}{% include "cms/sections/event_row.html" %}{% endif %}
+    {% endwith %}
+  {% empty %}
+    {% include "cms/sections/hero.html" %}
+  {% endfor %}
+{% endblock %}

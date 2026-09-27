@@ -1,0 +1,9 @@
+<div aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
+  {% for i in "0123456789012345678901234567" %}
+  <span class="absolute top-[-10%] block h-3 w-1.5 rounded-sm"
+        style="left: {% widthratio forloop.counter0 28 100 %}%; background: {% cycle 'var(--color-brand)' 'var(--color-brand-2)' 'var(--color-accent)' '#FBBF24' '#34D399' %};
+               animation: confetti {% cycle '2.6s' '3.1s' '2.2s' '3.4s' %} cubic-bezier(.2,.6,.4,1) {% cycle '0s' '.2s' '.45s' '.1s' '.3s' '.6s' %} both;
+               transform: rotate({% widthratio forloop.counter0 1 37 %}deg)"></span>
+  {% endfor %}
+</div>
+<style>@keyframes confetti{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(520px) rotate(720deg);opacity:0}}</style>

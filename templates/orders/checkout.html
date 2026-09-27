@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load i18n nexo %}
+{% block title %}{% translate "Checkout" %} — {{ event.title }}{% endblock %}
+{% block content %}
+<div class="container-x py-10">
+  <a href="{{ event.get_absolute_url }}" class="inline-flex items-center gap-1.5 text-sm text-muted hover:text-text">{% icon "chevron-left" "w-4 h-4" %}{% translate "Back to event" %}</a>
+  <h1 class="mt-3 font-display text-3xl font-extrabold sm:text-4xl">{% translate "Checkout" %}</h1>
+
+  <form method="post" class="mt-8 grid gap-8 lg:grid-cols-[1fr_400px]" x-data="{ busy: false }" @submit="busy = true">
+    {% csrf_token %}
+    {% for tt_id, qty in quantities.items %}<input type="hidden" name="q_{{ tt_id }}" value="{{ qty }}">{% endfor %}
+
+    <div class="space-y-6">
+      {% if form.non_field_errors %}
+      <div class="flex items-start gap-3 rounded-2xl bg-danger/10 p-4 text-sm text-danger ring-1 ring-danger/30" role="alert">
+        {% icon "alert" "w-5 h-5 shrink-0" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>
+      </div>
+      {% endif %}
+
+      <section class="card p-6">
+        <h2 class="flex items-center gap-3 font-display text-lg font-bold"><span class="grid h-7 w-7 place-items-center rounded-full bg-gradient-brand text-xs text-white">1</span>{% translate "Your details" %}</h2>
+        <div class="mt-5 grid gap-4 sm:grid-cols-2">
+          {% include "partials/field.html" with field=form.buyer_name %}
+          {% include "partials/field.html" with field=form.buyer_phone %}
+          {% include "partials/field.html" with field=form.delivery_email wrap="sm:col-span-2" %}
+        </div>
+      </section>
+
+      {% if fees.total > 0 %}
+      <section class="card p-6">
+        <h2 class="flex items-center gap-3 font-display text-lg font-bold"><span class="grid h-7 w-7 place-items-center rounded-full bg-gradient-brand text-xs text-white">2</span>{% translate "Pay with" %}</h2>
+        {% if methods %}
+        <div class="mt-5 grid gap-3 sm:grid-cols-2">
+          {% for m in methods %}
+          <label class="group relative flex cursor-pointer items-center gap-3 rounded-2xl bg-white/[.03] p-4 ring-1 ring-line-strong transition hover:bg-white/[.06] has-[:checked]:bg-brand/10 has-[:checked]:ring-2 has-[:checked]:ring-brand">
+            <input type="radio" name="payment_method" value="{{ m.provider }}" class="peer sr-only" {% if form.payment_method.value == m.provider or not form.payment_method.value and forloop.first %}checked{% endif %}>
+            {% if m.logo %}<img src="{{ m.logo.url }}" alt="" class="h-9 w-9 rounded-lg bg-white object-contain p-1">
+            {% else %}<span class="grid h-9 w-9 place-items-center rounded-lg text-xs font-extrabold
+              {% if m.provider == 'bkash' %}bg-[#E2136E] text-white{% elif m.provider == 'nagad' %}bg-[#F7941D] text-white{% elif m.provider == 'upay' %}bg-[#4FB4E6] text-white{% elif m.provider == 'pathaopay' %}bg-[#EF4136] text-white{% elif m.provider == 'sslcommerz' %}bg-white text-ink{% else %}bg-white/10 text-text{% endif %}">
+              {% if m.provider == 'sslcommerz' %}{% icon "lock" "w-4 h-4" %}{% else %}{{ m.get_provider_display|first }}{% endif %}</span>{% endif %}
+            <span class="flex-1 font-semibold">{{ m }}</span>
+            <span class="grid h-5 w-5 place-items-center rounded-full ring-1 ring-line-strong text-transparent peer-checked:bg-gradient-brand peer-checked:text-white peer-checked:ring-transparent">{% icon "check" "w-3 h-3" %}</span>
+          </label>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="mt-4 rounded-xl bg-warning/10 p-4 text-sm text-warning">{% translate "Online payments are being set up. Please check back shortly." %}</p>
+        {% endif %}
+      </section>
+      {% endif %}
+
+      <label class="flex cursor-pointer items-start gap-3 text-sm text-muted">
+        <input type="checkbox" name="agree" class="mt-0.5 h-4 w-4 accent-[var(--color-brand)]" {% if form.agree.value %}checked{% endif %} required>
+        <span>{% translate "I agree to the event's terms and Nexopay's" %} <a href="{% url 'cms:page' 'terms' %}" target="_blank" class="text-accent hover:underline">{% translate "terms of service" %}</a> {% translate "and" %} <a href="{% url 'cms:page' 'refund-policy' %}" target="_blank" class="text-accent hover:underline">{% translate "refund policy" %}</a>.</span>
+      </label>
+      {% for e in form.agree.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+    </div>
+
+    <!-- Summary -->
+    <aside class="lg:sticky lg:top-24 lg:self-start">
+      <div class="card overflow-hidden">
+        <div class="relative h-28 overflow-hidden">
+          {% if event.banner_renditions %}<img src="{{ event.banner_renditions|rendition:480 }}" alt="" class="h-full w-full object-cover">{% else %}<div class="h-full bg-gradient-brand"></div>{% endif %}
+          <div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+        </div>
+        <div class="-mt-8 relative px-6">
+          <h2 class="font-display text-xl font-bold leading-tight">{{ event.title }}</h2>
+          <p class="mt-1 text-sm text-muted">{{ event.starts_at|date:"D, j M Y · g:i A" }} · {{ event.venue_name }}</p>
+        </div>
+        <ul class="mt-5 space-y-3 border-t border-line px-6 py-5 text-sm">
+          {% for line in lines %}
+          <li class="flex justify-between gap-3"><span><span class="font-semibold">{{ line.quantity|bn_digits }} ×</span> {{ line.ticket_type.name }}</span><span class="shrink-0 tabular-nums">{{ line.total|taka }}</span></li>
+          {% endfor %}
+        </ul>
+        <dl class="space-y-2 border-t border-line px-6 py-5 text-sm">
+          <div class="flex justify-between text-muted"><dt>{% translate "Subtotal" %}</dt><dd class="tabular-nums">{{ fees.subtotal|taka }}</dd></div>
+          {% if fees.buyer_fee %}<div class="flex justify-between text-muted"><dt>{% translate "Service fee" %}</dt><dd class="tabular-nums">{{ fees.buyer_fee|taka }}</dd></div>{% endif %}
+          <div class="flex items-baseline justify-between pt-2"><dt class="font-semibold">{% translate "Total" %}</dt><dd class="font-display text-2xl font-bold tabular-nums">{% if fees.total == 0 %}{% translate "Free" %}{% else %}{{ fees.total|taka }}{% endif %}</dd></div>
+        </dl>
+        <div class="border-t border-line p-6">
+          <button class="btn-primary btn-lg w-full" :disabled="busy" {% if fees.total > 0 and not methods %}disabled{% endif %}>
+            <span x-show="!busy">{% if fees.total == 0 %}{% translate "Get free tickets" %}{% else %}{% blocktranslate with t=fees.total|taka %}Pay {{ t }}{% endblocktranslate %}{% endif %}</span>
+            <span x-show="busy" x-cloak class="inline-flex items-center gap-2"><svg class="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity=".3" stroke-width="3"/><path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>{% translate "Processing…" %}</span>
+          </button>
+          <p class="mt-3 flex items-center justify-center gap-1.5 text-xs text-subtle">{% icon "shield" "w-3.5 h-3.5" %}{% translate "Tickets are held for you while you pay." %}</p>
+        </div>
+      </div>
+    </aside>
+  </form>
+</div>
+{% endblock %}

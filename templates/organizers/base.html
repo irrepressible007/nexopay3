@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n nexo %}
+{% block content %}
+<div class="border-b border-line bg-surface/40">
+  <div class="container-x flex items-center gap-4 overflow-x-auto py-3 text-sm">
+    <span class="flex shrink-0 items-center gap-2 font-semibold">
+      {% if request.organizer.logo %}<img src="{{ request.organizer.logo.url }}" alt="" class="h-7 w-7 rounded-lg object-cover">{% else %}<span class="grid h-7 w-7 place-items-center rounded-lg bg-gradient-brand text-xs font-bold text-white">{{ request.organizer.name|slice:":1" }}</span>{% endif %}
+      {{ request.organizer.name }}
+    </span>
+    <span class="h-5 w-px shrink-0 bg-line"></span>
+    {% url 'organizers:dashboard' as d %}{% url 'organizers:event_new' as n %}{% url 'scan:home' as s %}
+    <a href="{{ d }}" class="shrink-0 rounded-full px-3 py-1.5 {% if request.path == d %}bg-white/10 text-text{% else %}text-muted hover:text-text{% endif %}">{% translate "Dashboard" %}</a>
+    <a href="{{ n }}" class="shrink-0 rounded-full px-3 py-1.5 {% if request.path == n %}bg-white/10 text-text{% else %}text-muted hover:text-text{% endif %}">{% translate "New event" %}</a>
+    <a href="{{ s }}" class="shrink-0 rounded-full px-3 py-1.5 text-muted hover:text-text">{% translate "Scanner" %}</a>
+  </div>
+</div>
+<div class="container-x py-8">{% block org_content %}{% endblock %}</div>
+{% endblock %}

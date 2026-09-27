@@ -1,0 +1,35 @@
+{% load i18n nexo %}
+<div id="nav-user" class="flex items-center gap-1.5">
+{% if user.is_authenticated %}
+  <a href="{% url 'accounts:tickets' %}" class="hidden sm:inline-flex btn-ghost !py-2">{% icon "ticket" "w-4 h-4" %}{% translate "My tickets" %}</a>
+  <div class="relative" x-data="{ m: false }" @click.outside="m = false" @keydown.escape="m = false">
+    <button type="button" @click="m = !m" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-brand text-sm font-bold text-white" aria-label="{% translate 'Account' %}" :aria-expanded="m">
+      {{ user.get_short_name|slice:":1"|upper }}
+    </button>
+    <div x-show="m" x-cloak x-transition.origin.top.right class="absolute right-0 mt-2 w-60 card p-2 shadow-2xl">
+      <div class="px-3 py-2 text-sm"><div class="font-semibold text-text truncate">{{ user.get_full_name }}</div><div class="text-subtle truncate">{{ user.email }}</div></div>
+      <div class="my-1 h-px bg-line"></div>
+      <a href="{% url 'accounts:tickets' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "ticket" "w-4 h-4" %}{% translate "My tickets" %}</a>
+      <a href="{% url 'accounts:orders' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "calendar" "w-4 h-4" %}{% translate "Orders" %}</a>
+      <a href="{% url 'accounts:profile' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "user" "w-4 h-4" %}{% translate "Profile" %}</a>
+      {% if user.organizer %}
+      <a href="{% url 'organizers:dashboard' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "chart" "w-4 h-4" %}{% translate "Organizer dashboard" %}</a>
+      {% endif %}
+      {% if user.scanner_access.exists %}
+      <a href="{% url 'scan:home' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "scan" "w-4 h-4" %}{% translate "Scan tickets" %}</a>
+      {% endif %}
+      {% if user.is_staff %}
+      <a href="/{{ ADMIN_URL|default:'control-room/' }}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "shield" "w-4 h-4" %}{% translate "Admin" %}</a>
+      {% endif %}
+      <div class="my-1 h-px bg-line"></div>
+      <form method="post" action="{% url 'account_logout' %}">{% csrf_token %}
+        <button class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-danger hover:bg-white/5">{% icon "logout" "w-4 h-4" %}{% translate "Log out" %}</button>
+      </form>
+    </div>
+  </div>
+{% else %}
+  <a href="{% url 'account_login' %}?next={{ request.headers.HX_Current_URL|default:request.get_full_path|urlencode }}" class="hidden sm:inline-flex text-sm font-semibold text-muted hover:text-text px-3 py-2">{% translate "Log in" %}</a>
+  <a href="{% url 'account_signup' %}" class="btn-primary !py-2">{% translate "Sign up" %}</a>
+{% endif %}
+</div>
+{% if oob %}<div id="toasts" hx-swap-oob="innerHTML">{% include "partials/messages.html" %}</div>{% endif %}

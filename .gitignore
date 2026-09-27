@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+db.sqlite3
+/media/
+/private_media/
+/staticfiles/
+/.cache/
+/logs/
+.pytest_cache/
+node_modules/
+tailwindcss*.exe
+tailwindcss-*

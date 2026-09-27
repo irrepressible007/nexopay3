@@ -1,0 +1,16 @@
+{% load i18n nexo %}
+<section class="container-x mt-16 sm:mt-20">
+  <a href="{{ section.link_url|default:'#' }}" class="group relative block overflow-hidden rounded-3xl ring-1 ring-line">
+    {% if section.image %}
+      <img src="{{ section.image.url }}" alt="{{ section.title }}" loading="lazy" class="aspect-[21/9] w-full object-cover transition duration-700 group-hover:scale-[1.03] sm:aspect-[32/9]">
+      <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent"></div>
+    {% else %}
+      <div class="aspect-[21/9] w-full bg-gradient-brand sm:aspect-[32/9]"></div>
+    {% endif %}
+    <div class="absolute inset-0 flex flex-col justify-center p-6 sm:p-12">
+      {% if section.title %}<h2 class="max-w-lg font-display text-2xl font-bold sm:text-4xl">{{ section.title }}</h2>{% endif %}
+      {% if section.subtitle %}<p class="mt-2 max-w-md text-white/80">{{ section.subtitle }}</p>{% endif %}
+      {% if section.cta_label %}<span class="mt-5 inline-flex w-fit items-center gap-2 btn-light">{{ section.cta_label }}{% icon "arrow-right" "w-4 h-4" %}</span>{% endif %}
+    </div>
+  </a>
+</section>

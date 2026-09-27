@@ -1,0 +1,118 @@
+{% extends "organizers/base.html" %}
+{% load i18n nexo %}
+{% block title %}{{ event.title }} — {% translate "Dashboard" %}{% endblock %}
+{% block org_content %}
+<div class="flex flex-wrap items-start justify-between gap-4">
+  <div class="min-w-0">
+    <a href="{% url 'organizers:dashboard' %}" class="inline-flex items-center gap-1.5 text-sm text-muted hover:text-text">{% icon "chevron-left" "w-4 h-4" %}{% translate "All events" %}</a>
+    <h1 class="mt-2 font-display text-3xl font-extrabold">{{ event.title }}</h1>
+    <p class="mt-1 text-muted">{{ event.starts_at|date:"l, j F Y · g:i A" }} · {{ event.venue_name }} · <span class="font-semibold text-text">{{ event.get_status_display }}</span></p>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <a href="{{ event.get_absolute_url }}" target="_blank" class="btn-ghost">{% icon "external" "w-4 h-4" %}{% translate "View page" %}</a>
+    {% if event.status != "ended" and event.status != "cancelled" %}<a href="{% url 'organizers:event_edit' event.slug %}" class="btn-ghost">{% icon "edit" "w-4 h-4" %}{% translate "Edit" %}</a>{% endif %}
+    <a href="{% url 'scan:event' event.slug %}" class="btn-primary">{% icon "scan" "w-4 h-4" %}{% translate "Open scanner" %}</a>
+  </div>
+</div>
+
+<div class="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+  <div class="card p-5"><p class="text-xs font-semibold uppercase tracking-widest text-subtle">{% translate "Gross sales" %}</p><p class="mt-2 font-display text-2xl font-bold">{{ totals.gross|default:0|taka }}</p></div>
+  <div class="card p-5"><p class="text-xs font-semibold uppercase tracking-widest text-subtle">{% translate "Your earnings" %}</p><p class="mt-2 font-display text-2xl font-bold text-success">{{ totals.net|default:0|taka }}</p></div>
+  <div class="card p-5"><p class="text-xs font-semibold uppercase tracking-widest text-subtle">{% translate "Tickets" %}</p><p class="mt-2 font-display text-2xl font-bold">{{ checkin.total }}</p></div>
+  <div class="card p-5"><p class="text-xs font-semibold uppercase tracking-widest text-subtle">{% translate "Checked in" %}</p>
+    <p class="mt-2 font-display text-2xl font-bold">{{ checkin.redeemed }}<span class="text-base text-subtle"> / {{ checkin.total }}</span></p>
+    {% if checkin.total %}<div class="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10"><div class="h-full rounded-full bg-success" style="width: {% widthratio checkin.redeemed checkin.total 100 %}%"></div></div>{% endif %}
+  </div>
+</div>
+
+<section class="mt-8 card overflow-hidden">
+  <h2 class="border-b border-line px-6 py-4 font-display text-lg font-bold">{% translate "Sales by ticket type" %}</h2>
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[640px] text-sm">
+      <thead class="text-left text-xs uppercase tracking-wider text-subtle"><tr><th class="px-6 py-3">{% translate "Ticket" %}</th><th class="px-3 py-3 text-right">{% translate "Price" %}</th><th class="px-3 py-3">{% translate "Sold" %}</th><th class="px-3 py-3 text-right">{% translate "Held" %}</th><th class="px-6 py-3 text-right">{% translate "Revenue" %}</th></tr></thead>
+      <tbody class="divide-y divide-line">
+        {% for t in types %}
+        {% with r=revenue|get_item:t.pk %}
+        <tr>
+          <td class="px-6 py-3 font-medium">{{ t.name }}{% if not t.is_available %} <span class="badge bg-white/10 text-subtle">{% translate "Off sale" %}</span>{% endif %}</td>
+          <td class="px-3 py-3 text-right tabular-nums">{{ t.price|taka }}</td>
+          <td class="px-3 py-3"><div class="flex items-center gap-3"><div class="h-1.5 w-28 overflow-hidden rounded-full bg-white/10"><div class="h-full rounded-full bg-gradient-brand" style="width: {% widthratio t.sold_count t.stock 100 %}%"></div></div><span class="tabular-nums">{{ t.sold_count }} / {{ t.stock }}</span></div></td>
+          <td class="px-3 py-3 text-right tabular-nums text-muted">{{ t.held_count }}</td>
+          <td class="px-6 py-3 text-right font-semibold tabular-nums">{{ r.gross|default:0|taka }}</td>
+        </tr>
+        {% endwith %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="mt-8 grid gap-6 lg:grid-cols-[1fr_380px]">
+  <section id="orders" class="card overflow-hidden">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line px-6 py-4">
+      <h2 class="font-display text-lg font-bold">{% translate "Orders" %}</h2>
+      <div class="flex gap-2">
+        <form method="get"><input type="search" name="q" value="{{ query }}" placeholder="{% translate 'Reference, email, phone…' %}" class="input !py-2 !text-sm w-56"></form>
+        <a href="{% url 'organizers:attendees_csv' event.slug %}" class="btn-ghost !py-2">{% icon "download" "w-4 h-4" %}CSV</a>
+      </div>
+    </div>
+    {% if pending_refunds %}<p class="bg-warning/10 px-6 py-2 text-sm text-warning">{% blocktranslate count n=pending_refunds %}{{ n }} refund request awaiting Nexopay review{% plural %}{{ n }} refund requests awaiting Nexopay review{% endblocktranslate %}</p>{% endif %}
+    <ul class="divide-y divide-line text-sm">
+      {% for o in orders %}
+      <li class="px-6 py-3" x-data="{ open: false }">
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="min-w-0 flex-1">
+            <p class="font-medium">{{ o.buyer_name }} <span class="font-mono text-xs text-subtle">{{ o.reference }}</span></p>
+            <p class="truncate text-xs text-muted">{{ o.delivery_email }} · {{ o.buyer_phone }} · {% for i in o.items.all %}{{ i.quantity }}× {{ i.ticket_type.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+          </div>
+          <span class="tabular-nums font-semibold">{{ o.subtotal|taka }}</span>
+          {% if o.status == "paid" or o.status == "partially_refunded" %}
+          <button type="button" @click="open = !open" class="text-xs font-semibold text-danger hover:underline">{% translate "Refund" %}</button>
+          {% else %}<span class="badge bg-white/10 text-subtle">{{ o.get_status_display }}</span>{% endif %}
+        </div>
+        <form x-show="open" x-cloak method="post" action="{% url 'organizers:order_refund' event.slug o.reference %}" class="mt-3 flex gap-2">
+          {% csrf_token %}
+          <input name="reason" required placeholder="{% translate 'Reason for the refund' %}" class="input !py-2 !text-sm">
+          <button class="btn !bg-danger !py-2 text-white">{% if request.organizer.can_issue_refunds %}{% translate "Refund now" %}{% else %}{% translate "Request refund" %}{% endif %}</button>
+        </form>
+      </li>
+      {% empty %}
+      <li class="px-6 py-10 text-center text-muted">{% translate "No orders yet." %}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <div class="space-y-6">
+    <section id="staff" class="card p-6">
+      <h2 class="font-display text-lg font-bold">{% translate "Gate staff" %}</h2>
+      <p class="mt-1 text-sm text-muted">{% translate "People who can scan tickets for this event." %}</p>
+      <ul class="mt-4 space-y-2 text-sm">
+        {% for s in staff %}
+        <li class="flex items-center justify-between gap-2 rounded-xl bg-white/[.03] px-3 py-2">
+          <span class="truncate">{{ s.user.get_full_name }} <span class="text-subtle">{{ s.user.email }}</span></span>
+          <form method="post" action="{% url 'organizers:scanner_remove' event.slug s.pk %}">{% csrf_token %}<button class="text-subtle hover:text-danger" aria-label="{% translate 'Remove' %}">{% icon "x" "w-4 h-4" %}</button></form>
+        </li>
+        {% empty %}<li class="text-subtle">{% translate "Only you can scan right now." %}</li>{% endfor %}
+      </ul>
+      <form method="post" action="{% url 'organizers:scanner_add' event.slug %}" class="mt-4 flex gap-2">
+        {% csrf_token %}
+        <input type="email" name="email" required placeholder="staff@email.com" class="input !py-2 !text-sm">
+        <button class="btn-ghost !py-2">{% translate "Add" %}</button>
+      </form>
+    </section>
+
+    <section class="card overflow-hidden">
+      <h2 class="border-b border-line px-6 py-4 font-display text-lg font-bold">{% translate "Check-in log" %}</h2>
+      <ul class="divide-y divide-line text-sm">
+        {% for s in scans %}
+        <li class="flex items-center gap-3 px-6 py-2.5">
+          <span class="h-2 w-2 shrink-0 rounded-full {% if s.result == 'ok' %}bg-success{% else %}bg-danger{% endif %}"></span>
+          <span class="flex-1 truncate">{{ s.get_result_display }}{% if s.ticket %} · {{ s.ticket.ticket_type.name }}{% endif %}</span>
+          <span class="shrink-0 text-xs text-subtle">{{ s.created_at|date:"g:i:s A" }}</span>
+        </li>
+        {% empty %}<li class="px-6 py-8 text-center text-muted">{% translate "Scans appear here on event day." %}</li>{% endfor %}
+      </ul>
+    </section>
+  </div>
+</div>
+{% endblock %}

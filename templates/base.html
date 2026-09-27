@@ -1,0 +1,52 @@
+{% load static i18n nexo %}<!doctype html>
+{% get_current_language as LANG %}
+<html lang="{{ LANG }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}{{ sitecfg.site_name }} — {{ sitecfg.tagline }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ sitecfg.meta_description|default:sitecfg.tagline }}{% endblock %}">
+  <meta name="theme-color" content="{{ sitecfg.background_color }}">
+  <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+  <link rel="alternate" hreflang="en" href="{{ request.scheme }}://{{ request.get_host }}{% lang_url 'en' %}">
+  <link rel="alternate" hreflang="bn" href="{{ request.scheme }}://{{ request.get_host }}{% lang_url 'bn' %}">
+  {% block og %}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ sitecfg.site_name }}">
+  <meta property="og:title" content="{{ sitecfg.site_name }} — {{ sitecfg.tagline }}">
+  {% if sitecfg.og_image %}<meta property="og:image" content="{{ sitecfg.og_image.url }}">{% endif %}
+  {% endblock %}
+  {% if sitecfg.favicon %}<link rel="icon" href="{{ sitecfg.favicon.url }}">{% else %}<link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">{% endif %}
+  <link rel="preload" href="{% static 'fonts/outfit-latin.woff2' %}" as="font" type="font/woff2" crossorigin>
+  {% if LANG == "bn" %}<link rel="preload" href="{% static 'fonts/hind-bn-400.woff2' %}" as="font" type="font/woff2" crossorigin>{% endif %}
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <style>:root{--brand:{{ sitecfg.primary_color }};--brand-2:{{ sitecfg.secondary_color }};--accent:{{ sitecfg.accent_color }};--bg:{{ sitecfg.background_color }}}</style>
+  <script defer src="{% static 'js/htmx.min.js' %}"></script>
+  <script defer src="{% static 'js/app.js' %}"></script>
+  <script defer src="{% static 'js/alpine.min.js' %}"></script>
+  {% block head %}{% endblock %}
+</head>
+<body class="min-h-dvh flex flex-col {% block body_class %}{% endblock %}" hx-boost="false">
+  {% include "partials/icons.html" %}
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] btn-light">{% translate "Skip to content" %}</a>
+
+  {% if sitecfg.announcement_enabled and sitecfg.announcement_text %}
+  <div class="relative z-40 bg-gradient-brand text-white text-center text-sm font-medium px-4 py-2">
+    {% if sitecfg.announcement_url %}<a href="{{ sitecfg.announcement_url }}" class="inline-flex items-center gap-1.5 hover:underline">{{ sitecfg.announcement_text }} {% icon "arrow-right" "w-4 h-4" %}</a>{% else %}{{ sitecfg.announcement_text }}{% endif %}
+  </div>
+  {% endif %}
+
+  {% include "partials/header.html" %}
+
+  <div id="toasts" class="pointer-events-none fixed inset-x-0 top-20 z-[60] flex flex-col items-center gap-2 px-4">
+    {% if not request.public_cache %}{% include "partials/messages.html" %}{% endif %}
+  </div>
+
+  <main id="main" class="flex-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "partials/footer.html" %}
+  {% block scripts %}{% endblock %}
+</body>
+</html>

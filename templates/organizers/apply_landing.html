@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n nexo %}
+{% block title %}{% translate "Sell tickets on Nexopay" %}{% endblock %}
+{% block content %}
+<section class="relative -mt-16 overflow-hidden noise">
+  <div class="orb -left-24 top-10 h-96 w-96 bg-brand"></div>
+  <div class="orb right-0 top-40 h-80 w-80 bg-accent opacity-30 [animation-delay:-4s]"></div>
+  <div class="container-x relative pb-20 pt-36 text-center">
+    <p class="text-xs font-bold uppercase tracking-[.25em] text-accent">{% translate "For organizers" %}</p>
+    <h1 class="mx-auto mt-4 max-w-3xl font-display text-5xl font-extrabold leading-[1.05] sm:text-7xl">{% translate "Sell out your next event" %} <span class="text-gradient">{% translate "on Nexopay" %}</span></h1>
+    <p class="mx-auto mt-6 max-w-xl text-lg text-muted">{% translate "Flat or multi-segment tickets, local payments, instant QR delivery and gate scanning from any phone." %}</p>
+    <div class="mt-9 flex flex-wrap justify-center gap-3">
+      <a href="{% url 'account_signup' %}?next={% url 'organizers:apply' %}" class="btn-primary btn-lg">{% translate "Create an account to apply" %}{% icon "arrow-right" "w-5 h-5" %}</a>
+      <a href="{% url 'account_login' %}?next={% url 'organizers:apply' %}" class="btn-ghost btn-lg">{% translate "I already have an account" %}</a>
+    </div>
+  </div>
+</section>
+<section class="container-x grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="card p-6"><span class="text-brand-2">{% icon "ticket" "w-7 h-7" %}</span><h3 class="mt-4 font-semibold">{% translate "Any ticket structure" %}</h3><p class="mt-1.5 text-sm text-muted">{% translate "One price, or entry + per-activity combos + an all-access bundle." %}</p></div>
+  <div class="card p-6"><span class="text-accent">{% icon "phone-device" "w-7 h-7" %}</span><h3 class="mt-4 font-semibold">{% translate "Local payments" %}</h3><p class="mt-1.5 text-sm text-muted">{% translate "bKash, Nagad, Upay, Pathao Pay and cards." %}</p></div>
+  <div class="card p-6"><span class="text-success">{% icon "scan" "w-7 h-7" %}</span><h3 class="mt-4 font-semibold">{% translate "Scan at the gate" %}</h3><p class="mt-1.5 text-sm text-muted">{% translate "Any phone becomes a scanner. Screenshots can't get in twice." %}</p></div>
+  <div class="card p-6"><span class="text-warning">{% icon "chart" "w-7 h-7" %}</span><h3 class="mt-4 font-semibold">{% translate "Live dashboard" %}</h3><p class="mt-1.5 text-sm text-muted">{% translate "Sales, revenue and check-ins in real time. Export attendees anytime." %}</p></div>
+</section>
+{% endblock %}

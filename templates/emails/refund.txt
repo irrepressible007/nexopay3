@@ -1,0 +1,11 @@
+{% load i18n nexo %}{% blocktranslate with name=order.buyer_name %}Hi {{ name }},{% endblocktranslate %}
+
+{% blocktranslate with amount=refund.amount|taka event=order.event.title %}We've refunded {{ amount }} for your order for {{ event }}.{% endblocktranslate %}
+
+{% translate "Order" %}: {{ order.reference }}
+{% translate "Reason" %}: {{ refund.reason }}
+
+{% translate "Depending on your payment method, it can take a few working days for the money to appear in your account. The refunded tickets can no longer be used." %}
+
+{% translate "Questions? Reply to this email or contact us:" %} {{ site_url }}/contact/
+— Nexopay

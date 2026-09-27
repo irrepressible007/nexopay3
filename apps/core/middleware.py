@@ -1,0 +1,27 @@
+from django.conf import settings
+from django.shortcuts import render
+
+from apps.cms.models import SiteSettings
+
+# Payment callbacks must keep working during maintenance so no payment is lost.
+ALWAYS_OPEN = ("/static/", "/media/", "/payments/", "/i18n/", "/accounts/login/")
+
+
+class MaintenanceModeMiddleware:
+    """Serve a 503 page to non-staff visitors while SiteSettings.maintenance_mode is on."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        path = request.path_info
+        if (
+            SiteSettings.load().maintenance_mode
+            and not path.startswith(ALWAYS_OPEN)
+            and settings.ADMIN_URL not in path
+            and not (request.user.is_authenticated and request.user.is_staff)
+        ):
+            response = render(request, "cms/maintenance.html", status=503)
+            response["Retry-After"] = "600"
+            return response
+        return self.get_response(request)

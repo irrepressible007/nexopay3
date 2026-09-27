@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load i18n nexo %}
+{% block title %}{% translate "Contact us" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block content %}
+<div class="container-x py-14">
+  <div class="grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
+    <div>
+      <h1 class="font-display text-4xl font-extrabold sm:text-5xl">{% translate "How can we" %} <span class="text-gradient">{% translate "help?" %}</span></h1>
+      <p class="mt-4 text-muted">{% translate "Pick a topic so your message reaches the right team straight away." %}</p>
+      <ul class="mt-8 space-y-3 text-sm">
+        {% if sitecfg.contact_email %}<li class="flex items-center gap-3"><span class="grid h-10 w-10 place-items-center rounded-xl bg-white/5 text-brand-2 ring-1 ring-line">{% icon "mail" "w-4 h-4" %}</span>{{ sitecfg.contact_email }}</li>{% endif %}
+        {% if sitecfg.contact_phone %}<li class="flex items-center gap-3"><span class="grid h-10 w-10 place-items-center rounded-xl bg-white/5 text-accent ring-1 ring-line">{% icon "phone" "w-4 h-4" %}</span>{{ sitecfg.contact_phone }}</li>{% endif %}
+      </ul>
+      <a href="{% url 'cms:faq' %}" class="btn-ghost mt-8">{% translate "Read the FAQ" %}</a>
+    </div>
+    <form method="post" class="card space-y-4 p-6 sm:p-8">
+      {% csrf_token %}
+      {{ form.website }}
+      {% include "partials/field.html" with field=form.reason %}
+      <div class="grid gap-4 sm:grid-cols-2">
+        {% include "partials/field.html" with field=form.name %}
+        {% include "partials/field.html" with field=form.email %}
+        {% include "partials/field.html" with field=form.phone %}
+        {% include "partials/field.html" with field=form.order_reference %}
+      </div>
+      {% include "partials/field.html" with field=form.message %}
+      <button class="btn-primary btn-lg w-full sm:w-auto">{% translate "Send message" %}{% icon "arrow-right" "w-5 h-5" %}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

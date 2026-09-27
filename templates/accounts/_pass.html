@@ -1,0 +1,40 @@
+{% load i18n nexo %}
+<div class="mx-auto w-full max-w-sm" x-data x-init="nxWakeLock()">
+  <div class="rounded-[2rem] bg-gradient-brand p-[1.5px] shadow-glow">
+    <div class="overflow-hidden rounded-[calc(2rem-1.5px)] bg-surface">
+      <div class="relative h-32 overflow-hidden">
+        {% if ticket.event.banner_renditions %}<img src="{{ ticket.event.banner_renditions|rendition:480 }}" alt="" class="h-full w-full object-cover">{% else %}<div class="h-full bg-gradient-brand"></div>{% endif %}
+        <div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+      </div>
+      <div class="-mt-10 relative px-6 text-center">
+        <h1 class="font-display text-xl font-bold leading-tight">{{ ticket.event.title }}</h1>
+        <p class="mt-1 text-sm text-muted">{{ ticket.event.starts_at|date:"D, j M Y · g:i A" }}</p>
+        <p class="text-sm text-muted">{{ ticket.event.venue_name }}</p>
+      </div>
+
+      <div class="relative mx-6 mt-5 rounded-3xl bg-white p-4">
+        <div class="mx-auto aspect-square w-full [&>svg]:h-full [&>svg]:w-full {% if ticket.status != 'valid' %}opacity-15{% endif %}">{{ qr|safe }}</div>
+        {% if ticket.status == "redeemed" %}
+        <div class="absolute inset-0 grid place-items-center">
+          <div class="rotate-[-8deg] rounded-2xl border-4 border-ink/80 px-5 py-2 text-center text-ink">
+            <p class="font-display text-2xl font-extrabold uppercase">{% translate "Checked in" %}</p>
+            <p class="text-xs font-semibold">{{ ticket.redeemed_at|date:"j M · g:i A" }}</p>
+          </div>
+        </div>
+        {% elif ticket.status == "refunded" %}
+        <div class="absolute inset-0 grid place-items-center"><p class="rotate-[-8deg] rounded-2xl border-4 border-danger px-5 py-2 font-display text-2xl font-extrabold uppercase text-danger">{% translate "Refunded" %}</p></div>
+        {% endif %}
+      </div>
+
+      <div class="ticket-notch mt-5 border-t border-dashed border-line-strong px-6 py-5">
+        <div class="grid grid-cols-2 gap-4 text-left text-sm">
+          <div><p class="text-[11px] uppercase tracking-widest text-subtle">{% translate "Ticket" %}</p><p class="font-semibold">{{ ticket.ticket_type.name }}</p></div>
+          <div><p class="text-[11px] uppercase tracking-widest text-subtle">{% translate "Name" %}</p><p class="truncate font-semibold">{{ ticket.holder_name|default:ticket.owner.get_full_name }}</p></div>
+          <div><p class="text-[11px] uppercase tracking-widest text-subtle">{% translate "Code" %}</p><p class="font-mono font-semibold tracking-wider">{{ ticket.code }}</p></div>
+          <div><p class="text-[11px] uppercase tracking-widest text-subtle">{% translate "Order" %}</p><p class="font-mono font-semibold">{{ ticket.order.reference }}</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if ticket.status == "valid" %}<p class="mt-4 text-center text-xs text-subtle">{% translate "Turn your screen brightness up at the gate. Each ticket scans only once." %}</p>{% endif %}
+</div>

@@ -1,0 +1,13 @@
+{% load i18n nexo %}
+<div x-data="richEditor('{{ field.id_for_label }}')" class="overflow-hidden rounded-xl bg-surface-2 ring-1 ring-line-strong focus-within:ring-2 focus-within:ring-brand">
+  <div class="flex flex-wrap gap-1 border-b border-line px-2 py-1.5 text-sm">
+    <button type="button" @click="cmd('bold')" class="rounded-lg px-2.5 py-1 font-bold hover:bg-white/10" title="{% translate 'Bold' %}">B</button>
+    <button type="button" @click="cmd('italic')" class="rounded-lg px-2.5 py-1 italic hover:bg-white/10" title="{% translate 'Italic' %}">I</button>
+    <button type="button" @click="cmd('formatBlock', 'h3')" class="rounded-lg px-2.5 py-1 font-semibold hover:bg-white/10">H</button>
+    <button type="button" @click="cmd('insertUnorderedList')" class="rounded-lg px-2.5 py-1 hover:bg-white/10">• {% translate "List" %}</button>
+    <button type="button" @click="cmd('insertOrderedList')" class="rounded-lg px-2.5 py-1 hover:bg-white/10">1. {% translate "List" %}</button>
+    <button type="button" @click="link()" class="rounded-lg px-2.5 py-1 hover:bg-white/10">{% translate "Link" %}</button>
+  </div>
+  <div x-ref="area" contenteditable="true" class="prose-nx px-4 py-3 text-text outline-none" style="min-height: {{ height|default:'140px' }}" data-placeholder="{{ placeholder }}"></div>
+  {{ field }}
+</div>

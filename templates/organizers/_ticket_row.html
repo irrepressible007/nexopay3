@@ -1,0 +1,25 @@
+{% load i18n nexo %}
+<div data-row class="rounded-2xl bg-white/[.03] p-4 ring-1 ring-line" x-data="{ more: false }">
+  {{ tf.id }}{{ tf.sort_order }}
+  <div class="hidden">{{ tf.DELETE }}</div>
+  {% if tf.non_field_errors %}<p class="field-error mb-2">{{ tf.non_field_errors|join:" " }}</p>{% endif %}
+  <div class="grid gap-3 sm:grid-cols-[1.4fr_1fr_.7fr_.7fr_auto] sm:items-end">
+    <div><label class="label">{{ tf.name_en.label }}</label>{{ tf.name_en }}{% for e in tf.name_en.errors %}<p class="field-error">{{ e }}</p>{% endfor %}</div>
+    <div><label class="label">{{ tf.name_bn.label }}</label>{{ tf.name_bn }}</div>
+    <div><label class="label">{{ tf.price.label }}</label>{{ tf.price }}{% for e in tf.price.errors %}<p class="field-error">{{ e }}</p>{% endfor %}</div>
+    <div><label class="label">{{ tf.stock.label }}</label>{{ tf.stock }}{% for e in tf.stock.errors %}<p class="field-error">{{ e }}</p>{% endfor %}</div>
+    <div class="flex gap-1 pb-1">
+      <button type="button" @click="more = !more" class="grid h-10 w-10 place-items-center rounded-xl ring-1 ring-line hover:bg-white/5" :class="more && 'bg-white/10'" title="{% translate 'More options' %}">{% icon "filter" "w-4 h-4" %}</button>
+      <button type="button" @click="remove($event)" class="grid h-10 w-10 place-items-center rounded-xl text-danger ring-1 ring-line hover:bg-danger/10" title="{% translate 'Remove' %}">{% icon "trash" "w-4 h-4" %}</button>
+    </div>
+  </div>
+  {% if tf.instance.pk and tf.instance.sold_count %}<p class="mt-2 text-xs text-subtle">{% blocktranslate with n=tf.instance.sold_count %}{{ n }} sold{% endblocktranslate %}</p>{% endif %}
+  <div x-show="more" x-transition.opacity {% if not tf.errors %}x-cloak{% endif %} class="mt-4 grid gap-3 border-t border-line pt-4 sm:grid-cols-2">
+    <div><label class="label">{% translate "What's included (English)" %}</label>{{ tf.description_en }}</div>
+    <div><label class="label">{% translate "What's included (Bangla)" %}</label>{{ tf.description_bn }}</div>
+    <label class="flex items-center gap-2 text-sm text-muted">{{ tf.allow_quantity }}{% translate "Buyers may buy more than one" %}</label>
+    <div class="flex items-center gap-2 text-sm text-muted"><span class="shrink-0">{% translate "Max per order" %}</span><div class="w-24">{{ tf.max_per_order }}</div></div>
+    <label class="flex items-center gap-2 text-sm text-muted">{{ tf.is_bundle }}{% translate "Highlight as all-access bundle" %}</label>
+    <label class="flex items-center gap-2 text-sm text-muted">{{ tf.is_available }}{% translate "Available for sale" %}</label>
+  </div>
+</div>

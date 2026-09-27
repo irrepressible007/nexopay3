@@ -1,0 +1,119 @@
+{% load i18n nexo %}
+{% if block.slides %}
+<section class="relative -mt-16 h-[82svh] min-h-[540px] max-h-[860px] overflow-hidden"
+         x-data="slider({{ block.slides|length }}, 6500)" @mouseenter="pause()" @mouseleave="play()"
+         aria-roledescription="carousel">
+  {% for s in block.slides %}
+  <div class="absolute inset-0" x-show="i === {{ forloop.counter0 }}" x-transition:enter="transition duration-1000 ease-out"
+       x-transition:enter-start="opacity-0" x-transition:leave="transition duration-700" x-transition:leave-end="opacity-0"
+       {% if not forloop.first %}x-cloak{% endif %} aria-roledescription="slide">
+    <picture>
+      {% if s.mobile_image %}<source media="(max-width: 640px)" srcset="{{ s.mobile_image.url }}">{% endif %}
+      <img src="{{ s.image_renditions|rendition:1600|default:s.image.url }}" {% if s.image_renditions %}srcset="{{ s.image_renditions|srcset }}" sizes="100vw"{% endif %}
+           alt="" class="h-full w-full object-cover scale-105 animate-[kenburns_14s_ease-out_both]"
+           {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+    </picture>
+    <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/10"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/20 to-transparent"></div>
+    <div class="container-x relative flex h-full flex-col justify-end pb-20 sm:pb-24">
+      <div class="max-w-2xl animate-rise">
+        {% if s.event and s.event.starts_at %}
+        <p class="mb-3 inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-sm font-medium ring-1 ring-white/10">
+          {% icon "calendar" "w-4 h-4 text-brand-2" %}{{ s.event.starts_at|date:"D, j M · g:i A" }}
+        </p>
+        {% endif %}
+        <h1 class="font-display text-4xl font-extrabold leading-[1.05] sm:text-6xl">{{ s.title }}</h1>
+        {% if s.subtitle %}<p class="mt-4 max-w-xl text-lg text-white/80">{{ s.subtitle }}</p>{% endif %}
+        {% if s.link %}
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="{{ s.link }}" class="btn-primary btn-lg">{% icon "ticket" "w-5 h-5" %}{{ s.cta_label|default:_("Get tickets") }}</a>
+          <a href="{% url 'events:catalog' %}" class="btn-ghost btn-lg">{% translate "Explore events" %}</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% if block.slides|length > 1 %}
+  <div class="absolute inset-x-0 bottom-7 z-10">
+    <div class="container-x flex items-center gap-2">
+      {% for s in block.slides %}
+      <button type="button" @click="go({{ forloop.counter0 }})" class="h-1.5 rounded-full transition-all duration-500"
+              :class="i === {{ forloop.counter0 }} ? 'w-10 bg-white' : 'w-4 bg-white/35 hover:bg-white/60'" aria-label="{% blocktranslate with n=forloop.counter %}Slide {{ n }}{% endblocktranslate %}"></button>
+      {% endfor %}
+      <div class="ml-auto hidden gap-2 sm:flex">
+        <button type="button" @click="prev()" class="grid h-10 w-10 place-items-center rounded-full glass ring-1 ring-white/15 hover:bg-white/10" aria-label="{% translate 'Previous' %}">{% icon "chevron-left" "w-5 h-5" %}</button>
+        <button type="button" @click="next()" class="grid h-10 w-10 place-items-center rounded-full glass ring-1 ring-white/15 hover:bg-white/10" aria-label="{% translate 'Next' %}">{% icon "chevron-right" "w-5 h-5" %}</button>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% else %}
+<section class="relative -mt-16 overflow-hidden noise">
+  <div class="orb -left-32 -top-24 h-[28rem] w-[28rem] bg-brand"></div>
+  <div class="orb right-[-10rem] top-10 h-[26rem] w-[26rem] bg-brand-2 [animation-delay:-3s]"></div>
+  <div class="orb bottom-[-12rem] left-1/3 h-[22rem] w-[22rem] bg-accent opacity-25 [animation-delay:-6s]"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_0%,var(--color-ink)_70%)]"></div>
+
+  <div class="container-x relative grid items-center gap-14 pb-20 pt-32 lg:grid-cols-[1.1fr_.9fr] lg:pb-28 lg:pt-40">
+    <div class="animate-rise">
+      <span class="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1.5 text-sm font-medium text-muted ring-1 ring-line-strong">
+        <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-success"></span></span>
+        {% translate "Live events across Bangladesh" %}
+      </span>
+      <h1 class="mt-6 font-display text-5xl font-extrabold leading-[1.02] sm:text-7xl">
+        {% if LANGUAGE_CODE == "bn" %}{{ sitecfg.tagline }}{% else %}{% translate "Tickets to" %} <span class="text-gradient">{% translate "everything" %}</span><br class="hidden sm:block"> {% translate "worth going to." %}{% endif %}
+      </h1>
+      <p class="mt-6 max-w-xl text-lg text-muted">{% translate "Concerts, festivals, competitions, workshops and more. Pay with bKash, Nagad or card, and get an instant QR ticket on your phone." %}</p>
+
+      <form action="{% url 'events:catalog' %}" method="get" class="mt-8 flex max-w-xl items-center gap-2 rounded-full bg-white/[.06] p-1.5 ring-1 ring-line-strong focus-within:ring-brand transition" role="search">
+        <span class="pl-3 text-subtle">{% icon "search" "w-5 h-5" %}</span>
+        <input type="search" name="q" placeholder="{% translate 'Search artists, events or venues' %}" class="min-w-0 flex-1 bg-transparent py-2.5 text-base outline-none placeholder:text-subtle">
+        <button class="btn-primary">{% translate "Search" %}</button>
+      </form>
+
+      <div class="mt-6 flex flex-wrap gap-2">
+        <a href="{% url 'events:catalog' %}?category=concert" class="chip">{% icon "mic" "w-4 h-4" %}{% translate "Concerts" %}</a>
+        <a href="{% url 'events:catalog' %}?category=festivals" class="chip">{% icon "festival" "w-4 h-4" %}{% translate "Festivals" %}</a>
+        <a href="{% url 'events:catalog' %}?category=competitions" class="chip">{% icon "trophy" "w-4 h-4" %}{% translate "Competitions" %}</a>
+        <a href="{% url 'events:catalog' %}?category=workshops" class="chip">{% icon "tools" "w-4 h-4" %}{% translate "Workshops" %}</a>
+        <a href="{% url 'events:catalog' %}?category=stand-up" class="chip">{% icon "smile" "w-4 h-4" %}{% translate "Stand-up" %}</a>
+      </div>
+    </div>
+
+    {% if block.events %}
+    <div class="relative mx-auto hidden h-[480px] w-full max-w-md lg:block" x-data="slider({{ block.events|length }}, 4200)">
+      {% for event in block.events|slice:":5" %}
+      <a href="{{ event.get_absolute_url }}"
+         class="absolute inset-x-6 top-0 block overflow-hidden rounded-3xl bg-surface ring-1 ring-line-strong shadow-2xl transition-all duration-700 ease-out"
+         :style="stackStyle({{ forloop.counter0 }})">
+        <div class="aspect-[4/3] overflow-hidden">
+          {% if event.banner_renditions %}<img src="{{ event.banner_renditions|rendition:960 }}" alt="" class="h-full w-full object-cover" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+          {% else %}<div class="h-full w-full bg-gradient-brand opacity-80"></div>{% endif %}
+        </div>
+        <div class="ticket-notch bg-surface p-5">
+          <p class="text-xs font-semibold uppercase tracking-widest text-brand-2">{{ event.starts_at|date:"D, j M" }}</p>
+          <h3 class="mt-1 line-clamp-1 font-display text-xl font-bold">{{ event.title }}</h3>
+          <div class="mt-3 flex items-center justify-between text-sm">
+            <span class="truncate text-muted">{{ event.venue_name }}</span>
+            <span class="font-semibold">{% if event.min_price == 0 %}{% translate "Free" %}{% elif event.min_price %}{{ event.min_price|taka }}{% endif %}</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="relative mx-auto hidden w-full max-w-sm lg:block animate-float">
+      <div class="rotate-3 rounded-3xl bg-gradient-brand p-[1px] shadow-glow">
+        <div class="ticket-notch rounded-3xl bg-surface p-7">
+          <div class="flex items-center justify-between"><span class="text-xs font-semibold uppercase tracking-widest text-muted">{% translate "Admit one" %}</span>{% icon "ticket" "w-6 h-6 text-brand-2" %}</div>
+          <div class="mt-10 font-display text-3xl font-bold">{% translate "Your next night out" %}</div>
+          <div class="mt-8 grid grid-cols-6 gap-1.5 opacity-80">{% for i in "012345678901234567890123" %}<span class="aspect-square rounded-[3px] {% cycle 'bg-white' 'bg-white/20' 'bg-white' 'bg-white/60' 'bg-white/10' %}"></span>{% endfor %}</div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}

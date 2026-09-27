@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n nexo %}
+{% block title %}{% translate "FAQ" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block content %}
+<div class="container-x max-w-3xl py-14">
+  <h1 class="font-display text-4xl font-extrabold sm:text-5xl">{% translate "Frequently asked questions" %}</h1>
+  <div class="mt-10 divide-y divide-line rounded-2xl bg-surface ring-1 ring-line" x-data="{ open: 1 }">
+    {% for f in faqs %}
+    <div>
+      <button type="button" class="flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-semibold" @click="open = open === {{ forloop.counter }} ? 0 : {{ forloop.counter }}" :aria-expanded="open === {{ forloop.counter }}">
+        {{ f.question }}<span class="shrink-0 text-muted transition" :class="open === {{ forloop.counter }} && 'rotate-180'">{% icon "chevron-down" "w-5 h-5" %}</span>
+      </button>
+      <div x-show="open === {{ forloop.counter }}" x-transition.opacity {% if not forloop.first %}x-cloak{% endif %} class="prose-nx px-6 pb-6">{{ f.answer|safe }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="mt-8 text-center text-muted">{% translate "Still stuck?" %} <a href="{% url 'support:contact' %}" class="font-semibold text-accent hover:underline">{% translate "Contact our team" %}</a></p>
+</div>
+{% endblock %}

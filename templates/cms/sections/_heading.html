@@ -1,0 +1,12 @@
+{% load i18n nexo %}
+<div class="mb-7 flex items-end justify-between gap-4">
+  <div>
+    <h2 class="font-display text-2xl font-bold sm:text-3xl">{{ section.title|default:section.get_kind_display }}</h2>
+    {% if section.subtitle %}<p class="mt-1.5 text-muted">{{ section.subtitle }}</p>{% endif %}
+  </div>
+  {% if see_all %}
+  <a href="{{ see_all }}" class="group hidden shrink-0 items-center gap-1.5 text-sm font-semibold text-muted hover:text-text sm:inline-flex">
+    {% translate "See all" %}<span class="transition group-hover:translate-x-0.5">{% icon "arrow-right" "w-4 h-4" %}</span>
+  </a>
+  {% endif %}
+</div>

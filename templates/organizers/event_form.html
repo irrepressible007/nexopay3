@@ -1,0 +1,118 @@
+{% extends "organizers/base.html" %}
+{% load i18n nexo %}
+{% block title %}{% if event.pk %}{% translate "Edit event" %}{% else %}{% translate "New event" %}{% endif %} — {{ sitecfg.site_name }}{% endblock %}
+{% block org_content %}
+<form method="post" enctype="multipart/form-data" x-data="{ lang: 'en' }" class="space-y-6">
+  {% csrf_token %}
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <a href="{% if event.pk %}{% url 'organizers:event' event.slug %}{% else %}{% url 'organizers:dashboard' %}{% endif %}" class="inline-flex items-center gap-1.5 text-sm text-muted hover:text-text">{% icon "chevron-left" "w-4 h-4" %}{% translate "Back" %}</a>
+      <h1 class="mt-2 font-display text-3xl font-extrabold">{% if event.pk %}{{ event.title }}{% else %}{% translate "Create an event" %}{% endif %}</h1>
+    </div>
+    <div class="flex rounded-full bg-white/5 p-1 ring-1 ring-line text-sm font-semibold">
+      <button type="button" @click="lang = 'en'" class="rounded-full px-4 py-1.5" :class="lang === 'en' ? 'bg-gradient-brand text-white' : 'text-muted'">English</button>
+      <button type="button" @click="lang = 'bn'" class="rounded-full px-4 py-1.5" :class="lang === 'bn' ? 'bg-gradient-brand text-white' : 'text-muted'">বাংলা</button>
+    </div>
+  </div>
+
+  {% if form.errors or formset.non_form_errors %}
+  <div class="rounded-2xl bg-danger/10 p-4 text-sm text-danger ring-1 ring-danger/30" role="alert">
+    {% translate "Please fix the highlighted fields." %}
+    {% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}{% for e in formset.non_form_errors %}<p>{{ e }}</p>{% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="grid gap-6 lg:grid-cols-[1fr_340px]">
+    <div class="space-y-6">
+      <section class="card space-y-4 p-6">
+        <h2 class="font-display text-lg font-bold">{% translate "Basics" %}</h2>
+        <div x-show="lang === 'en'" class="space-y-4">
+          {% include "partials/field.html" with field=form.title_en %}
+          {% include "partials/field.html" with field=form.summary_en %}
+          <div><label class="label">{% translate "Description (English)" %}</label>{% include "organizers/_rich_editor.html" with field=form.description_en height="200px" %}</div>
+        </div>
+        <div x-show="lang === 'bn'" x-cloak class="space-y-4">
+          {% include "partials/field.html" with field=form.title_bn %}
+          {% include "partials/field.html" with field=form.summary_bn %}
+          <div><label class="label">{% translate "Description (Bangla)" %}</label>{% include "organizers/_rich_editor.html" with field=form.description_bn height="200px" %}</div>
+          <p class="text-xs text-subtle">{% translate "Leave Bangla fields empty to show the English text to Bangla visitors." %}</p>
+        </div>
+      </section>
+
+      <section class="card p-6">
+        <h2 class="font-display text-lg font-bold">{{ form.categories.label }}</h2>
+        <p class="mt-1 text-sm text-muted">{{ form.categories.help_text }}</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {% for choice in form.categories %}
+          <label class="cursor-pointer">
+            <input type="checkbox" name="{{ choice.data.name }}" value="{{ choice.data.value }}" class="peer sr-only" {% if choice.data.selected %}checked{% endif %}>
+            <span class="chip peer-checked:chip-active peer-focus-visible:ring-2 peer-focus-visible:ring-accent">{{ choice.choice_label }}</span>
+          </label>
+          {% endfor %}
+        </div>
+        {% for e in form.categories.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+      </section>
+
+      <section class="card p-6" x-data="ticketBuilder('tt')">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="font-display text-lg font-bold">{% translate "Tickets" %}</h2>
+            <p class="mt-1 text-sm text-muted">{% translate "One ticket type for a simple event, or several — each with its own price and stock." %}</p>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" class="btn-ghost !py-2" @click='preset({{ preset|json_script_safe }})'>{% icon "sparkles" "w-4 h-4" %}{% translate "Multi-segment preset" %}</button>
+            <button type="button" class="btn-primary !py-2" @click="add()">{% icon "plus" "w-4 h-4" %}{% translate "Add ticket" %}</button>
+          </div>
+        </div>
+        {{ formset.management_form }}
+        <div x-ref="rows" class="mt-5 space-y-3">
+          {% for tf in formset %}{% include "organizers/_ticket_row.html" %}{% endfor %}
+        </div>
+        <template x-ref="empty">{% with tf=formset.empty_form %}{% include "organizers/_ticket_row.html" %}{% endwith %}</template>
+        <p class="mt-4 text-sm text-subtle" x-show="visible === 0" {% if formset.forms %}x-cloak{% endif %}>{% translate "No tickets yet — add one or start from the multi-segment preset." %}</p>
+      </section>
+
+      <section class="card p-6">
+        <h2 class="font-display text-lg font-bold">{% translate "Event terms & conditions" %}</h2>
+        <p class="mt-1 text-sm text-muted">{% translate "Shown on your event page, on top of Nexopay's platform terms." %}</p>
+        <div class="mt-4" x-show="lang === 'en'">{% include "organizers/_rich_editor.html" with field=form.terms_and_conditions_en %}</div>
+        <div class="mt-4" x-show="lang === 'bn'" x-cloak>{% include "organizers/_rich_editor.html" with field=form.terms_and_conditions_bn %}</div>
+      </section>
+    </div>
+
+    <aside class="space-y-6">
+      <section class="card space-y-4 p-6">
+        <h2 class="font-display text-lg font-bold">{% translate "When" %}</h2>
+        {% include "partials/field.html" with field=form.starts_at %}
+        {% include "partials/field.html" with field=form.ends_at %}
+        {% include "partials/field.html" with field=form.sales_start_at %}
+        {% include "partials/field.html" with field=form.sales_end_at %}
+      </section>
+      <section class="card space-y-4 p-6">
+        <h2 class="font-display text-lg font-bold">{% translate "Where" %}</h2>
+        <div x-show="lang === 'en'">{% include "partials/field.html" with field=form.venue_name_en %}</div>
+        <div x-show="lang === 'bn'" x-cloak>{% include "partials/field.html" with field=form.venue_name_bn %}</div>
+        {% include "partials/field.html" with field=form.venue_address %}
+        {% include "partials/field.html" with field=form.city %}
+        {% include "partials/field.html" with field=form.map_url %}
+        <label class="flex items-center gap-2 text-sm text-muted">{{ form.is_online }}{{ form.is_online.label }}</label>
+      </section>
+      <section class="card space-y-4 p-6">
+        <h2 class="font-display text-lg font-bold">{% translate "Banner" %}</h2>
+        {% if event.banner %}<img src="{{ event.banner_renditions|rendition:480|default:event.banner.url }}" alt="" class="aspect-video w-full rounded-xl object-cover">{% endif %}
+        {% include "partials/field.html" with field=form.banner %}
+        {% include "partials/field.html" with field=form.max_tickets_per_order %}
+      </section>
+      <div class="card sticky top-24 space-y-3 p-6">
+        {% if not event.pk or event.status == "draft" %}
+        <button name="action" value="publish" class="btn-primary btn-lg w-full">{% icon "rocket" "w-5 h-5" %}{% translate "Publish event" %}</button>
+        <button name="action" value="draft" class="btn-ghost w-full">{% translate "Save as draft" %}</button>
+        {% else %}
+        <button name="action" value="save" class="btn-primary btn-lg w-full">{% translate "Save changes" %}</button>
+        {% endif %}
+        {% if event.pk %}<a href="{{ event.get_absolute_url }}" target="_blank" class="btn-ghost w-full">{% icon "external" "w-4 h-4" %}{% translate "Preview" %}</a>{% endif %}
+      </div>
+    </aside>
+  </div>
+</form>
+{% endblock %}

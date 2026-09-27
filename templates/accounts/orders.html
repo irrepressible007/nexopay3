@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n nexo %}
+{% block title %}{% translate "Orders" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block content %}
+<div class="container-x py-10">
+  <h1 class="font-display text-3xl font-extrabold sm:text-4xl">{% translate "Orders" %}</h1>
+  <div class="mt-6">{% include "accounts/_nav.html" %}</div>
+  {% if orders %}
+  <div class="card divide-y divide-line">
+    {% for o in orders %}
+    <a href="{{ o.get_absolute_url }}" class="flex flex-col gap-2 p-5 transition hover:bg-white/[.03] sm:flex-row sm:items-center sm:gap-6">
+      <div class="min-w-0 flex-1">
+        <p class="truncate font-semibold">{{ o.event.title }}</p>
+        <p class="text-sm text-muted"><span class="font-mono">{{ o.reference }}</span> · {{ o.created_at|date:"j M Y" }} · {% for i in o.items.all %}{{ i.quantity }}× {{ i.ticket_type.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+      </div>
+      <div class="flex items-center gap-4">
+        {% if o.status == "paid" %}<span class="badge bg-success/15 text-success">{{ o.get_status_display }}</span>
+        {% elif o.status == "pending_payment" %}<span class="badge bg-warning/15 text-warning">{{ o.get_status_display }}</span>
+        {% else %}<span class="badge bg-white/10 text-muted">{{ o.get_status_display }}</span>{% endif %}
+        <span class="w-24 text-right font-semibold tabular-nums">{% if o.total == 0 %}{% translate "Free" %}{% else %}{{ o.total|taka }}{% endif %}</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="card p-10 text-center text-muted">{% translate "You haven't placed any orders yet." %}</p>
+  {% endif %}
+</div>
+{% endblock %}

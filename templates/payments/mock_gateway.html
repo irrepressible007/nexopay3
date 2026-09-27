@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n nexo %}
+{% block title %}Test payment{% endblock %}
+{% block content %}
+<div class="container-x grid min-h-[60vh] place-items-center py-16">
+  <div class="card w-full max-w-md p-8 text-center">
+    <span class="badge bg-warning/15 text-warning">TEST MODE</span>
+    <h1 class="mt-4 font-display text-2xl font-bold">Mock payment gateway</h1>
+    <p class="mt-2 text-sm text-muted">This page stands in for bKash / Nagad / card while developing. No money moves.</p>
+    <div class="mt-6 rounded-2xl bg-white/5 p-5 text-left text-sm">
+      <div class="flex justify-between"><span class="text-muted">Order</span><span class="font-mono">{{ attempt.order.reference }}</span></div>
+      <div class="mt-1 flex justify-between"><span class="text-muted">Event</span><span class="truncate pl-4">{{ attempt.order.event.title }}</span></div>
+      <div class="mt-1 flex justify-between"><span class="text-muted">Amount</span><span class="font-semibold">{{ attempt.amount|taka }}</span></div>
+    </div>
+    <div class="mt-6 grid gap-3">
+      <a href="{{ success_url }}" class="btn-primary btn-lg">{% icon "check" "w-5 h-5" %}Simulate successful payment</a>
+      <a href="{{ cancel_url }}" class="btn-ghost">Cancel payment</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% load static %}{% if sitecfg.logo %}<img src="{{ sitecfg.logo.url }}" alt="{{ sitecfg.site_name }}" class="h-8 w-auto" width="140" height="32">{% else %}<span class="inline-flex items-center gap-2">
+  <svg viewBox="0 0 32 32" class="h-8 w-8" aria-hidden="true">
+    <defs><linearGradient id="lg-logo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--color-brand)"/><stop offset="1" stop-color="var(--color-brand-2)"/></linearGradient></defs>
+    <path d="M4 9a3 3 0 0 1 3-3h18a3 3 0 0 1 3 3v3.2a3.8 3.8 0 0 0 0 7.6V23a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-3.2a3.8 3.8 0 0 0 0-7.6Z" fill="url(#lg-logo)"/>
+    <path d="M11 21V11l10 10V11" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span class="font-display text-xl font-bold tracking-tight">{{ sitecfg.site_name|lower }}</span>
+</span>{% endif %}

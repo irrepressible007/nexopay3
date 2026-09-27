@@ -1,0 +1,21 @@
+{% load i18n nexo %}
+<section class="container-x mt-20 sm:mt-28">
+  <div class="relative overflow-hidden rounded-[2rem] bg-surface p-8 ring-1 ring-line sm:p-14 noise">
+    <div class="orb -right-20 -top-20 h-80 w-80 bg-brand"></div>
+    <div class="orb -bottom-24 left-10 h-72 w-72 bg-brand-2 [animation-delay:-4s]"></div>
+    <div class="relative grid items-center gap-10 lg:grid-cols-2">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[.2em] text-accent">{% translate "For organizers" %}</p>
+        <h2 class="mt-3 font-display text-3xl font-extrabold sm:text-5xl">{{ section.title|default:_("Hosting an event?") }}</h2>
+        <p class="mt-4 max-w-lg text-lg text-muted">{{ section.subtitle|default:_("Sell tickets with bKash, Nagad and cards, and scan guests in at the gate.") }}</p>
+        <a href="{{ section.link_url|default:'/organizers/apply/' }}" class="btn-primary btn-lg mt-8">{{ section.cta_label|default:_("List your event") }}{% icon "arrow-right" "w-5 h-5" %}</a>
+      </div>
+      <ul class="grid gap-3 sm:grid-cols-2">
+        <li class="rounded-2xl bg-white/[.04] p-5 ring-1 ring-line"><span class="text-brand-2">{% icon "zap" "w-6 h-6" %}</span><p class="mt-3 font-semibold">{% translate "Live in hours" %}</p><p class="mt-1 text-sm text-muted">{% translate "Flat or multi-segment ticket tiers, your own terms, your brand." %}</p></li>
+        <li class="rounded-2xl bg-white/[.04] p-5 ring-1 ring-line"><span class="text-accent">{% icon "phone-device" "w-6 h-6" %}</span><p class="mt-3 font-semibold">{% translate "Local payments" %}</p><p class="mt-1 text-sm text-muted">{% translate "bKash, Nagad, Upay, Pathao Pay and cards." %}</p></li>
+        <li class="rounded-2xl bg-white/[.04] p-5 ring-1 ring-line"><span class="text-success">{% icon "scan" "w-6 h-6" %}</span><p class="mt-3 font-semibold">{% translate "Smooth scanning" %}</p><p class="mt-1 text-sm text-muted">{% translate "Scan QR tickets from any phone. No double entry." %}</p></li>
+        <li class="rounded-2xl bg-white/[.04] p-5 ring-1 ring-line"><span class="text-warning">{% icon "chart" "w-6 h-6" %}</span><p class="mt-3 font-semibold">{% translate "Real-time dashboard" %}</p><p class="mt-1 text-sm text-muted">{% translate "Sales and check-ins as they happen." %}</p></li>
+      </ul>
+    </div>
+  </div>
+</section>

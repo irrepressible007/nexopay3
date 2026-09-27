@@ -1,0 +1,15 @@
+{% load i18n %}{% blocktranslate with name=order.buyer_name %}Hi {{ name }},{% endblocktranslate %}
+
+{% blocktranslate with event=event.title %}Your tickets for {{ event }} are confirmed.{% endblocktranslate %}
+
+{% translate "Order" %}: {{ order.reference }}
+{% translate "Date" %}: {{ event.starts_at|date:"l, j F Y · g:i A" }}
+{% translate "Venue" %}: {{ event.venue_name|default:_("Online") }}
+
+{% for t in tickets %}- {{ t.ticket_type.name }} · {{ t.code }}
+{% endfor %}
+{% translate "Your tickets are attached as a PDF. You can also open them any time in My tickets:" %}
+{{ site_url }}/account/tickets/
+
+{% translate "Show the QR code at the entrance. Each ticket can be scanned only once." %}
+— Nexopay

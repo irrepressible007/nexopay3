@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n nexo %}
+{% block title %}{% translate "Sign up" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block content %}
+<div class="relative overflow-hidden">
+  <div class="orb -left-24 top-10 h-80 w-80 bg-brand"></div>
+  <div class="orb -right-24 bottom-0 h-80 w-80 bg-brand-2 [animation-delay:-4s]"></div>
+  <div class="container-x relative grid min-h-[calc(100dvh-4rem)] place-items-center py-12">
+    <div class="card w-full max-w-md p-7 shadow-2xl sm:p-9 animate-rise">
+      <h1 class="font-display text-3xl font-extrabold">{% translate "Create your account" %}</h1>
+      <p class="mt-2 text-muted">{% translate "One account for all your tickets — always re-downloadable." %}</p>
+      <form method="post" action="{% url 'account_signup' %}" class="mt-7 space-y-4">
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="rounded-xl bg-danger/10 p-3 text-sm text-danger ring-1 ring-danger/30">{% for e in form.non_field_errors %}{{ e }}{% endfor %}</div>{% endif %}
+        {% include "partials/field.html" with field=form.full_name %}
+        {% include "partials/field.html" with field=form.email %}
+        {% include "partials/field.html" with field=form.phone %}
+        {% include "partials/field.html" with field=form.password1 %}
+        {% include "partials/field.html" with field=form.password2 %}
+        {% if redirect_field_value %}<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">{% endif %}
+        <button class="btn-primary btn-lg w-full">{% translate "Sign up" %}</button>
+        <p class="text-center text-xs text-subtle">{% translate "By signing up you agree to our" %} <a href="{% url 'cms:page' 'terms' %}" class="underline">{% translate "terms" %}</a> {% translate "and" %} <a href="{% url 'cms:page' 'privacy' %}" class="underline">{% translate "privacy policy" %}</a>.</p>
+      </form>
+      <p class="mt-6 text-center text-sm text-muted">{% translate "Already have an account?" %} <a href="{{ login_url }}" class="font-semibold text-accent hover:underline">{% translate "Log in" %}</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

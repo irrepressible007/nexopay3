@@ -1,0 +1,11 @@
+{% load i18n %}
+<section class="container-x mt-16 sm:mt-20">
+  {% if section.kind == "upcoming" %}{% url 'events:catalog' as base %}{% with see_all=base|add:"?status=upcoming" %}{% include "cms/sections/_heading.html" %}{% endwith %}
+  {% elif section.kind == "category_spotlight" and section.category %}{% url 'events:catalog' as base %}{% with see_all=base|add:"?category="|add:section.category.slug %}{% include "cms/sections/_heading.html" %}{% endwith %}
+  {% else %}{% url 'events:catalog' as see_all %}{% include "cms/sections/_heading.html" %}{% endif %}
+  <div class="scroll-row -mx-4 px-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+    {% for event in block.events %}
+      {% include "partials/event_card.html" with card_class="w-[72%] sm:w-auto" %}
+    {% endfor %}
+  </div>
+</section>

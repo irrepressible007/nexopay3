@@ -1,0 +1,9 @@
+# cPanel › Cron Jobs. Replace 3.12 with the Python version chosen in Setup Python App.
+# Every minute: release expired holds, open/close events, reconcile payments, send ticket emails.
+* * * * * cd $HOME/nexopay && DJANGO_SETTINGS_MODULE=nexopay.settings.production /usr/bin/flock -n $HOME/.nexopay-cron.lock $HOME/virtualenv/nexopay/3.12/bin/python manage.py nexopay_cron >> $HOME/nexopay/logs/cron.log 2>&1
+
+# 03:15 every night: database backup to Cloudflare R2 (keeps 14 days).
+15 3 * * * cd $HOME/nexopay && DJANGO_SETTINGS_MODULE=nexopay.settings.production $HOME/virtualenv/nexopay/3.12/bin/python manage.py backup_db --keep 14 >> $HOME/nexopay/logs/backup.log 2>&1
+
+# Weekly: prune finished background-task rows.
+30 4 * * 1 cd $HOME/nexopay && DJANGO_SETTINGS_MODULE=nexopay.settings.production $HOME/virtualenv/nexopay/3.12/bin/python manage.py prune_db_task_results >> $HOME/nexopay/logs/cron.log 2>&1

@@ -1,0 +1,2352 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-27 09:52+0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps/accounts/apps.py:8
+msgid "People"
+msgstr "ব্যবহারকারী"
+
+#: apps/accounts/forms.py:13 apps/orders/forms.py:10
+msgid "Full name"
+msgstr "পুরো নাম"
+
+#: apps/accounts/forms.py:14 apps/orders/forms.py:11
+msgid "Mobile number"
+msgstr "মোবাইল নম্বর"
+
+#: apps/accounts/forms.py:14
+msgid "e.g. 01712345678"
+msgstr "যেমন: 01712345678"
+
+#: apps/accounts/forms.py:21
+msgid "An account with this mobile number already exists."
+msgstr "এই মোবাইল নম্বর দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট আছে।"
+
+#: apps/accounts/forms.py:37
+msgid "Language for emails"
+msgstr "ইমেইলের ভাষা"
+
+#: apps/accounts/forms.py:46
+msgid "This mobile number is used by another account."
+msgstr "এই মোবাইল নম্বরটি অন্য একটি অ্যাকাউন্টে ব্যবহৃত হচ্ছে।"
+
+#: apps/accounts/models.py:40
+msgid "email address"
+msgstr "ইমেইল ঠিকানা"
+
+#: apps/accounts/models.py:41
+msgid "full name"
+msgstr "পুরো নাম"
+
+#: apps/accounts/models.py:42
+msgid "mobile number"
+msgstr "মোবাইল নম্বর"
+
+#: apps/accounts/models.py:51
+msgid "user"
+msgstr "ব্যবহারকারী"
+
+#: apps/accounts/models.py:52
+msgid "users"
+msgstr "ব্যবহারকারী"
+
+#: apps/accounts/views.py:99
+msgid "Profile updated."
+msgstr "প্রোফাইল আপডেট হয়েছে।"
+
+#: apps/cms/apps.py:8
+msgid "Website content"
+msgstr "ওয়েবসাইটের কনটেন্ট"
+
+#: apps/cms/models.py:32
+msgid "SVG or PNG, shown on dark backgrounds."
+msgstr "SVG বা PNG, গাঢ় ব্যাকগ্রাউন্ডে দেখানো হয়।"
+
+#: apps/cms/models.py:33
+msgid "Used in emails and PDF tickets."
+msgstr "ইমেইল ও PDF টিকিটে ব্যবহৃত হয়।"
+
+#: apps/cms/models.py:35
+msgid "Default social share image."
+msgstr "সোশ্যাল শেয়ারের ডিফল্ট ছবি।"
+
+#: apps/cms/models.py:63
+msgid "Show a maintenance page to non-staff visitors."
+msgstr "স্টাফ ছাড়া অন্য ভিজিটরদের রক্ষণাবেক্ষণ পেজ দেখান।"
+
+#: apps/cms/models.py:66 apps/cms/models.py:67
+msgid "site settings"
+msgstr "সাইট সেটিংস"
+
+#: apps/cms/models.py:93
+msgid "Hero slider"
+msgstr "হিরো স্লাইডার"
+
+#: apps/cms/models.py:94
+msgid "Featured events carousel"
+msgstr "ফিচার্ড ইভেন্ট ক্যারোসেল"
+
+#: apps/cms/models.py:95
+msgid "Category grid"
+msgstr "ক্যাটাগরি গ্রিড"
+
+#: apps/cms/models.py:96
+msgid "Happening this week"
+msgstr "এই সপ্তাহে"
+
+#: apps/cms/models.py:97 apps/events/models.py:62
+#: templates/events/detail.html:56 templates/partials/event_card.html:21
+#: templates/partials/footer.html:19 templates/partials/header.html:11
+#: templates/partials/header.html:47
+msgid "Coming soon"
+msgstr "শীঘ্রই আসছে"
+
+#: apps/cms/models.py:98
+msgid "Just announced"
+msgstr "নতুন ঘোষণা"
+
+#: apps/cms/models.py:99
+msgid "Category spotlight"
+msgstr "ক্যাটাগরি স্পটলাইট"
+
+#: apps/cms/models.py:100
+msgid "Promo banner"
+msgstr "প্রোমো ব্যানার"
+
+#: apps/cms/models.py:101
+msgid "'List your event' call to action"
+msgstr "'আপনার ইভেন্ট যোগ করুন' আহ্বান"
+
+#: apps/cms/models.py:102
+msgid "Partner logos"
+msgstr "পার্টনার লোগো"
+
+#: apps/cms/models.py:103
+msgid "FAQ teaser"
+msgstr "সাধারণ জিজ্ঞাসা (সংক্ষেপে)"
+
+#: apps/cms/models.py:110
+msgid "Only for 'Category spotlight'."
+msgstr "শুধু 'ক্যাটাগরি স্পটলাইট'-এর জন্য।"
+
+#: apps/cms/models.py:112
+msgid "Only for 'Promo banner'."
+msgstr "শুধু 'প্রোমো ব্যানার'-এর জন্য।"
+
+#: apps/cms/models.py:124
+msgid "homepage section"
+msgstr "হোমপেজ সেকশন"
+
+#: apps/cms/models.py:125
+msgid "homepage sections"
+msgstr "হোমপেজ সেকশন"
+
+#: apps/cms/models.py:140
+msgid "Leave blank to link to the event."
+msgstr "ইভেন্টে লিংক করতে ফাঁকা রাখুন।"
+
+#: apps/cms/models.py:149
+msgid "hero slide"
+msgstr "হিরো স্লাইড"
+
+#: apps/cms/models.py:150
+msgid "hero slides"
+msgstr "হিরো স্লাইড"
+
+#: apps/cms/models.py:213
+msgid "FAQ item"
+msgstr "প্রশ্নোত্তর"
+
+#: apps/cms/models.py:214 templates/cms/faq.html:3
+#: templates/partials/footer.html:32
+msgid "FAQ"
+msgstr "সাধারণ জিজ্ঞাসা"
+
+#: apps/core/utils.py:18
+msgid "Enter a valid Bangladeshi mobile number, e.g. 01712345678."
+msgstr "সঠিক বাংলাদেশি মোবাইল নম্বর দিন, যেমন: 01712345678।"
+
+#: apps/events/apps.py:8 templates/events/catalog.html:3
+#: templates/partials/header.html:9
+msgid "Events"
+msgstr "ইভেন্ট"
+
+#: apps/events/models.py:13
+msgid "Use a hex colour like #A855F7."
+msgstr "#A855F7 এর মতো হেক্স রং ব্যবহার করুন।"
+
+#: apps/events/models.py:19 apps/events/models.py:165
+#: apps/support/models.py:36
+msgid "name"
+msgstr "নাম"
+
+#: apps/events/models.py:22
+msgid "icon"
+msgstr "আইকন"
+
+#: apps/events/models.py:22
+msgid "Icon key from the built-in icon set, e.g. 'music'."
+msgstr "বিল্ট-ইন আইকন সেট থেকে আইকনের নাম, যেমন 'music'।"
+
+#: apps/events/models.py:24
+msgid "accent colour"
+msgstr "অ্যাকসেন্ট রং"
+
+#: apps/events/models.py:30
+msgid "category"
+msgstr "ক্যাটাগরি"
+
+#: apps/events/models.py:31 apps/events/models.py:74
+msgid "categories"
+msgstr "ক্যাটাগরি"
+
+#: apps/events/models.py:61
+msgid "Draft"
+msgstr "খসড়া"
+
+#: apps/events/models.py:63 templates/partials/event_card.html:20
+#: templates/partials/header.html:10 templates/partials/header.html:46
+msgid "On sale"
+msgstr "বিক্রি চলছে"
+
+#: apps/events/models.py:64 templates/events/_ticket_panel.html:46
+#: templates/events/detail.html:53 templates/partials/event_card.html:22
+msgid "Sold out"
+msgstr "বিক্রি শেষ"
+
+#: apps/events/models.py:65 templates/partials/event_card.html:23
+msgid "Ended"
+msgstr "শেষ হয়েছে"
+
+#: apps/events/models.py:66 apps/orders/models.py:28
+#: apps/payments/models.py:48 templates/events/detail.html:55
+#: templates/partials/event_card.html:24
+msgid "Cancelled"
+msgstr "বাতিল"
+
+#: apps/events/models.py:69
+msgid "title"
+msgstr "শিরোনাম"
+
+#: apps/events/models.py:71
+msgid "short summary"
+msgstr "সংক্ষিপ্ত বিবরণ"
+
+#: apps/events/models.py:72
+msgid "description"
+msgstr "বিবরণ"
+
+#: apps/events/models.py:73
+msgid "event terms & conditions"
+msgstr "ইভেন্টের শর্তাবলী"
+
+#: apps/events/models.py:78
+msgid "featured"
+msgstr "ফিচার্ড"
+
+#: apps/events/models.py:78
+msgid "Editorial promotion; independent of status."
+msgstr "সম্পাদকীয় প্রচার; স্ট্যাটাসের উপর নির্ভরশীল নয়।"
+
+#: apps/events/models.py:80
+msgid "Lower shows first."
+msgstr "ছোট সংখ্যা আগে দেখাবে।"
+
+#: apps/events/models.py:82
+msgid "starts at"
+msgstr "শুরু"
+
+#: apps/events/models.py:83
+msgid "ends at"
+msgstr "শেষ"
+
+#: apps/events/models.py:84
+msgid "ticket sales open"
+msgstr "টিকিট বিক্রি শুরু"
+
+#: apps/events/models.py:85
+msgid "ticket sales close"
+msgstr "টিকিট বিক্রি শেষ"
+
+#: apps/events/models.py:87
+msgid "venue"
+msgstr "ভেন্যু"
+
+#: apps/events/models.py:88
+msgid "venue address"
+msgstr "ভেন্যুর ঠিকানা"
+
+#: apps/events/models.py:89
+msgid "city"
+msgstr "শহর"
+
+#: apps/events/models.py:90
+msgid "map link"
+msgstr "ম্যাপ লিংক"
+
+#: apps/events/models.py:91
+msgid "online event"
+msgstr "অনলাইন ইভেন্ট"
+
+#: apps/events/models.py:93
+msgid "banner image"
+msgstr "ব্যানার ছবি"
+
+#: apps/events/models.py:101
+msgid "event"
+msgstr "ইভেন্ট"
+
+#: apps/events/models.py:102 templates/organizers/dashboard.html:17
+msgid "events"
+msgstr "ইভেন্ট"
+
+#: apps/events/models.py:166
+msgid "what's included"
+msgstr "যা যা থাকছে"
+
+#: apps/events/models.py:168
+msgid "price (BDT)"
+msgstr "মূল্য (টাকা)"
+
+#: apps/events/models.py:170
+msgid "total quantity"
+msgstr "মোট সংখ্যা"
+
+#: apps/events/models.py:173
+msgid "available for sale"
+msgstr "বিক্রির জন্য উন্মুক্ত"
+
+#: apps/events/models.py:175
+msgid "all-access bundle"
+msgstr "অল-অ্যাক্সেস বান্ডেল"
+
+#: apps/events/models.py:175
+msgid "Highlight as the all-inclusive tier."
+msgstr "সব-কিছু-সহ টিকিট হিসেবে হাইলাইট করুন।"
+
+#: apps/events/models.py:178
+msgid "allow buying more than one"
+msgstr "একাধিক কেনার অনুমতি"
+
+#: apps/events/models.py:180
+msgid "By default one email/phone can buy this ticket only once."
+msgstr "ডিফল্টভাবে একটি ইমেইল/ফোন দিয়ে এই টিকিট একবারই কেনা যায়।"
+
+#: apps/events/models.py:182
+msgid "max per order"
+msgstr "প্রতি অর্ডারে সর্বোচ্চ"
+
+#: apps/events/models.py:188
+msgid "ticket type"
+msgstr "টিকিটের ধরন"
+
+#: apps/events/models.py:189
+msgid "ticket types"
+msgstr "টিকিটের ধরন"
+
+#: apps/events/views.py:74
+msgid "All"
+msgstr "সব"
+
+#: apps/events/views.py:74
+msgid "Live"
+msgstr "চলমান"
+
+#: apps/events/views.py:74 templates/organizers/dashboard.html:17
+msgid "Upcoming"
+msgstr "আসন্ন"
+
+#: apps/orders/apps.py:8 templates/accounts/_nav.html:5
+#: templates/accounts/orders.html:3 templates/accounts/orders.html:6
+#: templates/organizers/event_detail.html:53
+#: templates/partials/nav_user.html:13
+msgid "Orders"
+msgstr "অর্ডার"
+
+#: apps/orders/forms.py:13
+msgid "Send tickets to"
+msgstr "টিকিট পাঠানো হবে"
+
+#: apps/orders/forms.py:13
+msgid "Tickets also stay in your account, always."
+msgstr "টিকিট সবসময় আপনার অ্যাকাউন্টেও থাকবে।"
+
+#: apps/orders/forms.py:15 templates/orders/checkout.html:31
+msgid "Pay with"
+msgstr "পেমেন্ট মাধ্যম"
+
+#: apps/orders/forms.py:17
+msgid "I agree to the event's terms and Nexopay's terms of service."
+msgstr "আমি ইভেন্টের শর্তাবলী ও নেক্সোপের সেবার শর্তাবলীতে সম্মত।"
+
+#: apps/orders/forms.py:18
+msgid "Please accept the terms to continue."
+msgstr "এগিয়ে যেতে শর্তাবলীতে সম্মতি দিন।"
+
+#: apps/orders/forms.py:34
+msgid "Choose a payment method."
+msgstr "একটি পেমেন্ট মাধ্যম বেছে নিন।"
+
+#: apps/orders/models.py:25
+msgid "Awaiting payment"
+msgstr "পেমেন্টের অপেক্ষায়"
+
+#: apps/orders/models.py:26
+msgid "Paid"
+msgstr "পরিশোধিত"
+
+#: apps/orders/models.py:27
+msgid "Expired"
+msgstr "মেয়াদোত্তীর্ণ"
+
+#: apps/orders/models.py:29 apps/payments/models.py:81
+#: apps/tickets/models.py:31 templates/accounts/_pass.html:25
+msgid "Refunded"
+msgstr "রিফান্ড হয়েছে"
+
+#: apps/orders/models.py:30
+msgid "Partially refunded"
+msgstr "আংশিক রিফান্ড"
+
+#: apps/orders/models.py:41
+msgid "send tickets to"
+msgstr "টিকিট পাঠানো হবে"
+
+#: apps/orders/models.py:56
+msgid "order"
+msgstr "অর্ডার"
+
+#: apps/orders/models.py:57
+msgid "orders"
+msgstr "অর্ডার"
+
+#: apps/orders/services.py:120
+msgid "Choose at least one ticket."
+msgstr "অন্তত একটি টিকিট বেছে নিন।"
+
+#: apps/orders/services.py:124
+msgid "Tickets for this event are not on sale right now."
+msgstr "এই ইভেন্টের টিকিট এখন বিক্রি হচ্ছে না।"
+
+#: apps/orders/services.py:127
+#, python-format
+msgid "You can buy at most %(n)s tickets in one order."
+msgstr "এক অর্ডারে সর্বোচ্চ %(n)sটি টিকিট কেনা যাবে।"
+
+#: apps/orders/services.py:140
+msgid "One of the selected tickets is no longer available."
+msgstr "নির্বাচিত একটি টিকিট আর পাওয়া যাচ্ছে না।"
+
+#: apps/orders/services.py:146
+#, python-format
+msgid "“%(name)s” is not on sale right now."
+msgstr "“%(name)s” এখন বিক্রি হচ্ছে না।"
+
+#: apps/orders/services.py:149
+#, python-format
+msgid "You can buy at most %(n)s of “%(name)s”."
+msgstr "“%(name)s” সর্বোচ্চ %(n)sটি কেনা যাবে।"
+
+#: apps/orders/services.py:153
+#, python-format
+msgid "“%(name)s” is sold out."
+msgstr "“%(name)s” বিক্রি শেষ।"
+
+#: apps/orders/services.py:154
+#, python-format
+msgid "Only %(n)s left of “%(name)s”."
+msgstr "“%(name)s” আর মাত্র %(n)sটি বাকি।"
+
+#: apps/orders/services.py:191
+#, python-format
+msgid ""
+"You already have a ticket for “%(name)s”. Each person can buy it only once."
+msgstr ""
+"“%(name)s” টিকিট আপনার ইতিমধ্যে আছে। প্রত্যেকে এটি একবারই কিনতে পারবেন।"
+
+#: apps/orders/services.py:199
+msgid ""
+"You already have a ticket for this event. Each person can buy it only once."
+msgstr ""
+"এই ইভেন্টের টিকিট আপনার ইতিমধ্যে আছে। প্রত্যেকে এটি একবারই কিনতে পারবেন।"
+
+#: apps/organizers/apps.py:8 templates/partials/footer.html:23
+msgid "Organizers"
+msgstr "আয়োজক"
+
+#: apps/organizers/forms.py:30
+msgid "Short public bio"
+msgstr "সংক্ষিপ্ত পরিচিতি"
+
+#: apps/organizers/forms.py:31
+msgid "Trade license / NID / registration document"
+msgstr "ট্রেড লাইসেন্স / এনআইডি / নিবন্ধন কাগজ"
+
+#: apps/organizers/forms.py:34
+msgid ""
+"What kind of events do you run, how big, how often? Links to past events "
+"help."
+msgstr ""
+"আপনি কী ধরনের ইভেন্ট আয়োজন করেন, কত বড়, কত ঘন ঘন? আগের ইভেন্টের লিংক দিলে "
+"ভালো হয়।"
+
+#: apps/organizers/forms.py:43
+msgid "Please upload a file smaller than 5 MB."
+msgstr "৫ এমবির চেয়ে ছোট ফাইল আপলোড করুন।"
+
+#: apps/organizers/forms.py:50 templates/events/catalog.html:52
+msgid "Categories"
+msgstr "ক্যাটাগরি"
+
+#: apps/organizers/forms.py:50
+msgid "Pick every category that fits — events can have several."
+msgstr ""
+"যেসব ক্যাটাগরি মেলে সবগুলো বাছুন — একটি ইভেন্টের একাধিক ক্যাটাগরি থাকতে "
+"পারে।"
+
+#: apps/organizers/forms.py:70
+msgid "Event title (English)"
+msgstr "ইভেন্টের নাম (ইংরেজি)"
+
+#: apps/organizers/forms.py:70
+msgid "Event title (Bangla)"
+msgstr "ইভেন্টের নাম (বাংলা)"
+
+#: apps/organizers/forms.py:71
+msgid "One-line summary (English)"
+msgstr "এক লাইনের সারাংশ (ইংরেজি)"
+
+#: apps/organizers/forms.py:71
+msgid "One-line summary (Bangla)"
+msgstr "এক লাইনের সারাংশ (বাংলা)"
+
+#: apps/organizers/forms.py:72
+msgid "Venue (English)"
+msgstr "ভেন্যু (ইংরেজি)"
+
+#: apps/organizers/forms.py:72
+msgid "Venue (Bangla)"
+msgstr "ভেন্যু (বাংলা)"
+
+#: apps/organizers/forms.py:73
+msgid "Ticket sales open"
+msgstr "টিকিট বিক্রি শুরু"
+
+#: apps/organizers/forms.py:73
+msgid "Ticket sales close"
+msgstr "টিকিট বিক্রি শেষ"
+
+#: apps/organizers/forms.py:76
+msgid "Leave empty to open sales as soon as you publish."
+msgstr "প্রকাশ করার সাথে সাথে বিক্রি শুরু করতে ফাঁকা রাখুন।"
+
+#: apps/organizers/forms.py:77
+msgid "16:9 works best, at least 1600×900 px."
+msgstr "১৬:৯ অনুপাত সবচেয়ে ভালো, অন্তত ১৬০০×৯০০ পিক্সেল।"
+
+#: apps/organizers/forms.py:90
+msgid "The event must end after it starts."
+msgstr "ইভেন্ট শুরুর পরে শেষ হতে হবে।"
+
+#: apps/organizers/forms.py:93
+msgid "Sales must close after they open."
+msgstr "বিক্রি শুরুর পরে বিক্রি শেষ হতে হবে।"
+
+#: apps/organizers/forms.py:95
+msgid "The event date is in the past."
+msgstr "ইভেন্টের তারিখ অতীতে।"
+
+#: apps/organizers/forms.py:124
+msgid "Ticket name"
+msgstr "টিকিটের নাম"
+
+#: apps/organizers/forms.py:124
+msgid "Name (Bangla)"
+msgstr "নাম (বাংলা)"
+
+#: apps/organizers/forms.py:124
+msgid "Quantity"
+msgstr "সংখ্যা"
+
+#: apps/organizers/forms.py:135
+#, python-format
+msgid "Already %(n)s sold or reserved — quantity can't go lower."
+msgstr "ইতিমধ্যে %(n)sটি বিক্রি বা সংরক্ষিত — সংখ্যা এর কম করা যাবে না।"
+
+#: apps/organizers/forms.py:146
+msgid "Add at least one ticket type."
+msgstr "অন্তত একটি টিকিটের ধরন যোগ করুন।"
+
+#: apps/organizers/forms.py:150
+#, python-format
+msgid ""
+"“%(name)s” has sales and can't be deleted — mark it unavailable instead."
+msgstr ""
+"“%(name)s” বিক্রি হয়েছে, তাই মুছে ফেলা যাবে না — বরং অপ্রাপ্য হিসেবে "
+"চিহ্নিত করুন।"
+
+#: apps/organizers/forms.py:161
+msgid "Staff member's account email"
+msgstr "স্টাফের অ্যাকাউন্টের ইমেইল"
+
+#: apps/organizers/models.py:33
+msgid "Pending review"
+msgstr "পর্যালোচনাধীন"
+
+#: apps/organizers/models.py:34 apps/payments/models.py:80
+msgid "Approved"
+msgstr "অনুমোদিত"
+
+#: apps/organizers/models.py:35 apps/payments/models.py:83
+msgid "Rejected"
+msgstr "প্রত্যাখ্যাত"
+
+#: apps/organizers/models.py:40
+msgid "organizer / brand name"
+msgstr "আয়োজক / ব্র্যান্ডের নাম"
+
+#: apps/organizers/models.py:43
+msgid "about"
+msgstr "পরিচিতি"
+
+#: apps/organizers/models.py:46
+msgid "contact email"
+msgstr "যোগাযোগের ইমেইল"
+
+#: apps/organizers/models.py:47
+msgid "contact phone"
+msgstr "যোগাযোগের ফোন"
+
+#: apps/organizers/models.py:52
+msgid "organization type"
+msgstr "প্রতিষ্ঠানের ধরন"
+
+#: apps/organizers/models.py:53
+msgid "trade license / registration no."
+msgstr "ট্রেড লাইসেন্স / নিবন্ধন নম্বর"
+
+#: apps/organizers/models.py:57
+msgid "tell us about your events"
+msgstr "আপনার ইভেন্ট সম্পর্কে বলুন"
+
+#: apps/organizers/models.py:64
+msgid "Sent to the organizer when rejected."
+msgstr "প্রত্যাখ্যান করলে আয়োজককে পাঠানো হবে।"
+
+#: apps/organizers/models.py:74
+msgid "Allow this organizer to issue refunds without admin approval."
+msgstr "অ্যাডমিন অনুমোদন ছাড়াই এই আয়োজককে রিফান্ড দেওয়ার অনুমতি দিন।"
+
+#: apps/organizers/models.py:78
+msgid "organizer"
+msgstr "আয়োজক"
+
+#: apps/organizers/models.py:79
+msgid "organizers"
+msgstr "আয়োজক"
+
+#: apps/organizers/views.py:79
+msgid "Application received! We'll review it and email you shortly."
+msgstr "আবেদন পেয়েছি! পর্যালোচনা করে শীঘ্রই আপনাকে ইমেইল করব।"
+
+#: apps/organizers/views.py:142
+msgid "Ended or cancelled events can't be edited."
+msgstr "শেষ বা বাতিল ইভেন্ট সম্পাদনা করা যায় না।"
+
+#: apps/organizers/views.py:165
+msgid "Event published!"
+msgstr "ইভেন্ট প্রকাশিত হয়েছে!"
+
+#: apps/organizers/views.py:165
+msgid "Saved."
+msgstr "সংরক্ষিত।"
+
+#: apps/organizers/views.py:244
+msgid "No Nexopay account uses that email. Ask them to sign up first."
+msgstr "এই ইমেইলে কোনো নেক্সোপে অ্যাকাউন্ট নেই। আগে সাইন আপ করতে বলুন।"
+
+#: apps/organizers/views.py:247
+#, python-format
+msgid "%(email)s can now scan tickets for this event."
+msgstr "%(email)s এখন এই ইভেন্টের টিকিট স্ক্যান করতে পারবেন।"
+
+#: apps/organizers/views.py:256
+msgid "Scanner access removed."
+msgstr "স্ক্যানার অ্যাক্সেস সরানো হয়েছে।"
+
+#: apps/organizers/views.py:265
+msgid "Refund requested by the organizer"
+msgstr "আয়োজকের অনুরোধে রিফান্ড"
+
+#: apps/organizers/views.py:275
+#, python-format
+msgid "Refund issued for %(ref)s."
+msgstr "%(ref)s-এর রিফান্ড দেওয়া হয়েছে।"
+
+#: apps/organizers/views.py:277
+msgid "Refund approved — our team will complete it shortly."
+msgstr "রিফান্ড অনুমোদিত — আমাদের টিম শীঘ্রই সম্পন্ন করবে।"
+
+#: apps/organizers/views.py:279
+msgid "Refund requested. Nexopay will review and process it."
+msgstr "রিফান্ডের অনুরোধ করা হয়েছে। নেক্সোপে পর্যালোচনা করে সম্পন্ন করবে।"
+
+#: apps/payments/apps.py:8
+msgid "Payments"
+msgstr "পেমেন্ট"
+
+#: apps/payments/models.py:13
+msgid "Card (Visa / Mastercard)"
+msgstr "কার্ড (ভিসা / মাস্টারকার্ড)"
+
+#: apps/payments/models.py:14
+msgid "Free ticket"
+msgstr "ফ্রি টিকিট"
+
+#: apps/payments/models.py:15
+msgid "Test payment"
+msgstr "টেস্ট পেমেন্ট"
+
+#: apps/payments/models.py:23
+msgid "Use the provider's sandbox/test environment."
+msgstr "প্রোভাইডারের স্যান্ডবক্স/টেস্ট পরিবেশ ব্যবহার করুন।"
+
+#: apps/payments/models.py:29
+msgid "payment method"
+msgstr "পেমেন্ট মাধ্যম"
+
+#: apps/payments/models.py:30
+msgid "payment methods"
+msgstr "পেমেন্ট মাধ্যম"
+
+#: apps/payments/models.py:45
+msgid "Initiated"
+msgstr "শুরু হয়েছে"
+
+#: apps/payments/models.py:46
+msgid "Succeeded"
+msgstr "সফল"
+
+#: apps/payments/models.py:47 apps/payments/models.py:82
+msgid "Failed"
+msgstr "ব্যর্থ"
+
+#: apps/payments/models.py:52
+msgid "Our id sent to the provider."
+msgstr "প্রোভাইডারকে পাঠানো আমাদের আইডি।"
+
+#: apps/payments/models.py:55
+msgid "Provider session/payment id."
+msgstr "প্রোভাইডারের সেশন/পেমেন্ট আইডি।"
+
+#: apps/payments/models.py:79
+msgid "Requested"
+msgstr "অনুরোধ করা হয়েছে"
+
+#: apps/payments/models.py:97
+msgid "Reference of a refund sent manually (e.g. bKash send-money TrxID)."
+msgstr "ম্যানুয়ালি পাঠানো রিফান্ডের রেফারেন্স (যেমন বিকাশ সেন্ড-মানি TrxID)।"
+
+#: apps/payments/models.py:115
+msgid "e.g. Bank transfer, bKash"
+msgstr "যেমন: ব্যাংক ট্রান্সফার, বিকাশ"
+
+#: apps/payments/tasks.py:15
+#, python-format
+msgid "Your refund for %(event)s"
+msgstr "%(event)s-এর রিফান্ড"
+
+#: apps/payments/views.py:20
+msgid "That payment method is not available right now."
+msgstr "এই পেমেন্ট মাধ্যমটি এখন উপলব্ধ নয়।"
+
+#: apps/payments/views.py:29
+msgid ""
+"We could not reach the payment provider. Please try again or choose another "
+"method."
+msgstr ""
+"পেমেন্ট প্রোভাইডারের সাথে যোগাযোগ করা যায়নি। আবার চেষ্টা করুন বা অন্য "
+"মাধ্যম বেছে নিন।"
+
+#: apps/payments/views.py:45
+msgid ""
+"We could not confirm that payment. If money was deducted, please contact "
+"support."
+msgstr "পেমেন্টটি নিশ্চিত করা যায়নি। টাকা কেটে থাকলে সাপোর্টে যোগাযোগ করুন।"
+
+#: apps/payments/views.py:52
+msgid "Payment cancelled. Your tickets are still held for a few minutes."
+msgstr "পেমেন্ট বাতিল হয়েছে। আপনার টিকিট আরও কয়েক মিনিট সংরক্ষিত থাকবে।"
+
+#: apps/payments/views.py:54
+msgid ""
+"The payment did not go through. You can try again or use another method."
+msgstr "পেমেন্ট সম্পন্ন হয়নি। আবার চেষ্টা করুন বা অন্য মাধ্যম ব্যবহার করুন।"
+
+#: apps/support/apps.py:8
+msgid "Support"
+msgstr "সাপোর্ট"
+
+#: apps/support/models.py:7
+msgid "Payment issue"
+msgstr "পেমেন্ট সমস্যা"
+
+#: apps/support/models.py:8
+msgid "Purchased ticket issue"
+msgstr "কেনা টিকিটের সমস্যা"
+
+#: apps/support/models.py:9
+msgid "Account management"
+msgstr "অ্যাকাউন্ট ব্যবস্থাপনা"
+
+#: apps/support/models.py:10
+msgid "List an event / event promotion"
+msgstr "ইভেন্ট যোগ / ইভেন্ট প্রচার"
+
+#: apps/support/models.py:11
+msgid "Technical assistance"
+msgstr "কারিগরি সহায়তা"
+
+#: apps/support/models.py:12
+msgid "Feedback and suggestions"
+msgstr "মতামত ও পরামর্শ"
+
+#: apps/support/models.py:19
+msgid "Inbox that receives this type of message."
+msgstr "যে ইনবক্সে এই ধরনের বার্তা যাবে।"
+
+#: apps/support/models.py:22
+msgid "support route"
+msgstr "সাপোর্ট রুট"
+
+#: apps/support/models.py:23
+msgid "support routes"
+msgstr "সাপোর্ট রুট"
+
+#: apps/support/models.py:31
+msgid "New"
+msgstr "নতুন"
+
+#: apps/support/models.py:32
+msgid "In progress"
+msgstr "চলমান"
+
+#: apps/support/models.py:33
+msgid "Resolved"
+msgstr "সমাধান হয়েছে"
+
+#: apps/support/models.py:35
+msgid "reason"
+msgstr "বিষয়"
+
+#: apps/support/models.py:37
+msgid "email"
+msgstr "ইমেইল"
+
+#: apps/support/models.py:38
+msgid "phone"
+msgstr "ফোন"
+
+#: apps/support/models.py:39
+msgid "order reference"
+msgstr "অর্ডার রেফারেন্স"
+
+#: apps/support/models.py:40
+msgid "message"
+msgstr "বার্তা"
+
+#: apps/support/models.py:51
+msgid "contact message"
+msgstr "যোগাযোগ বার্তা"
+
+#: apps/support/models.py:52
+msgid "contact messages"
+msgstr "যোগাযোগ বার্তা"
+
+#: apps/support/views.py:26
+msgid "Order reference (if any)"
+msgstr "অর্ডার রেফারেন্স (যদি থাকে)"
+
+#: apps/support/views.py:56
+msgid "Thanks! Our team will get back to you soon."
+msgstr "ধন্যবাদ! আমাদের টিম শীঘ্রই আপনার সাথে যোগাযোগ করবে।"
+
+#: apps/tickets/apps.py:8 templates/events/_ticket_panel.html:4
+#: templates/organizers/event_detail.html:21
+#: templates/organizers/event_form.html:59
+msgid "Tickets"
+msgstr "টিকিট"
+
+#: apps/tickets/models.py:29 templates/accounts/tickets.html:32
+msgid "Valid"
+msgstr "বৈধ"
+
+#: apps/tickets/models.py:30 apps/tickets/models.py:99
+#: templates/accounts/_pass.html:20 templates/accounts/tickets.html:31
+#: templates/organizers/dashboard.html:16
+#: templates/organizers/event_detail.html:22
+msgid "Checked in"
+msgstr "প্রবেশ করেছেন"
+
+#: apps/tickets/models.py:49
+msgid "ticket"
+msgstr "টিকিট"
+
+#: apps/tickets/models.py:50
+msgid "tickets"
+msgstr "টিকিট"
+
+#: apps/tickets/models.py:87 apps/tickets/models.py:88
+msgid "scanner access"
+msgstr "স্ক্যানার অ্যাক্সেস"
+
+#: apps/tickets/models.py:100 apps/tickets/scan_views.py:63
+msgid "Already used"
+msgstr "ইতিমধ্যে ব্যবহৃত"
+
+#: apps/tickets/models.py:101
+msgid "Refunded ticket"
+msgstr "রিফান্ডকৃত টিকিট"
+
+#: apps/tickets/models.py:102
+msgid "Different event"
+msgstr "ভিন্ন ইভেন্ট"
+
+#: apps/tickets/models.py:103
+msgid "Invalid code"
+msgstr "অবৈধ কোড"
+
+#: apps/tickets/rendering.py:82
+msgid "Date & time"
+msgstr "তারিখ ও সময়"
+
+#: apps/tickets/rendering.py:83 templates/emails/tickets.txt:7
+#: templates/events/detail.html:85
+msgid "Venue"
+msgstr "ভেন্যু"
+
+#: apps/tickets/rendering.py:83 templates/cms/sections/featured.html:26
+#: templates/emails/tickets.html:18 templates/emails/tickets.txt:7
+#: templates/partials/event_card.html:35
+msgid "Online"
+msgstr "অনলাইন"
+
+#: apps/tickets/rendering.py:84 templates/accounts/_pass.html:31
+#: templates/organizers/event_detail.html:32 templates/tickets/share.html:3
+msgid "Ticket"
+msgstr "টিকিট"
+
+#: apps/tickets/rendering.py:85 templates/accounts/_pass.html:32
+msgid "Name"
+msgstr "নাম"
+
+#: apps/tickets/rendering.py:117
+msgid ""
+"Show this QR code at the entrance. It can be scanned only once — do not "
+"share it."
+msgstr ""
+"প্রবেশপথে এই QR কোড দেখান। এটি একবারই স্ক্যান করা যায় — কারও সাথে শেয়ার "
+"করবেন না।"
+
+#: apps/tickets/rendering.py:122 templates/accounts/_pass.html:34
+#: templates/emails/refund.txt:5 templates/emails/tickets.html:16
+#: templates/emails/tickets.txt:5 templates/orders/detail.html:3
+msgid "Order"
+msgstr "অর্ডার"
+
+#: apps/tickets/scan_views.py:62
+msgid "Welcome in!"
+msgstr "স্বাগতম!"
+
+#: apps/tickets/scan_views.py:64
+msgid "Refunded ticket — not valid"
+msgstr "রিফান্ডকৃত টিকিট — বৈধ নয়"
+
+#: apps/tickets/scan_views.py:65
+msgid "Ticket is for a different event"
+msgstr "টিকিটটি অন্য ইভেন্টের"
+
+#: apps/tickets/scan_views.py:66
+msgid "Not a valid Nexopay ticket"
+msgstr "বৈধ নেক্সোপে টিকিট নয়"
+
+#: apps/tickets/tasks.py:25
+#, python-format
+msgid "Your tickets for %(event)s"
+msgstr "%(event)s-এর টিকিট"
+
+#: nexopay/settings/base.py:137
+msgid "English"
+msgstr "English"
+
+#: nexopay/settings/base.py:137
+msgid "Bangla"
+msgstr "বাংলা"
+
+#: templates/account/login.html:3 templates/account/login.html:30
+#: templates/account/signup.html:24 templates/partials/nav_user.html:31
+msgid "Log in"
+msgstr "লগ ইন"
+
+#: templates/account/login.html:10 templates/organizers/dashboard.html:7
+msgid "Welcome back"
+msgstr "আবার স্বাগতম"
+
+#: templates/account/login.html:11
+msgid "Log in to buy tickets and open your QR passes."
+msgstr "টিকিট কিনতে ও QR পাস খুলতে লগ ইন করুন।"
+
+#: templates/account/login.html:16 templates/accounts/profile.html:11
+#: templates/events/detail.html:118
+msgid "Email"
+msgstr "ইমেইল"
+
+#: templates/account/login.html:21
+msgid "Password"
+msgstr "পাসওয়ার্ড"
+
+#: templates/account/login.html:21
+msgid "Forgot?"
+msgstr "ভুলে গেছেন?"
+
+#: templates/account/login.html:24
+msgid "Hide"
+msgstr "লুকান"
+
+#: templates/account/login.html:24
+msgid "Show"
+msgstr "দেখান"
+
+#: templates/account/login.html:28
+msgid "Keep me logged in"
+msgstr "লগ ইন থাকুন"
+
+#: templates/account/login.html:32
+msgid "New to Nexopay?"
+msgstr "নেক্সোপে-তে নতুন?"
+
+#: templates/account/login.html:32
+msgid "Create an account"
+msgstr "অ্যাকাউন্ট খুলুন"
+
+#: templates/account/signup.html:3 templates/account/signup.html:21
+#: templates/partials/nav_user.html:32
+msgid "Sign up"
+msgstr "সাইন আপ"
+
+#: templates/account/signup.html:10
+msgid "Create your account"
+msgstr "আপনার অ্যাকাউন্ট খুলুন"
+
+#: templates/account/signup.html:11
+msgid "One account for all your tickets — always re-downloadable."
+msgstr ""
+"আপনার সব টিকিটের জন্য একটি অ্যাকাউন্ট — যেকোনো সময় আবার ডাউনলোড করা যাবে।"
+
+#: templates/account/signup.html:22
+msgid "By signing up you agree to our"
+msgstr "সাইন আপ করে আপনি সম্মত হচ্ছেন আমাদের"
+
+#: templates/account/signup.html:22
+msgid "terms"
+msgstr "শর্তাবলী"
+
+#: templates/account/signup.html:22 templates/orders/checkout.html:54
+msgid "and"
+msgstr "ও"
+
+#: templates/account/signup.html:22
+msgid "privacy policy"
+msgstr "গোপনীয়তা নীতিতে"
+
+#: templates/account/signup.html:24
+msgid "Already have an account?"
+msgstr "ইতিমধ্যে অ্যাকাউন্ট আছে?"
+
+#: templates/accounts/_nav.html:2 templates/partials/nav_user.html:6
+msgid "Account"
+msgstr "অ্যাকাউন্ট"
+
+#: templates/accounts/_nav.html:4 templates/accounts/ticket_detail.html:6
+#: templates/accounts/tickets.html:3 templates/accounts/tickets.html:6
+#: templates/partials/header.html:48 templates/partials/nav_user.html:4
+#: templates/partials/nav_user.html:12
+msgid "My tickets"
+msgstr "আমার টিকিট"
+
+#: templates/accounts/_nav.html:6 templates/accounts/profile.html:3
+#: templates/accounts/profile.html:6 templates/partials/nav_user.html:14
+msgid "Profile"
+msgstr "প্রোফাইল"
+
+#: templates/accounts/_pass.html:33
+msgid "Code"
+msgstr "কোড"
+
+#: templates/accounts/_pass.html:39
+msgid ""
+"Turn your screen brightness up at the gate. Each ticket scans only once."
+msgstr ""
+"গেটে স্ক্রিনের উজ্জ্বলতা বাড়িয়ে নিন। প্রতিটি টিকিট একবারই স্ক্যান হয়।"
+
+#: templates/accounts/orders.html:20 templates/cms/sections/featured.html:28
+#: templates/cms/sections/hero.html:100 templates/events/_ticket_panel.html:44
+#: templates/orders/checkout.html:78 templates/orders/detail.html:71
+#: templates/partials/event_card.html:38
+msgid "Free"
+msgstr "ফ্রি"
+
+#: templates/accounts/orders.html:26
+msgid "You haven't placed any orders yet."
+msgstr "আপনি এখনো কোনো অর্ডার করেননি।"
+
+#: templates/accounts/profile.html:15 templates/organizers/event_form.html:111
+msgid "Save changes"
+msgstr "পরিবর্তন সংরক্ষণ করুন"
+
+#: templates/accounts/profile.html:18
+msgid "Security"
+msgstr "নিরাপত্তা"
+
+#: templates/accounts/profile.html:19
+msgid "Change password"
+msgstr "পাসওয়ার্ড পরিবর্তন"
+
+#: templates/accounts/profile.html:20
+msgid "Manage email addresses"
+msgstr "ইমেইল ঠিকানা পরিচালনা"
+
+#: templates/accounts/ticket_detail.html:10
+#, python-format
+msgid "My ticket for %(e)s:"
+msgstr "%(e)s-এর জন্য আমার টিকিট:"
+
+#: templates/accounts/ticket_detail.html:13 templates/events/detail.html:145
+msgid "Link copied"
+msgstr "লিংক কপি হয়েছে"
+
+#: templates/accounts/ticket_detail.html:13
+msgid "Copy ticket link"
+msgstr "টিকিটের লিংক কপি করুন"
+
+#: templates/accounts/ticket_detail.html:16
+msgid ""
+"Anyone with the ticket link can show this QR. Only share it with the person "
+"attending."
+msgstr ""
+"টিকিটের লিংক যার কাছে থাকবে সে-ই এই QR দেখাতে পারবে। শুধু যিনি যাবেন তাঁর "
+"সাথেই শেয়ার করুন।"
+
+#: templates/accounts/tickets.html:7
+msgid "Open a ticket and show its QR code at the entrance."
+msgstr "টিকিট খুলে প্রবেশপথে QR কোড দেখান।"
+
+#: templates/accounts/tickets.html:44
+msgid "No upcoming tickets"
+msgstr "আসন্ন কোনো টিকিট নেই"
+
+#: templates/accounts/tickets.html:45
+msgid "When you buy tickets they'll appear here, ready to scan."
+msgstr "টিকিট কিনলে এখানে দেখাবে, স্ক্যানের জন্য প্রস্তুত।"
+
+#: templates/accounts/tickets.html:46
+msgid "Find events"
+msgstr "ইভেন্ট খুঁজুন"
+
+#: templates/accounts/tickets.html:53
+msgid "Past events"
+msgstr "পুরনো ইভেন্ট"
+
+#: templates/accounts/tickets.html:59
+#, python-format
+msgid "%(n)s ticket"
+msgid_plural "%(n)s tickets"
+msgstr[0] "%(n)sটি টিকিট"
+msgstr[1] "%(n)sটি টিকিট"
+
+#: templates/admin/index.html:3
+msgid "Django site admin"
+msgstr "নেক্সোপে অ্যাডমিন"
+
+#: templates/base.html:31
+msgid "Skip to content"
+msgstr "মূল কনটেন্টে যান"
+
+#: templates/cms/faq.html:6
+msgid "Frequently asked questions"
+msgstr "সাধারণ জিজ্ঞাসা"
+
+#: templates/cms/faq.html:17
+msgid "Still stuck?"
+msgstr "এখনো সমস্যা?"
+
+#: templates/cms/faq.html:17
+msgid "Contact our team"
+msgstr "আমাদের টিমের সাথে যোগাযোগ করুন"
+
+#: templates/cms/maintenance.html:2
+msgid "Back soon"
+msgstr "শীঘ্রই ফিরছি"
+
+#: templates/cms/maintenance.html:4
+msgid "We'll be right back"
+msgstr "আমরা শীঘ্রই ফিরছি"
+
+#: templates/cms/maintenance.html:4
+msgid "Nexopay is getting an upgrade. Please check back in a few minutes."
+msgstr "নেক্সোপে আপগ্রেড হচ্ছে। কয়েক মিনিট পর আবার দেখুন।"
+
+#: templates/cms/sections/_heading.html:9
+msgid "See all"
+msgstr "সব দেখুন"
+
+#: templates/cms/sections/categories.html:12 templates/events/catalog.html:76
+#, python-format
+msgid "%(n)s event"
+msgid_plural "%(n)s events"
+msgstr[0] "%(n)sটি ইভেন্ট"
+msgstr[1] "%(n)sটি ইভেন্ট"
+
+#: templates/cms/sections/faq.html:5
+msgid "Questions, answered"
+msgstr "আপনার প্রশ্নের উত্তর"
+
+#: templates/cms/sections/faq.html:6
+msgid "Can't find what you need?"
+msgstr "যা খুঁজছেন পাচ্ছেন না?"
+
+#: templates/cms/sections/faq.html:6
+msgid "Talk to us"
+msgstr "আমাদের বলুন"
+
+#: templates/cms/sections/featured.html:5
+msgid "Spotlight"
+msgstr "স্পটলাইট"
+
+#: templates/cms/sections/featured.html:6
+msgid "Featured events"
+msgstr "ফিচার্ড ইভেন্ট"
+
+#: templates/cms/sections/featured.html:10 templates/cms/sections/hero.html:45
+#: templates/events/catalog.html:88
+msgid "Previous"
+msgstr "আগের"
+
+#: templates/cms/sections/featured.html:11 templates/cms/sections/hero.html:46
+#: templates/events/catalog.html:90
+msgid "Next"
+msgstr "পরের"
+
+#: templates/cms/sections/featured.html:28
+msgid "Details"
+msgstr "বিস্তারিত"
+
+#: templates/cms/sections/hero.html:29
+msgid "Get tickets"
+msgstr "টিকিট নিন"
+
+#: templates/cms/sections/hero.html:30
+msgid "Explore events"
+msgstr "ইভেন্ট দেখুন"
+
+#: templates/cms/sections/hero.html:42
+#, python-format
+msgid "Slide %(n)s"
+msgstr "স্লাইড %(n)s"
+
+#: templates/cms/sections/hero.html:63
+msgid "Live events across Bangladesh"
+msgstr "সারা বাংলাদেশের লাইভ ইভেন্ট"
+
+#: templates/cms/sections/hero.html:66
+msgid "Tickets to"
+msgstr "যেখানে যাওয়া"
+
+#: templates/cms/sections/hero.html:66
+msgid "everything"
+msgstr "সার্থক"
+
+#: templates/cms/sections/hero.html:66
+msgid "worth going to."
+msgstr "সেখানকার সব টিকিট।"
+
+#: templates/cms/sections/hero.html:68
+msgid ""
+"Concerts, festivals, competitions, workshops and more. Pay with bKash, Nagad"
+" or card, and get an instant QR ticket on your phone."
+msgstr ""
+"কনসার্ট, উৎসব, প্রতিযোগিতা, কর্মশালা আর আরও অনেক কিছু। বিকাশ, নগদ বা কার্ডে "
+"পেমেন্ট করুন, সাথে সাথে ফোনে QR টিকিট পান।"
+
+#: templates/cms/sections/hero.html:72 templates/events/catalog.html:11
+msgid "Search artists, events or venues"
+msgstr "শিল্পী, ইভেন্ট বা ভেন্যু খুঁজুন"
+
+#: templates/cms/sections/hero.html:73
+msgid "Search"
+msgstr "খুঁজুন"
+
+#: templates/cms/sections/hero.html:77
+msgid "Concerts"
+msgstr "কনসার্ট"
+
+#: templates/cms/sections/hero.html:78
+msgid "Festivals"
+msgstr "উৎসব"
+
+#: templates/cms/sections/hero.html:79
+msgid "Competitions"
+msgstr "প্রতিযোগিতা"
+
+#: templates/cms/sections/hero.html:80
+msgid "Workshops"
+msgstr "কর্মশালা"
+
+#: templates/cms/sections/hero.html:81
+msgid "Stand-up"
+msgstr "স্ট্যান্ড-আপ"
+
+#: templates/cms/sections/hero.html:110
+msgid "Admit one"
+msgstr "একজনের প্রবেশ"
+
+#: templates/cms/sections/hero.html:111
+msgid "Your next night out"
+msgstr "আপনার পরের দারুণ সন্ধ্যা"
+
+#: templates/cms/sections/organizer_cta.html:8
+#: templates/organizers/apply_landing.html:9 templates/partials/header.html:12
+#: templates/partials/header.html:49
+msgid "For organizers"
+msgstr "আয়োজকদের জন্য"
+
+#: templates/cms/sections/organizer_cta.html:9
+msgid "Hosting an event?"
+msgstr "ইভেন্ট আয়োজন করছেন?"
+
+#: templates/cms/sections/organizer_cta.html:10
+msgid ""
+"Sell tickets with bKash, Nagad and cards, and scan guests in at the gate."
+msgstr ""
+"বিকাশ, নগদ ও কার্ডে টিকিট বিক্রি করুন, আর গেটে স্ক্যান করে অতিথিদের প্রবেশ "
+"করান।"
+
+#: templates/cms/sections/organizer_cta.html:11
+msgid "List your event"
+msgstr "আপনার ইভেন্ট যোগ করুন"
+
+#: templates/cms/sections/organizer_cta.html:14
+msgid "Live in hours"
+msgstr "কয়েক ঘণ্টায় লাইভ"
+
+#: templates/cms/sections/organizer_cta.html:14
+msgid "Flat or multi-segment ticket tiers, your own terms, your brand."
+msgstr "একক বা মাল্টি-সেগমেন্ট টিকিট, আপনার নিজস্ব শর্ত, আপনার ব্র্যান্ড।"
+
+#: templates/cms/sections/organizer_cta.html:15
+#: templates/organizers/apply_landing.html:20
+msgid "Local payments"
+msgstr "দেশীয় পেমেন্ট"
+
+#: templates/cms/sections/organizer_cta.html:15
+#: templates/organizers/apply_landing.html:20
+msgid "bKash, Nagad, Upay, Pathao Pay and cards."
+msgstr "বিকাশ, নগদ, উপায়, পাঠাও পে ও কার্ড।"
+
+#: templates/cms/sections/organizer_cta.html:16
+msgid "Smooth scanning"
+msgstr "সহজ স্ক্যানিং"
+
+#: templates/cms/sections/organizer_cta.html:16
+msgid "Scan QR tickets from any phone. No double entry."
+msgstr "যেকোনো ফোন দিয়ে QR টিকিট স্ক্যান করুন। দুবার প্রবেশ অসম্ভব।"
+
+#: templates/cms/sections/organizer_cta.html:17
+msgid "Real-time dashboard"
+msgstr "রিয়েল-টাইম ড্যাশবোর্ড"
+
+#: templates/cms/sections/organizer_cta.html:17
+msgid "Sales and check-ins as they happen."
+msgstr "বিক্রি ও প্রবেশ — যখন যা ঘটছে।"
+
+#: templates/emails/refund.txt:1 templates/emails/tickets.txt:1
+#, python-format
+msgid "Hi %(name)s,"
+msgstr "প্রিয় %(name)s,"
+
+#: templates/emails/refund.txt:3
+#, python-format
+msgid "We've refunded %(amount)s for your order for %(event)s."
+msgstr "%(event)s-এর অর্ডারের জন্য আমরা %(amount)s রিফান্ড করেছি।"
+
+#: templates/emails/refund.txt:6
+msgid "Reason"
+msgstr "কারণ"
+
+#: templates/emails/refund.txt:8
+msgid ""
+"Depending on your payment method, it can take a few working days for the "
+"money to appear in your account. The refunded tickets can no longer be used."
+msgstr ""
+"পেমেন্ট মাধ্যমভেদে টাকা আপনার অ্যাকাউন্টে পৌঁছাতে কয়েক কর্মদিবস লাগতে পারে।"
+" রিফান্ডকৃত টিকিট আর ব্যবহার করা যাবে না।"
+
+#: templates/emails/refund.txt:10
+msgid "Questions? Reply to this email or contact us:"
+msgstr "কোনো প্রশ্ন? এই ইমেইলের উত্তর দিন বা যোগাযোগ করুন:"
+
+#: templates/emails/tickets.html:10 templates/orders/detail.html:13
+msgid "You're going!"
+msgstr "আপনি যাচ্ছেন!"
+
+#: templates/emails/tickets.html:14
+#, python-format
+msgid ""
+"Hi %(name)s, your order is confirmed. Your tickets are attached as a PDF."
+msgstr ""
+"প্রিয় %(name)s, আপনার অর্ডার নিশ্চিত হয়েছে। টিকিট PDF হিসেবে সংযুক্ত করা "
+"হলো।"
+
+#: templates/emails/tickets.html:17 templates/events/catalog.html:39
+#: templates/organizers/event_form.html:85
+msgid "When"
+msgstr "কখন"
+
+#: templates/emails/tickets.html:18 templates/organizers/event_form.html:92
+msgid "Where"
+msgstr "কোথায়"
+
+#: templates/emails/tickets.html:20
+msgid "TICKETS"
+msgstr "টিকিট"
+
+#: templates/emails/tickets.html:28
+msgid "Open my tickets"
+msgstr "আমার টিকিট খুলুন"
+
+#: templates/emails/tickets.html:30
+msgid ""
+"Show the QR code at the entrance. Each ticket can be scanned only once — "
+"don't share it."
+msgstr ""
+"প্রবেশপথে QR কোড দেখান। প্রতিটি টিকিট একবারই স্ক্যান করা যায় — শেয়ার করবেন"
+" না।"
+
+#: templates/emails/tickets.txt:3
+#, python-format
+msgid "Your tickets for %(event)s are confirmed."
+msgstr "%(event)s-এর টিকিট নিশ্চিত হয়েছে।"
+
+#: templates/emails/tickets.txt:6
+msgid "Date"
+msgstr "তারিখ"
+
+#: templates/emails/tickets.txt:11
+msgid ""
+"Your tickets are attached as a PDF. You can also open them any time in My "
+"tickets:"
+msgstr "টিকিট PDF হিসেবে সংযুক্ত। 'আমার টিকিট'-এ যেকোনো সময় খুলতে পারবেন:"
+
+#: templates/emails/tickets.txt:14
+msgid ""
+"Show the QR code at the entrance. Each ticket can be scanned only once."
+msgstr "প্রবেশপথে QR কোড দেখান। প্রতিটি টিকিট একবারই স্ক্যান করা যায়।"
+
+#: templates/events/_ticket_panel.html:5
+msgid "Live availability"
+msgstr "লাইভ প্রাপ্যতা"
+
+#: templates/events/_ticket_panel.html:10
+msgid "Tickets go on sale in"
+msgstr "টিকিট বিক্রি শুরু হতে বাকি"
+
+#: templates/events/_ticket_panel.html:10
+msgid "Tickets will be announced soon"
+msgstr "টিকিটের ঘোষণা শীঘ্রই"
+
+#: templates/events/_ticket_panel.html:13
+msgid "Days"
+msgstr "দিন"
+
+#: templates/events/_ticket_panel.html:14
+msgid "Hours"
+msgstr "ঘণ্টা"
+
+#: templates/events/_ticket_panel.html:15
+msgid "Min"
+msgstr "মিনিট"
+
+#: templates/events/_ticket_panel.html:16
+msgid "Sec"
+msgstr "সেকেন্ড"
+
+#: templates/events/_ticket_panel.html:22
+msgid "This event has ended"
+msgstr "ইভেন্টটি শেষ হয়েছে"
+
+#: templates/events/_ticket_panel.html:22
+msgid "Discover upcoming events"
+msgstr "আসন্ন ইভেন্ট দেখুন"
+
+#: templates/events/_ticket_panel.html:24
+msgid "This event was cancelled"
+msgstr "ইভেন্টটি বাতিল হয়েছে"
+
+#: templates/events/_ticket_panel.html:24
+msgid "Ticket holders are refunded automatically."
+msgstr "টিকিটধারীদের স্বয়ংক্রিয়ভাবে রিফান্ড দেওয়া হয়।"
+
+#: templates/events/_ticket_panel.html:26
+msgid "Tickets will be announced soon."
+msgstr "টিকিটের ঘোষণা শীঘ্রই।"
+
+#: templates/events/_ticket_panel.html:40
+msgid "All access"
+msgstr "অল অ্যাক্সেস"
+
+#: templates/events/_ticket_panel.html:45
+#, python-format
+msgid "Only %(n)s left"
+msgstr "মাত্র %(n)sটি বাকি"
+
+#: templates/events/_ticket_panel.html:47
+msgid "Not on sale"
+msgstr "বিক্রি হচ্ছে না"
+
+#: templates/events/_ticket_panel.html:48
+msgid "Available"
+msgstr "পাওয়া যাচ্ছে"
+
+#: templates/events/_ticket_panel.html:54
+msgid "Fewer"
+msgstr "কম"
+
+#: templates/events/_ticket_panel.html:56
+msgid "More"
+msgstr "বেশি"
+
+#: templates/events/_ticket_panel.html:62
+msgid "Select"
+msgstr "বাছুন"
+
+#: templates/events/_ticket_panel.html:63
+msgid "Added"
+msgstr "যোগ হয়েছে"
+
+#: templates/events/_ticket_panel.html:74
+msgid "ticket(s)"
+msgstr "টি টিকিট"
+
+#: templates/events/_ticket_panel.html:74
+msgid "Select tickets"
+msgstr "টিকিট বাছুন"
+
+#: templates/events/_ticket_panel.html:78
+msgid "Continue to checkout"
+msgstr "চেকআউটে যান"
+
+#: templates/events/_ticket_panel.html:80
+msgid "Secure payment · Instant QR tickets"
+msgstr "নিরাপদ পেমেন্ট · সাথে সাথে QR টিকিট"
+
+#: templates/events/catalog.html:8
+msgid "Find your next"
+msgstr "খুঁজে নিন আপনার পরের"
+
+#: templates/events/catalog.html:8
+msgid "experience"
+msgstr "অভিজ্ঞতা"
+
+#: templates/events/catalog.html:24 templates/events/catalog.html:34
+msgid "Filters"
+msgstr "ফিল্টার"
+
+#: templates/events/catalog.html:35
+msgid "Close"
+msgstr "বন্ধ"
+
+#: templates/events/catalog.html:53
+msgid "Clear"
+msgstr "মুছুন"
+
+#: templates/events/catalog.html:68
+msgid "Show results"
+msgstr "ফলাফল দেখুন"
+
+#: templates/events/catalog.html:69
+msgid "Apply filters"
+msgstr "ফিল্টার প্রয়োগ"
+
+#: templates/events/catalog.html:86
+msgid "Pagination"
+msgstr "পৃষ্ঠাসমূহ"
+
+#: templates/events/catalog.html:89
+#, python-format
+msgid "Page %(p)s of %(t)s"
+msgstr "পৃষ্ঠা %(p)s / %(t)s"
+
+#: templates/events/catalog.html:96
+msgid "No events match — yet"
+msgstr "কোনো ইভেন্ট মেলেনি — এখনো"
+
+#: templates/events/catalog.html:97
+msgid ""
+"Try another category or clear your filters. New events land every week."
+msgstr "অন্য ক্যাটাগরি দেখুন বা ফিল্টার মুছুন। প্রতি সপ্তাহে নতুন ইভেন্ট আসে।"
+
+#: templates/events/catalog.html:98
+msgid "Clear filters"
+msgstr "ফিল্টার মুছুন"
+
+#: templates/events/detail.html:34
+msgid "Preview — this event is a draft and not visible to the public."
+msgstr "প্রিভিউ — ইভেন্টটি খসড়া, সবার জন্য দৃশ্যমান নয়।"
+
+#: templates/events/detail.html:54
+msgid "Event ended"
+msgstr "ইভেন্ট শেষ"
+
+#: templates/events/detail.html:62 templates/events/detail.html:89
+msgid "Online event"
+msgstr "অনলাইন ইভেন্ট"
+
+#: templates/events/detail.html:63
+msgid "Organized by"
+msgstr "আয়োজনে"
+
+#: templates/events/detail.html:79
+msgid "About this event"
+msgstr "ইভেন্ট সম্পর্কে"
+
+#: templates/events/detail.html:92
+msgid "Map"
+msgstr "ম্যাপ"
+
+#: templates/events/detail.html:99 templates/organizers/event_form.html:76
+msgid "Event terms & conditions"
+msgstr "ইভেন্টের শর্তাবলী"
+
+#: templates/events/detail.html:107
+msgid "Organizer"
+msgstr "আয়োজক"
+
+#: templates/events/detail.html:119
+msgid "Call"
+msgstr "কল"
+
+#: templates/events/detail.html:139
+msgid "Google Calendar"
+msgstr "গুগল ক্যালেন্ডার"
+
+#: templates/events/detail.html:140
+msgid "Add to calendar"
+msgstr "ক্যালেন্ডারে যোগ করুন"
+
+#: templates/events/detail.html:145
+msgid "Share event"
+msgstr "ইভেন্ট শেয়ার করুন"
+
+#: templates/events/detail.html:153
+msgid "You might also like"
+msgstr "আপনার ভালো লাগতে পারে"
+
+#: templates/orders/checkout.html:3 templates/orders/checkout.html:7
+msgid "Checkout"
+msgstr "চেকআউট"
+
+#: templates/orders/checkout.html:6 templates/orders/detail.html:59
+msgid "Back to event"
+msgstr "ইভেন্টে ফিরুন"
+
+#: templates/orders/checkout.html:21
+msgid "Your details"
+msgstr "আপনার তথ্য"
+
+#: templates/orders/checkout.html:47
+msgid "Online payments are being set up. Please check back shortly."
+msgstr "অনলাইন পেমেন্ট চালু করা হচ্ছে। একটু পরে আবার দেখুন।"
+
+#: templates/orders/checkout.html:54
+msgid "I agree to the event's terms and Nexopay's"
+msgstr "আমি ইভেন্টের শর্তাবলী এবং নেক্সোপের"
+
+#: templates/orders/checkout.html:54
+msgid "terms of service"
+msgstr "সেবার শর্তাবলী"
+
+#: templates/orders/checkout.html:54
+msgid "refund policy"
+msgstr "রিফান্ড নীতিতে সম্মত"
+
+#: templates/orders/checkout.html:76
+msgid "Subtotal"
+msgstr "উপমোট"
+
+#: templates/orders/checkout.html:77 templates/orders/detail.html:70
+msgid "Service fee"
+msgstr "সার্ভিস ফি"
+
+#: templates/orders/checkout.html:78 templates/orders/detail.html:71
+msgid "Total"
+msgstr "মোট"
+
+#: templates/orders/checkout.html:82
+msgid "Get free tickets"
+msgstr "ফ্রি টিকিট নিন"
+
+#: templates/orders/checkout.html:82 templates/orders/detail.html:47
+#, python-format
+msgid "Pay %(t)s"
+msgstr "%(t)s পরিশোধ করুন"
+
+#: templates/orders/checkout.html:83
+msgid "Processing…"
+msgstr "প্রক্রিয়াকরণ চলছে…"
+
+#: templates/orders/checkout.html:85
+msgid "Tickets are held for you while you pay."
+msgstr "পেমেন্টের সময় টিকিট আপনার জন্য সংরক্ষিত থাকবে।"
+
+#: templates/orders/detail.html:14
+#, python-format
+msgid ""
+"Your tickets are on their way to <strong class=\"text-"
+"text\">%(email)s</strong> — and always in your account."
+msgstr ""
+"আপনার টিকিট <strong class=\"text-text\">%(email)s</strong>-এ পাঠানো হচ্ছে — "
+"আর সবসময় আপনার অ্যাকাউন্টে থাকবে।"
+
+#: templates/orders/detail.html:16
+msgid "View my tickets"
+msgstr "আমার টিকিট দেখুন"
+
+#: templates/orders/detail.html:17
+msgid "Download PDF"
+msgstr "PDF ডাউনলোড"
+
+#: templates/orders/detail.html:34
+msgid "Complete your payment"
+msgstr "পেমেন্ট সম্পন্ন করুন"
+
+#: templates/orders/detail.html:35
+msgid "Your tickets are held for"
+msgstr "আপনার টিকিট সংরক্ষিত থাকবে আরও"
+
+#: templates/orders/detail.html:36
+msgid "Your hold has expired. Please start again from the event page."
+msgstr "সংরক্ষণের সময় শেষ। ইভেন্ট পেজ থেকে আবার শুরু করুন।"
+
+#: templates/orders/detail.html:55
+msgid "This order was refunded"
+msgstr "এই অর্ডারটি রিফান্ড হয়েছে"
+
+#: templates/orders/detail.html:55
+msgid "This order was partly refunded"
+msgstr "এই অর্ডারটি আংশিক রিফান্ড হয়েছে"
+
+#: templates/orders/detail.html:55
+msgid "This order expired"
+msgstr "এই অর্ডারের মেয়াদ শেষ"
+
+#: templates/orders/detail.html:57
+msgid ""
+"If money left your account for this order, it will be refunded. Contact "
+"support with your order reference if you need help."
+msgstr ""
+"এই অর্ডারের জন্য টাকা কেটে থাকলে তা রিফান্ড করা হবে। সাহায্যের প্রয়োজনে "
+"অর্ডার রেফারেন্সসহ সাপোর্টে যোগাযোগ করুন।"
+
+#: templates/orders/detail.html:60
+msgid "Contact support"
+msgstr "সাপোর্টে যোগাযোগ"
+
+#: templates/orders/detail.html:66
+msgid "Order reference"
+msgstr "অর্ডার রেফারেন্স"
+
+#: templates/orders/detail.html:67
+msgid "Event"
+msgstr "ইভেন্ট"
+
+#: templates/organizers/_rich_editor.html:4
+msgid "Bold"
+msgstr "বোল্ড"
+
+#: templates/organizers/_rich_editor.html:5
+msgid "Italic"
+msgstr "ইটালিক"
+
+#: templates/organizers/_rich_editor.html:7
+#: templates/organizers/_rich_editor.html:8
+msgid "List"
+msgstr "তালিকা"
+
+#: templates/organizers/_rich_editor.html:9
+msgid "Link"
+msgstr "লিংক"
+
+#: templates/organizers/_ticket_row.html:12
+msgid "More options"
+msgstr "আরও অপশন"
+
+#: templates/organizers/_ticket_row.html:13
+#: templates/organizers/event_detail.html:93
+msgid "Remove"
+msgstr "সরান"
+
+#: templates/organizers/_ticket_row.html:16
+#, python-format
+msgid "%(n)s sold"
+msgstr "%(n)sটি বিক্রি"
+
+#: templates/organizers/_ticket_row.html:18
+msgid "What's included (English)"
+msgstr "যা যা থাকছে (ইংরেজি)"
+
+#: templates/organizers/_ticket_row.html:19
+msgid "What's included (Bangla)"
+msgstr "যা যা থাকছে (বাংলা)"
+
+#: templates/organizers/_ticket_row.html:20
+msgid "Buyers may buy more than one"
+msgstr "ক্রেতা একাধিক কিনতে পারবেন"
+
+#: templates/organizers/_ticket_row.html:21
+msgid "Max per order"
+msgstr "প্রতি অর্ডারে সর্বোচ্চ"
+
+#: templates/organizers/_ticket_row.html:22
+msgid "Highlight as all-access bundle"
+msgstr "অল-অ্যাক্সেস বান্ডেল হিসেবে হাইলাইট"
+
+#: templates/organizers/_ticket_row.html:23
+msgid "Available for sale"
+msgstr "বিক্রির জন্য উন্মুক্ত"
+
+#: templates/organizers/apply.html:3
+msgid "Apply as an organizer"
+msgstr "আয়োজক হিসেবে আবেদন"
+
+#: templates/organizers/apply.html:6
+msgid "Organizer application"
+msgstr "আয়োজকের আবেদন"
+
+#: templates/organizers/apply.html:7
+msgid "Tell us about you"
+msgstr "আপনার সম্পর্কে বলুন"
+
+#: templates/organizers/apply.html:8
+msgid ""
+"Every organizer is reviewed before they can list events — it keeps buyers "
+"safe. Most applications are answered within 1–2 working days."
+msgstr ""
+"ইভেন্ট যোগ করার আগে প্রত্যেক আয়োজককে যাচাই করা হয় — এতে ক্রেতারা নিরাপদ "
+"থাকেন। বেশিরভাগ আবেদনের উত্তর ১–২ কর্মদিবসে দেওয়া হয়।"
+
+#: templates/organizers/apply.html:11
+msgid "Your previous application wasn't approved."
+msgstr "আপনার আগের আবেদনটি অনুমোদিত হয়নি।"
+
+#: templates/organizers/apply.html:13
+msgid "You can update the details below and apply again."
+msgstr "নিচের তথ্য হালনাগাদ করে আবার আবেদন করতে পারেন।"
+
+#: templates/organizers/apply.html:19
+msgid "Public profile"
+msgstr "পাবলিক প্রোফাইল"
+
+#: templates/organizers/apply.html:30
+msgid "Verification (private)"
+msgstr "যাচাইকরণ (গোপন)"
+
+#: templates/organizers/apply.html:35
+msgid "Submit application"
+msgstr "আবেদন জমা দিন"
+
+#: templates/organizers/apply_landing.html:3
+msgid "Sell tickets on Nexopay"
+msgstr "নেক্সোপে-তে টিকিট বিক্রি করুন"
+
+#: templates/organizers/apply_landing.html:10
+msgid "Sell out your next event"
+msgstr "আপনার পরের ইভেন্ট হাউসফুল করুন"
+
+#: templates/organizers/apply_landing.html:10
+msgid "on Nexopay"
+msgstr "নেক্সোপে-তে"
+
+#: templates/organizers/apply_landing.html:11
+msgid ""
+"Flat or multi-segment tickets, local payments, instant QR delivery and gate "
+"scanning from any phone."
+msgstr ""
+"একক বা মাল্টি-সেগমেন্ট টিকিট, দেশীয় পেমেন্ট, তাৎক্ষণিক QR টিকিট আর যেকোনো "
+"ফোনে গেট স্ক্যানিং।"
+
+#: templates/organizers/apply_landing.html:13
+msgid "Create an account to apply"
+msgstr "আবেদন করতে অ্যাকাউন্ট খুলুন"
+
+#: templates/organizers/apply_landing.html:14
+msgid "I already have an account"
+msgstr "আমার অ্যাকাউন্ট আছে"
+
+#: templates/organizers/apply_landing.html:19
+msgid "Any ticket structure"
+msgstr "যেকোনো টিকিট কাঠামো"
+
+#: templates/organizers/apply_landing.html:19
+msgid "One price, or entry + per-activity combos + an all-access bundle."
+msgstr ""
+"একটি মূল্য, অথবা এন্ট্রি + প্রতিটি সেগমেন্টের কম্বো + অল-অ্যাক্সেস বান্ডেল।"
+
+#: templates/organizers/apply_landing.html:21
+msgid "Scan at the gate"
+msgstr "গেটে স্ক্যান"
+
+#: templates/organizers/apply_landing.html:21
+msgid "Any phone becomes a scanner. Screenshots can't get in twice."
+msgstr "যেকোনো ফোনই স্ক্যানার। স্ক্রিনশট দিয়ে দুবার ঢোকা যায় না।"
+
+#: templates/organizers/apply_landing.html:22
+msgid "Live dashboard"
+msgstr "লাইভ ড্যাশবোর্ড"
+
+#: templates/organizers/apply_landing.html:22
+msgid "Sales, revenue and check-ins in real time. Export attendees anytime."
+msgstr ""
+"বিক্রি, আয় ও প্রবেশ রিয়েল-টাইমে। যেকোনো সময় অংশগ্রহণকারীদের তালিকা "
+"এক্সপোর্ট করুন।"
+
+#: templates/organizers/apply_status.html:3
+msgid "Organizer account"
+msgstr "আয়োজক অ্যাকাউন্ট"
+
+#: templates/organizers/apply_status.html:9
+msgid "You're approved!"
+msgstr "আপনি অনুমোদিত!"
+
+#: templates/organizers/apply_status.html:10
+msgid "Create your first event and start selling."
+msgstr "প্রথম ইভেন্ট তৈরি করে বিক্রি শুরু করুন।"
+
+#: templates/organizers/apply_status.html:12
+#: templates/organizers/dashboard.html:10
+#: templates/organizers/dashboard.html:46
+msgid "Create event"
+msgstr "ইভেন্ট তৈরি করুন"
+
+#: templates/organizers/apply_status.html:13 templates/organizers/base.html:12
+#: templates/organizers/event_detail.html:3
+msgid "Dashboard"
+msgstr "ড্যাশবোর্ড"
+
+#: templates/organizers/apply_status.html:17
+msgid "Application under review"
+msgstr "আবেদন পর্যালোচনাধীন"
+
+#: templates/organizers/apply_status.html:18
+#, python-format
+msgid ""
+"Thanks, %(name)s! Our team is reviewing your details. We'll email you as "
+"soon as there's a decision."
+msgstr ""
+"ধন্যবাদ, %(name)s! আমাদের টিম আপনার তথ্য যাচাই করছে। সিদ্ধান্ত হলেই আপনাকে "
+"ইমেইল করব।"
+
+#: templates/organizers/apply_status.html:19
+msgid "Questions?"
+msgstr "প্রশ্ন আছে?"
+
+#: templates/organizers/apply_status.html:19
+msgid "Contact the organizer team"
+msgstr "আয়োজক টিমের সাথে যোগাযোগ করুন"
+
+#: templates/organizers/base.html:13 templates/organizers/event_form.html:3
+msgid "New event"
+msgstr "নতুন ইভেন্ট"
+
+#: templates/organizers/base.html:14 templates/scan/scanner.html:9
+msgid "Scanner"
+msgstr "স্ক্যানার"
+
+#: templates/organizers/dashboard.html:3 templates/partials/nav_user.html:16
+msgid "Organizer dashboard"
+msgstr "আয়োজকের ড্যাশবোর্ড"
+
+#: templates/organizers/dashboard.html:14
+#: templates/organizers/event_detail.html:20
+msgid "Your earnings"
+msgstr "আপনার আয়"
+
+#: templates/organizers/dashboard.html:14
+#, python-format
+msgid "%(g)s gross sales"
+msgstr "মোট বিক্রি %(g)s"
+
+#: templates/organizers/dashboard.html:15
+msgid "Tickets sold"
+msgstr "বিক্রিত টিকিট"
+
+#: templates/organizers/dashboard.html:15
+#, python-format
+msgid "%(n)s orders"
+msgstr "%(n)sটি অর্ডার"
+
+#: templates/organizers/dashboard.html:16
+msgid "across all events"
+msgstr "সব ইভেন্ট মিলিয়ে"
+
+#: templates/organizers/dashboard.html:22
+msgid "Your events"
+msgstr "আপনার ইভেন্ট"
+
+#: templates/organizers/dashboard.html:36
+msgid "sold"
+msgstr "বিক্রি"
+
+#: templates/organizers/dashboard.html:45
+msgid "Your first event is a few minutes away"
+msgstr "আপনার প্রথম ইভেন্ট মাত্র কয়েক মিনিট দূরে"
+
+#: templates/organizers/dashboard.html:52
+msgid "Latest sales"
+msgstr "সাম্প্রতিক বিক্রি"
+
+#: templates/organizers/dashboard.html:60
+msgid "Sales will appear here in real time."
+msgstr "বিক্রি এখানে রিয়েল-টাইমে দেখা যাবে।"
+
+#: templates/organizers/event_detail.html:7 templates/partials/footer.html:17
+#: templates/partials/header.html:45
+msgid "All events"
+msgstr "সব ইভেন্ট"
+
+#: templates/organizers/event_detail.html:12
+msgid "View page"
+msgstr "পেজ দেখুন"
+
+#: templates/organizers/event_detail.html:13
+msgid "Edit"
+msgstr "সম্পাদনা"
+
+#: templates/organizers/event_detail.html:14
+msgid "Open scanner"
+msgstr "স্ক্যানার খুলুন"
+
+#: templates/organizers/event_detail.html:19
+msgid "Gross sales"
+msgstr "মোট বিক্রি"
+
+#: templates/organizers/event_detail.html:29
+msgid "Sales by ticket type"
+msgstr "টিকিটের ধরন অনুযায়ী বিক্রি"
+
+#: templates/organizers/event_detail.html:32
+msgid "Price"
+msgstr "মূল্য"
+
+#: templates/organizers/event_detail.html:32
+msgid "Sold"
+msgstr "বিক্রি"
+
+#: templates/organizers/event_detail.html:32
+msgid "Held"
+msgstr "সংরক্ষিত"
+
+#: templates/organizers/event_detail.html:32
+msgid "Revenue"
+msgstr "আয়"
+
+#: templates/organizers/event_detail.html:37
+msgid "Off sale"
+msgstr "বিক্রি বন্ধ"
+
+#: templates/organizers/event_detail.html:55
+msgid "Reference, email, phone…"
+msgstr "রেফারেন্স, ইমেইল, ফোন…"
+
+#: templates/organizers/event_detail.html:59
+#, python-format
+msgid "%(n)s refund request awaiting Nexopay review"
+msgid_plural "%(n)s refund requests awaiting Nexopay review"
+msgstr[0] "%(n)sটি রিফান্ডের অনুরোধ নেক্সোপের পর্যালোচনার অপেক্ষায়"
+msgstr[1] "%(n)sটি রিফান্ডের অনুরোধ নেক্সোপের পর্যালোচনার অপেক্ষায়"
+
+#: templates/organizers/event_detail.html:70
+msgid "Refund"
+msgstr "রিফান্ড"
+
+#: templates/organizers/event_detail.html:75
+msgid "Reason for the refund"
+msgstr "রিফান্ডের কারণ"
+
+#: templates/organizers/event_detail.html:76
+msgid "Refund now"
+msgstr "এখনই রিফান্ড"
+
+#: templates/organizers/event_detail.html:76
+msgid "Request refund"
+msgstr "রিফান্ডের অনুরোধ"
+
+#: templates/organizers/event_detail.html:80
+msgid "No orders yet."
+msgstr "এখনো কোনো অর্ডার নেই।"
+
+#: templates/organizers/event_detail.html:87
+msgid "Gate staff"
+msgstr "গেট স্টাফ"
+
+#: templates/organizers/event_detail.html:88
+msgid "People who can scan tickets for this event."
+msgstr "যারা এই ইভেন্টের টিকিট স্ক্যান করতে পারবেন।"
+
+#: templates/organizers/event_detail.html:95
+msgid "Only you can scan right now."
+msgstr "এখন শুধু আপনি স্ক্যান করতে পারবেন।"
+
+#: templates/organizers/event_detail.html:100
+msgid "Add"
+msgstr "যোগ করুন"
+
+#: templates/organizers/event_detail.html:105
+msgid "Check-in log"
+msgstr "প্রবেশের লগ"
+
+#: templates/organizers/event_detail.html:113
+msgid "Scans appear here on event day."
+msgstr "ইভেন্টের দিন স্ক্যানগুলো এখানে দেখা যাবে।"
+
+#: templates/organizers/event_form.html:3
+msgid "Edit event"
+msgstr "ইভেন্ট সম্পাদনা"
+
+#: templates/organizers/event_form.html:9 templates/scan/scanner.html:19
+msgid "Back"
+msgstr "ফিরে যান"
+
+#: templates/organizers/event_form.html:10
+msgid "Create an event"
+msgstr "ইভেন্ট তৈরি করুন"
+
+#: templates/organizers/event_form.html:20
+msgid "Please fix the highlighted fields."
+msgstr "চিহ্নিত ঘরগুলো ঠিক করুন।"
+
+#: templates/organizers/event_form.html:28
+msgid "Basics"
+msgstr "মূল তথ্য"
+
+#: templates/organizers/event_form.html:32
+msgid "Description (English)"
+msgstr "বিবরণ (ইংরেজি)"
+
+#: templates/organizers/event_form.html:37
+msgid "Description (Bangla)"
+msgstr "বিবরণ (বাংলা)"
+
+#: templates/organizers/event_form.html:38
+msgid "Leave Bangla fields empty to show the English text to Bangla visitors."
+msgstr "বাংলা ঘর ফাঁকা রাখলে বাংলা ভিজিটররা ইংরেজি লেখা দেখবেন।"
+
+#: templates/organizers/event_form.html:60
+msgid ""
+"One ticket type for a simple event, or several — each with its own price and"
+" stock."
+msgstr ""
+"সাধারণ ইভেন্টের জন্য একটি টিকিট, অথবা একাধিক — প্রতিটির আলাদা মূল্য ও "
+"সংখ্যা।"
+
+#: templates/organizers/event_form.html:63
+msgid "Multi-segment preset"
+msgstr "মাল্টি-সেগমেন্ট প্রিসেট"
+
+#: templates/organizers/event_form.html:64
+msgid "Add ticket"
+msgstr "টিকিট যোগ করুন"
+
+#: templates/organizers/event_form.html:72
+msgid "No tickets yet — add one or start from the multi-segment preset."
+msgstr ""
+"এখনো কোনো টিকিট নেই — একটি যোগ করুন বা মাল্টি-সেগমেন্ট প্রিসেট দিয়ে শুরু "
+"করুন।"
+
+#: templates/organizers/event_form.html:77
+msgid "Shown on your event page, on top of Nexopay's platform terms."
+msgstr ""
+"নেক্সোপের প্ল্যাটফর্ম শর্তাবলীর পাশাপাশি আপনার ইভেন্ট পেজে দেখানো হবে।"
+
+#: templates/organizers/event_form.html:101
+msgid "Banner"
+msgstr "ব্যানার"
+
+#: templates/organizers/event_form.html:108
+msgid "Publish event"
+msgstr "ইভেন্ট প্রকাশ করুন"
+
+#: templates/organizers/event_form.html:109
+msgid "Save as draft"
+msgstr "খসড়া হিসেবে সংরক্ষণ"
+
+#: templates/organizers/event_form.html:113
+msgid "Preview"
+msgstr "প্রিভিউ"
+
+#: templates/partials/event_card.html:25
+msgid "Featured"
+msgstr "ফিচার্ড"
+
+#: templates/partials/event_card.html:37
+msgid "Tickets TBA"
+msgstr "টিকিট শীঘ্রই"
+
+#: templates/partials/event_card.html:39
+msgid "From"
+msgstr "শুরু"
+
+#: templates/partials/footer.html:15
+msgid "Discover"
+msgstr "খুঁজে দেখুন"
+
+#: templates/partials/footer.html:18
+msgid "On sale now"
+msgstr "এখন বিক্রি চলছে"
+
+#: templates/partials/footer.html:25
+msgid "Sell tickets"
+msgstr "টিকিট বিক্রি করুন"
+
+#: templates/partials/footer.html:26
+msgid "Promote your event"
+msgstr "ইভেন্টের প্রচার"
+
+#: templates/partials/footer.html:30
+msgid "Help"
+msgstr "সহায়তা"
+
+#: templates/partials/footer.html:33 templates/support/contact.html:3
+msgid "Contact us"
+msgstr "যোগাযোগ"
+
+#: templates/partials/footer.html:38
+msgid "Get in touch"
+msgstr "যোগাযোগ করুন"
+
+#: templates/partials/footer.html:48
+msgid "All rights reserved."
+msgstr "সর্বস্বত্ব সংরক্ষিত।"
+
+#: templates/partials/footer.html:49
+msgid "Payment methods"
+msgstr "পেমেন্ট মাধ্যম"
+
+#: templates/partials/header.html:8
+msgid "Main"
+msgstr "প্রধান"
+
+#: templates/partials/header.html:17 templates/partials/header.html:43
+msgid "Search events, venues…"
+msgstr "ইভেন্ট, ভেন্যু খুঁজুন…"
+
+#: templates/partials/header.html:24
+msgid "Change language"
+msgstr "ভাষা পরিবর্তন"
+
+#: templates/partials/header.html:34
+msgid "Menu"
+msgstr "মেনু"
+
+#: templates/partials/header.html:50
+msgid "Help & contact"
+msgstr "সহায়তা ও যোগাযোগ"
+
+#: templates/partials/nav_user.html:19 templates/scan/home.html:3
+#: templates/scan/home.html:6
+msgid "Scan tickets"
+msgstr "টিকিট স্ক্যান"
+
+#: templates/partials/nav_user.html:22
+msgid "Admin"
+msgstr "অ্যাডমিন"
+
+#: templates/partials/nav_user.html:26
+msgid "Log out"
+msgstr "লগ আউট"
+
+#: templates/scan/home.html:7
+msgid "Choose the event you're checking guests in for."
+msgstr "যে ইভেন্টে অতিথিদের প্রবেশ করাচ্ছেন সেটি বেছে নিন।"
+
+#: templates/scan/home.html:18
+msgid ""
+"You don't have scanner access for any current event. Ask the organizer to "
+"add your email as gate staff."
+msgstr ""
+"চলমান কোনো ইভেন্টে আপনার স্ক্যানার অ্যাক্সেস নেই। আয়োজককে আপনার ইমেইল গেট "
+"স্টাফ হিসেবে যোগ করতে বলুন।"
+
+#: templates/scan/scanner.html:26
+msgid "checked in"
+msgstr "প্রবেশ করেছেন"
+
+#: templates/scan/scanner.html:48
+msgid "Or type the ticket code"
+msgstr "অথবা টিকিট কোড লিখুন"
+
+#: templates/scan/scanner.html:50
+msgid "Check"
+msgstr "যাচাই"
+
+#: templates/scan/scanner.html:69
+msgid "Checked in at"
+msgstr "প্রবেশের সময়"
+
+#: templates/scan/scanner.html:73
+msgid "Tap to scan the next ticket"
+msgstr "পরের টিকিট স্ক্যান করতে ট্যাপ করুন"
+
+#: templates/scan/scanner.html:92
+msgid "Camera unavailable — allow camera access, or type ticket codes below."
+msgstr ""
+"ক্যামেরা পাওয়া যাচ্ছে না — ক্যামেরার অনুমতি দিন, অথবা নিচে টিকিট কোড লিখুন।"
+
+#: templates/scan/scanner.html:142
+msgid "Connection problem — try again"
+msgstr "সংযোগে সমস্যা — আবার চেষ্টা করুন"
+
+#: templates/support/contact.html:8
+msgid "How can we"
+msgstr "কীভাবে আমরা"
+
+#: templates/support/contact.html:8
+msgid "help?"
+msgstr "সাহায্য করতে পারি?"
+
+#: templates/support/contact.html:9
+msgid "Pick a topic so your message reaches the right team straight away."
+msgstr "বিষয় বেছে নিন, যাতে বার্তাটি সরাসরি সঠিক টিমের কাছে পৌঁছায়।"
+
+#: templates/support/contact.html:14
+msgid "Read the FAQ"
+msgstr "সাধারণ জিজ্ঞাসা পড়ুন"
+
+#: templates/support/contact.html:27
+msgid "Send message"
+msgstr "বার্তা পাঠান"

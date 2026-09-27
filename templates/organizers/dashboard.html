@@ -1,0 +1,65 @@
+{% extends "organizers/base.html" %}
+{% load i18n nexo %}
+{% block title %}{% translate "Organizer dashboard" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block org_content %}
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <p class="text-sm text-muted">{% translate "Welcome back" %}</p>
+    <h1 class="font-display text-3xl font-extrabold sm:text-4xl">{{ org.name }}</h1>
+  </div>
+  <a href="{% url 'organizers:event_new' %}" class="btn-primary">{% icon "plus" "w-4 h-4" %}{% translate "Create event" %}</a>
+</div>
+
+<div class="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+  <div class="card p-5"><p class="text-xs font-semibold uppercase tracking-widest text-subtle">{% translate "Your earnings" %}</p><p class="mt-2 font-display text-2xl font-bold sm:text-3xl">{{ stats.net|taka }}</p><p class="mt-1 text-xs text-subtle">{% blocktranslate with g=stats.gross|taka %}{{ g }} gross sales{% endblocktranslate %}</p></div>
+  <div class="card p-5"><p class="text-xs font-semibold uppercase tracking-widest text-subtle">{% translate "Tickets sold" %}</p><p class="mt-2 font-display text-2xl font-bold sm:text-3xl">{{ stats.tickets|bn_digits }}</p><p class="mt-1 text-xs text-subtle">{% blocktranslate with n=stats.orders %}{{ n }} orders{% endblocktranslate %}</p></div>
+  <div class="card p-5"><p class="text-xs font-semibold uppercase tracking-widest text-subtle">{% translate "Checked in" %}</p><p class="mt-2 font-display text-2xl font-bold sm:text-3xl">{{ stats.checked_in|bn_digits }}</p><p class="mt-1 text-xs text-subtle">{% translate "across all events" %}</p></div>
+  <div class="card p-5"><p class="text-xs font-semibold uppercase tracking-widest text-subtle">{% translate "Upcoming" %}</p><p class="mt-2 font-display text-2xl font-bold sm:text-3xl">{{ stats.upcoming|bn_digits }}</p><p class="mt-1 text-xs text-subtle">{% translate "events" %}</p></div>
+</div>
+
+<div class="mt-8 grid gap-6 lg:grid-cols-[1fr_360px]">
+  <section class="card overflow-hidden">
+    <h2 class="border-b border-line px-6 py-4 font-display text-lg font-bold">{% translate "Your events" %}</h2>
+    {% if events %}
+    <ul class="divide-y divide-line">
+      {% for e in events %}
+      <li>
+        <a href="{% url 'organizers:event' e.slug %}" class="flex items-center gap-4 px-6 py-4 transition hover:bg-white/[.03]">
+          <div class="h-12 w-16 shrink-0 overflow-hidden rounded-lg bg-surface-2">{% if e.banner_renditions %}<img src="{{ e.banner_renditions|rendition:480 }}" alt="" class="h-full w-full object-cover" loading="lazy">{% endif %}</div>
+          <div class="min-w-0 flex-1">
+            <p class="truncate font-semibold">{{ e.title }}</p>
+            <p class="text-xs text-muted">{{ e.starts_at|date:"D, j M Y · g:i A" }}</p>
+            {% if e.capacity %}
+            <div class="mt-2 h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-white/10"><div class="h-full rounded-full bg-gradient-brand" style="width: {% widthratio e.sold|default:0 e.capacity 100 %}%"></div></div>
+            {% endif %}
+          </div>
+          <div class="hidden text-right text-sm sm:block"><p class="font-semibold tabular-nums">{{ e.sold|default:0 }} / {{ e.capacity|default:0 }}</p><p class="text-xs text-subtle">{% translate "sold" %}</p></div>
+          <span class="badge {% if e.status == 'on_sale' %}bg-success/15 text-success{% elif e.status == 'draft' %}bg-white/10 text-muted{% elif e.status == 'coming_soon' %}bg-accent/15 text-accent{% elif e.status == 'sold_out' %}bg-warning/15 text-warning{% else %}bg-white/10 text-subtle{% endif %}">{{ e.get_status_display }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="grid place-items-center px-6 py-16 text-center">
+      <span class="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-brand text-white shadow-glow">{% icon "rocket" "w-7 h-7" %}</span>
+      <p class="mt-4 font-display text-xl font-bold">{% translate "Your first event is a few minutes away" %}</p>
+      <a href="{% url 'organizers:event_new' %}" class="btn-primary mt-5">{% translate "Create event" %}</a>
+    </div>
+    {% endif %}
+  </section>
+
+  <section class="card overflow-hidden">
+    <h2 class="border-b border-line px-6 py-4 font-display text-lg font-bold">{% translate "Latest sales" %}</h2>
+    <ul class="divide-y divide-line text-sm">
+      {% for o in recent %}
+      <li class="flex items-center justify-between gap-3 px-6 py-3">
+        <div class="min-w-0"><p class="truncate font-medium">{{ o.buyer_name }}</p><p class="truncate text-xs text-subtle">{{ o.event.title }} · {{ o.paid_at|timesince }}</p></div>
+        <span class="shrink-0 font-semibold tabular-nums text-success">+{{ o.organizer_net|taka }}</span>
+      </li>
+      {% empty %}
+      <li class="px-6 py-10 text-center text-muted">{% translate "Sales will appear here in real time." %}</li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>
+{% endblock %}
