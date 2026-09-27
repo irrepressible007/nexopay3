@@ -12,4 +12,4 @@
 {{ site_url }}/account/tickets/
 
 {% translate "Show the QR code at the entrance. Each ticket can be scanned only once." %}
-— Nexopay
+— {{ sitecfg.site_name }}

@@ -32,6 +32,20 @@ def _hex_to_rgb(value: str) -> tuple[int, int, int]:
     return tuple(int(value[i : i + 2], 16) for i in (0, 2, 4))
 
 
+def _header_logo():
+    """Raster logo for the coloured PDF header: the admin's upload, else the bundled white logo."""
+    from apps.cms.models import SiteSettings
+
+    site = SiteSettings.load()
+    if site.logo_on_color and site.logo_on_color.name.lower().endswith((".png", ".jpg", ".jpeg")):
+        try:
+            with site.logo_on_color.open("rb") as fh:
+                return io.BytesIO(fh.read())
+        except Exception:
+            pass
+    return str(Path(settings.BASE_DIR) / "static" / "img" / "logo-white.png")
+
+
 @lru_cache(maxsize=1)
 def _font_paths():
     return FONT_DIR / "HindSiliguri-Regular.ttf", FONT_DIR / "HindSiliguri-Bold.ttf"
@@ -53,7 +67,11 @@ def render_tickets_pdf(tickets, language: str = "en") -> bytes:
     """Render one page per ticket and return the PDF bytes."""
     from apps.cms.models import SiteSettings
 
+    from apps.cms.sitetext import ensure_applied
+
+    ensure_applied()
     site = SiteSettings.load()
+    logo = _header_logo()
     primary = _hex_to_rgb(site.primary_color)
     secondary = _hex_to_rgb(site.secondary_color)
     pdf = _TicketPDF()
@@ -68,9 +86,14 @@ def render_tickets_pdf(tickets, language: str = "en") -> bytes:
             with pdf.use_pattern(LinearGradient(0, 0, w, 34, [primary, secondary])):
                 pdf.rect(0, 0, w, 34, "F")
             pdf.set_text_color(255, 255, 255)
-            pdf.set_font("Hind", "B", 11)
-            pdf.set_xy(8, 7)
-            pdf.cell(0, 5, site.site_name.upper())
+            try:
+                if hasattr(logo, "seek"):
+                    logo.seek(0)
+                pdf.image(logo, x=8, y=6, h=6.5)
+            except Exception:
+                pdf.set_font("Hind", "B", 11)
+                pdf.set_xy(8, 7)
+                pdf.cell(0, 5, site.site_name)
             pdf.set_font("Hind", "B", 15)
             pdf.set_xy(8, 14)
             pdf.multi_cell(w - 16, 7, event.title, align="L")

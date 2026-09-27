@@ -17,9 +17,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         base = Path(settings.BASE_DIR) / "locale"
-        spec = importlib.util.spec_from_file_location("bn_translations", base / "bn_translations.py")
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
+        module = self._load(base / "bn_translations.py")
+        extra = base / "bn_translations_accounts.py"
+        if extra.exists():
+            module.TR.update(self._load(extra).TR)
 
         po_path = base / "bn" / "LC_MESSAGES" / "django.po"
         po = polib.pofile(str(po_path))
@@ -44,3 +45,10 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"Translated {po.percent_translated()}% — compiled django.mo"))
         for msgid in missing:
             self.stdout.write(f"  missing: {msgid!r}")
+
+    @staticmethod
+    def _load(path):
+        spec = importlib.util.spec_from_file_location(path.stem, path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module

@@ -1,16 +1,104 @@
+from django import forms
 from django.contrib import admin, messages
 from django.db.models import Sum
+from django.utils.html import format_html
+from modeltranslation.admin import TranslationAdmin
 from unfold.admin import ModelAdmin
 from unfold.decorators import action, display
 
 from .models import PaymentAttempt, PaymentProviderSetting, Payout, Refund
+from .registry import provider_class
 from .refunds import mark_refunded_manually, process_refund
 
 
+class ProviderSettingForm(forms.ModelForm):
+    """Adds one field per credential the provider needs; secrets are write-only."""
+
+    clear_credentials = forms.BooleanField(required=False, label="Remove all saved credentials")
+
+    class Meta:
+        model = PaymentProviderSetting
+        fields = ["display_name_en", "display_name_bn", "is_enabled", "is_sandbox", "logo", "brand_color",
+                  "show_in_footer", "sort_order"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        cls = provider_class(self.instance.provider) if self.instance.pk else None
+        self.credential_specs = list(getattr(cls, "CREDENTIALS", []))
+        saved = self.instance.get_credentials() if self.instance.pk else {}
+        for spec in self.credential_specs:
+            name = f"cred_{spec.name}"
+            has_value = bool(saved.get(spec.name))
+            if spec.secret:
+                widget = forms.Textarea(attrs={"rows": 3}) if spec.multiline else forms.PasswordInput(render_value=False)
+                help_text = ("Saved ✓ — leave empty to keep it. " if has_value else "") + spec.help
+            else:
+                widget = forms.Textarea(attrs={"rows": 3}) if spec.multiline else forms.TextInput()
+                help_text = spec.help
+            self.fields[name] = forms.CharField(
+                label=spec.label, required=False, widget=widget, help_text=help_text,
+                initial="" if spec.secret else saved.get(spec.name, ""),
+            )
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+        creds = {} if self.cleaned_data.get("clear_credentials") else obj.get_credentials()
+        for spec in self.credential_specs:
+            value = (self.cleaned_data.get(f"cred_{spec.name}") or "").strip()
+            if value:
+                creds[spec.name] = value
+            elif not spec.secret:
+                creds.pop(spec.name, None)
+        obj.set_credentials(creds)
+        if commit:
+            obj.save()
+        return obj
+
+
 @admin.register(PaymentProviderSetting)
-class PaymentProviderSettingAdmin(ModelAdmin):
-    list_display = ["provider", "display_name", "is_enabled", "is_sandbox", "sort_order"]
-    list_editable = ["display_name", "is_enabled", "is_sandbox", "sort_order"]
+class PaymentProviderSettingAdmin(ModelAdmin, TranslationAdmin):
+    form = ProviderSettingForm
+    list_display = ["provider", "display_name", "is_enabled", "is_sandbox", "credentials_status", "sort_order"]
+    list_editable = ["is_enabled", "is_sandbox", "sort_order"]
+    readonly_fields = ["provider"]
+
+    def has_add_permission(self, request):
+        return False
+
+    def get_form(self, request, obj=None, **kwargs):
+        # Declare this provider's credential fields so the admin accepts them in fieldsets.
+        specs = getattr(provider_class(obj.provider), "CREDENTIALS", []) if obj else []
+        declared = {f"cred_{s.name}": forms.CharField(required=False) for s in specs}
+        kwargs["form"] = type("ProviderSettingForm", (ProviderSettingForm,), declared)
+        return super().get_form(request, obj, **kwargs)
+
+    def get_fieldsets(self, request, obj=None):
+        base = [
+            (None, {"fields": ["provider", "display_name_en", "display_name_bn", "is_enabled", "is_sandbox"]}),
+            ("Appearance", {"fields": ["logo", "brand_color", "show_in_footer", "sort_order"]}),
+        ]
+        cls = provider_class(obj.provider) if obj else None
+        specs = getattr(cls, "CREDENTIALS", [])
+        if specs:
+            base.append(("Merchant credentials", {
+                "fields": [f"cred_{s.name}" for s in specs] + ["clear_credentials"],
+                "description": "Paste the values from the provider's merchant panel. They are stored encrypted "
+                               "and never shown again. Keep 'Sandbox' ticked until live credentials are entered.",
+            }))
+        return base
+
+    @display(description="Credentials")
+    def credentials_status(self, obj):
+        cls = provider_class(obj.provider)
+        specs = [s for s in getattr(cls, "CREDENTIALS", []) if s.required]
+        if not specs:
+            return "—"
+        from .providers.base import BasePaymentProvider
+
+        missing = [s.label for s in specs if not BasePaymentProvider.resolve_credential(obj, s.name)]
+        if missing:
+            return format_html('<span style="color:#f87171">Missing: {}</span>', ", ".join(missing))
+        return format_html('<span style="color:#34d399">Complete ✓</span>')
 
 
 @admin.register(PaymentAttempt)

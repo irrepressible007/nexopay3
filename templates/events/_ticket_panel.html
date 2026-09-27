@@ -40,8 +40,8 @@
                 {% if t.is_bundle %}<span class="badge bg-warning/15 text-warning">{% icon "star" "w-3 h-3" %}{% translate "All access" %}</span>{% endif %}
               </p>
               {% if t.description %}<p class="mt-1 text-sm text-muted">{{ t.description|linebreaksbr }}</p>{% endif %}
-              <p class="mt-2 flex items-center gap-2">
-                <span class="font-display text-lg font-bold">{% if t.price == 0 %}{% translate "Free" %}{% else %}{{ t.price|taka }}{% endif %}</span>
+              <p class="mt-2 flex flex-wrap items-center gap-2">
+                <span class="price font-display text-lg font-bold">{% if t.price == 0 %}{% translate "Free" %}{% else %}{{ t.price|taka }}{% endif %}</span>
                 {% if st == "low" %}<span class="badge bg-warning/15 text-warning">{% icon "flame" "w-3 h-3" %}{% blocktranslate with n=t.remaining %}Only {{ n }} left{% endblocktranslate %}</span>
                 {% elif st == "sold_out" %}<span class="badge bg-danger/15 text-danger">{% translate "Sold out" %}</span>
                 {% elif st == "closed" %}<span class="badge bg-white/10 text-muted">{% translate "Not on sale" %}</span>
@@ -71,7 +71,7 @@
       </ul>
       <div class="sticky bottom-0 border-t border-line bg-surface/95 px-6 py-4 backdrop-blur">
         <div class="mb-3 flex items-baseline justify-between">
-          <span class="text-sm text-muted" x-text="count ? count + ' {% translate "ticket(s)" %}' : '{% translate "Select tickets" %}'">{% translate "Select tickets" %}</span>
+          <span class="text-sm text-muted" x-text="count ? count + ' {% translate "ticket(s)" as t1 %}{{ t1|escapejs }}' : '{% translate "Select tickets" as t2 %}{{ t2|escapejs }}'">{% translate "Select tickets" %}</span>
           <span class="font-display text-2xl font-bold" x-text="money(total)">৳0</span>
         </div>
         <button class="btn-primary btn-lg w-full" :disabled="count === 0" disabled>

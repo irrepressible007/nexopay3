@@ -7,6 +7,7 @@ All environment-specific values come from environment variables (or a local
 from pathlib import Path
 
 import environ
+from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -17,6 +18,7 @@ if env_file.exists():
     environ.Env.read_env(env_file)
 
 SECRET_KEY = env("SECRET_KEY", default="dev-insecure-key-change-me")
+FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY", default="")
 DEBUG = env.bool("DEBUG", default=False)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
@@ -64,6 +66,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "apps.cms.middleware.SiteTextMiddleware",
     "apps.core.middleware.MaintenanceModeMiddleware",
 ]
 
@@ -129,6 +132,7 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_RATE_LIMITS = {"login_failed": "10/m/ip,5/5m/key"}
 ACCOUNT_FORMS = {"signup": "apps.accounts.forms.SignupForm"}
+ACCOUNT_ADAPTER = "apps.accounts.adapter.AccountAdapter"
 LOGIN_REDIRECT_URL = "accounts:tickets"
 LOGIN_URL = "account_login"
 
@@ -241,14 +245,16 @@ ADMIN_URL = env("ADMIN_URL", default="control-room/")
 UNFOLD = {
     "SITE_TITLE": "Nexopay Admin",
     "SITE_HEADER": "Nexopay",
-    "SITE_SYMBOL": "confirmation_number",
+    "SITE_ICON": lambda request: static("img/icon-192.png"),
+    "SITE_LOGO": lambda request: static("img/logo-on-dark.png"),
+    "SITE_FAVICONS": [{"rel": "icon", "sizes": "48x48", "type": "image/png", "href": lambda request: static("img/favicon-48.png")}],
     "THEME": "dark",
     "COLORS": {
         "primary": {
-            "50": "250 245 255", "100": "243 232 255", "200": "233 213 255",
-            "300": "216 180 254", "400": "192 132 252", "500": "168 85 247",
-            "600": "147 51 234", "700": "126 34 206", "800": "107 33 168",
-            "900": "88 28 135", "950": "59 7 100",
+            "50": "245 243 255", "100": "237 233 254", "200": "221 214 254",
+            "300": "196 181 253", "400": "167 139 250", "500": "139 92 246",
+            "600": "124 58 237", "700": "109 40 217", "800": "91 33 182",
+            "900": "76 29 149", "950": "46 16 101",
         },
     },
     "SIDEBAR": {"show_search": True, "show_all_applications": True},

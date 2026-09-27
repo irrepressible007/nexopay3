@@ -1,5 +1,5 @@
 {% load i18n nexo %}
-<div x-data="richEditor('{{ field.id_for_label }}')" class="overflow-hidden rounded-xl bg-surface-2 ring-1 ring-line-strong focus-within:ring-2 focus-within:ring-brand">
+<div x-data="richEditor('{{ field.id_for_label }}', '{% translate "Link address (starting with https://)" as lp %}{{ lp|escapejs }}')" class="overflow-hidden rounded-xl bg-surface-2 ring-1 ring-line-strong focus-within:ring-2 focus-within:ring-brand">
   <div class="flex flex-wrap gap-1 border-b border-line px-2 py-1.5 text-sm">
     <button type="button" @click="cmd('bold')" class="rounded-lg px-2.5 py-1 font-bold hover:bg-white/10" title="{% translate 'Bold' %}">B</button>
     <button type="button" @click="cmd('italic')" class="rounded-lg px-2.5 py-1 italic hover:bg-white/10" title="{% translate 'Italic' %}">I</button>

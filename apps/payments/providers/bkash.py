@@ -13,8 +13,8 @@ from django.urls import reverse
 
 from ..models import PaymentAttempt
 from ..services import PaymentError, mark_failed, mark_succeeded
-from .base import BasePaymentProvider, RefundResult, VerifyResult
-from .http import call, env
+from .base import BasePaymentProvider, Credential, RefundResult, VerifyResult
+from .http import call
 
 SANDBOX = "https://tokenized.sandbox.bka.sh/v1.2.0-beta"
 LIVE = "https://tokenized.pay.bka.sh/v1.2.0-beta"
@@ -23,13 +23,21 @@ LIVE = "https://tokenized.pay.bka.sh/v1.2.0-beta"
 class BkashProvider(BasePaymentProvider):
     code = "bkash"
     supports_refund_api = True
+    CREDENTIALS = [
+        Credential("app_key", "App key"),
+        Credential("app_secret", "App secret", secret=True),
+        Credential("username", "Username"),
+        Credential("password", "Password", secret=True),
+        Credential("base_url", "API base URL (optional)", required=False,
+                   help="Only if bKash gives you a different URL. Empty = standard sandbox/live URL."),
+    ]
 
     @property
     def base(self):
-        return env("BKASH_BASE_URL") or (SANDBOX if self.sandbox else LIVE)
+        return self.cred("base_url") or (SANDBOX if self.sandbox else LIVE)
 
     def _app_key(self):
-        key = env("BKASH_APP_KEY")
+        key = self.cred("app_key")
         if not key:
             raise PaymentError("bKash credentials are not configured")
         return key
@@ -43,8 +51,8 @@ class BkashProvider(BasePaymentProvider):
             "POST",
             f"{self.base}/tokenized/checkout/token/grant",
             provider=self.code,
-            headers={"username": env("BKASH_USERNAME"), "password": env("BKASH_PASSWORD"), "Accept": "application/json"},
-            json={"app_key": self._app_key(), "app_secret": env("BKASH_APP_SECRET")},
+            headers={"username": self.cred("username"), "password": self.cred("password"), "Accept": "application/json"},
+            json={"app_key": self._app_key(), "app_secret": self.cred("app_secret")},
         )
         token = data.get("id_token")
         if not token:

@@ -23,7 +23,12 @@ class PaymentProviderSetting(models.Model):
     is_sandbox = models.BooleanField(default=True, help_text=_("Use the provider's sandbox/test environment."))
     display_name = models.CharField(max_length=60, blank=True)
     logo = models.ImageField(upload_to="payments/logos/", blank=True)
+    brand_color = models.CharField(
+        max_length=7, default="#FFFFFF", help_text=_("Colour of the name badge, e.g. #E2136E.")
+    )
+    show_in_footer = models.BooleanField(default=True, help_text=_("Show this method in the site footer."))
     sort_order = models.PositiveSmallIntegerField(default=0)
+    credentials_encrypted = models.TextField(blank=True, editable=False)
 
     class Meta:
         verbose_name = _("payment method")
@@ -32,6 +37,16 @@ class PaymentProviderSetting(models.Model):
 
     def __str__(self):
         return self.display_name or self.get_provider_display()
+
+    def get_credentials(self) -> dict:
+        from apps.core.crypto import decrypt_json
+
+        return decrypt_json(self.credentials_encrypted)
+
+    def set_credentials(self, values: dict) -> None:
+        from apps.core.crypto import encrypt_json
+
+        self.credentials_encrypted = encrypt_json({k: v for k, v in values.items() if v not in (None, "")})
 
 
 class PaymentAttempt(TimeStampedModel):

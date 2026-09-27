@@ -8,6 +8,8 @@
   <meta name="robots" content="noindex">
   <title>{% translate "Scanner" %} — {{ event.title }}</title>
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <link rel="manifest" href="{% url 'webmanifest' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
   <style>:root{--brand:{{ sitecfg.primary_color }};--brand-2:{{ sitecfg.secondary_color }};--accent:{{ sitecfg.accent_color }}}</style>
   <script defer src="{% static 'js/alpine.min.js' %}"></script>
 </head>
@@ -89,7 +91,7 @@ function scanner() {
         this.$refs.video.srcObject = stream;
         await this.$refs.video.play();
       } catch (e) {
-        this.cameraError = "{% translate 'Camera unavailable — allow camera access, or type ticket codes below.' %}";
+        this.cameraError = "{% translate 'Camera unavailable — allow camera access, or type ticket codes below.' as t_cam %}{{ t_cam|escapejs }}";
         return;
       }
       if ("BarcodeDetector" in window) {
@@ -139,7 +141,7 @@ function scanner() {
         clearTimeout(this.hideTimer);
         this.hideTimer = setTimeout(() => this.dismiss(), data.ok ? 1800 : 4500);
       } catch (e) {
-        this.result = { ok: false, message: "{% translate 'Connection problem — try again' %}" };
+        this.result = { ok: false, message: "{% translate 'Connection problem — try again' as t_conn %}{{ t_conn|escapejs }}" };
         this.feedback(false);
       } finally { this.busy = false; }
     },

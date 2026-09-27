@@ -1,59 +1,52 @@
 {% load i18n nexo %}
 <footer class="relative mt-24 border-t border-line bg-surface/40">
-  <div class="container-x grid gap-10 py-14 md:grid-cols-12">
-    <div class="md:col-span-4">
-      <a href="{% url 'cms:home' %}" class="text-text">{% include "partials/logo.html" %}</a>
-      <p class="mt-4 max-w-xs text-sm text-muted">{{ sitecfg.footer_text|default:sitecfg.tagline }}</p>
-      <div class="mt-5 flex gap-2">
-        {% if sitecfg.facebook_url %}<a href="{{ sitecfg.facebook_url }}" class="grid h-9 w-9 place-items-center rounded-full ring-1 ring-line text-muted hover:text-text hover:bg-white/5" aria-label="Facebook" rel="noopener" target="_blank">{% icon "facebook" "w-4 h-4" %}</a>{% endif %}
-        {% if sitecfg.instagram_url %}<a href="{{ sitecfg.instagram_url }}" class="grid h-9 w-9 place-items-center rounded-full ring-1 ring-line text-muted hover:text-text hover:bg-white/5" aria-label="Instagram" rel="noopener" target="_blank">{% icon "instagram" "w-4 h-4" %}</a>{% endif %}
-        {% if sitecfg.youtube_url %}<a href="{{ sitecfg.youtube_url }}" class="grid h-9 w-9 place-items-center rounded-full ring-1 ring-line text-muted hover:text-text hover:bg-white/5" aria-label="YouTube" rel="noopener" target="_blank">{% icon "youtube" "w-4 h-4" %}</a>{% endif %}
-        {% if sitecfg.linkedin_url %}<a href="{{ sitecfg.linkedin_url }}" class="grid h-9 w-9 place-items-center rounded-full ring-1 ring-line text-muted hover:text-text hover:bg-white/5" aria-label="LinkedIn" rel="noopener" target="_blank">{% icon "linkedin" "w-4 h-4" %}</a>{% endif %}
+  <div class="container-x flex flex-col gap-10 py-14 lg:flex-row lg:gap-16">
+    <div class="min-w-0 lg:w-72 lg:shrink-0">
+      <a href="{% url 'cms:home' %}" class="inline-block text-text">{% include "partials/logo.html" %}</a>
+      <p class="mt-4 max-w-sm text-sm text-muted">{{ sitecfg.footer_text|default:sitecfg.tagline }}</p>
+      <div class="mt-5 flex flex-wrap gap-2">
+        {% if sitecfg.facebook_url %}<a href="{{ sitecfg.facebook_url }}" class="grid h-9 w-9 place-items-center rounded-full text-muted ring-1 ring-line hover:bg-white/5 hover:text-text" aria-label="Facebook" rel="noopener" target="_blank">{% icon "facebook" "w-4 h-4" %}</a>{% endif %}
+        {% if sitecfg.instagram_url %}<a href="{{ sitecfg.instagram_url }}" class="grid h-9 w-9 place-items-center rounded-full text-muted ring-1 ring-line hover:bg-white/5 hover:text-text" aria-label="Instagram" rel="noopener" target="_blank">{% icon "instagram" "w-4 h-4" %}</a>{% endif %}
+        {% if sitecfg.youtube_url %}<a href="{{ sitecfg.youtube_url }}" class="grid h-9 w-9 place-items-center rounded-full text-muted ring-1 ring-line hover:bg-white/5 hover:text-text" aria-label="YouTube" rel="noopener" target="_blank">{% icon "youtube" "w-4 h-4" %}</a>{% endif %}
+        {% if sitecfg.tiktok_url %}<a href="{{ sitecfg.tiktok_url }}" class="grid h-9 w-9 place-items-center rounded-full text-muted ring-1 ring-line hover:bg-white/5 hover:text-text" aria-label="TikTok" rel="noopener" target="_blank">{% icon "music" "w-4 h-4" %}</a>{% endif %}
+        {% if sitecfg.linkedin_url %}<a href="{{ sitecfg.linkedin_url }}" class="grid h-9 w-9 place-items-center rounded-full text-muted ring-1 ring-line hover:bg-white/5 hover:text-text" aria-label="LinkedIn" rel="noopener" target="_blank">{% icon "linkedin" "w-4 h-4" %}</a>{% endif %}
       </div>
     </div>
-    <div class="md:col-span-2">
-      <h3 class="text-sm font-semibold text-text">{% translate "Discover" %}</h3>
-      <ul class="mt-4 space-y-2.5 text-sm text-muted">
-        <li><a href="{% url 'events:catalog' %}" class="hover:text-text">{% translate "All events" %}</a></li>
-        <li><a href="{% url 'events:catalog' %}?status=live" class="hover:text-text">{% translate "On sale now" %}</a></li>
-        <li><a href="{% url 'events:catalog' %}?status=upcoming" class="hover:text-text">{% translate "Coming soon" %}</a></li>
-      </ul>
-    </div>
-    <div class="md:col-span-2">
-      <h3 class="text-sm font-semibold text-text">{% translate "Organizers" %}</h3>
-      <ul class="mt-4 space-y-2.5 text-sm text-muted">
-        <li><a href="{% url 'organizers:apply' %}" class="hover:text-text">{% translate "Sell tickets" %}</a></li>
-        <li><a href="{% url 'support:contact' %}?reason=list_event" class="hover:text-text">{% translate "Promote your event" %}</a></li>
-      </ul>
-    </div>
-    <div class="md:col-span-2">
-      <h3 class="text-sm font-semibold text-text">{% translate "Help" %}</h3>
-      <ul class="mt-4 space-y-2.5 text-sm text-muted">
-        <li><a href="{% url 'cms:faq' %}" class="hover:text-text">{% translate "FAQ" %}</a></li>
-        <li><a href="{% url 'support:contact' %}" class="hover:text-text">{% translate "Contact us" %}</a></li>
-        {% for p in footer_pages %}<li><a href="{{ p.url }}" class="hover:text-text">{{ p.title }}</a></li>{% endfor %}
-      </ul>
-    </div>
-    <div class="md:col-span-2">
-      <h3 class="text-sm font-semibold text-text">{% translate "Get in touch" %}</h3>
-      <ul class="mt-4 space-y-2.5 text-sm text-muted">
-        {% if sitecfg.contact_email %}<li class="flex items-center gap-2">{% icon "mail" "w-4 h-4" %}<a href="mailto:{{ sitecfg.contact_email }}" class="hover:text-text">{{ sitecfg.contact_email }}</a></li>{% endif %}
-        {% if sitecfg.contact_phone %}<li class="flex items-center gap-2">{% icon "phone" "w-4 h-4" %}<a href="tel:{{ sitecfg.contact_phone }}" class="hover:text-text">{{ sitecfg.contact_phone }}</a></li>{% endif %}
-        {% if sitecfg.address %}<li class="flex items-start gap-2">{% icon "pin" "w-4 h-4 mt-0.5" %}<span>{{ sitecfg.address }}</span></li>{% endif %}
-      </ul>
+
+    <div class="grid min-w-0 flex-1 grid-cols-[repeat(auto-fill,minmax(min(100%,10rem),1fr))] gap-x-8 gap-y-10">
+      {% for column in footer_columns %}
+      <div class="min-w-0">
+        <h3 class="text-sm font-semibold text-text">{{ column.title }}</h3>
+        <ul class="mt-4 space-y-2.5 text-sm text-muted">
+          {% for link in column.links %}
+          <li class=""><a href="{{ link.url|localize_url }}" {% if link.new_tab %}target="_blank" rel="noopener"{% endif %} class="hover:text-text">{{ link.label }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+      {% if sitecfg.contact_email or sitecfg.contact_phone or sitecfg.address %}
+      <div class="min-w-0">
+        <h3 class="text-sm font-semibold text-text">{% translate "Get in touch" %}</h3>
+        <ul class="mt-4 space-y-2.5 text-sm text-muted">
+          {% if sitecfg.contact_email %}<li class="flex min-w-0 items-start gap-2">{% icon "mail" "w-4 h-4 mt-0.5 shrink-0" %}<a href="mailto:{{ sitecfg.contact_email }}" class="min-w-0 break-all hover:text-text">{{ sitecfg.contact_email }}</a></li>{% endif %}
+          {% if sitecfg.contact_phone %}<li class="flex min-w-0 items-start gap-2">{% icon "phone" "w-4 h-4 mt-0.5 shrink-0" %}<a href="tel:{{ sitecfg.contact_phone }}" class="min-w-0 hover:text-text">{{ sitecfg.contact_phone }}</a></li>{% endif %}
+          {% if sitecfg.address %}<li class="flex min-w-0 items-start gap-2">{% icon "pin" "w-4 h-4 mt-0.5 shrink-0" %}<span class="min-w-0">{{ sitecfg.address }}</span></li>{% endif %}
+        </ul>
+      </div>
+      {% endif %}
     </div>
   </div>
   <div class="border-t border-line">
-    <div class="container-x flex flex-col items-center justify-between gap-4 py-6 text-xs text-subtle md:flex-row">
-      <p>© {% now "Y" %} {{ sitecfg.site_name }}. {% translate "All rights reserved." %}</p>
-      <div class="flex flex-wrap items-center justify-center gap-2" aria-label="{% translate 'Payment methods' %}">
-        <span class="rounded-md bg-white/5 px-2 py-1 font-semibold text-[#E2136E]">bKash</span>
-        <span class="rounded-md bg-white/5 px-2 py-1 font-semibold text-[#F7941D]">Nagad</span>
-        <span class="rounded-md bg-white/5 px-2 py-1 font-semibold text-[#4FB4E6]">Upay</span>
-        <span class="rounded-md bg-white/5 px-2 py-1 font-semibold text-[#EF4136]">Pathao Pay</span>
-        <span class="rounded-md bg-white/5 px-2 py-1 font-semibold text-white">VISA</span>
-        <span class="rounded-md bg-white/5 px-2 py-1 font-semibold text-white">Mastercard</span>
-      </div>
+    <div class="container-x flex flex-col items-center justify-between gap-4 py-6 text-center text-xs text-subtle md:flex-row md:text-left">
+      <p class="">© {% now "Y" %} {{ sitecfg.site_name }}. {% translate "All rights reserved." %}</p>
+      {% if payment_badges %}
+      <ul class="flex flex-wrap items-center justify-center gap-2" aria-label="{% translate 'Payment methods' %}">
+        {% for p in payment_badges %}
+        <li>{% if p.logo %}<img src="{{ p.logo }}" alt="{{ p.name }}" class="h-6 w-auto max-w-[5rem] rounded bg-white object-contain px-1" loading="lazy">
+            {% else %}<span class="inline-block max-w-[10rem] truncate rounded-md bg-white/5 px-2 py-1 font-semibold" style="color: {{ p.color }}">{{ p.name }}</span>{% endif %}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
     </div>
   </div>
 </footer>

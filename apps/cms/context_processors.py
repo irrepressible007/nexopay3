@@ -1,19 +1,43 @@
 from django.conf import settings
 from django.core.cache import cache
+from django.db.models import Prefetch
 
 from apps.core.cache import versioned_key
 
-from .models import Page, SiteSettings
+from .models import FooterColumn, MenuItem, SiteSettings
+
+
+def _navigation(lang: str) -> dict:
+    """Header menu, footer columns and payment badges — all admin-managed, cached per language."""
+    key = versioned_key("navigation", lang)
+    data = cache.get(key)
+    if data is not None:
+        return data
+    from apps.payments.models import PaymentProviderSetting
+
+    header = [
+        {"label": item.label, "url": item.url, "new_tab": item.open_in_new_tab}
+        for item in MenuItem.objects.filter(location=MenuItem.Location.HEADER, is_enabled=True).order_by("sort_order")
+    ]
+    columns = [
+        {
+            "title": col.title,
+            "links": [{"label": i.label, "url": i.url, "new_tab": i.open_in_new_tab} for i in col.enabled_items],
+        }
+        for col in FooterColumn.objects.filter(is_enabled=True).prefetch_related(
+            Prefetch("items", queryset=MenuItem.objects.filter(is_enabled=True).order_by("sort_order"),
+                     to_attr="enabled_items")
+        )
+    ]
+    payments = [
+        {"name": str(p), "color": p.brand_color, "logo": p.logo.url if p.logo else ""}
+        for p in PaymentProviderSetting.objects.filter(show_in_footer=True).exclude(provider__in=("mock", "free"))
+    ]
+    data = {"header_links": header, "footer_columns": columns, "payment_badges": payments}
+    cache.set(key, data, 3600)
+    return data
 
 
 def site(request):
     lang = getattr(request, "LANGUAGE_CODE", "en")
-    key = versioned_key("footer-pages", lang)
-    pages = cache.get(key)
-    if pages is None:
-        pages = [
-            {"title": p.title, "url": p.get_absolute_url()}
-            for p in Page.objects.filter(is_published=True, show_in_footer=True)
-        ]
-        cache.set(key, pages, 3600)
-    return {"sitecfg": SiteSettings.load(), "footer_pages": pages, "ADMIN_URL": settings.ADMIN_URL}
+    return {"sitecfg": SiteSettings.load(), "ADMIN_URL": settings.ADMIN_URL, **_navigation(lang)}

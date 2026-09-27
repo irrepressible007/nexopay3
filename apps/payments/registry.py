@@ -13,6 +13,16 @@ PROVIDER_CLASSES = {
 }
 
 
+def provider_class(code: str):
+    path = PROVIDER_CLASSES.get(code)
+    if not path:
+        return None
+    try:
+        return import_string(path)
+    except ImportError:
+        return None
+
+
 def mock_allowed() -> bool:
     return settings.DEBUG or getattr(settings, "ALLOW_MOCK_PAYMENTS", False)
 

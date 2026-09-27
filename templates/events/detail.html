@@ -48,15 +48,15 @@
   <div class="container-x pb-6 pt-8 sm:pt-12">
     <div class="flex flex-wrap items-center gap-2">
       {% for c in event.categories.all %}
-      <a href="{% url 'events:catalog' %}?category={{ c.slug }}" class="chip !py-1 text-xs" style="color: {{ c.accent_color }}">{% icon c.icon|default:"ticket" "w-3.5 h-3.5" %}{{ c.name }}</a>
+      <a href="{% url 'events:catalog' %}?category={{ c.slug }}" class="chip !py-1 text-xs" style="color: {{ c.accent_color }}">{% category_icon c "w-3.5 h-3.5" %}{{ c.name }}</a>
       {% endfor %}
       {% if event.status == "sold_out" %}<span class="badge bg-danger/90 text-white">{% translate "Sold out" %}</span>
       {% elif event.status == "ended" %}<span class="badge bg-white/10 text-muted">{% translate "Event ended" %}</span>
       {% elif event.status == "cancelled" %}<span class="badge bg-danger/20 text-danger">{% translate "Cancelled" %}</span>
       {% elif event.status == "coming_soon" %}<span class="badge bg-accent/90 text-ink">{% translate "Coming soon" %}</span>{% endif %}
     </div>
-    <h1 class="mt-4 max-w-4xl font-display text-4xl font-extrabold leading-[1.05] sm:text-6xl">{{ event.title }}</h1>
-    {% if event.summary %}<p class="mt-4 max-w-2xl text-lg text-muted">{{ event.summary }}</p>{% endif %}
+    <h1 class="mt-4 max-w-4xl font-display text-[clamp(2rem,6vw,3.75rem)] font-extrabold leading-[1.06]">{{ event.title }}</h1>
+    {% if event.summary %}<p class="mt-4 max-w-2xl text-base text-muted sm:text-lg">{{ event.summary }}</p>{% endif %}
     <div class="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm">
       <span class="flex items-center gap-2"><span class="grid h-9 w-9 place-items-center rounded-xl bg-white/5 text-brand-2 ring-1 ring-line">{% icon "calendar" "w-4 h-4" %}</span><span><span class="block font-semibold">{{ event.starts_at|date:"l, j F Y" }}</span><span class="text-muted">{{ event.starts_at|date:"g:i A" }}{% if event.ends_at %} – {{ event.ends_at|date:"g:i A" }}{% endif %}</span></span></span>
       <span class="flex items-center gap-2"><span class="grid h-9 w-9 place-items-center rounded-xl bg-white/5 text-accent ring-1 ring-line">{% icon "pin" "w-4 h-4" %}</span><span><span class="block font-semibold">{{ event.venue_name|default:_("Online event") }}</span><span class="text-muted">{{ event.city }}</span></span></span>
@@ -138,11 +138,11 @@
       <a class="btn-ghost !py-2.5" target="_blank" rel="noopener"
          href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text={{ event.title|urlencode }}&amp;dates={{ event.starts_at|date:'Ymd\THis' }}/{{ end_time|date:'Ymd\THis' }}&amp;ctz=Asia/Dhaka&amp;location={{ event.venue_name|urlencode }}&amp;details={{ share_url|urlencode }}">{% icon "calendar" "w-4 h-4" %}{% translate "Google Calendar" %}</a>
       <a class="btn-ghost !py-2.5" href="{% url 'events:ics' event.slug %}">{% icon "download" "w-4 h-4" %}{% translate "Add to calendar" %}</a>
-      <a class="btn-ghost !py-2.5" target="_blank" rel="noopener" href="https://wa.me/?text={{ event.title|urlencode }}%20{{ share_url|urlencode }}">{% icon "whatsapp" "w-4 h-4" %}WhatsApp</a>
-      <a class="btn-ghost !py-2.5" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}">{% icon "facebook" "w-4 h-4" %}Facebook</a>
+      <a class="btn-ghost !py-2.5" target="_blank" rel="noopener" href="https://wa.me/?text={{ event.title|urlencode }}%20{{ share_url|urlencode }}">{% icon "whatsapp" "w-4 h-4" %}{% translate "WhatsApp" %}</a>
+      <a class="btn-ghost !py-2.5" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}">{% icon "facebook" "w-4 h-4" %}{% translate "Facebook" %}</a>
       <button type="button" class="btn-ghost col-span-2 !py-2.5" @click="native()">
         <span x-show="!copied">{% icon "share" "w-4 h-4" %}</span><span x-show="copied" x-cloak class="text-success">{% icon "check" "w-4 h-4" %}</span>
-        <span x-text="copied ? '{% translate "Link copied" %}' : '{% translate "Share event" %}'">{% translate "Share event" %}</span>
+        <span x-text="copied ? '{% translate "Link copied" as t1 %}{{ t1|escapejs }}' : '{% translate "Share event" as t2 %}{{ t2|escapejs }}'">{% translate "Share event" %}</span>
       </button>
     </div>
   </aside>

@@ -3,7 +3,11 @@
 Target: the existing cPanel account (`/home/nexopayc`, CloudLinux, Setup Python App, MySQL, SSH).
 Do **staging first** (`staging.nexopay.com.bd`), then production with the same steps.
 
-## 0. One-time accounts (outside cPanel)
+**Minimum to go live on cPanel alone:** sections 1–4. Cloudflare (DNS/CDN) and R2 (media storage) are
+optional upgrades (sections 0 and 5): without R2, uploads are stored in `public_html/media` and served by
+Apache directly, and CSS/JS are served from `public_html/static` — neither uses a Python process.
+
+## 0. Accounts outside cPanel (can come later)
 
 1. **Cloudflare** (free): add `nexopay.com.bd`, then at your registrar point the nameservers to Cloudflare.
    Copy over *every* existing DNS record first — especially **MX, SPF (TXT), DKIM (TXT)** so cPanel email keeps working.
@@ -37,6 +41,7 @@ git clone <your-repo-url> nexopay          # or upload via cPanel Git Version Co
 cd nexopay
 cp .env.example .env && chmod 600 .env
 nano .env                                  # fill in every value (see below)
+mkdir -p ~/public_html/static ~/public_html/media   # Apache serves these directly
 source ~/virtualenv/nexopay/3.12/bin/activate
 pip install -r requirements.txt            # if mysqlclient fails: pip install PyMySQL (auto-detected)
 python manage.py migrate
@@ -56,7 +61,7 @@ SITE_URL=https://nexopay.com.bd
 ADMIN_URL=<something-unguessable>/
 DATABASE_URL=mysql://nexopayc_app:<password>@localhost:3306/nexopayc_main
 R2_… / MEDIA_URL=https://media.nexopay.com.bd/
-EMAIL_HOST=mail.nexopay.com.bd  EMAIL_HOST_USER=tickets@nexopay.com.bd  EMAIL_HOST_PASSWORD=…
+# Email + payment credentials are entered in the admin (encrypted). EMAIL_* / <PROVIDER>_* env vars are optional fallbacks.
 CACHE_DIR=/home/nexopayc/nexopay/.cache
 ```
 
@@ -70,13 +75,16 @@ holds, opens/closes event sales, reconciles payments and sends ticket emails. Ch
 
 ## 4. Admin configuration (https://nexopay.com.bd/<ADMIN_URL>)
 
-1. **Site settings**: upload the logo (+ a light version for emails/PDFs), favicon, brand colours, contact info,
-   social links, default fees (commission % / buyer fee).
-2. **Payment methods**: for each provider with credentials in `.env`, tick *Enabled*; keep *Sandbox* ticked until
-   live credentials are in place. Never enable "Test payment" in production.
-3. **Homepage sections / Hero slides / Pages / FAQ**: arrange the homepage and edit About, Terms, Privacy, Refund policy
-   (English + Bangla fields).
-4. **Support routes**: confirm which inbox receives each contact-form reason.
+1. **Site settings**: logo (the bundled Nexopay logo is used until you upload one), favicon, brand colours,
+   contact info, social links, reservation time, default fees, and **Outgoing email** (the cPanel mailbox
+   `tickets@…`, host `mail.nexopay.com.bd`, port 465 + SSL, its password).
+2. **Payment methods**: open each provider, paste the merchant credentials from its merchant panel (stored
+   encrypted), tick *Enabled*; keep *Sandbox* ticked until live credentials are in. The list shows
+   "Complete ✓" or which credentials are missing. Never enable "Test payment" in production.
+3. **Site texts**: reword any button/label/message in English or Bangla; filter by page.
+4. **Homepage sections / Hero slides / Header menu / Footer columns / Pages / FAQ**: arrange the homepage and
+   menus; write About, Terms, Privacy and Refund policy (they start empty).
+5. **Support routes**: confirm which inbox receives each contact-form reason.
 
 ## 5. Cloudflare caching (after the site works)
 

@@ -7,6 +7,8 @@ from django.templatetags.static import static as static_url
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
+from apps.cms import views as cms_views
+from apps.core import views as core_views
 from apps.core.sitemaps import SITEMAPS
 
 urlpatterns = [
@@ -14,6 +16,8 @@ urlpatterns = [
     path("payments/", include("apps.payments.urls")),
     path("sitemap.xml", sitemap, {"sitemaps": SITEMAPS}, name="sitemap"),
     path("favicon.ico", lambda request: redirect(static_url("img/favicon.svg"), permanent=True)),
+    path("site.webmanifest", cms_views.webmanifest, name="webmanifest"),
+    path("private-media/<path:path>", core_views.private_media, name="private_media"),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 ]
 

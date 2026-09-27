@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-27 09:52+0600\n"
+"POT-Creation-Date: 2026-09-27 10:30+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,857 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps/accounts/allauth_texts.py:9
+msgid "This account is currently inactive."
+msgstr "এই অ্যাকাউন্টটি এখন নিষ্ক্রিয়।"
+
+#: apps/accounts/allauth_texts.py:10
+msgid "You cannot remove your primary email address."
+msgstr "আপনার প্রধান ইমেইল ঠিকানা সরানো যাবে না।"
+
+#: apps/accounts/allauth_texts.py:11
+msgid "This email address is already associated with this account."
+msgstr "এই ইমেইল ঠিকানাটি ইতিমধ্যে এই অ্যাকাউন্টে যুক্ত আছে।"
+
+#: apps/accounts/allauth_texts.py:12
+msgid "The email address and/or password you specified are not correct."
+msgstr "ইমেইল ঠিকানা বা পাসওয়ার্ড সঠিক নয়।"
+
+#: apps/accounts/allauth_texts.py:13
+msgid "The phone number and/or password you specified are not correct."
+msgstr "ফোন নম্বর বা পাসওয়ার্ড সঠিক নয়।"
+
+#: apps/accounts/allauth_texts.py:14
+msgid "A user is already registered with this email address."
+msgstr "এই ইমেইল ঠিকানা দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট আছে।"
+
+#: apps/accounts/allauth_texts.py:15
+msgid "Please type your current password."
+msgstr "আপনার বর্তমান পাসওয়ার্ড লিখুন।"
+
+#: apps/accounts/allauth_texts.py:16
+msgid "Incorrect code."
+msgstr "কোডটি সঠিক নয়।"
+
+#: apps/accounts/allauth_texts.py:17
+#| msgid "Change password"
+msgid "Incorrect password."
+msgstr "পাসওয়ার্ড সঠিক নয়।"
+
+#: apps/accounts/allauth_texts.py:18
+#| msgid "Invalid code"
+msgid "Invalid or expired key."
+msgstr "কী অবৈধ অথবা মেয়াদোত্তীর্ণ।"
+
+#: apps/accounts/allauth_texts.py:19
+#| msgid "Invalid code"
+msgid "Invalid login."
+msgstr "লগ ইন অবৈধ।"
+
+#: apps/accounts/allauth_texts.py:20
+msgid "The password reset token was invalid."
+msgstr "পাসওয়ার্ড রিসেট টোকেনটি অবৈধ।"
+
+#: apps/accounts/allauth_texts.py:21
+#, python-format
+#| msgid "Manage email addresses"
+msgid "You cannot add more than %d email addresses."
+msgstr "%dটির বেশি ইমেইল ঠিকানা যোগ করা যাবে না।"
+
+#: apps/accounts/allauth_texts.py:22
+msgid "A user is already registered with this phone number."
+msgstr "এই ফোন নম্বর দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট আছে।"
+
+#: apps/accounts/allauth_texts.py:23
+msgid "Too many failed login attempts. Try again later."
+msgstr "অনেকবার ভুল লগ ইনের চেষ্টা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।"
+
+#: apps/accounts/allauth_texts.py:24
+#| msgid "This mobile number is used by another account."
+msgid "The email address is not assigned to any user account."
+msgstr "এই ইমেইল ঠিকানায় কোনো অ্যাকাউন্ট নেই।"
+
+#: apps/accounts/allauth_texts.py:25
+#| msgid "This mobile number is used by another account."
+msgid "The phone number is not assigned to any user account."
+msgstr "এই ফোন নম্বরে কোনো অ্যাকাউন্ট নেই।"
+
+#: apps/accounts/allauth_texts.py:26
+msgid "Your primary email address must be verified."
+msgstr "আপনার প্রধান ইমেইল ঠিকানা যাচাই করা আবশ্যক।"
+
+#: apps/accounts/allauth_texts.py:27
+msgid "Username can not be used. Please use other username."
+msgstr "এই ইউজারনেম ব্যবহার করা যাবে না। অন্য একটি দিন।"
+
+#: apps/accounts/allauth_texts.py:28
+msgid "The username and/or password you specified are not correct."
+msgstr "ইউজারনেম বা পাসওয়ার্ড সঠিক নয়।"
+
+#: apps/accounts/allauth_texts.py:29
+msgid "Please select only one."
+msgstr "শুধু একটি বাছুন।"
+
+#: apps/accounts/allauth_texts.py:30
+msgid "The new value must be different from the current one."
+msgstr "নতুন মান বর্তমানটির থেকে আলাদা হতে হবে।"
+
+#: apps/accounts/allauth_texts.py:31
+msgid "Be patient, you are sending too many requests."
+msgstr "একটু অপেক্ষা করুন, আপনি অনেক বেশি অনুরোধ পাঠাচ্ছেন।"
+
+#: apps/accounts/allauth_texts.py:32
+#| msgid "Change password"
+msgid "Use your password"
+msgstr "পাসওয়ার্ড ব্যবহার করুন"
+
+#: apps/accounts/allauth_texts.py:33
+msgid "Use authenticator app or code"
+msgstr "অথেনটিকেটর অ্যাপ বা কোড ব্যবহার করুন"
+
+#: apps/accounts/allauth_texts.py:34
+msgid "Use a security key"
+msgstr "সিকিউরিটি কী ব্যবহার করুন"
+
+#: apps/accounts/allauth_texts.py:35
+#, python-brace-format
+msgid "Marked {email} as verified."
+msgstr "{email} যাচাইকৃত হিসেবে চিহ্নিত হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:36
+#, python-brace-format
+msgid "Failed to mark {email} as verified."
+msgstr "{email} যাচাইকৃত হিসেবে চিহ্নিত করা যায়নি।"
+
+#: apps/accounts/allauth_texts.py:37
+#| msgid "Manage email addresses"
+msgid "Mark selected email addresses as verified"
+msgstr "নির্বাচিত ইমেইল ঠিকানাগুলো যাচাইকৃত হিসেবে চিহ্নিত করুন"
+
+#: apps/accounts/allauth_texts.py:38
+#| msgid "Account"
+msgid "Accounts"
+msgstr "অ্যাকাউন্ট"
+
+#: apps/accounts/allauth_texts.py:39 templates/account/login.html:16
+#: templates/accounts/profile.html:11 templates/events/detail.html:118
+msgid "Email"
+msgstr "ইমেইল"
+
+#: apps/accounts/allauth_texts.py:40
+#| msgid "email address"
+msgid "Email address"
+msgstr "ইমেইল ঠিকানা"
+
+#: apps/accounts/allauth_texts.py:41
+msgid "Enter a phone number including country code (e.g. +1 for the US)."
+msgstr "দেশের কোডসহ ফোন নম্বর দিন (যেমন বাংলাদেশের জন্য +880)।"
+
+#: apps/accounts/allauth_texts.py:42
+#| msgid "phone"
+msgid "Phone"
+msgstr "ফোন"
+
+#: apps/accounts/allauth_texts.py:43
+msgid "You must type the same password each time."
+msgstr "দুবারই একই পাসওয়ার্ড লিখতে হবে।"
+
+#: apps/accounts/allauth_texts.py:44 templates/account/login.html:21
+msgid "Password"
+msgstr "পাসওয়ার্ড"
+
+#: apps/accounts/allauth_texts.py:45
+msgid "Remember Me"
+msgstr "মনে রাখুন"
+
+#: apps/accounts/allauth_texts.py:46
+#| msgid "name"
+msgid "Username"
+msgstr "ইউজারনেম"
+
+#: apps/accounts/allauth_texts.py:47
+msgid "Login"
+msgstr "লগ ইন"
+
+#: apps/accounts/allauth_texts.py:48
+#| msgid "Reference, email, phone…"
+msgid "Username, email or phone"
+msgstr "ইউজারনেম, ইমেইল বা ফোন"
+
+#: apps/accounts/allauth_texts.py:49
+#| msgid "Language for emails"
+msgid "Username or email"
+msgstr "ইউজারনেম বা ইমেইল"
+
+#: apps/accounts/allauth_texts.py:50
+msgid "Username or phone"
+msgstr "ইউজারনেম বা ফোন"
+
+#: apps/accounts/allauth_texts.py:51
+msgid "Email or phone"
+msgstr "ইমেইল বা ফোন"
+
+#: apps/accounts/allauth_texts.py:52
+msgid "Forgot your password?"
+msgstr "পাসওয়ার্ড ভুলে গেছেন?"
+
+#: apps/accounts/allauth_texts.py:53
+msgid "Email (again)"
+msgstr "ইমেইল (আবার)"
+
+#: apps/accounts/allauth_texts.py:54
+#| msgid "email address"
+msgid "Email address confirmation"
+msgstr "ইমেইল ঠিকানা নিশ্চিতকরণ"
+
+#: apps/accounts/allauth_texts.py:55
+msgid "Email (optional)"
+msgstr "ইমেইল (ঐচ্ছিক)"
+
+#: apps/accounts/allauth_texts.py:56
+msgid "Username (optional)"
+msgstr "ইউজারনেম (ঐচ্ছিক)"
+
+#: apps/accounts/allauth_texts.py:57
+msgid "You must type the same email each time."
+msgstr "দুবারই একই ইমেইল লিখতে হবে।"
+
+#: apps/accounts/allauth_texts.py:58
+#| msgid "Password"
+msgid "Password (again)"
+msgstr "পাসওয়ার্ড (আবার)"
+
+#: apps/accounts/allauth_texts.py:59
+#| msgid "Password"
+msgid "Current Password"
+msgstr "বর্তমান পাসওয়ার্ড"
+
+#: apps/accounts/allauth_texts.py:60
+#| msgid "Password"
+msgid "New Password"
+msgstr "নতুন পাসওয়ার্ড"
+
+#: apps/accounts/allauth_texts.py:61
+msgid "New Password (again)"
+msgstr "নতুন পাসওয়ার্ড (আবার)"
+
+#: apps/accounts/allauth_texts.py:62 templates/accounts/_pass.html:33
+msgid "Code"
+msgstr "কোড"
+
+#: apps/accounts/allauth_texts.py:63 apps/accounts/models.py:51
+msgid "user"
+msgstr "ব্যবহারকারী"
+
+#: apps/accounts/allauth_texts.py:64 apps/accounts/models.py:40
+msgid "email address"
+msgstr "ইমেইল ঠিকানা"
+
+#: apps/accounts/allauth_texts.py:65
+msgid "verified"
+msgstr "যাচাইকৃত"
+
+#: apps/accounts/allauth_texts.py:66
+msgid "primary"
+msgstr "প্রধান"
+
+#: apps/accounts/allauth_texts.py:67
+#| msgid "email address"
+msgid "email addresses"
+msgstr "ইমেইল ঠিকানা"
+
+#: apps/accounts/allauth_texts.py:68
+msgid "created"
+msgstr "তৈরি হয়েছে"
+
+#: apps/accounts/allauth_texts.py:69
+msgid "sent"
+msgstr "পাঠানো হয়েছে"
+
+#: apps/accounts/allauth_texts.py:70
+msgid "key"
+msgstr "কী"
+
+#: apps/accounts/allauth_texts.py:71
+msgid "email confirmation"
+msgstr "ইমেইল নিশ্চিতকরণ"
+
+#: apps/accounts/allauth_texts.py:72
+msgid "email confirmations"
+msgstr "ইমেইল নিশ্চিতকরণ"
+
+#: apps/accounts/allauth_texts.py:73
+#| msgid "Cancelled"
+msgid "Cancel"
+msgstr "বাতিল"
+
+#: apps/accounts/allauth_texts.py:74
+#| msgid "Account management"
+msgid "Account Inactive"
+msgstr "অ্যাকাউন্ট নিষ্ক্রিয়"
+
+#: apps/accounts/allauth_texts.py:75
+msgid "This account is inactive."
+msgstr "এই অ্যাকাউন্টটি নিষ্ক্রিয়।"
+
+#: apps/accounts/allauth_texts.py:76
+msgid "Confirm"
+msgstr "নিশ্চিত করুন"
+
+#: apps/accounts/allauth_texts.py:77
+#| msgid "Sign up"
+msgid "Sign In"
+msgstr "লগ ইন"
+
+#: apps/accounts/allauth_texts.py:78
+#| msgid "Password"
+msgid "Password Reset"
+msgstr "পাসওয়ার্ড রিসেট"
+
+#: apps/accounts/allauth_texts.py:79
+#| msgid "email address"
+msgid "Email Addresses"
+msgstr "ইমেইল ঠিকানাসমূহ"
+
+#: apps/accounts/allauth_texts.py:80
+msgid "The following email addresses are associated with your account:"
+msgstr "আপনার অ্যাকাউন্টে যুক্ত ইমেইল ঠিকানাসমূহ:"
+
+#: apps/accounts/allauth_texts.py:81
+msgid "Verified"
+msgstr "যাচাইকৃত"
+
+#: apps/accounts/allauth_texts.py:82
+msgid "Unverified"
+msgstr "যাচাই হয়নি"
+
+#: apps/accounts/allauth_texts.py:83
+msgid "Primary"
+msgstr "প্রধান"
+
+#: apps/accounts/allauth_texts.py:84
+msgid "Make Primary"
+msgstr "প্রধান করুন"
+
+#: apps/accounts/allauth_texts.py:85
+msgid "Re-send Verification"
+msgstr "আবার যাচাই ইমেইল পাঠান"
+
+#: apps/accounts/allauth_texts.py:86 templates/organizers/_ticket_row.html:13
+#: templates/organizers/event_detail.html:93
+msgid "Remove"
+msgstr "সরান"
+
+#: apps/accounts/allauth_texts.py:87
+#| msgid "email address"
+msgid "Add Email Address"
+msgstr "ইমেইল ঠিকানা যোগ করুন"
+
+#: apps/accounts/allauth_texts.py:88
+#| msgid "Email"
+msgid "Add Email"
+msgstr "ইমেইল যোগ করুন"
+
+#: apps/accounts/allauth_texts.py:89
+msgid "Do you really want to remove the selected email address?"
+msgstr "আপনি কি সত্যিই নির্বাচিত ইমেইল ঠিকানাটি সরাতে চান?"
+
+#: apps/accounts/allauth_texts.py:90
+#, python-format
+msgid ""
+"You are receiving this email because you or someone else tried to signup for an\n"
+"account using email address:\n"
+"\n"
+"%(email)s\n"
+"\n"
+"However, an account using that email address already exists.  In case you have\n"
+"forgotten about this, please use the password forgotten procedure to recover\n"
+"your account:\n"
+"\n"
+"%(password_reset_url)s"
+msgstr ""
+"আপনি অথবা অন্য কেউ এই ইমেইল ঠিকানা দিয়ে অ্যাকাউন্ট খোলার চেষ্টা করেছেন:\n"
+"\n"
+"%(email)s\n"
+"\n"
+"কিন্তু এই ইমেইলে ইতিমধ্যে একটি অ্যাকাউন্ট আছে। পাসওয়ার্ড ভুলে গিয়ে থাকলে নিচের লিংক থেকে\n"
+"আপনার অ্যাকাউন্ট উদ্ধার করুন:\n"
+"\n"
+"%(password_reset_url)s"
+
+#: apps/accounts/allauth_texts.py:91
+msgid "Account Already Exists"
+msgstr "অ্যাকাউন্ট ইতিমধ্যে আছে"
+
+#: apps/accounts/allauth_texts.py:92
+#, python-format
+msgid "Hello from %(site_name)s!"
+msgstr "%(site_name)s থেকে শুভেচ্ছা!"
+
+#: apps/accounts/allauth_texts.py:93
+#, python-format
+msgid ""
+"Thank you for using %(site_name)s!\n"
+"%(site_domain)s"
+msgstr ""
+"%(site_name)s ব্যবহারের জন্য ধন্যবাদ!\n"
+"%(site_domain)s"
+
+#: apps/accounts/allauth_texts.py:94
+msgid ""
+"You are receiving this mail because the following change was made to your "
+"account:"
+msgstr ""
+"আপনার অ্যাকাউন্টে নিচের পরিবর্তনটি করা হয়েছে বলে এই ইমেইল পাঠানো হলো:"
+
+#: apps/accounts/allauth_texts.py:95
+#, python-format
+msgid ""
+"If you do not recognize this change then please take proper security precautions immediately. The change to your account originates from:\n"
+"\n"
+"- IP address: %(ip)s\n"
+"- Browser: %(user_agent)s\n"
+"- Date: %(timestamp)s"
+msgstr ""
+"এই পরিবর্তন আপনি না করে থাকলে এখনই প্রয়োজনীয় নিরাপত্তা ব্যবস্থা নিন। পরিবর্তনটি করা হয়েছে:\n"
+"\n"
+"- আইপি ঠিকানা: %(ip)s\n"
+"- ব্রাউজার: %(user_agent)s\n"
+"- তারিখ: %(timestamp)s"
+
+#: apps/accounts/allauth_texts.py:96
+#, python-format
+msgid "Your email has been changed from %(from_email)s to %(to_email)s."
+msgstr "আপনার ইমেইল %(from_email)s থেকে %(to_email)s-এ পরিবর্তন করা হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:97
+msgid "Email Changed"
+msgstr "ইমেইল পরিবর্তিত হয়েছে"
+
+#: apps/accounts/allauth_texts.py:98
+#| msgid "Your tickets for %(event)s are confirmed."
+msgid "Your email has been confirmed."
+msgstr "আপনার ইমেইল নিশ্চিত হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:99
+msgid "Email Confirmation"
+msgstr "ইমেইল নিশ্চিতকরণ"
+
+#: apps/accounts/allauth_texts.py:100
+#, python-format
+msgid ""
+"You're receiving this email because user %(user_display)s has given your "
+"email address to register an account on %(site_domain)s."
+msgstr ""
+"%(site_domain)s-এ অ্যাকাউন্ট খুলতে %(user_display)s আপনার ইমেইল ঠিকানা "
+"দিয়েছেন বলে এই ইমেইল পাঠানো হলো।"
+
+#: apps/accounts/allauth_texts.py:101
+msgid ""
+"Your email verification code is listed below. Please enter it in your open "
+"browser window."
+msgstr ""
+"আপনার ইমেইল যাচাইয়ের কোড নিচে দেওয়া হলো। খোলা ব্রাউজার উইন্ডোতে কোডটি "
+"লিখুন।"
+
+#: apps/accounts/allauth_texts.py:102
+#, python-format
+msgid "To confirm this is correct, go to %(activate_url)s"
+msgstr "এটি নিশ্চিত করতে এই লিংকে যান: %(activate_url)s"
+
+#: apps/accounts/allauth_texts.py:103
+msgid "Please Confirm Your Email Address"
+msgstr "আপনার ইমেইল ঠিকানা নিশ্চিত করুন"
+
+#: apps/accounts/allauth_texts.py:104
+#, python-format
+msgid "Email address %(deleted_email)s has been removed from your account."
+msgstr "আপনার অ্যাকাউন্ট থেকে %(deleted_email)s ইমেইল ঠিকানাটি সরানো হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:105
+#| msgid "Remove"
+msgid "Email Removed"
+msgstr "ইমেইল সরানো হয়েছে"
+
+#: apps/accounts/allauth_texts.py:106
+msgid "This mail can be safely ignored if you did not initiate this action."
+msgstr "আপনি এটি না করে থাকলে নিশ্চিন্তে এই ইমেইল উপেক্ষা করতে পারেন।"
+
+#: apps/accounts/allauth_texts.py:107
+msgid "Your password has been changed."
+msgstr "আপনার পাসওয়ার্ড পরিবর্তন করা হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:108
+#| msgid "Password"
+msgid "Password Changed"
+msgstr "পাসওয়ার্ড পরিবর্তিত"
+
+#: apps/accounts/allauth_texts.py:109
+msgid ""
+"You're receiving this email because you or someone else has requested a password reset for your user account.\n"
+"It can be safely ignored if you did not request a password reset. Click the link below to reset your password."
+msgstr ""
+"আপনি বা অন্য কেউ আপনার অ্যাকাউন্টের পাসওয়ার্ড রিসেটের অনুরোধ করেছেন।\n"
+"আপনি অনুরোধ না করে থাকলে এই ইমেইল উপেক্ষা করুন। পাসওয়ার্ড রিসেট করতে নিচের লিংকে ক্লিক করুন।"
+
+#: apps/accounts/allauth_texts.py:110
+#, python-format
+msgid "In case you forgot, your username is %(username)s."
+msgstr "ভুলে গিয়ে থাকলে মনে করিয়ে দিই, আপনার ইউজারনেম %(username)s।"
+
+#: apps/accounts/allauth_texts.py:111
+msgid "Password Reset Email"
+msgstr "পাসওয়ার্ড রিসেট ইমেইল"
+
+#: apps/accounts/allauth_texts.py:112
+msgid "Your password has been reset."
+msgstr "আপনার পাসওয়ার্ড রিসেট করা হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:113
+msgid "Your password has been set."
+msgstr "আপনার পাসওয়ার্ড সেট করা হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:114
+#| msgid "Password"
+msgid "Password Set"
+msgstr "পাসওয়ার্ড সেট হয়েছে"
+
+#: apps/accounts/allauth_texts.py:115
+#, python-format
+msgid ""
+"You are receiving this email because you, or someone else, tried to access "
+"an account with email %(email)s. However, we do not have any record of such "
+"an account in our database."
+msgstr ""
+"আপনি বা অন্য কেউ %(email)s ইমেইল দিয়ে একটি অ্যাকাউন্টে ঢোকার চেষ্টা করেছেন,"
+" কিন্তু এই ইমেইলে আমাদের কোনো অ্যাকাউন্ট নেই।"
+
+#: apps/accounts/allauth_texts.py:116
+msgid "If it was you, you can sign up for an account using the link below."
+msgstr "এটি আপনি হলে নিচের লিংক থেকে অ্যাকাউন্ট খুলতে পারেন।"
+
+#: apps/accounts/allauth_texts.py:117
+#| msgid "Account"
+msgid "Unknown Account"
+msgstr "অজানা অ্যাকাউন্ট"
+
+#: apps/accounts/allauth_texts.py:118
+#| msgid "email address"
+msgid "Email Address"
+msgstr "ইমেইল ঠিকানা"
+
+#: apps/accounts/allauth_texts.py:119
+#| msgid "contact email"
+msgid "Current email"
+msgstr "বর্তমান ইমেইল"
+
+#: apps/accounts/allauth_texts.py:120
+#| msgid "worth going to."
+msgid "Changing to"
+msgstr "পরিবর্তন করা হচ্ছে"
+
+#: apps/accounts/allauth_texts.py:121
+msgid "Your email address is still pending verification."
+msgstr "আপনার ইমেইল ঠিকানা এখনো যাচাইয়ের অপেক্ষায়।"
+
+#: apps/accounts/allauth_texts.py:122
+#| msgid "Change language"
+msgid "Cancel Change"
+msgstr "পরিবর্তন বাতিল"
+
+#: apps/accounts/allauth_texts.py:123
+#| msgid "Change password"
+msgid "Change to"
+msgstr "পরিবর্তন করুন"
+
+#: apps/accounts/allauth_texts.py:124
+msgid "Change Email"
+msgstr "ইমেইল পরিবর্তন"
+
+#: apps/accounts/allauth_texts.py:125
+#| msgid "email address"
+msgid "Confirm Email Address"
+msgstr "ইমেইল ঠিকানা নিশ্চিত করুন"
+
+#: apps/accounts/allauth_texts.py:126
+#, python-format
+msgid ""
+"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an email "
+"address for user %(user_display)s."
+msgstr ""
+"অনুগ্রহ করে নিশ্চিত করুন যে <a href=\"mailto:%(email)s\">%(email)s</a> "
+"ঠিকানাটি %(user_display)s-এর ইমেইল।"
+
+#: apps/accounts/allauth_texts.py:127
+#, python-format
+msgid ""
+"Unable to confirm %(email)s because it is already confirmed by a different "
+"account."
+msgstr ""
+"%(email)s নিশ্চিত করা যায়নি, কারণ এটি অন্য একটি অ্যাকাউন্টে নিশ্চিত করা "
+"আছে।"
+
+#: apps/accounts/allauth_texts.py:128
+#, python-format
+msgid ""
+"This email confirmation link expired or is invalid. Please <a "
+"href=\"%(email_url)s\">issue a new email confirmation request</a>."
+msgstr ""
+"ইমেইল নিশ্চিতকরণের লিংকটির মেয়াদ শেষ বা অবৈধ। অনুগ্রহ করে <a "
+"href=\"%(email_url)s\">নতুন করে নিশ্চিতকরণের অনুরোধ করুন</a>।"
+
+#: apps/accounts/allauth_texts.py:129
+#, python-format
+msgid ""
+"If you have not created an account yet, then please %(link)ssign "
+"up%(end_link)s first."
+msgstr "এখনো অ্যাকাউন্ট না থাকলে আগে %(link)sসাইন আপ করুন%(end_link)s।"
+
+#: apps/accounts/allauth_texts.py:130
+msgid "Sign in with a passkey"
+msgstr "পাসকি দিয়ে লগ ইন"
+
+#: apps/accounts/allauth_texts.py:131
+msgid "Send me a sign-in code"
+msgstr "আমাকে লগ ইন কোড পাঠান"
+
+#: apps/accounts/allauth_texts.py:132
+#| msgid "Sign up"
+msgid "Sign Out"
+msgstr "লগ আউট"
+
+#: apps/accounts/allauth_texts.py:133
+msgid "Are you sure you want to sign out?"
+msgstr "আপনি কি নিশ্চিত যে লগ আউট করতে চান?"
+
+#: apps/accounts/allauth_texts.py:134
+#, python-format
+msgid "You cannot remove your primary email address (%(email)s)."
+msgstr "আপনার প্রধান ইমেইল ঠিকানা (%(email)s) সরানো যাবে না।"
+
+#: apps/accounts/allauth_texts.py:135
+#, python-format
+msgid "Confirmation email sent to %(email)s."
+msgstr "%(email)s-এ নিশ্চিতকরণ ইমেইল পাঠানো হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:136
+#, python-format
+msgid "You have confirmed %(email)s."
+msgstr "আপনি %(email)s নিশ্চিত করেছেন।"
+
+#: apps/accounts/allauth_texts.py:137
+#, python-format
+#| msgid "Manage email addresses"
+msgid "Removed email address %(email)s."
+msgstr "%(email)s ইমেইল ঠিকানাটি সরানো হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:138
+#, python-format
+msgid "Successfully signed in as %(name)s."
+msgstr "%(name)s হিসেবে সফলভাবে লগ ইন হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:139
+#| msgid "Your next night out"
+msgid "You have signed out."
+msgstr "আপনি লগ আউট করেছেন।"
+
+#: apps/accounts/allauth_texts.py:140
+msgid "Password successfully changed."
+msgstr "পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:141
+msgid "Password successfully set."
+msgstr "পাসওয়ার্ড সফলভাবে সেট হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:142
+#| msgid "Manage email addresses"
+msgid "Primary email address set."
+msgstr "প্রধান ইমেইল ঠিকানা সেট হয়েছে।"
+
+#: apps/accounts/allauth_texts.py:143
+#| msgid "Change password"
+msgid "Change Password"
+msgstr "পাসওয়ার্ড পরিবর্তন"
+
+#: apps/accounts/allauth_texts.py:144
+#| msgid "Password"
+msgid "Forgot Password?"
+msgstr "পাসওয়ার্ড ভুলে গেছেন?"
+
+#: apps/accounts/allauth_texts.py:145
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll send you "
+"an email allowing you to reset it."
+msgstr ""
+"পাসওয়ার্ড ভুলে গেছেন? নিচে আপনার ইমেইল ঠিকানা দিন, আমরা পাসওয়ার্ড রিসেটের "
+"লিংক পাঠিয়ে দেব।"
+
+#: apps/accounts/allauth_texts.py:146
+#| msgid "Password"
+msgid "Reset My Password"
+msgstr "পাসওয়ার্ড রিসেট করুন"
+
+#: apps/accounts/allauth_texts.py:147
+msgid "Please contact us if you have any trouble resetting your password."
+msgstr "পাসওয়ার্ড রিসেটে সমস্যা হলে আমাদের সাথে যোগাযোগ করুন।"
+
+#: apps/accounts/allauth_texts.py:148
+msgid ""
+"We have sent you an email. If you have not received it please check your "
+"spam folder. Otherwise contact us if you do not receive it in a few minutes."
+msgstr ""
+"আমরা আপনাকে একটি ইমেইল পাঠিয়েছি। না পেলে স্প্যাম ফোল্ডার দেখুন। কয়েক "
+"মিনিটের মধ্যে না পেলে আমাদের সাথে যোগাযোগ করুন।"
+
+#: apps/accounts/allauth_texts.py:149
+msgid "Bad Token"
+msgstr "অবৈধ লিংক"
+
+#: apps/accounts/allauth_texts.py:150
+#, python-format
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a <a href=\"%(passwd_reset_url)s\">new password "
+"reset</a>."
+msgstr ""
+"পাসওয়ার্ড রিসেটের লিংকটি অবৈধ, সম্ভবত এটি আগেই ব্যবহার করা হয়েছে। অনুগ্রহ "
+"করে <a href=\"%(passwd_reset_url)s\">নতুন করে পাসওয়ার্ড রিসেটের অনুরোধ "
+"করুন</a>।"
+
+#: apps/accounts/allauth_texts.py:151
+msgid "Your password is now changed."
+msgstr "আপনার পাসওয়ার্ড এখন পরিবর্তিত।"
+
+#: apps/accounts/allauth_texts.py:152
+#| msgid "Password"
+msgid "Set Password"
+msgstr "পাসওয়ার্ড সেট করুন"
+
+#: apps/accounts/allauth_texts.py:153
+#| msgid "Sign up"
+msgid "Signup"
+msgstr "সাইন আপ"
+
+#: apps/accounts/allauth_texts.py:154
+#| msgid "Sign up"
+msgid "Sign Up"
+msgstr "সাইন আপ"
+
+#: apps/accounts/allauth_texts.py:155
+#, python-format
+msgid "Already have an account? Then please %(link)ssign in%(end_link)s."
+msgstr "ইতিমধ্যে অ্যাকাউন্ট আছে? তাহলে %(link)sলগ ইন করুন%(end_link)s।"
+
+#: apps/accounts/allauth_texts.py:156
+msgid "Sign up using a passkey"
+msgstr "পাসকি দিয়ে সাইন আপ"
+
+#: apps/accounts/allauth_texts.py:157
+msgid "Passkey Sign Up"
+msgstr "পাসকি সাইন আপ"
+
+#: apps/accounts/allauth_texts.py:158
+#| msgid "More options"
+msgid "Other options"
+msgstr "অন্যান্য উপায়"
+
+#: apps/accounts/allauth_texts.py:159
+msgid "Sign Up Closed"
+msgstr "সাইন আপ বন্ধ"
+
+#: apps/accounts/allauth_texts.py:160
+msgid "We are sorry, but the sign up is currently closed."
+msgstr "দুঃখিত, এই মুহূর্তে সাইন আপ বন্ধ আছে।"
+
+#: apps/accounts/allauth_texts.py:161
+msgid "Note"
+msgstr "দ্রষ্টব্য"
+
+#: apps/accounts/allauth_texts.py:162
+#, python-format
+msgid "You are already logged in as %(user_display)s."
+msgstr "আপনি ইতিমধ্যে %(user_display)s হিসেবে লগ ইন আছেন।"
+
+#: apps/accounts/allauth_texts.py:163
+msgid "Warning:"
+msgstr "সতর্কতা:"
+
+#: apps/accounts/allauth_texts.py:164
+msgid ""
+"You currently do not have any email address set up. You should really add an"
+" email address so you can receive notifications, reset your password, etc."
+msgstr ""
+"আপনার অ্যাকাউন্টে এখন কোনো ইমেইল ঠিকানা নেই। নোটিফিকেশন পেতে ও পাসওয়ার্ড "
+"রিসেট করতে একটি ইমেইল ঠিকানা যোগ করুন।"
+
+#: apps/accounts/allauth_texts.py:165
+#| msgid "email address"
+msgid "Verify Your Email Address"
+msgstr "আপনার ইমেইল ঠিকানা যাচাই করুন"
+
+#: apps/accounts/allauth_texts.py:166
+msgid ""
+"We have sent an email to you for verification. Follow the link provided to "
+"finalize the signup process. If you do not see the verification email in "
+"your main inbox, check your spam folder. Please contact us if you do not "
+"receive the verification email within a few minutes."
+msgstr ""
+"যাচাইয়ের জন্য আমরা আপনাকে একটি ইমেইল পাঠিয়েছি। সাইন আপ সম্পন্ন করতে "
+"ইমেইলের লিংকে ক্লিক করুন। ইনবক্সে না পেলে স্প্যাম ফোল্ডার দেখুন। কয়েক "
+"মিনিটের মধ্যে না পেলে আমাদের সাথে যোগাযোগ করুন।"
+
+#: apps/accounts/allauth_texts.py:167
+msgid ""
+"This part of the site requires us to verify that\n"
+"you are who you claim to be. For this purpose, we require that you\n"
+"verify ownership of your email address. "
+msgstr ""
+"সাইটের এই অংশে আপনার পরিচয় নিশ্চিত করা প্রয়োজন।\n"
+"এজন্য আপনার ইমেইল ঠিকানাটি যে আপনার,\n"
+"তা যাচাই করতে হবে। "
+
+#: apps/accounts/allauth_texts.py:168
+msgid ""
+"We have sent an email to you for\n"
+"verification. Please click on the link inside that email. If you do not see the verification email in your main inbox, check your spam folder. Otherwise\n"
+"contact us if you do not receive it within a few minutes."
+msgstr ""
+"যাচাইয়ের জন্য আমরা আপনাকে একটি ইমেইল\n"
+"পাঠিয়েছি। ইমেইলের ভেতরের লিংকে ক্লিক করুন। ইনবক্সে না পেলে স্প্যাম ফোল্ডার দেখুন। কয়েক মিনিটের মধ্যে না পেলে\n"
+"আমাদের সাথে যোগাযোগ করুন।"
+
+#: apps/accounts/allauth_texts.py:169
+#, python-format
+msgid ""
+"<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your "
+"email address</a>."
+msgstr ""
+"<strong>দ্রষ্টব্য:</strong> আপনি এখনো <a href=\"%(email_url)s\">ইমেইল ঠিকানা"
+" পরিবর্তন</a> করতে পারেন।"
+
+#: apps/accounts/allauth_texts.py:170
+#| msgid "message"
+msgid "Messages:"
+msgstr "বার্তা:"
+
+#: apps/accounts/allauth_texts.py:171
+#| msgid "Menu"
+msgid "Menu:"
+msgstr "মেনু:"
+
+#: apps/accounts/allauth_texts.py:172
+msgid "Account Connections"
+msgstr "সংযুক্ত অ্যাকাউন্ট"
+
+#: apps/accounts/allauth_texts.py:173
+msgid "Two-Factor Authentication"
+msgstr "টু-ফ্যাক্টর যাচাই"
+
+#: apps/accounts/allauth_texts.py:174
+#| msgid "Questions?"
+msgid "Sessions"
+msgstr "সেশন"
 
 #: apps/accounts/apps.py:8
 msgid "People"
@@ -46,10 +897,6 @@ msgstr "ইমেইলের ভাষা"
 msgid "This mobile number is used by another account."
 msgstr "এই মোবাইল নম্বরটি অন্য একটি অ্যাকাউন্টে ব্যবহৃত হচ্ছে।"
 
-#: apps/accounts/models.py:40
-msgid "email address"
-msgstr "ইমেইল ঠিকানা"
-
 #: apps/accounts/models.py:41
 msgid "full name"
 msgstr "পুরো নাম"
@@ -57,10 +904,6 @@ msgstr "পুরো নাম"
 #: apps/accounts/models.py:42
 msgid "mobile number"
 msgstr "মোবাইল নম্বর"
-
-#: apps/accounts/models.py:51
-msgid "user"
-msgstr "ব্যবহারকারী"
 
 #: apps/accounts/models.py:52
 msgid "users"
@@ -78,112 +921,216 @@ msgstr "ওয়েবসাইটের কনটেন্ট"
 msgid "SVG or PNG, shown on dark backgrounds."
 msgstr "SVG বা PNG, গাঢ় ব্যাকগ্রাউন্ডে দেখানো হয়।"
 
-#: apps/cms/models.py:33
-msgid "Used in emails and PDF tickets."
-msgstr "ইমেইল ও PDF টিকিটে ব্যবহৃত হয়।"
-
 #: apps/cms/models.py:35
+msgid ""
+"All-white PNG used on coloured backgrounds: email headers and PDF tickets."
+msgstr "রঙিন ব্যাকগ্রাউন্ডে (ইমেইলের হেডার ও PDF টিকিট) ব্যবহৃত সাদা PNG।"
+
+#: apps/cms/models.py:38
 msgid "Default social share image."
 msgstr "সোশ্যাল শেয়ারের ডিফল্ট ছবি।"
 
-#: apps/cms/models.py:63
+#: apps/cms/models.py:67
+msgid "How long tickets stay reserved while a buyer pays."
+msgstr "ক্রেতা পেমেন্ট করার সময় টিকিট কতক্ষণ সংরক্ষিত থাকবে।"
+
+#: apps/cms/models.py:71
+msgid "e.g. mail.nexopay.com.bd"
+msgstr "যেমন: mail.nexopay.com.bd"
+
+#: apps/cms/models.py:73
+msgid "Port 465: SSL on. Port 587: SSL off, TLS on."
+msgstr "পোর্ট ৪৬৫: SSL চালু। পোর্ট ৫৮৭: SSL বন্ধ, TLS চালু।"
+
+#: apps/cms/models.py:78
+#| msgid "Sell tickets on Nexopay"
+msgid "e.g. tickets@nexopay.com.bd"
+msgstr "যেমন: tickets@nexopay.com.bd"
+
+#: apps/cms/models.py:80
 msgid "Show a maintenance page to non-staff visitors."
 msgstr "স্টাফ ছাড়া অন্য ভিজিটরদের রক্ষণাবেক্ষণ পেজ দেখান।"
 
-#: apps/cms/models.py:66 apps/cms/models.py:67
+#: apps/cms/models.py:83 apps/cms/models.py:84
 msgid "site settings"
 msgstr "সাইট সেটিংস"
 
-#: apps/cms/models.py:93
+#: apps/cms/models.py:122
 msgid "Hero slider"
 msgstr "হিরো স্লাইডার"
 
-#: apps/cms/models.py:94
+#: apps/cms/models.py:123
 msgid "Featured events carousel"
 msgstr "ফিচার্ড ইভেন্ট ক্যারোসেল"
 
-#: apps/cms/models.py:95
+#: apps/cms/models.py:124
 msgid "Category grid"
 msgstr "ক্যাটাগরি গ্রিড"
 
-#: apps/cms/models.py:96
+#: apps/cms/models.py:125
 msgid "Happening this week"
 msgstr "এই সপ্তাহে"
 
-#: apps/cms/models.py:97 apps/events/models.py:62
+#: apps/cms/models.py:126 apps/events/models.py:74
 #: templates/events/detail.html:56 templates/partials/event_card.html:21
-#: templates/partials/footer.html:19 templates/partials/header.html:11
-#: templates/partials/header.html:47
 msgid "Coming soon"
 msgstr "শীঘ্রই আসছে"
 
-#: apps/cms/models.py:98
+#: apps/cms/models.py:127
 msgid "Just announced"
 msgstr "নতুন ঘোষণা"
 
-#: apps/cms/models.py:99
+#: apps/cms/models.py:128
 msgid "Category spotlight"
 msgstr "ক্যাটাগরি স্পটলাইট"
 
-#: apps/cms/models.py:100
+#: apps/cms/models.py:129
 msgid "Promo banner"
 msgstr "প্রোমো ব্যানার"
 
-#: apps/cms/models.py:101
+#: apps/cms/models.py:130
 msgid "'List your event' call to action"
 msgstr "'আপনার ইভেন্ট যোগ করুন' আহ্বান"
 
-#: apps/cms/models.py:102
+#: apps/cms/models.py:131
 msgid "Partner logos"
 msgstr "পার্টনার লোগো"
 
-#: apps/cms/models.py:103
+#: apps/cms/models.py:132
 msgid "FAQ teaser"
 msgstr "সাধারণ জিজ্ঞাসা (সংক্ষেপে)"
 
-#: apps/cms/models.py:110
+#: apps/cms/models.py:139
 msgid "Only for 'Category spotlight'."
 msgstr "শুধু 'ক্যাটাগরি স্পটলাইট'-এর জন্য।"
 
-#: apps/cms/models.py:112
+#: apps/cms/models.py:141
 msgid "Only for 'Promo banner'."
 msgstr "শুধু 'প্রোমো ব্যানার'-এর জন্য।"
 
-#: apps/cms/models.py:124
+#: apps/cms/models.py:153
 msgid "homepage section"
 msgstr "হোমপেজ সেকশন"
 
-#: apps/cms/models.py:125
+#: apps/cms/models.py:154
 msgid "homepage sections"
 msgstr "হোমপেজ সেকশন"
 
-#: apps/cms/models.py:140
+#: apps/cms/models.py:169
 msgid "Leave blank to link to the event."
 msgstr "ইভেন্টে লিংক করতে ফাঁকা রাখুন।"
 
-#: apps/cms/models.py:149
+#: apps/cms/models.py:178
 msgid "hero slide"
 msgstr "হিরো স্লাইড"
 
-#: apps/cms/models.py:150
+#: apps/cms/models.py:179
 msgid "hero slides"
 msgstr "হিরো স্লাইড"
 
+#: apps/cms/models.py:200
+msgid "footer column"
+msgstr "ফুটার কলাম"
+
+#: apps/cms/models.py:201
+msgid "footer columns"
+msgstr "ফুটার কলাম"
+
+#: apps/cms/models.py:212
+msgid "Header menu"
+msgstr "হেডার মেনু"
+
 #: apps/cms/models.py:213
+msgid "Footer column"
+msgstr "ফুটার কলাম"
+
+#: apps/cms/models.py:218
+msgid "Required for footer links."
+msgstr "ফুটারের লিংকের জন্য আবশ্যক।"
+
+#: apps/cms/models.py:222
+msgid ""
+"A path on this site like /events/?status=live, or a full https:// link."
+msgstr ""
+"এই সাইটের পাথ, যেমন /events/?status=live, অথবা সম্পূর্ণ https:// লিংক।"
+
+#: apps/cms/models.py:229
+#| msgid "map link"
+msgid "menu link"
+msgstr "মেনু লিংক"
+
+#: apps/cms/models.py:230
+#| msgid "map link"
+msgid "menu links"
+msgstr "মেনু লিংক"
+
+#: apps/cms/models.py:240
+msgid "Choose which footer column this link belongs to."
+msgstr "লিংকটি কোন ফুটার কলামে থাকবে তা বাছুন।"
+
+#: apps/cms/models.py:242
+msgid "Start with / for a page on this site, or https:// for another site."
+msgstr ""
+"এই সাইটের পেজের জন্য / দিয়ে, অন্য সাইটের জন্য https:// দিয়ে শুরু করুন।"
+
+#: apps/cms/models.py:250
+msgid "header menu link"
+msgstr "হেডার মেনুর লিংক"
+
+#: apps/cms/models.py:251
+msgid "header menu"
+msgstr "হেডার মেনু"
+
+#: apps/cms/models.py:303
 msgid "FAQ item"
 msgstr "প্রশ্নোত্তর"
 
-#: apps/cms/models.py:214 templates/cms/faq.html:3
-#: templates/partials/footer.html:32
+#: apps/cms/models.py:304 templates/cms/faq.html:3
 msgid "FAQ"
 msgstr "সাধারণ জিজ্ঞাসা"
+
+#: apps/cms/models.py:332
+msgid "Leave empty to use the original text."
+msgstr "মূল লেখা রাখতে ফাঁকা রাখুন।"
+
+#: apps/cms/models.py:334
+msgid "Only for texts with a number, e.g. '3 tickets'."
+msgstr "শুধু সংখ্যাসহ লেখার জন্য, যেমন '৩টি টিকিট'।"
+
+#: apps/cms/models.py:336
+msgid "Leave empty to use the default Bangla."
+msgstr "ডিফল্ট বাংলা রাখতে ফাঁকা রাখুন।"
+
+#: apps/cms/models.py:341
+#| msgid "Website content"
+msgid "site text"
+msgstr "সাইটের লেখা"
+
+#: apps/cms/models.py:342
+#| msgid "site settings"
+msgid "site texts"
+msgstr "সাইটের লেখা"
+
+#: apps/cms/models.py:372
+#, python-format
+msgid "keep %(p)s"
+msgstr "%(p)s রাখুন"
+
+#: apps/cms/models.py:374
+#, python-format
+msgid "remove %(p)s"
+msgstr "%(p)s সরান"
+
+#: apps/cms/models.py:375
+#, python-format
+msgid "Placeholders must stay exactly as in the original: %(details)s."
+msgstr "প্লেসহোল্ডারগুলো মূল লেখার মতোই রাখতে হবে: %(details)s।"
 
 #: apps/core/utils.py:18
 msgid "Enter a valid Bangladeshi mobile number, e.g. 01712345678."
 msgstr "সঠিক বাংলাদেশি মোবাইল নম্বর দিন, যেমন: 01712345678।"
 
 #: apps/events/apps.py:8 templates/events/catalog.html:3
-#: templates/partials/header.html:9
 msgid "Events"
 msgstr "ইভেন্ট"
 
@@ -191,172 +1138,183 @@ msgstr "ইভেন্ট"
 msgid "Use a hex colour like #A855F7."
 msgstr "#A855F7 এর মতো হেক্স রং ব্যবহার করুন।"
 
-#: apps/events/models.py:19 apps/events/models.py:165
+#: apps/events/models.py:28 apps/events/models.py:177
 #: apps/support/models.py:36
 msgid "name"
 msgstr "নাম"
 
-#: apps/events/models.py:22
+#: apps/events/models.py:30
 msgid "icon"
 msgstr "আইকন"
 
-#: apps/events/models.py:22
-msgid "Icon key from the built-in icon set, e.g. 'music'."
-msgstr "বিল্ট-ইন আইকন সেট থেকে আইকনের নাম, যেমন 'music'।"
+#: apps/events/models.py:32
+msgid "custom icon"
+msgstr "নিজস্ব আইকন"
 
-#: apps/events/models.py:24
+#: apps/events/models.py:33
+msgid "Optional SVG/PNG. Replaces the built-in icon."
+msgstr "ঐচ্ছিক SVG/PNG। বিল্ট-ইন আইকনের বদলে দেখাবে।"
+
+#: apps/events/models.py:35
 msgid "accent colour"
 msgstr "অ্যাকসেন্ট রং"
 
-#: apps/events/models.py:30
+#: apps/events/models.py:37
+msgid "show in homepage grid"
+msgstr "হোমপেজের গ্রিডে দেখান"
+
+#: apps/events/models.py:38
+msgid "show as quick link in the hero"
+msgstr "হিরো অংশে দ্রুত লিংক হিসেবে দেখান"
+
+#: apps/events/models.py:42
 msgid "category"
 msgstr "ক্যাটাগরি"
 
-#: apps/events/models.py:31 apps/events/models.py:74
+#: apps/events/models.py:43 apps/events/models.py:86
 msgid "categories"
 msgstr "ক্যাটাগরি"
 
-#: apps/events/models.py:61
+#: apps/events/models.py:73
 msgid "Draft"
 msgstr "খসড়া"
 
-#: apps/events/models.py:63 templates/partials/event_card.html:20
-#: templates/partials/header.html:10 templates/partials/header.html:46
+#: apps/events/models.py:75 templates/partials/event_card.html:20
 msgid "On sale"
 msgstr "বিক্রি চলছে"
 
-#: apps/events/models.py:64 templates/events/_ticket_panel.html:46
+#: apps/events/models.py:76 templates/events/_ticket_panel.html:46
 #: templates/events/detail.html:53 templates/partials/event_card.html:22
 msgid "Sold out"
 msgstr "বিক্রি শেষ"
 
-#: apps/events/models.py:65 templates/partials/event_card.html:23
+#: apps/events/models.py:77 templates/partials/event_card.html:23
 msgid "Ended"
 msgstr "শেষ হয়েছে"
 
-#: apps/events/models.py:66 apps/orders/models.py:28
-#: apps/payments/models.py:48 templates/events/detail.html:55
+#: apps/events/models.py:78 apps/orders/models.py:28
+#: apps/payments/models.py:63 templates/events/detail.html:55
 #: templates/partials/event_card.html:24
 msgid "Cancelled"
 msgstr "বাতিল"
 
-#: apps/events/models.py:69
+#: apps/events/models.py:81
 msgid "title"
 msgstr "শিরোনাম"
 
-#: apps/events/models.py:71
+#: apps/events/models.py:83
 msgid "short summary"
 msgstr "সংক্ষিপ্ত বিবরণ"
 
-#: apps/events/models.py:72
+#: apps/events/models.py:84
 msgid "description"
 msgstr "বিবরণ"
 
-#: apps/events/models.py:73
+#: apps/events/models.py:85
 msgid "event terms & conditions"
 msgstr "ইভেন্টের শর্তাবলী"
 
-#: apps/events/models.py:78
+#: apps/events/models.py:90
 msgid "featured"
 msgstr "ফিচার্ড"
 
-#: apps/events/models.py:78
+#: apps/events/models.py:90
 msgid "Editorial promotion; independent of status."
 msgstr "সম্পাদকীয় প্রচার; স্ট্যাটাসের উপর নির্ভরশীল নয়।"
 
-#: apps/events/models.py:80
+#: apps/events/models.py:92
 msgid "Lower shows first."
 msgstr "ছোট সংখ্যা আগে দেখাবে।"
 
-#: apps/events/models.py:82
+#: apps/events/models.py:94
 msgid "starts at"
 msgstr "শুরু"
 
-#: apps/events/models.py:83
+#: apps/events/models.py:95
 msgid "ends at"
 msgstr "শেষ"
 
-#: apps/events/models.py:84
+#: apps/events/models.py:96
 msgid "ticket sales open"
 msgstr "টিকিট বিক্রি শুরু"
 
-#: apps/events/models.py:85
+#: apps/events/models.py:97
 msgid "ticket sales close"
 msgstr "টিকিট বিক্রি শেষ"
 
-#: apps/events/models.py:87
+#: apps/events/models.py:99
 msgid "venue"
 msgstr "ভেন্যু"
 
-#: apps/events/models.py:88
+#: apps/events/models.py:100
 msgid "venue address"
 msgstr "ভেন্যুর ঠিকানা"
 
-#: apps/events/models.py:89
+#: apps/events/models.py:101
 msgid "city"
 msgstr "শহর"
 
-#: apps/events/models.py:90
+#: apps/events/models.py:102
 msgid "map link"
 msgstr "ম্যাপ লিংক"
 
-#: apps/events/models.py:91
+#: apps/events/models.py:103
 msgid "online event"
 msgstr "অনলাইন ইভেন্ট"
 
-#: apps/events/models.py:93
+#: apps/events/models.py:105
 msgid "banner image"
 msgstr "ব্যানার ছবি"
 
-#: apps/events/models.py:101
+#: apps/events/models.py:113
 msgid "event"
 msgstr "ইভেন্ট"
 
-#: apps/events/models.py:102 templates/organizers/dashboard.html:17
+#: apps/events/models.py:114 templates/organizers/dashboard.html:17
 msgid "events"
 msgstr "ইভেন্ট"
 
-#: apps/events/models.py:166
+#: apps/events/models.py:178
 msgid "what's included"
 msgstr "যা যা থাকছে"
 
-#: apps/events/models.py:168
+#: apps/events/models.py:180
 msgid "price (BDT)"
 msgstr "মূল্য (টাকা)"
 
-#: apps/events/models.py:170
+#: apps/events/models.py:182
 msgid "total quantity"
 msgstr "মোট সংখ্যা"
 
-#: apps/events/models.py:173
+#: apps/events/models.py:185
 msgid "available for sale"
 msgstr "বিক্রির জন্য উন্মুক্ত"
 
-#: apps/events/models.py:175
+#: apps/events/models.py:187
 msgid "all-access bundle"
 msgstr "অল-অ্যাক্সেস বান্ডেল"
 
-#: apps/events/models.py:175
+#: apps/events/models.py:187
 msgid "Highlight as the all-inclusive tier."
 msgstr "সব-কিছু-সহ টিকিট হিসেবে হাইলাইট করুন।"
 
-#: apps/events/models.py:178
+#: apps/events/models.py:190
 msgid "allow buying more than one"
 msgstr "একাধিক কেনার অনুমতি"
 
-#: apps/events/models.py:180
+#: apps/events/models.py:192
 msgid "By default one email/phone can buy this ticket only once."
 msgstr "ডিফল্টভাবে একটি ইমেইল/ফোন দিয়ে এই টিকিট একবারই কেনা যায়।"
 
-#: apps/events/models.py:182
+#: apps/events/models.py:194
 msgid "max per order"
 msgstr "প্রতি অর্ডারে সর্বোচ্চ"
 
-#: apps/events/models.py:188
+#: apps/events/models.py:200
 msgid "ticket type"
 msgstr "টিকিটের ধরন"
 
-#: apps/events/models.py:189
+#: apps/events/models.py:201
 msgid "ticket types"
 msgstr "টিকিটের ধরন"
 
@@ -415,7 +1373,7 @@ msgstr "পরিশোধিত"
 msgid "Expired"
 msgstr "মেয়াদোত্তীর্ণ"
 
-#: apps/orders/models.py:29 apps/payments/models.py:81
+#: apps/orders/models.py:29 apps/payments/models.py:96
 #: apps/tickets/models.py:31 templates/accounts/_pass.html:25
 msgid "Refunded"
 msgstr "রিফান্ড হয়েছে"
@@ -436,57 +1394,57 @@ msgstr "অর্ডার"
 msgid "orders"
 msgstr "অর্ডার"
 
-#: apps/orders/services.py:120
+#: apps/orders/services.py:126
 msgid "Choose at least one ticket."
 msgstr "অন্তত একটি টিকিট বেছে নিন।"
 
-#: apps/orders/services.py:124
+#: apps/orders/services.py:130
 msgid "Tickets for this event are not on sale right now."
 msgstr "এই ইভেন্টের টিকিট এখন বিক্রি হচ্ছে না।"
 
-#: apps/orders/services.py:127
+#: apps/orders/services.py:133
 #, python-format
 msgid "You can buy at most %(n)s tickets in one order."
 msgstr "এক অর্ডারে সর্বোচ্চ %(n)sটি টিকিট কেনা যাবে।"
 
-#: apps/orders/services.py:140
+#: apps/orders/services.py:146
 msgid "One of the selected tickets is no longer available."
 msgstr "নির্বাচিত একটি টিকিট আর পাওয়া যাচ্ছে না।"
 
-#: apps/orders/services.py:146
+#: apps/orders/services.py:152
 #, python-format
 msgid "“%(name)s” is not on sale right now."
 msgstr "“%(name)s” এখন বিক্রি হচ্ছে না।"
 
-#: apps/orders/services.py:149
+#: apps/orders/services.py:155
 #, python-format
 msgid "You can buy at most %(n)s of “%(name)s”."
 msgstr "“%(name)s” সর্বোচ্চ %(n)sটি কেনা যাবে।"
 
-#: apps/orders/services.py:153
+#: apps/orders/services.py:159
 #, python-format
 msgid "“%(name)s” is sold out."
 msgstr "“%(name)s” বিক্রি শেষ।"
 
-#: apps/orders/services.py:154
+#: apps/orders/services.py:160
 #, python-format
 msgid "Only %(n)s left of “%(name)s”."
 msgstr "“%(name)s” আর মাত্র %(n)sটি বাকি।"
 
-#: apps/orders/services.py:191
+#: apps/orders/services.py:197
 #, python-format
 msgid ""
 "You already have a ticket for “%(name)s”. Each person can buy it only once."
 msgstr ""
 "“%(name)s” টিকিট আপনার ইতিমধ্যে আছে। প্রত্যেকে এটি একবারই কিনতে পারবেন।"
 
-#: apps/orders/services.py:199
+#: apps/orders/services.py:205
 msgid ""
 "You already have a ticket for this event. Each person can buy it only once."
 msgstr ""
 "এই ইভেন্টের টিকিট আপনার ইতিমধ্যে আছে। প্রত্যেকে এটি একবারই কিনতে পারবেন।"
 
-#: apps/organizers/apps.py:8 templates/partials/footer.html:23
+#: apps/organizers/apps.py:8
 msgid "Organizers"
 msgstr "আয়োজক"
 
@@ -609,11 +1567,11 @@ msgstr "স্টাফের অ্যাকাউন্টের ইমেই�
 msgid "Pending review"
 msgstr "পর্যালোচনাধীন"
 
-#: apps/organizers/models.py:34 apps/payments/models.py:80
+#: apps/organizers/models.py:34 apps/payments/models.py:95
 msgid "Approved"
 msgstr "অনুমোদিত"
 
-#: apps/organizers/models.py:35 apps/payments/models.py:83
+#: apps/organizers/models.py:35 apps/payments/models.py:98
 msgid "Rejected"
 msgstr "প্রত্যাখ্যাত"
 
@@ -727,47 +1685,55 @@ msgstr "টেস্ট পেমেন্ট"
 msgid "Use the provider's sandbox/test environment."
 msgstr "প্রোভাইডারের স্যান্ডবক্স/টেস্ট পরিবেশ ব্যবহার করুন।"
 
+#: apps/payments/models.py:27
+msgid "Colour of the name badge, e.g. #E2136E."
+msgstr "নামের ব্যাজের রং, যেমন #E2136E।"
+
 #: apps/payments/models.py:29
+msgid "Show this method in the site footer."
+msgstr "এই মাধ্যমটি সাইটের ফুটারে দেখান।"
+
+#: apps/payments/models.py:34
 msgid "payment method"
 msgstr "পেমেন্ট মাধ্যম"
 
-#: apps/payments/models.py:30
+#: apps/payments/models.py:35
 msgid "payment methods"
 msgstr "পেমেন্ট মাধ্যম"
 
-#: apps/payments/models.py:45
+#: apps/payments/models.py:60
 msgid "Initiated"
 msgstr "শুরু হয়েছে"
 
-#: apps/payments/models.py:46
+#: apps/payments/models.py:61
 msgid "Succeeded"
 msgstr "সফল"
 
-#: apps/payments/models.py:47 apps/payments/models.py:82
+#: apps/payments/models.py:62 apps/payments/models.py:97
 msgid "Failed"
 msgstr "ব্যর্থ"
 
-#: apps/payments/models.py:52
+#: apps/payments/models.py:67
 msgid "Our id sent to the provider."
 msgstr "প্রোভাইডারকে পাঠানো আমাদের আইডি।"
 
-#: apps/payments/models.py:55
+#: apps/payments/models.py:70
 msgid "Provider session/payment id."
 msgstr "প্রোভাইডারের সেশন/পেমেন্ট আইডি।"
 
-#: apps/payments/models.py:79
+#: apps/payments/models.py:94
 msgid "Requested"
 msgstr "অনুরোধ করা হয়েছে"
 
-#: apps/payments/models.py:97
+#: apps/payments/models.py:112
 msgid "Reference of a refund sent manually (e.g. bKash send-money TrxID)."
 msgstr "ম্যানুয়ালি পাঠানো রিফান্ডের রেফারেন্স (যেমন বিকাশ সেন্ড-মানি TrxID)।"
 
-#: apps/payments/models.py:115
+#: apps/payments/models.py:130
 msgid "e.g. Bank transfer, bKash"
 msgstr "যেমন: ব্যাংক ট্রান্সফার, বিকাশ"
 
-#: apps/payments/tasks.py:15
+#: apps/payments/tasks.py:19
 #, python-format
 msgid "Your refund for %(event)s"
 msgstr "%(event)s-এর রিফান্ড"
@@ -932,31 +1898,31 @@ msgstr "ভিন্ন ইভেন্ট"
 msgid "Invalid code"
 msgstr "অবৈধ কোড"
 
-#: apps/tickets/rendering.py:82
+#: apps/tickets/rendering.py:105
 msgid "Date & time"
 msgstr "তারিখ ও সময়"
 
-#: apps/tickets/rendering.py:83 templates/emails/tickets.txt:7
+#: apps/tickets/rendering.py:106 templates/emails/tickets.txt:7
 #: templates/events/detail.html:85
 msgid "Venue"
 msgstr "ভেন্যু"
 
-#: apps/tickets/rendering.py:83 templates/cms/sections/featured.html:26
+#: apps/tickets/rendering.py:106 templates/cms/sections/featured.html:26
 #: templates/emails/tickets.html:18 templates/emails/tickets.txt:7
 #: templates/partials/event_card.html:35
 msgid "Online"
 msgstr "অনলাইন"
 
-#: apps/tickets/rendering.py:84 templates/accounts/_pass.html:31
+#: apps/tickets/rendering.py:107 templates/accounts/_pass.html:31
 #: templates/organizers/event_detail.html:32 templates/tickets/share.html:3
 msgid "Ticket"
 msgstr "টিকিট"
 
-#: apps/tickets/rendering.py:85 templates/accounts/_pass.html:32
+#: apps/tickets/rendering.py:108 templates/accounts/_pass.html:32
 msgid "Name"
 msgstr "নাম"
 
-#: apps/tickets/rendering.py:117
+#: apps/tickets/rendering.py:140
 msgid ""
 "Show this QR code at the entrance. It can be scanned only once — do not "
 "share it."
@@ -964,7 +1930,7 @@ msgstr ""
 "প্রবেশপথে এই QR কোড দেখান। এটি একবারই স্ক্যান করা যায় — কারও সাথে শেয়ার "
 "করবেন না।"
 
-#: apps/tickets/rendering.py:122 templates/accounts/_pass.html:34
+#: apps/tickets/rendering.py:145 templates/accounts/_pass.html:34
 #: templates/emails/refund.txt:5 templates/emails/tickets.html:16
 #: templates/emails/tickets.txt:5 templates/orders/detail.html:3
 msgid "Order"
@@ -986,21 +1952,22 @@ msgstr "টিকিটটি অন্য ইভেন্টের"
 msgid "Not a valid Nexopay ticket"
 msgstr "বৈধ নেক্সোপে টিকিট নয়"
 
-#: apps/tickets/tasks.py:25
+#: apps/tickets/tasks.py:46
 #, python-format
 msgid "Your tickets for %(event)s"
 msgstr "%(event)s-এর টিকিট"
 
-#: nexopay/settings/base.py:137
+#: nexopay/settings/base.py:141
 msgid "English"
 msgstr "English"
 
-#: nexopay/settings/base.py:137
+#: nexopay/settings/base.py:141
 msgid "Bangla"
 msgstr "বাংলা"
 
 #: templates/account/login.html:3 templates/account/login.html:30
-#: templates/account/signup.html:24 templates/partials/nav_user.html:31
+#: templates/account/signup.html:24 templates/partials/header.html:52
+#: templates/partials/nav_user.html:31
 msgid "Log in"
 msgstr "লগ ইন"
 
@@ -1011,15 +1978,6 @@ msgstr "আবার স্বাগতম"
 #: templates/account/login.html:11
 msgid "Log in to buy tickets and open your QR passes."
 msgstr "টিকিট কিনতে ও QR পাস খুলতে লগ ইন করুন।"
-
-#: templates/account/login.html:16 templates/accounts/profile.html:11
-#: templates/events/detail.html:118
-msgid "Email"
-msgstr "ইমেইল"
-
-#: templates/account/login.html:21
-msgid "Password"
-msgstr "পাসওয়ার্ড"
 
 #: templates/account/login.html:21
 msgid "Forgot?"
@@ -1046,7 +2004,7 @@ msgid "Create an account"
 msgstr "অ্যাকাউন্ট খুলুন"
 
 #: templates/account/signup.html:3 templates/account/signup.html:21
-#: templates/partials/nav_user.html:32
+#: templates/partials/header.html:52 templates/partials/nav_user.html:32
 msgid "Sign up"
 msgstr "সাইন আপ"
 
@@ -1085,7 +2043,7 @@ msgstr "অ্যাকাউন্ট"
 
 #: templates/accounts/_nav.html:4 templates/accounts/ticket_detail.html:6
 #: templates/accounts/tickets.html:3 templates/accounts/tickets.html:6
-#: templates/partials/header.html:48 templates/partials/nav_user.html:4
+#: templates/partials/header.html:51 templates/partials/nav_user.html:4
 #: templates/partials/nav_user.html:12
 msgid "My tickets"
 msgstr "আমার টিকিট"
@@ -1094,10 +2052,6 @@ msgstr "আমার টিকিট"
 #: templates/accounts/profile.html:6 templates/partials/nav_user.html:14
 msgid "Profile"
 msgstr "প্রোফাইল"
-
-#: templates/accounts/_pass.html:33
-msgid "Code"
-msgstr "কোড"
 
 #: templates/accounts/_pass.html:39
 msgid ""
@@ -1132,10 +2086,18 @@ msgstr "পাসওয়ার্ড পরিবর্তন"
 msgid "Manage email addresses"
 msgstr "ইমেইল ঠিকানা পরিচালনা"
 
+#: templates/accounts/ticket_detail.html:9
+msgid "PDF"
+msgstr "PDF"
+
 #: templates/accounts/ticket_detail.html:10
 #, python-format
 msgid "My ticket for %(e)s:"
 msgstr "%(e)s-এর জন্য আমার টিকিট:"
+
+#: templates/accounts/ticket_detail.html:10 templates/events/detail.html:141
+msgid "WhatsApp"
+msgstr "হোয়াটসঅ্যাপ"
 
 #: templates/accounts/ticket_detail.html:13 templates/events/detail.html:145
 msgid "Link copied"
@@ -1184,7 +2146,7 @@ msgstr[1] "%(n)sটি টিকিট"
 msgid "Django site admin"
 msgstr "নেক্সোপে অ্যাডমিন"
 
-#: templates/base.html:31
+#: templates/base.html:33
 msgid "Skip to content"
 msgstr "মূল কনটেন্টে যান"
 
@@ -1211,6 +2173,11 @@ msgstr "আমরা শীঘ্রই ফিরছি"
 #: templates/cms/maintenance.html:4
 msgid "Nexopay is getting an upgrade. Please check back in a few minutes."
 msgstr "নেক্সোপে আপগ্রেড হচ্ছে। কয়েক মিনিট পর আবার দেখুন।"
+
+#: templates/cms/page.html:12
+#| msgid "Online payments are being set up. Please check back shortly."
+msgid "This page is being updated. Please check back soon."
+msgstr "পেজটি হালনাগাদ করা হচ্ছে। শীঘ্রই আবার দেখুন।"
 
 #: templates/cms/sections/_heading.html:9
 msgid "See all"
@@ -1274,18 +2241,6 @@ msgstr "স্লাইড %(n)s"
 msgid "Live events across Bangladesh"
 msgstr "সারা বাংলাদেশের লাইভ ইভেন্ট"
 
-#: templates/cms/sections/hero.html:66
-msgid "Tickets to"
-msgstr "যেখানে যাওয়া"
-
-#: templates/cms/sections/hero.html:66
-msgid "everything"
-msgstr "সার্থক"
-
-#: templates/cms/sections/hero.html:66
-msgid "worth going to."
-msgstr "সেখানকার সব টিকিট।"
-
 #: templates/cms/sections/hero.html:68
 msgid ""
 "Concerts, festivals, competitions, workshops and more. Pay with bKash, Nagad"
@@ -1298,29 +2253,10 @@ msgstr ""
 msgid "Search artists, events or venues"
 msgstr "শিল্পী, ইভেন্ট বা ভেন্যু খুঁজুন"
 
-#: templates/cms/sections/hero.html:73
+#: templates/cms/sections/hero.html:72 templates/cms/sections/hero.html:73
+#: templates/partials/header.html:18 templates/partials/header.html:45
 msgid "Search"
 msgstr "খুঁজুন"
-
-#: templates/cms/sections/hero.html:77
-msgid "Concerts"
-msgstr "কনসার্ট"
-
-#: templates/cms/sections/hero.html:78
-msgid "Festivals"
-msgstr "উৎসব"
-
-#: templates/cms/sections/hero.html:79
-msgid "Competitions"
-msgstr "প্রতিযোগিতা"
-
-#: templates/cms/sections/hero.html:80
-msgid "Workshops"
-msgstr "কর্মশালা"
-
-#: templates/cms/sections/hero.html:81
-msgid "Stand-up"
-msgstr "স্ট্যান্ড-আপ"
 
 #: templates/cms/sections/hero.html:110
 msgid "Admit one"
@@ -1331,8 +2267,7 @@ msgid "Your next night out"
 msgstr "আপনার পরের দারুণ সন্ধ্যা"
 
 #: templates/cms/sections/organizer_cta.html:8
-#: templates/organizers/apply_landing.html:9 templates/partials/header.html:12
-#: templates/partials/header.html:49
+#: templates/organizers/apply_landing.html:9
 msgid "For organizers"
 msgstr "আয়োজকদের জন্য"
 
@@ -1577,7 +2512,7 @@ msgstr "অভিজ্ঞতা"
 msgid "Filters"
 msgstr "ফিল্টার"
 
-#: templates/events/catalog.html:35
+#: templates/events/catalog.html:35 templates/partials/messages.html:9
 msgid "Close"
 msgstr "বন্ধ"
 
@@ -1658,6 +2593,10 @@ msgstr "গুগল ক্যালেন্ডার"
 #: templates/events/detail.html:140
 msgid "Add to calendar"
 msgstr "ক্যালেন্ডারে যোগ করুন"
+
+#: templates/events/detail.html:142
+msgid "Facebook"
+msgstr "ফেসবুক"
 
 #: templates/events/detail.html:145
 msgid "Share event"
@@ -1785,6 +2724,10 @@ msgstr "অর্ডার রেফারেন্স"
 msgid "Event"
 msgstr "ইভেন্ট"
 
+#: templates/organizers/_rich_editor.html:2
+msgid "Link address (starting with https://)"
+msgstr "লিংকের ঠিকানা (https:// দিয়ে শুরু)"
+
 #: templates/organizers/_rich_editor.html:4
 msgid "Bold"
 msgstr "বোল্ড"
@@ -1805,11 +2748,6 @@ msgstr "লিংক"
 #: templates/organizers/_ticket_row.html:12
 msgid "More options"
 msgstr "আরও অপশন"
-
-#: templates/organizers/_ticket_row.html:13
-#: templates/organizers/event_detail.html:93
-msgid "Remove"
-msgstr "সরান"
 
 #: templates/organizers/_ticket_row.html:16
 #, python-format
@@ -2034,8 +2972,7 @@ msgstr "সাম্প্রতিক বিক্রি"
 msgid "Sales will appear here in real time."
 msgstr "বিক্রি এখানে রিয়েল-টাইমে দেখা যাবে।"
 
-#: templates/organizers/event_detail.html:7 templates/partials/footer.html:17
-#: templates/partials/header.html:45
+#: templates/organizers/event_detail.html:7
 msgid "All events"
 msgstr "সব ইভেন্ট"
 
@@ -2083,6 +3020,10 @@ msgstr "বিক্রি বন্ধ"
 msgid "Reference, email, phone…"
 msgstr "রেফারেন্স, ইমেইল, ফোন…"
 
+#: templates/organizers/event_detail.html:56
+msgid "CSV"
+msgstr "CSV"
+
 #: templates/organizers/event_detail.html:59
 #, python-format
 msgid "%(n)s refund request awaiting Nexopay review"
@@ -2122,6 +3063,10 @@ msgstr "যারা এই ইভেন্টের টিকিট স্ক�
 msgid "Only you can scan right now."
 msgstr "এখন শুধু আপনি স্ক্যান করতে পারবেন।"
 
+#: templates/organizers/event_detail.html:99
+msgid "staff@email.com"
+msgstr "staff@email.com"
+
 #: templates/organizers/event_detail.html:100
 msgid "Add"
 msgstr "যোগ করুন"
@@ -2138,7 +3083,7 @@ msgstr "ইভেন্টের দিন স্ক্যানগুলো এ
 msgid "Edit event"
 msgstr "ইভেন্ট সম্পাদনা"
 
-#: templates/organizers/event_form.html:9 templates/scan/scanner.html:19
+#: templates/organizers/event_form.html:9 templates/scan/scanner.html:21
 msgid "Back"
 msgstr "ফিরে যান"
 
@@ -2221,59 +3166,35 @@ msgstr "টিকিট শীঘ্রই"
 msgid "From"
 msgstr "শুরু"
 
-#: templates/partials/footer.html:15
-msgid "Discover"
-msgstr "খুঁজে দেখুন"
-
-#: templates/partials/footer.html:18
-msgid "On sale now"
-msgstr "এখন বিক্রি চলছে"
-
-#: templates/partials/footer.html:25
-msgid "Sell tickets"
-msgstr "টিকিট বিক্রি করুন"
-
-#: templates/partials/footer.html:26
-msgid "Promote your event"
-msgstr "ইভেন্টের প্রচার"
-
-#: templates/partials/footer.html:30
-msgid "Help"
-msgstr "সহায়তা"
-
-#: templates/partials/footer.html:33 templates/support/contact.html:3
-msgid "Contact us"
-msgstr "যোগাযোগ"
-
-#: templates/partials/footer.html:38
+#: templates/partials/footer.html:29
 msgid "Get in touch"
 msgstr "যোগাযোগ করুন"
 
-#: templates/partials/footer.html:48
+#: templates/partials/footer.html:41
 msgid "All rights reserved."
 msgstr "সর্বস্বত্ব সংরক্ষিত।"
 
-#: templates/partials/footer.html:49
+#: templates/partials/footer.html:43
 msgid "Payment methods"
 msgstr "পেমেন্ট মাধ্যম"
 
-#: templates/partials/header.html:8
+#: templates/partials/header.html:9
 msgid "Main"
 msgstr "প্রধান"
 
-#: templates/partials/header.html:17 templates/partials/header.html:43
+#: templates/partials/header.html:18 templates/partials/header.html:45
 msgid "Search events, venues…"
 msgstr "ইভেন্ট, ভেন্যু খুঁজুন…"
 
-#: templates/partials/header.html:24
+#: templates/partials/header.html:25
 msgid "Change language"
 msgstr "ভাষা পরিবর্তন"
 
-#: templates/partials/header.html:34
+#: templates/partials/header.html:36 templates/partials/header.html:43
 msgid "Menu"
 msgstr "মেনু"
 
-#: templates/partials/header.html:50
+#: templates/partials/header.html:53
 msgid "Help & contact"
 msgstr "সহায়তা ও যোগাযোগ"
 
@@ -2302,34 +3223,38 @@ msgstr ""
 "চলমান কোনো ইভেন্টে আপনার স্ক্যানার অ্যাক্সেস নেই। আয়োজককে আপনার ইমেইল গেট "
 "স্টাফ হিসেবে যোগ করতে বলুন।"
 
-#: templates/scan/scanner.html:26
+#: templates/scan/scanner.html:28
 msgid "checked in"
 msgstr "প্রবেশ করেছেন"
 
-#: templates/scan/scanner.html:48
+#: templates/scan/scanner.html:50
 msgid "Or type the ticket code"
 msgstr "অথবা টিকিট কোড লিখুন"
 
-#: templates/scan/scanner.html:50
+#: templates/scan/scanner.html:52
 msgid "Check"
 msgstr "যাচাই"
 
-#: templates/scan/scanner.html:69
+#: templates/scan/scanner.html:71
 msgid "Checked in at"
 msgstr "প্রবেশের সময়"
 
-#: templates/scan/scanner.html:73
+#: templates/scan/scanner.html:75
 msgid "Tap to scan the next ticket"
 msgstr "পরের টিকিট স্ক্যান করতে ট্যাপ করুন"
 
-#: templates/scan/scanner.html:92
+#: templates/scan/scanner.html:94
 msgid "Camera unavailable — allow camera access, or type ticket codes below."
 msgstr ""
 "ক্যামেরা পাওয়া যাচ্ছে না — ক্যামেরার অনুমতি দিন, অথবা নিচে টিকিট কোড লিখুন।"
 
-#: templates/scan/scanner.html:142
+#: templates/scan/scanner.html:144
 msgid "Connection problem — try again"
 msgstr "সংযোগে সমস্যা — আবার চেষ্টা করুন"
+
+#: templates/support/contact.html:3
+msgid "Contact us"
+msgstr "যোগাযোগ"
 
 #: templates/support/contact.html:8
 msgid "How can we"

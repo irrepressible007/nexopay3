@@ -16,10 +16,16 @@ def django_db_setup(django_db_setup, django_db_blocker):
         "apps.cms.migrations.0002_seed_content",
         "apps.payments.migrations.0002_seed_providers",
         "apps.support.migrations.0002_seed_routes",
+        "apps.cms.migrations.0004_seed_navigation",
+        "apps.events.migrations.0004_hero_categories",
+        "apps.payments.migrations.0004_provider_branding",
     ]
     with django_db_blocker.unblock():
         for module in seeds:
             importlib.import_module(module).seed(django_apps, None)
+        from apps.cms.sitetext import sync_from_catalog
+
+        sync_from_catalog()
 
 
 @pytest.fixture(autouse=True)

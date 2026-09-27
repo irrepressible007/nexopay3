@@ -10,7 +10,7 @@ from apps.core.cache import versioned_key
 from apps.core.http import private_no_store, public_cache
 from apps.events.models import Category, Event
 
-from .models import FaqItem, HeroSlide, HomeSection, Page, Partner
+from .models import FaqItem, HeroSlide, HomeSection, Page, Partner, SiteSettings
 
 
 def _event_cards(qs, limit):
@@ -29,8 +29,12 @@ def _section_payload(section: HomeSection):
     if kind == K.HERO:
         slides = list(HeroSlide.objects.visible().select_related("event"))
         if not slides:
-            # Fall back to featured events so the hero is never empty.
-            return {"events": _event_cards(Event.objects.featured().order_by("featured_rank", "starts_at"), 5)}
+            # Brand hero: admin headline + quick category links + featured card stack.
+            return {
+                "events": _event_cards(Event.objects.featured().order_by("featured_rank", "starts_at"), 5),
+                "hero_categories": list(Category.objects.filter(is_active=True, show_in_hero=True)[:8]),
+                "brand": True,
+            }
         return {"slides": slides}
     if kind == K.FEATURED:
         return {"events": _event_cards(Event.objects.featured().order_by("featured_rank", "starts_at"), section.item_limit)}
@@ -66,6 +70,7 @@ def home(request):
         for section in HomeSection.objects.visible():
             payload = _section_payload(section)
             has_content = any(payload.values()) or section.kind in (
+                HomeSection.Kind.HERO,
                 HomeSection.Kind.PROMO_BANNER,
                 HomeSection.Kind.ORGANIZER_CTA,
             )
@@ -94,3 +99,27 @@ def nav_fragment(request):
 
 def maintenance(request):
     return render(request, "cms/maintenance.html", status=503)
+
+
+def webmanifest(request):
+    """Lets buyers and gate staff add the site to their phone's home screen."""
+    from django.http import JsonResponse
+    from django.templatetags.static import static
+
+    site = SiteSettings.load()
+    icon = site.favicon.url if site.favicon else static("img/icon-512.png")
+    return JsonResponse(
+        {
+            "name": site.site_name,
+            "short_name": site.site_name,
+            "start_url": "/",
+            "display": "standalone",
+            "background_color": site.background_color,
+            "theme_color": site.background_color,
+            "icons": [
+                {"src": static("img/icon-192.png"), "sizes": "192x192", "type": "image/png"},
+                {"src": icon, "sizes": "512x512", "type": "image/png"},
+            ],
+        },
+        content_type="application/manifest+json",
+    )

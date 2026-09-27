@@ -70,7 +70,7 @@ document.addEventListener("alpine:init", () => {
   }));
 
   /* Minimal rich-text editor that writes sanitisable HTML into a hidden input. */
-  Alpine.data("richEditor", (inputId) => ({
+  Alpine.data("richEditor", (inputId, linkPrompt = "Link URL (https://…)") => ({
     init() {
       const input = document.getElementById(inputId);
       this.$refs.area.innerHTML = input.value || "";
@@ -82,7 +82,7 @@ document.addEventListener("alpine:init", () => {
       document.getElementById(inputId).value = this.$refs.area.innerHTML;
     },
     link() {
-      const url = prompt("Link URL (https://…)");
+      const url = prompt(linkPrompt);
       if (url && /^https?:\/\//.test(url)) this.cmd("createLink", url);
     },
   }));

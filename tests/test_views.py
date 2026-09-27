@@ -215,3 +215,22 @@ def test_maintenance_mode_blocks_public_but_not_staff_or_payments(client):
     assert client.get("/payments/mock/return/").status_code != 503
     client.force_login(UserFactory(is_staff=True))
     assert client.get("/").status_code == 200
+
+
+def test_private_documents_are_staff_only(client):
+    from django.core.files.base import ContentFile
+    from django.core.files.storage import storages
+
+    storage = storages["private"]
+    name = storage.save("org/test/docs/licence.pdf", ContentFile(b"%PDF-1.4 test"))
+    url = f"/private-media/{name}"
+    try:
+        assert client.get(url).status_code == 302  # to the admin login
+        client.force_login(UserFactory())
+        assert client.get(url).status_code == 302
+        client.force_login(UserFactory(is_staff=True))
+        response = client.get(url)
+        assert response.status_code == 200 and b"".join(response.streaming_content).startswith(b"%PDF")
+        assert client.get("/private-media/../settings.py").status_code == 404
+    finally:
+        storage.delete(name)

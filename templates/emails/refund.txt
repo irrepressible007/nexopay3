@@ -8,4 +8,4 @@
 {% translate "Depending on your payment method, it can take a few working days for the money to appear in your account. The refunded tickets can no longer be used." %}
 
 {% translate "Questions? Reply to this email or contact us:" %} {{ site_url }}/contact/
-— Nexopay
+— {{ sitecfg.site_name }}

@@ -12,18 +12,30 @@ from apps.core.utils import sanitize_html
 
 hex_color = RegexValidator(r"^#[0-9A-Fa-f]{6}$", _("Use a hex colour like #A855F7."))
 
+ICON_CHOICES = [
+    (name, name.replace("-", " ").title())
+    for name in (
+        "ticket", "festival", "mic", "music", "headphones", "trophy", "ball", "podium", "tools", "film",
+        "party", "frame", "book", "sparkles", "smile", "shirt", "heart", "users", "rocket", "star", "flame",
+        "globe", "building", "calendar", "zap", "phone-device", "pin", "chart",
+    )
+]
+
 
 class Category(models.Model):
     """Fixed, admin-managed taxonomy. Organizers pick from it; they never create it."""
 
     name = models.CharField(_("name"), max_length=60)
     slug = models.SlugField(max_length=70, unique=True)
-    icon = models.CharField(
-        _("icon"), max_length=40, blank=True, help_text=_("Icon key from the built-in icon set, e.g. 'music'.")
+    icon = models.CharField(_("icon"), max_length=40, choices=ICON_CHOICES, default="ticket")
+    icon_image = models.FileField(
+        _("custom icon"), upload_to="categories/", blank=True,
+        help_text=_("Optional SVG/PNG. Replaces the built-in icon."),
     )
     accent_color = models.CharField(_("accent colour"), max_length=7, default="#A855F7", validators=[hex_color])
     sort_order = models.PositiveSmallIntegerField(default=0)
-    show_on_home = models.BooleanField(default=True)
+    show_on_home = models.BooleanField(_("show in homepage grid"), default=True)
+    show_in_hero = models.BooleanField(_("show as quick link in the hero"), default=False)
     is_active = models.BooleanField(default=True)
 
     class Meta:

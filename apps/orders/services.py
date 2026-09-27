@@ -79,6 +79,12 @@ def calculate_fees(subtotal: Decimal, organizer) -> FeeBreakdown:
     )
 
 
+def _hold_minutes() -> int:
+    from apps.cms.models import SiteSettings
+
+    return SiteSettings.load().hold_minutes or settings.NEXOPAY["HOLD_MINUTES"]
+
+
 def identities_for(user, phone: str) -> list[str]:
     ids = {f"email:{user.email.lower()}", f"phone:{normalize_phone(phone)}"}
     if user.phone:
@@ -162,7 +168,7 @@ def start_checkout(
         buyer_phone=phone,
         delivery_email=delivery_email.strip().lower(),
         language=language,
-        expires_at=timezone.now() + timedelta(minutes=settings.NEXOPAY["HOLD_MINUTES"]),
+        expires_at=timezone.now() + timedelta(minutes=_hold_minutes()),
         subtotal=fees.subtotal,
         buyer_fee=fees.buyer_fee,
         total=fees.total,

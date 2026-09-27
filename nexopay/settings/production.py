@@ -14,4 +14,6 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 X_FRAME_OPTIONS = "DENY"
 
+EMAIL_BACKEND = env("EMAIL_BACKEND", default="apps.core.mail.SiteEmailBackend")
+
 ADMINS = [("Nexopay Ops", env("ADMIN_EMAIL", default="admin@nexopay.com.bd"))]

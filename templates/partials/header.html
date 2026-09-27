@@ -1,52 +1,56 @@
 {% load i18n nexo %}{% get_current_language as LANG %}
 <header x-data="{ open: false, scrolled: false }" @scroll.window.throttle.50ms="scrolled = window.scrollY > 8"
-        :class="scrolled ? 'glass ring-1 ring-line' : 'bg-transparent'"
+        @keydown.escape.window="open = false"
+        :class="scrolled || open ? 'glass ring-1 ring-line' : 'bg-transparent'"
         class="sticky top-0 z-50 transition-colors duration-300">
-  <div class="container-x flex h-16 items-center gap-4">
+  <div class="container-x flex h-16 items-center gap-3">
     <a href="{% url 'cms:home' %}" class="shrink-0 text-text" aria-label="{{ sitecfg.site_name }}">{% include "partials/logo.html" %}</a>
 
-    <nav class="hidden md:flex items-center gap-1 ml-4 text-sm font-medium text-muted" aria-label="{% translate 'Main' %}">
-      <a href="{% url 'events:catalog' %}" class="rounded-full px-3 py-2 hover:text-text hover:bg-white/5">{% translate "Events" %}</a>
-      <a href="{% url 'events:catalog' %}?status=live" class="rounded-full px-3 py-2 hover:text-text hover:bg-white/5">{% translate "On sale" %}</a>
-      <a href="{% url 'events:catalog' %}?status=upcoming" class="rounded-full px-3 py-2 hover:text-text hover:bg-white/5">{% translate "Coming soon" %}</a>
-      <a href="{% url 'organizers:apply' %}" class="rounded-full px-3 py-2 hover:text-text hover:bg-white/5">{% translate "For organizers" %}</a>
+    <nav class="no-scrollbar hidden min-w-0 flex-1 items-center gap-1 overflow-x-auto text-sm font-medium text-muted lg:flex" aria-label="{% translate 'Main' %}">
+      {% for link in header_links %}
+      <a href="{{ link.url|localize_url }}" {% if link.new_tab %}target="_blank" rel="noopener"{% endif %}
+         class="shrink-0 whitespace-nowrap rounded-full px-3 py-2 hover:bg-white/5 hover:text-text">{{ link.label }}</a>
+      {% endfor %}
     </nav>
 
-    <form action="{% url 'events:catalog' %}" method="get" class="relative ml-auto hidden lg:block" role="search">
+    <form action="{% url 'events:catalog' %}" method="get" class="relative ml-auto hidden shrink-0 xl:block" role="search">
       <span class="absolute left-3 top-1/2 -translate-y-1/2 text-subtle">{% icon "search" "w-4 h-4" %}</span>
-      <input type="search" name="q" placeholder="{% translate 'Search events, venues…' %}"
-             class="w-64 rounded-full bg-white/5 py-2 pl-9 pr-4 text-sm ring-1 ring-line placeholder:text-subtle outline-none focus:ring-brand focus:w-80 transition-all">
+      <input type="search" name="q" placeholder="{% translate 'Search events, venues…' %}" aria-label="{% translate 'Search' %}"
+             class="w-56 rounded-full bg-white/5 py-2 pl-9 pr-4 text-sm ring-1 ring-line outline-none transition-all placeholder:text-subtle focus:w-72 focus:ring-brand">
     </form>
 
-    <div class="ml-auto lg:ml-2 flex items-center gap-1.5">
+    <div class="ml-auto flex shrink-0 items-center gap-1.5 xl:ml-2">
       <a href="{% if LANG == 'bn' %}{% lang_url 'en' %}{% else %}{% lang_url 'bn' %}{% endif %}"
-         class="inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-muted ring-1 ring-line hover:text-text hover:bg-white/5"
+         class="inline-flex h-9 items-center gap-1.5 rounded-full px-2.5 text-sm font-semibold text-muted ring-1 ring-line hover:bg-white/5 hover:text-text"
          hreflang="{% if LANG == 'bn' %}en{% else %}bn{% endif %}" title="{% translate 'Change language' %}">
         {% icon "globe" "w-4 h-4" %}<span>{% if LANG == "bn" %}EN{% else %}বাং{% endif %}</span>
       </a>
       {% if request.public_cache %}
         <div id="nav-user" hx-get="{% url 'cms:nav' %}" hx-trigger="load" hx-swap="outerHTML">
-          <span class="inline-block h-9 w-24 skeleton rounded-full"></span>
+          <span class="inline-block h-9 w-9 rounded-full skeleton sm:w-24"></span>
         </div>
       {% else %}
         {% include "partials/nav_user.html" %}
       {% endif %}
-      <button type="button" class="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-full ring-1 ring-line" @click="open = !open" :aria-expanded="open" aria-label="{% translate 'Menu' %}">
+      <button type="button" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full ring-1 ring-line lg:hidden"
+              @click="open = !open" :aria-expanded="open" aria-controls="mobile-menu" aria-label="{% translate 'Menu' %}">
         <span x-show="!open">{% icon "menu" "w-5 h-5" %}</span><span x-show="open" x-cloak>{% icon "x" "w-5 h-5" %}</span>
       </button>
     </div>
   </div>
 
-  <div x-show="open" x-cloak x-transition.opacity class="md:hidden glass border-t border-line">
-    <nav class="container-x flex flex-col py-3 text-base font-medium">
+  <div id="mobile-menu" x-show="open" x-cloak x-transition.opacity class="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line lg:hidden">
+    <nav class="container-x flex flex-col py-3 text-base font-medium" aria-label="{% translate 'Menu' %}">
       <form action="{% url 'events:catalog' %}" method="get" class="mb-2" role="search">
-        <input type="search" name="q" placeholder="{% translate 'Search events, venues…' %}" class="input">
+        <input type="search" name="q" placeholder="{% translate 'Search events, venues…' %}" aria-label="{% translate 'Search' %}" class="input">
       </form>
-      <a href="{% url 'events:catalog' %}" class="py-2.5">{% translate "All events" %}</a>
-      <a href="{% url 'events:catalog' %}?status=live" class="py-2.5">{% translate "On sale" %}</a>
-      <a href="{% url 'events:catalog' %}?status=upcoming" class="py-2.5">{% translate "Coming soon" %}</a>
+      {% for link in header_links %}
+      <a href="{{ link.url|localize_url }}" {% if link.new_tab %}target="_blank" rel="noopener"{% endif %} class="py-2.5">{{ link.label }}</a>
+      {% endfor %}
+      <span class="my-2 h-px bg-line"></span>
       <a href="{% url 'accounts:tickets' %}" class="py-2.5">{% translate "My tickets" %}</a>
-      <a href="{% url 'organizers:apply' %}" class="py-2.5">{% translate "For organizers" %}</a>
+      <a href="{% url 'account_login' %}" class="py-2.5 md:hidden">{% translate "Log in" %}</a>
+      <a href="{% url 'account_signup' %}" class="py-2.5 sm:hidden">{% translate "Sign up" %}</a>
       <a href="{% url 'support:contact' %}" class="py-2.5">{% translate "Help & contact" %}</a>
     </nav>
   </div>

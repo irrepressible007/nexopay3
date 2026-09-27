@@ -1,4 +1,4 @@
-{% load nexo %}{% for message in messages %}
+{% load i18n nexo %}{% for message in messages %}
 <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 6000)" x-show="show" x-transition.opacity.duration.300ms
      class="pointer-events-auto flex w-full max-w-md items-start gap-3 rounded-2xl glass px-4 py-3 text-sm ring-1 shadow-2xl animate-pop
             {% if message.tags == 'error' %}ring-danger/40{% elif message.tags == 'success' %}ring-success/40{% else %}ring-line-strong{% endif %}" role="status">
@@ -6,6 +6,6 @@
     {% if message.tags == 'success' %}{% icon "check" "w-4 h-4" %}{% elif message.tags == 'error' %}{% icon "alert" "w-4 h-4" %}{% else %}{% icon "info" "w-4 h-4" %}{% endif %}
   </span>
   <p class="flex-1 text-text">{{ message }}</p>
-  <button type="button" @click="show = false" class="text-subtle hover:text-text" aria-label="Close">{% icon "x" "w-4 h-4" %}</button>
+  <button type="button" @click="show = false" class="text-subtle hover:text-text" aria-label="{% translate 'Close' %}">{% icon "x" "w-4 h-4" %}</button>
 </div>
 {% endfor %}

@@ -19,8 +19,8 @@ from django.utils import timezone
 
 from ..models import PaymentAttempt
 from ..services import PaymentError, mark_failed, mark_succeeded
-from .base import BasePaymentProvider, VerifyResult
-from .http import call, env
+from .base import BasePaymentProvider, Credential, VerifyResult
+from .http import call
 
 SANDBOX = "http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs"
 LIVE = "https://api.mynagad.com/api/dfs"
@@ -37,23 +37,31 @@ def _pem(raw: str, kind: str) -> bytes:
 class NagadProvider(BasePaymentProvider):
     code = "nagad"
     supports_refund_api = False  # refunds are processed manually via the Nagad merchant portal
+    CREDENTIALS = [
+        Credential("merchant_id", "Merchant ID"),
+        Credential("merchant_number", "Merchant number"),
+        Credential("public_key", "Nagad public key", secret=True, multiline=True,
+                   help="The PG public key Nagad sends you (with or without BEGIN/END lines)."),
+        Credential("private_key", "Your merchant private key", secret=True, multiline=True),
+        Credential("base_url", "API base URL (optional)", required=False),
+    ]
 
     @property
     def base(self):
-        return env("NAGAD_BASE_URL") or (SANDBOX if self.sandbox else LIVE)
+        return self.cred("base_url") or (SANDBOX if self.sandbox else LIVE)
 
     @property
     def merchant_id(self):
-        mid = env("NAGAD_MERCHANT_ID")
+        mid = self.cred("merchant_id")
         if not mid:
             raise PaymentError("Nagad credentials are not configured")
         return mid
 
     def _nagad_public_key(self):
-        return serialization.load_pem_public_key(_pem(env("NAGAD_PUBLIC_KEY"), "PUBLIC KEY"))
+        return serialization.load_pem_public_key(_pem(self.cred("public_key"), "PUBLIC KEY"))
 
     def _merchant_private_key(self):
-        return serialization.load_pem_private_key(_pem(env("NAGAD_PRIVATE_KEY"), "PRIVATE KEY"), password=None)
+        return serialization.load_pem_private_key(_pem(self.cred("private_key"), "PRIVATE KEY"), password=None)
 
     def _encrypt(self, payload: dict) -> str:
         data = json.dumps(payload, separators=(",", ":")).encode()
@@ -86,7 +94,7 @@ class NagadProvider(BasePaymentProvider):
             provider=self.code,
             headers=self._headers(request),
             json={
-                "accountNumber": env("NAGAD_MERCHANT_NUMBER"),
+                "accountNumber": self.cred("merchant_number"),
                 "dateTime": now,
                 "sensitiveData": self._encrypt(sensitive),
                 "signature": self._sign(sensitive),

@@ -1,6 +1,6 @@
 from modeltranslation.translator import TranslationOptions, register
 
-from .models import FaqItem, HeroSlide, HomeSection, Page, SiteSettings
+from .models import FaqItem, FooterColumn, HeaderLink, HeroSlide, HomeSection, MenuItem, Page, SiteSettings
 
 
 @register(SiteSettings)
@@ -26,3 +26,18 @@ class PageTR(TranslationOptions):
 @register(FaqItem)
 class FaqItemTR(TranslationOptions):
     fields = ("question", "answer")
+
+
+@register(FooterColumn)
+class FooterColumnTR(TranslationOptions):
+    fields = ("title",)
+
+
+@register(MenuItem)
+class MenuItemTR(TranslationOptions):
+    fields = ("label",)
+
+
+@register(HeaderLink)
+class HeaderLinkTR(TranslationOptions):
+    fields = ("label",)

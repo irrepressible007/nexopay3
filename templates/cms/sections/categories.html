@@ -1,14 +1,14 @@
 {% load i18n nexo %}
 <section class="container-x mt-16 sm:mt-20">
   {% include "cms/sections/_heading.html" %}
-  <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+  <div class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,9.5rem),1fr))] gap-3">
     {% for cat in block.categories %}
     <a href="{% url 'events:catalog' %}?category={{ cat.slug }}"
        class="group relative overflow-hidden rounded-2xl bg-surface p-4 ring-1 ring-line transition duration-300 hover:-translate-y-1 hover:ring-line-strong"
        style="--c: {{ cat.accent_color }}">
       <div class="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-20 blur-2xl transition group-hover:opacity-50" style="background: var(--c)"></div>
-      <span class="grid h-10 w-10 place-items-center rounded-xl" style="background: color-mix(in oklab, var(--c) 18%, transparent); color: var(--c)">{% icon cat.icon|default:"ticket" "w-5 h-5" %}</span>
-      <p class="mt-4 font-semibold leading-tight">{{ cat.name }}</p>
+      <span class="grid h-10 w-10 place-items-center rounded-xl" style="background: color-mix(in oklab, var(--c) 18%, transparent); color: var(--c)">{% category_icon cat "w-5 h-5" %}</span>
+      <p class="mt-4 line-clamp-2 font-semibold leading-tight">{{ cat.name }}</p>
       <p class="mt-0.5 text-xs text-subtle">{% blocktranslate count n=cat.n %}{{ n }} event{% plural %}{{ n }} events{% endblocktranslate %}</p>
     </a>
     {% endfor %}

@@ -6,11 +6,11 @@
   <a href="{% url 'accounts:tickets' %}" class="inline-flex items-center gap-1.5 text-sm text-muted hover:text-text">{% icon "chevron-left" "w-4 h-4" %}{% translate "My tickets" %}</a>
   <div class="mt-6">{% include "accounts/_pass.html" %}</div>
   <div class="mx-auto mt-6 grid max-w-sm grid-cols-2 gap-2" x-data="share('{{ share_url|escapejs }}', '{{ ticket.event.title|escapejs }}')">
-    <a href="{% url 'accounts:ticket_pdf' ticket.code %}" class="btn-ghost">{% icon "download" "w-4 h-4" %}PDF</a>
-    <a href="https://wa.me/?text={% filter urlencode %}{% blocktranslate with e=ticket.event.title %}My ticket for {{ e }}:{% endblocktranslate %} {{ share_url }}{% endfilter %}" target="_blank" rel="noopener" class="btn-ghost">{% icon "whatsapp" "w-4 h-4" %}WhatsApp</a>
+    <a href="{% url 'accounts:ticket_pdf' ticket.code %}" class="btn-ghost">{% icon "download" "w-4 h-4" %}{% translate "PDF" %}</a>
+    <a href="https://wa.me/?text={% filter urlencode %}{% blocktranslate with e=ticket.event.title %}My ticket for {{ e }}:{% endblocktranslate %} {{ share_url }}{% endfilter %}" target="_blank" rel="noopener" class="btn-ghost">{% icon "whatsapp" "w-4 h-4" %}{% translate "WhatsApp" %}</a>
     <button type="button" @click="copy()" class="btn-ghost col-span-2">
       <span x-show="!copied">{% icon "copy" "w-4 h-4" %}</span><span x-show="copied" x-cloak class="text-success">{% icon "check" "w-4 h-4" %}</span>
-      <span x-text="copied ? '{% translate "Link copied" %}' : '{% translate "Copy ticket link" %}'">{% translate "Copy ticket link" %}</span>
+      <span x-text="copied ? '{% translate "Link copied" as t1 %}{{ t1|escapejs }}' : '{% translate "Copy ticket link" as t2 %}{{ t2|escapejs }}'">{% translate "Copy ticket link" %}</span>
     </button>
   </div>
   <p class="mx-auto mt-4 max-w-sm text-center text-xs text-subtle">{% translate "Anyone with the ticket link can show this QR. Only share it with the person attending." %}</p>

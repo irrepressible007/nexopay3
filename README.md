@@ -81,13 +81,43 @@ is translated per-field in the admin (`*_en` / `*_bn`).
 ## Tests
 
 ```bash
-pytest                  # 76 tests; uses MariaDB from TEST_DATABASE_URL (SQLite otherwise, skipping lock tests)
+pytest                  # 89 tests; uses MariaDB from TEST_DATABASE_URL (SQLite otherwise, skipping lock tests)
 ```
 
 Covers the claude.md guarantees: no overselling under concurrent checkout (threads racing on real row
 locks), double-redemption rejected (including concurrent gate scans), webhook/IPN replay idempotency,
 one-identity-per-ticket-type rule, hold expiry, fee maths, provider flows with server-side verification
 (SSLCommerz validation, bKash execute/query, Nagad RSA), refunds + stock release, event cancellation.
+
+## Everything is editable in the admin (no code)
+
+| What | Where in the admin |
+|---|---|
+| Every interface text (buttons, labels, messages, emails, PDF, login pages), English + Bangla | **Website content › Site texts**: filter by page, edit inline, "Reset to default" action |
+| Logo, favicon, colours, tagline, announcement bar, contact & social, SEO, reservation time, default fees | **Website content › Site settings** |
+| Outgoing email (SMTP mailbox + sender) | **Site settings › Outgoing email** |
+| Header menu, footer columns and links | **Website content › Header menu / Footer columns** |
+| Homepage sections (order, on/off, schedule), hero headline (`*word*` = gradient), hero slides | **Homepage sections / Hero slides** |
+| About / Terms / Privacy / Refund pages, FAQ | **Pages / FAQ** (pages start empty and show "being updated" until written) |
+| Categories (names, icon picker or uploaded icon, colour, hero quick links) | **Events › Categories** |
+| Payment methods: on/off, sandbox/live, name, badge colour/logo, **merchant credentials** | **Payments › Payment methods** (credentials are encrypted and never shown back) |
+
+Interface texts are mirrored from the code on every `migrate`. Placeholders such as `%(name)s` are
+validated, so an admin can reword but not break a sentence. Secrets in the database are encrypted with a
+key derived from `SECRET_KEY` (or `FIELD_ENCRYPTION_KEY` if set): changing it means re-entering secrets.
+
+## Layout safety (any screen, any admin content)
+
+```bash
+python manage.py seed_stress        # DEV ONLY: worst-case content (huge titles, long Bangla words, 15 tiers…)
+python tools/layout_audit.py --ids '{"tt": <ticket-type id>, "code": "<ticket code>", "order": "<order ref>"}'
+python manage.py seed_stress --undo
+```
+
+The audit loads ~27 pages at 14 screen sizes (320px phones → 2560px monitors, incl. landscape) and fails on
+anything that goes off-screen, spills out of its box, or squeezes a short label onto several lines.
+Global CSS rules make this hold for new content automatically: text wraps instead of widening its
+container, grid cells may shrink, prices/badges/buttons never split mid-word.
 
 ## How the key flows work
 

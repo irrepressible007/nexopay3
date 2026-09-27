@@ -22,8 +22,8 @@
           {% icon "calendar" "w-4 h-4 text-brand-2" %}{{ s.event.starts_at|date:"D, j M · g:i A" }}
         </p>
         {% endif %}
-        <h1 class="font-display text-4xl font-extrabold leading-[1.05] sm:text-6xl">{{ s.title }}</h1>
-        {% if s.subtitle %}<p class="mt-4 max-w-xl text-lg text-white/80">{{ s.subtitle }}</p>{% endif %}
+        <h1 class="line-clamp-4 font-display text-[clamp(2rem,7vw,4rem)] font-extrabold leading-[1.05]">{{ s.title|highlight }}</h1>
+        {% if s.subtitle %}<p class="mt-4 line-clamp-3 max-w-xl text-base text-white/80 sm:text-lg">{{ s.subtitle }}</p>{% endif %}
         {% if s.link %}
         <div class="mt-7 flex flex-wrap gap-3">
           <a href="{{ s.link }}" class="btn-primary btn-lg">{% icon "ticket" "w-5 h-5" %}{{ s.cta_label|default:_("Get tickets") }}</a>
@@ -58,28 +58,28 @@
 
   <div class="container-x relative grid items-center gap-14 pb-20 pt-32 lg:grid-cols-[1.1fr_.9fr] lg:pb-28 lg:pt-40">
     <div class="animate-rise">
-      <span class="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1.5 text-sm font-medium text-muted ring-1 ring-line-strong">
+      <span class="inline-flex max-w-full items-center gap-2 rounded-full bg-white/5 px-3 py-1.5 text-sm font-medium text-muted ring-1 ring-line-strong">
         <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-success"></span></span>
         {% translate "Live events across Bangladesh" %}
       </span>
-      <h1 class="mt-6 font-display text-5xl font-extrabold leading-[1.02] sm:text-7xl">
-        {% if LANGUAGE_CODE == "bn" %}{{ sitecfg.tagline }}{% else %}{% translate "Tickets to" %} <span class="text-gradient">{% translate "everything" %}</span><br class="hidden sm:block"> {% translate "worth going to." %}{% endif %}
+      <h1 class="mt-6 font-display text-[clamp(2.25rem,8vw,4.5rem)] font-extrabold leading-[1.04]">
+        {% if section.title %}{{ section.title|highlight }}{% else %}{{ sitecfg.tagline|highlight }}{% endif %}
       </h1>
-      <p class="mt-6 max-w-xl text-lg text-muted">{% translate "Concerts, festivals, competitions, workshops and more. Pay with bKash, Nagad or card, and get an instant QR ticket on your phone." %}</p>
+      <p class="mt-6 max-w-xl text-base text-muted sm:text-lg">{% if section.subtitle %}{{ section.subtitle }}{% else %}{% translate "Concerts, festivals, competitions, workshops and more. Pay with bKash, Nagad or card, and get an instant QR ticket on your phone." %}{% endif %}</p>
 
       <form action="{% url 'events:catalog' %}" method="get" class="mt-8 flex max-w-xl items-center gap-2 rounded-full bg-white/[.06] p-1.5 ring-1 ring-line-strong focus-within:ring-brand transition" role="search">
-        <span class="pl-3 text-subtle">{% icon "search" "w-5 h-5" %}</span>
-        <input type="search" name="q" placeholder="{% translate 'Search artists, events or venues' %}" class="min-w-0 flex-1 bg-transparent py-2.5 text-base outline-none placeholder:text-subtle">
-        <button class="btn-primary">{% translate "Search" %}</button>
+        <span class="shrink-0 pl-3 text-subtle">{% icon "search" "w-5 h-5" %}</span>
+        <input type="search" name="q" placeholder="{% translate 'Search artists, events or venues' %}" aria-label="{% translate 'Search' %}" class="min-w-0 flex-1 bg-transparent py-2.5 text-base outline-none placeholder:text-subtle">
+        <button class="btn-primary shrink-0 !px-4 sm:!px-5">{% icon "search" "w-4 h-4 sm:hidden" %}<span class="hidden sm:inline">{% translate "Search" %}</span></button>
       </form>
 
+      {% if block.hero_categories %}
       <div class="mt-6 flex flex-wrap gap-2">
-        <a href="{% url 'events:catalog' %}?category=concert" class="chip">{% icon "mic" "w-4 h-4" %}{% translate "Concerts" %}</a>
-        <a href="{% url 'events:catalog' %}?category=festivals" class="chip">{% icon "festival" "w-4 h-4" %}{% translate "Festivals" %}</a>
-        <a href="{% url 'events:catalog' %}?category=competitions" class="chip">{% icon "trophy" "w-4 h-4" %}{% translate "Competitions" %}</a>
-        <a href="{% url 'events:catalog' %}?category=workshops" class="chip">{% icon "tools" "w-4 h-4" %}{% translate "Workshops" %}</a>
-        <a href="{% url 'events:catalog' %}?category=stand-up" class="chip">{% icon "smile" "w-4 h-4" %}{% translate "Stand-up" %}</a>
+        {% for cat in block.hero_categories %}
+        <a href="{% url 'events:catalog' %}?category={{ cat.slug }}" class="chip max-w-full">{% category_icon cat "w-4 h-4 shrink-0" %}<span class="truncate">{{ cat.name }}</span></a>
+        {% endfor %}
       </div>
+      {% endif %}
     </div>
 
     {% if block.events %}
@@ -95,9 +95,9 @@
         <div class="ticket-notch bg-surface p-5">
           <p class="text-xs font-semibold uppercase tracking-widest text-brand-2">{{ event.starts_at|date:"D, j M" }}</p>
           <h3 class="mt-1 line-clamp-1 font-display text-xl font-bold">{{ event.title }}</h3>
-          <div class="mt-3 flex items-center justify-between text-sm">
-            <span class="truncate text-muted">{{ event.venue_name }}</span>
-            <span class="font-semibold">{% if event.min_price == 0 %}{% translate "Free" %}{% elif event.min_price %}{{ event.min_price|taka }}{% endif %}</span>
+          <div class="mt-3 flex items-center justify-between gap-3 text-sm">
+            <span class="min-w-0 truncate text-muted">{{ event.venue_name }}</span>
+            <span class="price font-semibold">{% if event.min_price == 0 %}{% translate "Free" %}{% elif event.min_price %}{{ event.min_price|taka }}{% endif %}</span>
           </div>
         </div>
       </a>

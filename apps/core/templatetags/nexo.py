@@ -1,4 +1,5 @@
 import json
+import re
 from decimal import Decimal
 
 from django import template
@@ -85,3 +86,37 @@ def is_future(dt):
 @register.filter
 def get_item(mapping, key):
     return mapping.get(key) if mapping else None
+
+
+@register.filter
+def localize_url(url):
+    """Give admin-entered internal links (/events/…) the current language prefix (/bn/events/…)."""
+    if not url or not url.startswith("/") or url.startswith("//"):
+        return url
+    lang = get_language()
+    if lang == settings.LANGUAGE_CODE:
+        return url
+    prefix = f"/{lang}/"
+    return url if url.startswith(prefix) or url == f"/{lang}" else f"/{lang}{url}"
+
+
+@register.simple_tag
+def category_icon(category, css="w-5 h-5"):
+    """An admin-uploaded icon if present, else the chosen built-in icon."""
+    if not hasattr(category, "icon"):  # None / "" when an event has no category yet
+        return icon("ticket", css)
+    if getattr(category, "icon_image", None):
+        return format_html('<img src="{}" alt="" class="{} object-contain" loading="lazy">', category.icon_image.url, css)
+    return icon(category.icon or "ticket", css)
+
+
+_HIGHLIGHT = re.compile(r"\*([^*]+)\*")
+
+
+@register.filter
+def highlight(text):
+    """Admins wrap words in *asterisks* to show them in the brand gradient."""
+    from django.utils.html import escape
+
+    escaped = escape(text or "")
+    return mark_safe(_HIGHLIGHT.sub(r'<span class="text-gradient">\1</span>', escaped))

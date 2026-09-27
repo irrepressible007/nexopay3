@@ -63,10 +63,10 @@
   {% endif %}
 
   <div class="mt-8 card p-6 text-sm">
-    <div class="flex items-center justify-between"><span class="text-muted">{% translate "Order reference" %}</span><span class="font-mono font-semibold">{{ order.reference }}</span></div>
-    <div class="mt-2 flex items-center justify-between"><span class="text-muted">{% translate "Event" %}</span><a href="{{ order.event.get_absolute_url }}" class="font-semibold hover:underline">{{ order.event.title }}</a></div>
+    <div class="flex items-center justify-between gap-3"><span class="text-muted">{% translate "Order reference" %}</span><span class="font-mono font-semibold">{{ order.reference }}</span></div>
+    <div class="mt-2 flex items-center justify-between gap-3"><span class="shrink-0 text-muted">{% translate "Event" %}</span><a href="{{ order.event.get_absolute_url }}" class="min-w-0 text-right font-semibold hover:underline">{{ order.event.title }}</a></div>
     <ul class="mt-4 space-y-2 border-t border-line pt-4">
-      {% for item in order.items.all %}<li class="flex justify-between"><span>{{ item.quantity }} × {{ item.ticket_type.name }}</span><span class="tabular-nums">{{ item.line_total|taka }}</span></li>{% endfor %}
+      {% for item in order.items.all %}<li class="flex justify-between gap-3"><span class="min-w-0">{{ item.quantity }} × {{ item.ticket_type.name }}</span><span class="tabular-nums">{{ item.line_total|taka }}</span></li>{% endfor %}
       {% if order.buyer_fee %}<li class="flex justify-between text-muted"><span>{% translate "Service fee" %}</span><span class="tabular-nums">{{ order.buyer_fee|taka }}</span></li>{% endif %}
       <li class="flex justify-between border-t border-line pt-2 font-semibold"><span>{% translate "Total" %}</span><span class="tabular-nums">{% if order.total == 0 %}{% translate "Free" %}{% else %}{{ order.total|taka }}{% endif %}</span></li>
     </ul>

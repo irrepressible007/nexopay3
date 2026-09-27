@@ -13,8 +13,8 @@ from django.utils import timezone
 
 from ..models import PaymentAttempt
 from ..services import PaymentError, mark_failed, mark_succeeded
-from .base import BasePaymentProvider, RefundResult, VerifyResult
-from .http import call, env
+from .base import BasePaymentProvider, Credential, RefundResult, VerifyResult
+from .http import call
 
 SANDBOX = "https://sandbox.sslcommerz.com"
 LIVE = "https://securepay.sslcommerz.com"
@@ -23,6 +23,12 @@ LIVE = "https://securepay.sslcommerz.com"
 class SSLCommerzProvider(BasePaymentProvider):
     code = "sslcommerz"
     supports_refund_api = True
+    CREDENTIALS = [
+        Credential("store_id", "Store ID"),
+        Credential("store_password", "Store password", secret=True),
+        Credential("multi_card_name", "Limit to methods (optional)", required=False,
+                   help="e.g. visacard,mastercard,amexcard to show cards only. Empty = all methods."),
+    ]
 
     @property
     def base(self):
@@ -30,7 +36,7 @@ class SSLCommerzProvider(BasePaymentProvider):
 
     @property
     def creds(self):
-        store_id, password = env("SSLCOMMERZ_STORE_ID"), env("SSLCOMMERZ_STORE_PASSWORD")
+        store_id, password = self.cred("store_id"), self.cred("store_password")
         if not store_id or not password:
             raise PaymentError("SSLCommerz credentials are not configured")
         return {"store_id": store_id, "store_passwd": password}
@@ -59,7 +65,7 @@ class SSLCommerzProvider(BasePaymentProvider):
             "num_of_item": order.ticket_count,
             "value_a": order.reference,
         }
-        cards_only = env("SSLCOMMERZ_MULTI_CARD_NAME")
+        cards_only = self.cred("multi_card_name")
         if cards_only:
             payload["multi_card_name"] = cards_only  # e.g. "visacard,mastercard,amexcard"
         data = call("POST", f"{self.base}/gwprocess/v4/api.php", provider=self.code, data=payload)

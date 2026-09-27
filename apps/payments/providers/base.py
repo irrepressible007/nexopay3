@@ -11,6 +11,18 @@ from django.urls import reverse
 from ..models import PaymentAttempt
 
 
+@dataclass(frozen=True)
+class Credential:
+    """One value an admin pastes from the provider's merchant panel."""
+
+    name: str
+    label: str
+    secret: bool = False
+    required: bool = True
+    multiline: bool = False
+    help: str = ""
+
+
 @dataclass
 class VerifyResult:
     status: str  # one of PaymentAttempt.Status
@@ -29,10 +41,32 @@ class RefundResult:
 class BasePaymentProvider:
     code = ""
     supports_refund_api = False
+    CREDENTIALS: list[Credential] = []
 
     def __init__(self, setting):
         self.setting = setting
         self.sandbox = setting.is_sandbox
+        self._creds = None
+
+    @staticmethod
+    def resolve_credential(setting, name: str, default: str = "") -> str:
+        """Admin-entered value first; otherwise the <PROVIDER>_<NAME> environment variable."""
+        value = setting.get_credentials().get(name, "")
+        if value:
+            return value
+        from .http import env
+
+        return env(f"{setting.provider.upper()}_{name.upper()}", default)
+
+    def cred(self, name: str, default: str = "") -> str:
+        if self._creds is None:
+            self._creds = self.setting.get_credentials()
+        value = self._creds.get(name, "")
+        if value:
+            return value
+        from .http import env
+
+        return env(f"{self.code.upper()}_{name.upper()}", default)
 
     # --- URLs the provider sends the buyer / its servers back to --------------
     def return_url(self, attempt: PaymentAttempt, outcome: str = "") -> str:

@@ -50,17 +50,23 @@ def fake_http(monkeypatch):
 
 
 @pytest.fixture
-def creds(monkeypatch):
-    values = {
-        "SSLCOMMERZ_STORE_ID": "teststore", "SSLCOMMERZ_STORE_PASSWORD": "secret",
-        "BKASH_APP_KEY": "k", "BKASH_APP_SECRET": "s", "BKASH_USERNAME": "u", "BKASH_PASSWORD": "p",
-        "NAGAD_MERCHANT_ID": "683002007104225", "NAGAD_MERCHANT_NUMBER": "01711428036",
+def creds(db):
+    """Store merchant credentials the way an admin does (encrypted on the provider setting)."""
+    defaults = {
+        "sslcommerz": {"store_id": "teststore", "store_password": "secret"},
+        "bkash": {"app_key": "k", "app_secret": "s", "username": "u", "password": "p"},
+        "nagad": {"merchant_id": "683002007104225", "merchant_number": "01711428036"},
     }
-    monkeypatch.setattr("apps.payments.providers.http.env", lambda name, default="": values.get(name, default))
-    for mod in ("sslcommerz", "bkash", "nagad"):
-        monkeypatch.setattr(f"apps.payments.providers.{mod}.env", lambda name, default="": values.get(name, default))
-    PaymentProviderSetting.objects.filter(provider__in=["sslcommerz", "bkash", "nagad"]).update(is_enabled=True)
-    return values
+
+    def configure(provider, **extra):
+        setting = PaymentProviderSetting.objects.get(provider=provider)
+        setting.set_credentials({**defaults.get(provider, {}), **extra})
+        setting.is_enabled = True
+        setting.save()
+
+    for provider in defaults:
+        configure(provider)
+    return configure
 
 
 @pytest.fixture
@@ -209,7 +215,7 @@ def test_nagad_encrypted_flow(fake_http, creds, pending_order):
     routes, _ = fake_http
     nagad_key, _nagad_priv, nagad_pub = _keypair()
     merchant_key, merchant_priv, _merchant_pub = _keypair()
-    creds.update({"NAGAD_PUBLIC_KEY": nagad_pub, "NAGAD_PRIVATE_KEY": merchant_priv})
+    creds("nagad", public_key=nagad_pub, private_key=merchant_priv)
 
     def initialize(kw):
         body = kw["json"]
@@ -255,3 +261,19 @@ def test_cancel_event_refunds_everyone(buyer, event):
     assert event.status == "cancelled"
     assert order.status == Order.Status.REFUNDED
     assert order.tickets.get().status == Ticket.Status.REFUNDED
+
+
+def test_credentials_are_encrypted_at_rest(creds):
+    setting = PaymentProviderSetting.objects.get(provider="bkash")
+    assert "secret" not in setting.credentials_encrypted and "app_secret" not in setting.credentials_encrypted
+    assert setting.get_credentials()["app_secret"] == "s"
+    assert get_provider("bkash").cred("app_secret") == "s"
+
+
+def test_missing_credentials_fall_back_to_environment(monkeypatch):
+    setting = PaymentProviderSetting.objects.get(provider="sslcommerz")
+    setting.set_credentials({})
+    setting.is_enabled = True
+    setting.save()
+    monkeypatch.setattr("apps.payments.providers.http.env", lambda name, default="": {"SSLCOMMERZ_STORE_ID": "from-env"}.get(name, default))
+    assert get_provider("sslcommerz").cred("store_id") == "from-env"

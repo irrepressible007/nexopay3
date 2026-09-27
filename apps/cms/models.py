@@ -30,15 +30,18 @@ class SiteSettings(models.Model):
     site_name = models.CharField(max_length=60, default="Nexopay")
     tagline = models.CharField(max_length=160, default="Tickets to everything worth going to")
     logo = models.FileField(upload_to="site/", blank=True, help_text=_("SVG or PNG, shown on dark backgrounds."))
-    logo_on_light = models.FileField(upload_to="site/", blank=True, help_text=_("Used in emails and PDF tickets."))
+    logo_on_color = models.FileField(
+        upload_to="site/", blank=True,
+        help_text=_("All-white PNG used on coloured backgrounds: email headers and PDF tickets."),
+    )
     favicon = models.FileField(upload_to="site/", blank=True)
     og_image = models.ImageField(upload_to="site/", blank=True, help_text=_("Default social share image."))
 
     # Brand colours → CSS custom properties.
-    primary_color = models.CharField(max_length=7, default="#A855F7", validators=[hex_color])
-    secondary_color = models.CharField(max_length=7, default="#EC4899", validators=[hex_color])
+    primary_color = models.CharField(max_length=7, default="#8B5CF6", validators=[hex_color])
+    secondary_color = models.CharField(max_length=7, default="#D946EF", validators=[hex_color])
     accent_color = models.CharField(max_length=7, default="#22D3EE", validators=[hex_color])
-    background_color = models.CharField(max_length=7, default="#07060B", validators=[hex_color])
+    background_color = models.CharField(max_length=7, default="#08051A", validators=[hex_color])
 
     contact_email = models.EmailField(default="support@nexopay.com.bd")
     contact_phone = models.CharField(max_length=30, blank=True)
@@ -60,6 +63,20 @@ class SiteSettings(models.Model):
     default_buyer_fee_pct = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0"), validators=PERCENT)
     default_buyer_fee_flat = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("0"))
 
+    hold_minutes = models.PositiveSmallIntegerField(
+        default=15, help_text=_("How long tickets stay reserved while a buyer pays.")
+    )
+
+    # Outgoing email (leave the host empty to use the server configuration).
+    email_host = models.CharField(max_length=120, blank=True, help_text=_("e.g. mail.nexopay.com.bd"))
+    email_port = models.PositiveIntegerField(default=465)
+    email_use_ssl = models.BooleanField(default=True, help_text=_("Port 465: SSL on. Port 587: SSL off, TLS on."))
+    email_use_tls = models.BooleanField(default=False)
+    email_username = models.CharField(max_length=200, blank=True)
+    email_password_encrypted = models.TextField(blank=True, editable=False)
+    email_from_name = models.CharField(max_length=80, default="Nexopay")
+    email_from_address = models.EmailField(blank=True, help_text=_("e.g. tickets@nexopay.com.bd"))
+
     maintenance_mode = models.BooleanField(default=False, help_text=_("Show a maintenance page to non-staff visitors."))
 
     class Meta:
@@ -76,6 +93,18 @@ class SiteSettings(models.Model):
 
     def delete(self, *args, **kwargs):  # the singleton cannot be deleted
         return
+
+    @property
+    def email_password(self) -> str:
+        from apps.core.crypto import decrypt_str
+
+        return decrypt_str(self.email_password_encrypted)
+
+    @email_password.setter
+    def email_password(self, value: str) -> None:
+        from apps.core.crypto import encrypt_str
+
+        self.email_password_encrypted = encrypt_str(value) if value else ""
 
     @classmethod
     def load(cls) -> "SiteSettings":
@@ -160,6 +189,68 @@ class HeroSlide(models.Model):
         return self.event.get_absolute_url() if self.event_id else ""
 
 
+class FooterColumn(models.Model):
+    """A titled column of links in the site footer."""
+
+    title = models.CharField(max_length=60)
+    sort_order = models.PositiveIntegerField(default=0)
+    is_enabled = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _("footer column")
+        verbose_name_plural = _("footer columns")
+        ordering = ["sort_order"]
+
+    def __str__(self):
+        return self.title
+
+
+class MenuItem(models.Model):
+    """A link in the header menu or in a footer column: label, target and order are all editable."""
+
+    class Location(models.TextChoices):
+        HEADER = "header", _("Header menu")
+        FOOTER = "footer", _("Footer column")
+
+    location = models.CharField(max_length=10, choices=Location.choices, default=Location.HEADER)
+    column = models.ForeignKey(
+        FooterColumn, null=True, blank=True, on_delete=models.CASCADE, related_name="items",
+        help_text=_("Required for footer links."),
+    )
+    label = models.CharField(max_length=60)
+    url = models.CharField(
+        max_length=300, help_text=_("A path on this site like /events/?status=live, or a full https:// link.")
+    )
+    open_in_new_tab = models.BooleanField(default=False)
+    sort_order = models.PositiveIntegerField(default=0)
+    is_enabled = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _("menu link")
+        verbose_name_plural = _("menu links")
+        ordering = ["location", "sort_order"]
+
+    def __str__(self):
+        return self.label
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+
+        if self.location == self.Location.FOOTER and not self.column_id:
+            raise ValidationError({"column": _("Choose which footer column this link belongs to.")})
+        if not self.url.startswith(("/", "https://", "http://", "mailto:", "tel:")):
+            raise ValidationError({"url": _("Start with / for a page on this site, or https:// for another site.")})
+
+
+class HeaderLink(MenuItem):
+    """Admin view onto the header menu links only."""
+
+    class Meta:
+        proxy = True
+        verbose_name = _("header menu link")
+        verbose_name_plural = _("header menu")
+
+
 class Partner(models.Model):
     name = models.CharField(max_length=100)
     logo = models.FileField(upload_to="partners/")
@@ -179,9 +270,8 @@ class Page(models.Model):
 
     slug = models.SlugField(max_length=80, unique=True)
     title = models.CharField(max_length=150)
-    body = models.TextField()
+    body = models.TextField(blank=True)
     meta_description = models.CharField(max_length=300, blank=True)
-    show_in_footer = models.BooleanField(default=True)
     sort_order = models.PositiveIntegerField(default=0)
     is_published = models.BooleanField(default=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -222,3 +312,68 @@ class FaqItem(models.Model):
             if hasattr(self, attr):
                 setattr(self, attr, sanitize_html(getattr(self, attr)))
         super().save(*args, **kwargs)
+
+
+class SiteText(models.Model):
+    """
+    One user-visible interface string (button, label, heading, email line…).
+    `msgid` is the English source text from the code; admins override it per
+    language without touching code. Overrides are applied on top of the
+    translation catalogs, so every template, form, email and PDF picks them up.
+    """
+
+    key = models.CharField(max_length=40, unique=True, editable=False)
+    msgid = models.TextField("original text (from code)", editable=False)
+    msgid_plural = models.TextField(blank=True, editable=False)
+    group = models.CharField(max_length=60, db_index=True, editable=False)
+    location = models.CharField(max_length=255, blank=True, editable=False)
+    default_bn = models.TextField("default Bangla", blank=True, editable=False)
+    placeholders = models.CharField(max_length=255, blank=True, editable=False)
+    text_en = models.TextField("English text", blank=True, help_text=_("Leave empty to use the original text."))
+    text_en_plural = models.TextField(
+        "English text (plural)", blank=True, help_text=_("Only for texts with a number, e.g. '3 tickets'.")
+    )
+    text_bn = models.TextField("Bangla text", blank=True, help_text=_("Leave empty to use the default Bangla."))
+    is_obsolete = models.BooleanField(default=False, editable=False)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("site text")
+        verbose_name_plural = _("site texts")
+        ordering = ["group", "msgid"]
+
+    def __str__(self):
+        return self.msgid[:80]
+
+    @property
+    def is_customized(self) -> bool:
+        return bool(self.text_en or self.text_en_plural or self.text_bn)
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+
+        from .sitetext import clean_override, placeholder_set
+
+        expected = placeholder_set(self.msgid + " " + self.msgid_plural)
+        errors = {}
+        for field in ("text_en", "text_en_plural", "text_bn"):
+            value = getattr(self, field)
+            if not value:
+                continue
+            value = clean_override(value, allow_html="<" in self.msgid)
+            setattr(self, field, value)
+            found = placeholder_set(value)
+            # The English singular of a counted text may drop the number ("One ticket").
+            singular_may_drop = field == "text_en" and self.msgid_plural and found <= expected
+            if found != expected and not singular_may_drop:
+                missing, extra = expected - found, found - expected
+                parts = []
+                if missing:
+                    parts.append(_("keep %(p)s") % {"p": ", ".join(sorted(missing))})
+                if extra:
+                    parts.append(_("remove %(p)s") % {"p": ", ".join(sorted(extra))})
+                errors[field] = _("Placeholders must stay exactly as in the original: %(details)s.") % {
+                    "details": "; ".join(parts)
+                }
+        if errors:
+            raise ValidationError(errors)

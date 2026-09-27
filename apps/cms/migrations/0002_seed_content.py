@@ -18,10 +18,10 @@ SECTIONS = [
 ]
 
 PAGES = [
-    ("about", "About Nexopay", "নেক্সোপে সম্পর্কে", "<p>Nexopay is Bangladesh's home for event tickets.</p>"),
-    ("terms", "Terms & Conditions", "শর্তাবলী", "<p>Platform terms go here.</p>"),
-    ("privacy", "Privacy Policy", "গোপনীয়তা নীতি", "<p>Privacy policy goes here.</p>"),
-    ("refund-policy", "Refund Policy", "রিফান্ড নীতি", "<p>Refund policy goes here.</p>"),
+    ("about", "About Nexopay", "নেক্সোপে সম্পর্কে", ""),
+    ("terms", "Terms & Conditions", "শর্তাবলী", ""),
+    ("privacy", "Privacy Policy", "গোপনীয়তা নীতি", ""),
+    ("refund-policy", "Refund Policy", "রিফান্ড নীতি", ""),
 ]
 
 FAQ = [

@@ -53,7 +53,7 @@
       <h2 class="font-display text-lg font-bold">{% translate "Orders" %}</h2>
       <div class="flex gap-2">
         <form method="get"><input type="search" name="q" value="{{ query }}" placeholder="{% translate 'Reference, email, phone…' %}" class="input !py-2 !text-sm w-56"></form>
-        <a href="{% url 'organizers:attendees_csv' event.slug %}" class="btn-ghost !py-2">{% icon "download" "w-4 h-4" %}CSV</a>
+        <a href="{% url 'organizers:attendees_csv' event.slug %}" class="btn-ghost !py-2">{% icon "download" "w-4 h-4" %}{% translate "CSV" %}</a>
       </div>
     </div>
     {% if pending_refunds %}<p class="bg-warning/10 px-6 py-2 text-sm text-warning">{% blocktranslate count n=pending_refunds %}{{ n }} refund request awaiting Nexopay review{% plural %}{{ n }} refund requests awaiting Nexopay review{% endblocktranslate %}</p>{% endif %}
@@ -96,7 +96,7 @@
       </ul>
       <form method="post" action="{% url 'organizers:scanner_add' event.slug %}" class="mt-4 flex gap-2">
         {% csrf_token %}
-        <input type="email" name="email" required placeholder="staff@email.com" class="input !py-2 !text-sm">
+        <input type="email" name="email" required placeholder="{% translate 'staff@email.com' %}" class="input !py-2 !text-sm">
         <button class="btn-ghost !py-2">{% translate "Add" %}</button>
       </form>
     </section>
