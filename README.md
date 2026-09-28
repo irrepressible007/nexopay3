@@ -33,7 +33,7 @@ apps/
   cms/          SiteSettings (branding/colours/fees), homepage sections, hero slides, pages, FAQ
   support/      contact form routed to per-reason inboxes
   core/         cache/HTTP helpers, template tags, cron + backup + demo-data commands
-templates/  static/src/app.css (Tailwind source)  locale/ (Bangla)  deploy/  tests/
+templates/  assets/tailwind/app.css (Tailwind source)  locale/ (Bangla)  deploy/  tests/
 ```
 
 ## Local development (Windows / macOS / Linux)
@@ -66,7 +66,7 @@ python manage.py nexopay_cron         # run periodic jobs once (sends queued tic
 **CSS** — after editing templates, rebuild with the Tailwind standalone CLI (no Node needed):
 
 ```bash
-bin/tailwindcss.exe -i static/src/app.css -o static/css/app.css --minify     # add --watch while developing
+bin/tailwindcss.exe -i assets/tailwind/app.css -o static/css/app.css --minify     # add --watch while developing
 ```
 
 Download the CLI for your OS from https://github.com/tailwindlabs/tailwindcss/releases (v4) into `bin/`.
