@@ -234,3 +234,24 @@ def test_private_documents_are_staff_only(client):
         assert client.get("/private-media/../settings.py").status_code == 404
     finally:
         storage.delete(name)
+
+
+class TestCloudflareRealIP:
+    def _addr(self, remote, header):
+        from django.test import RequestFactory
+
+        from apps.core.cloudflare import CloudflareRealIPMiddleware
+
+        request = RequestFactory().get("/", REMOTE_ADDR=remote, HTTP_CF_CONNECTING_IP=header)
+        CloudflareRealIPMiddleware(lambda r: r)(request)
+        return request.META["REMOTE_ADDR"]
+
+    def test_uses_visitor_ip_when_request_comes_from_cloudflare(self):
+        assert self._addr("172.70.1.2", "203.0.113.9") == "203.0.113.9"
+        assert self._addr("2606:4700::1", "2001:db8::5") == "2001:db8::5"
+
+    def test_ignores_spoofed_header_from_elsewhere(self):
+        assert self._addr("198.51.100.7", "203.0.113.9") == "198.51.100.7"
+
+    def test_ignores_garbage_header(self):
+        assert self._addr("172.70.1.2", "not-an-ip") == "172.70.1.2"
