@@ -110,6 +110,8 @@ if DATABASES["default"]["ENGINE"] == "django.db.backends.mysql":
     DATABASES["default"]["TEST"] = {"CHARSET": "utf8mb4", "COLLATION": "utf8mb4_unicode_ci"}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+# allauth's conditional unique index is unsupported on MariaDB; email uniqueness is enforced on User.email.
+SILENCED_SYSTEM_CHECKS = ["models.W036"]
 FORMS_URLFIELD_ASSUME_HTTPS = True
 AUTH_USER_MODEL = "accounts.User"
 

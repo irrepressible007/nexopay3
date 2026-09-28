@@ -16,3 +16,4 @@ tailwindcss-*
 # Local notes (server outputs etc.)
 outputscpanel.md
 *.local.md
+/tmp/
