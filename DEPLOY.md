@@ -68,6 +68,20 @@ CACHE_DIR=/home/nexopayc/nexopay/.cache
 The `.env` file is read by the web app *and* by cron, so keep secrets there (not only in the cPanel UI).
 On **staging only**, add `ALLOW_MOCK_PAYMENTS=True` if you want the test gateway.
 
+### If the app can't start: `lswsgi: No such file or directory` in `stderr.log`
+
+Some hosts' LiteSpeed lacks its Python connector, so *Setup Python App* can't run any app. Serve the site
+through `deploy/cgi_bridge.sh` instead (it only edits the block it adds to the domain's `.htaccess`):
+
+1. cPanel › Setup Python App › the app › **Stop app** (never *Destroy*, never *Save* — Save rewrites
+   `passenger_wsgi.py`). Keep the app: its virtualenv is what the bridge runs.
+2. `bash ~/nexopay3/deploy/cgi_bridge.sh on` — CGI: works on any host, ~1 s per page.
+3. `bash ~/nexopay3/deploy/fcgi_probe.sh` — if it prints `FAST MODE SUPPORTED`, switch to
+   `bash ~/nexopay3/deploy/cgi_bridge.sh fast` (FastCGI: Python stays loaded, pages in milliseconds).
+   `deploy.sh` reloads the fast workers in place, without dropping requests.
+
+`cgi_bridge.sh status` shows the mode; `cgi_bridge.sh off` removes the bridge (then *Start app* again).
+
 ## 3. Cron (cPanel › Cron Jobs)
 
 Paste the lines from `deploy/crontab.txt` (adjust `3.12`). The every-minute job releases expired ticket
@@ -97,7 +111,7 @@ Also: Speed › Optimization → enable Brotli; Caching › Configuration → Br
 ## 6. Updating
 
 ```bash
-bash ~/nexopay/deploy/deploy.sh      # pull, install, migrate, collectstatic, check, restart
+bash ~/nexopay3/deploy/deploy.sh     # pull, install, migrate, collectstatic, check, restart
 ```
 
 ## 7. Going live checklist
