@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Give the site's database user a new random password - in cPanel and in .env together.
-# Nobody sees or types it. If anything fails, the old password is put back everywhere.
+# Give the site's database user a new password - in cPanel and in .env together.
+# If anything fails, the old password is put back everywhere.
 #
-#   bash ~/nexopay3/deploy/rotate_db_password.sh
+#   bash ~/nexopay3/deploy/rotate_db_password.sh            # a random one nobody sees or types
+#   bash ~/nexopay3/deploy/rotate_db_password.sh --choose   # one you type (hidden, asked twice)
 #
 # Also pins FIELD_ENCRYPTION_KEY (to the current SECRET_KEY, so nothing already saved
 # changes): secrets stored in the admin then stay readable even if SECRET_KEY changes.
@@ -20,7 +21,11 @@ main() {
   local db_user old_password new_password
   db_user="$(db_url_part user)"
   old_password="$(db_url_part password)"
-  new_password="$("$PY" -c 'import secrets, string; a = string.ascii_letters + string.digits; print("".join(secrets.choice(a) for _ in range(32)))')"
+  if [ "${1:-}" = "--choose" ]; then
+    new_password="$(ask_password)"
+  else
+    new_password="$("$PY" -c 'import secrets, string; a = string.ascii_letters + string.digits; print("".join(secrets.choice(a) for _ in range(32)))')"
+  fi
 
   printf '%s' "$new_password" | "$PY" -c "$REWRITE_ENV" "$ENV_FILE" "$ENV_FILE.new"
   echo "→ Setting a new password for database user $db_user in cPanel"
@@ -48,6 +53,17 @@ main() {
     fi
     exit 1
   fi
+}
+
+ask_password() {  # prompts go to the screen; only the password is returned
+  local first second
+  while :; do
+    read -rsp "New database password (hidden): " first; echo >&2
+    read -rsp "Type it again: " second; echo >&2
+    if [ -n "$first" ] && [ "$first" = "$second" ]; then break; fi
+    echo "Empty, or the two didn't match - try again." >&2
+  done
+  printf '%s' "$first"
 }
 
 # user or password from DATABASE_URL in .env (password URL-decoded)
