@@ -18,3 +18,4 @@ Pillow>=12,<13
 requests>=2.32,<3
 polib>=1.2,<2
 cryptography>=45
+gunicorn>=23,<27  # always-on app server for deploy/cgi_bridge.sh fast mode (hosts without lswsgi)

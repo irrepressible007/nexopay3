@@ -2,13 +2,13 @@
 # Serve Nexopay on hosts whose LiteSpeed lacks the Python connector (lswsgi),
 # so cPanel's "Setup Python App" cannot start the app.
 #
-#   bash ~/nexopay3/deploy/cgi_bridge.sh on       # CGI: works everywhere, ~1 s per page
-#   bash ~/nexopay3/deploy/cgi_bridge.sh fast     # FastCGI: Python stays loaded (fast) - only if
-#                                                 #   deploy/fcgi_probe.sh says the server supports it
+#   bash ~/nexopay3/deploy/cgi_bridge.sh on       # CGI: Django loads on every request (~1 s per page)
+#   bash ~/nexopay3/deploy/cgi_bridge.sh fast     # tiny CGI forwarder + always-on app server (deploy/appserver.sh)
 #   bash ~/nexopay3/deploy/cgi_bridge.sh off      # remove the bridge (then "Start app" in cPanel)
 #   bash ~/nexopay3/deploy/cgi_bridge.sh status
 #
 # Both modes need the Python app STOPPED in cPanel (Setup Python App > Stop app).
+# In fast mode, if the app server is ever down, pages are served the "on" way instead.
 set -euo pipefail
 
 main() {
@@ -20,8 +20,8 @@ main() {
   static_root="$(grep -E '^STATIC_ROOT=' "$APP_DIR/.env" | cut -d= -f2- || true)"
   DOCROOT="${DOCROOT:-${static_root%/static}}"
   HTACCESS="$DOCROOT/.htaccess"
-  CGI_SCRIPT="$DOCROOT/cgi-bin/nexopay.cgi"
-  FCGI_DIR="$DOCROOT/fcgi-bin"
+  SCRIPT="$DOCROOT/cgi-bin/nexopay.cgi"
+  APPSERVER="$APP_DIR/deploy/appserver.sh"
   BEGIN="# BEGIN NEXOPAY CGI BRIDGE"
   END="# END NEXOPAY CGI BRIDGE"
 
@@ -29,112 +29,193 @@ main() {
   [ -x "$VENV/bin/python" ] || { echo "Virtualenv not found at $VENV." >&2; exit 1; }
 
   case "$action" in
-    on | cgi) enable cgi ;;
-    fast | fcgi) enable fcgi ;;
+    on | cgi)
+      enable cgi
+      bash "$APPSERVER" disable
+      ;;
+    fast)
+      "$VENV/bin/pip" install --quiet --disable-pip-version-check \
+        "$(grep -E '^gunicorn' "$APP_DIR/requirements.txt" | cut -d' ' -f1)"
+      bash "$APPSERVER" enable
+      enable fast
+      ;;
     off)
       strip_block
-      remove_entries
+      rm -f "$SCRIPT" "$DOCROOT/cgi-bin/nexopay.fcgi"
+      rm -rf "$DOCROOT/fcgi-bin"
+      bash "$APPSERVER" disable
       echo "✓ Bridge OFF. To use the normal Python app: cPanel > Setup Python App > 'Start app'."
       ;;
     status)
-      if grep -qF "/fcgi-bin/" "$HTACCESS" 2>/dev/null; then echo "Bridge: FAST (FastCGI)"
-      elif grep -qF "$BEGIN" "$HTACCESS" 2>/dev/null; then echo "Bridge: ON (CGI)"
-      else echo "Bridge: off"; fi
+      if ! grep -qF "$BEGIN" "$HTACCESS" 2>/dev/null; then echo "Bridge: off"
+      elif grep -qxF "FORWARD = True" "$SCRIPT" 2>/dev/null; then echo "Bridge: FAST (forwarder + app server)"
+      else echo "Bridge: ON (CGI)"; fi
       if grep -qE '^\s*PassengerAppRoot' "$HTACCESS" 2>/dev/null; then echo "Python app: running"; else echo "Python app: stopped"; fi
+      bash "$APPSERVER" status
       ;;
     *) echo "Usage: $0 on|fast|off|status" >&2; exit 1 ;;
   esac
 }
 
 enable() {
-  local mode="$1" target
+  local mode="$1"
   if grep -qE '^\s*PassengerAppRoot' "$HTACCESS" 2>/dev/null; then
     echo "The Python app is still running for this domain."
     echo "First: cPanel > Setup Python App > your app > 'Stop app' (NOT Destroy, NOT Save). Then run this again."
     exit 1
   fi
-  remove_entries
-  if [ "$mode" = fcgi ]; then
-    "$VENV/bin/pip" install --quiet --disable-pip-version-check "flup==1.0.3"
-    mkdir -p "$FCGI_DIR"
-    printf 'Options +ExecCGI -Indexes\nAddHandler fcgid-script .fcgi\n' > "$FCGI_DIR/.htaccess"
-    write_entry fcgi > "$FCGI_DIR/nexopay.fcgi"
-    chmod 755 "$FCGI_DIR" "$FCGI_DIR/nexopay.fcgi"
-    target="/fcgi-bin/nexopay.fcgi"
-  else
-    mkdir -p "$(dirname "$CGI_SCRIPT")"
-    write_entry cgi > "$CGI_SCRIPT"
-    chmod 755 "$(dirname "$CGI_SCRIPT")" "$CGI_SCRIPT"
-    target="/cgi-bin/nexopay.cgi"
-  fi
+  mkdir -p "$(dirname "$SCRIPT")"
+  write_entry "$mode" > "$SCRIPT.new"
+  chmod 755 "$(dirname "$SCRIPT")" "$SCRIPT.new"
+  mv -f "$SCRIPT.new" "$SCRIPT"  # atomic: requests in progress never see a half-written script
+  rm -f "$DOCROOT/cgi-bin/nexopay.fcgi"
+  rm -rf "$DOCROOT/fcgi-bin"
 
-  [ -f "$HTACCESS" ] && cp -p "$HTACCESS" "$HTACCESS.before-bridge"
-  strip_block
+  if grep -qF "$BEGIN" "$HTACCESS" 2>/dev/null; then
+    strip_block
+  elif [ -f "$HTACCESS" ]; then
+    cp -p "$HTACCESS" "$HTACCESS.before-bridge"
+  fi
   cat >> "$HTACCESS" <<HT
 $BEGIN
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} !^/(cgi-bin|fcgi-bin)/
-RewriteRule ^(.*)\$ $target/\$1 [L,QSA]
+RewriteCond %{REQUEST_URI} !^/cgi-bin/
+RewriteRule ^(.*)\$ /cgi-bin/nexopay.cgi/\$1 [L,QSA]
 </IfModule>
 $END
 HT
-  if [ "$mode" = fcgi ]; then echo "✓ Bridge FAST (FastCGI) for $DOCROOT"; else echo "✓ Bridge ON (CGI) for $DOCROOT"; fi
+  if [ "$mode" = fast ]; then echo "✓ Bridge FAST for $DOCROOT"; else echo "✓ Bridge ON (CGI) for $DOCROOT"; fi
 }
 
 write_entry() {
-  local mode="$1"
+  local mode="$1" forward=False flags=""
+  # Fast mode: -S skips loading site-packages at start-up; the forwarder needs only the standard library.
+  if [ "$mode" = fast ]; then forward=True; flags=" -S"; fi
   cat <<PY
-#!$VENV/bin/python
+#!$VENV/bin/python$flags
 # Nexopay entry point ($mode) - generated by deploy/cgi_bridge.sh, do not edit.
-import signal
+import os
+import socket
 import sys
 
-# A reload request (SIGHUP) while starting up is moot - the newest code is being loaded anyway.
-# Ignoring it here stops it from killing the process; the FastCGI server handles it once running.
-signal.signal(signal.SIGHUP, signal.SIG_IGN)
-sys.path.insert(0, "$APP_DIR")
-
-from passenger_wsgi import application as django_app  # noqa: E402  (logs start-up errors)
-
-
-def application(environ, start_response):
-    # The site lives at /, not under the bridge script's URL.
-    environ["SCRIPT_NAME"] = ""
-    environ.pop("SCRIPT_URL", None)
-    environ.pop("REDIRECT_URL", None)
-    return django_app(environ, start_response)
-
-
+APP_DIR = "$APP_DIR"
+APP_SOCKET = "$APP_DIR/tmp/appserver/app.sock"
+FORWARD = $forward
 PY
-  if [ "$mode" = fcgi ]; then
-    cat <<'PY'
-import os  # noqa: E402
+  cat <<'PY'
 
-from flup.server.fcgi_single import WSGIServer  # noqa: E402
+# Hop-by-hop headers, plus ones the web server adds itself.
+DROP_HEADERS = {b"connection", b"keep-alive", b"proxy-connection", b"te", b"trailer", b"transfer-encoding",
+                b"upgrade", b"server", b"date"}
+SKIP_ENV = {b"HTTP_CONNECTION", b"HTTP_KEEP_ALIVE", b"HTTP_PROXY_CONNECTION", b"HTTP_TE", b"HTTP_TRAILER",
+            b"HTTP_TRANSFER_ENCODING", b"HTTP_UPGRADE", b"HTTP_PROXY"}
 
-# Started by the web server as FastCGI: stays running, one request at a time (flup falls back
-# to plain CGI if started any other way).
-if WSGIServer(application).run():
-    # SIGHUP from deploy.sh lands here once the current request is finished: reload the code in
-    # place. The web server's socket stays open, so visitors wait a moment instead of an error.
-    os.execv(sys.executable, [sys.executable] + sys.argv)
+
+def run_directly():
+    """Load Django in this process and answer the request (slow, but needs nothing else)."""
+    if sys.flags.no_site:
+        # Started as the forwarder (-S): restart normally so site-packages load as usual.
+        # The request body is still unread and the environment is kept, so nothing is lost.
+        os.environ["NEXOPAY_BRIDGE_DIRECT"] = "1"
+        os.execv(sys.executable, [sys.executable, os.path.abspath(sys.argv[0])])
+    sys.path.insert(0, APP_DIR)
+    from wsgiref.handlers import CGIHandler
+
+    from passenger_wsgi import application as django_app  # logs start-up errors
+
+    def application(environ, start_response):
+        # The site lives at /, not under the bridge script's URL.
+        environ["SCRIPT_NAME"] = ""
+        environ.pop("SCRIPT_URL", None)
+        environ.pop("REDIRECT_URL", None)
+        return django_app(environ, start_response)
+
+    CGIHandler().run(application)
+
+
+def request_head(env):
+    uri = env.get(b"REQUEST_URI") or env.get(b"PATH_INFO", b"/") + (
+        b"?" + env[b"QUERY_STRING"] if env.get(b"QUERY_STRING") else b"")
+    lines = [env.get(b"REQUEST_METHOD", b"GET") + b" " + uri + b" HTTP/1.0"]
+    for key, value in env.items():
+        if key.startswith(b"HTTP_") and key not in SKIP_ENV and not key.startswith(b"HTTP_X_NEXOPAY_"):
+            lines.append(key[5:].replace(b"_", b"-") + b": " + value)
+    if env.get(b"CONTENT_TYPE"):
+        lines.append(b"Content-Type: " + env[b"CONTENT_TYPE"])
+    if env.get(b"CONTENT_LENGTH"):
+        lines.append(b"Content-Length: " + env[b"CONTENT_LENGTH"])
+    https = env.get(b"HTTPS", b"").lower() in (b"on", b"1") or env.get(b"REQUEST_SCHEME") == b"https"
+    lines.append(b"X-Nexopay-Remote-Addr: " + env.get(b"REMOTE_ADDR", b""))
+    lines.append(b"X-Nexopay-Scheme: " + (b"https" if https else b"http"))
+    lines.append(b"Connection: close")
+    return b"\r\n".join(lines) + b"\r\n\r\n"
+
+
+def forward(conn):
+    """Relay this CGI request to the app server; True once a response has been sent."""
+    env = os.environb
+    conn.sendall(request_head(env))
+    remaining = int(env.get(b"CONTENT_LENGTH") or 0)
+    while remaining > 0:
+        chunk = sys.stdin.buffer.read(min(remaining, 65536))
+        if not chunk:
+            break
+        conn.sendall(chunk)
+        remaining -= len(chunk)
+
+    reply = conn.makefile("rb")
+    status = reply.readline()
+    if not status.startswith(b"HTTP/"):
+        return False
+    head = [b"Status: " + (status.split(b" ", 1)[1].strip() if b" " in status.strip() else b"502")]
+    while True:
+        line = reply.readline()
+        if line in (b"\r\n", b"\n", b""):
+            break
+        if line.split(b":", 1)[0].strip().lower() not in DROP_HEADERS:
+            head.append(line.rstrip(b"\r\n"))
+    out = sys.stdout.buffer
+    out.write(b"\r\n".join(head) + b"\r\n\r\n")
+    try:
+        while True:
+            chunk = reply.read1(65536)
+            if not chunk:
+                break
+            out.write(chunk)
+        out.flush()
+    except OSError:
+        pass  # the response had already started: end it here rather than send a second one
+    return True
+
+
+def main():
+    if not FORWARD or os.environ.get("NEXOPAY_BRIDGE_DIRECT"):
+        return run_directly()
+    conn = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    conn.settimeout(3)
+    try:
+        conn.connect(APP_SOCKET)
+    except OSError:
+        conn.close()
+        return run_directly()  # app server down: serve the slow way rather than fail
+    conn.settimeout(120)
+    try:
+        if forward(conn):
+            return
+    except OSError:
+        pass
+    finally:
+        conn.close()
+    if os.environ.get("REQUEST_METHOD", "GET") in ("GET", "HEAD"):
+        return run_directly()  # nothing was sent yet and it's safe to repeat
+    sys.stdout.write("Status: 503 Service Unavailable\r\nContent-Type: text/plain\r\nRetry-After: 5\r\n\r\n"
+                     "The site is restarting. Please go back and try again in a moment.\n")
+
+
+main()
 PY
-  else
-    cat <<'PY'
-from wsgiref.handlers import CGIHandler  # noqa: E402
-
-CGIHandler().run(application)
-PY
-  fi
-}
-
-remove_entries() {
-  rm -f "$CGI_SCRIPT"
-  rm -rf "$FCGI_DIR"
-  # Running FastCGI workers keep old code in memory; the web server starts fresh ones on demand.
-  pkill -u "$(id -u)" -f "fcgi-bin/nexopay\.fcgi" 2>/dev/null || true
 }
 
 strip_block() {

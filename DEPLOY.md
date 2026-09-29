@@ -75,10 +75,12 @@ through `deploy/cgi_bridge.sh` instead (it only edits the block it adds to the d
 
 1. cPanel › Setup Python App › the app › **Stop app** (never *Destroy*, never *Save* — Save rewrites
    `passenger_wsgi.py`). Keep the app: its virtualenv is what the bridge runs.
-2. `bash ~/nexopay3/deploy/cgi_bridge.sh on` — CGI: works on any host, ~1 s per page.
-3. `bash ~/nexopay3/deploy/fcgi_probe.sh` — if it prints `FAST MODE SUPPORTED`, switch to
-   `bash ~/nexopay3/deploy/cgi_bridge.sh fast` (FastCGI: Python stays loaded, pages in milliseconds).
-   `deploy.sh` reloads the fast workers in place, without dropping requests.
+2. `bash ~/nexopay3/deploy/cgi_bridge.sh fast` — a tiny CGI forwarder relays each request to an always-on
+   app server (gunicorn, `deploy/appserver.sh`) on a private socket: pages in tens of milliseconds. It also adds
+   one keep-alive line to your crontab (only its own line, tagged `# nexopay-appserver`) that restarts the app
+   server within a minute if it ever stops; until then pages are served the slow way, never an error.
+   `deploy.sh` reloads the app server without dropping requests. Log: `logs/appserver.log`.
+3. Or `bash ~/nexopay3/deploy/cgi_bridge.sh on` — plain CGI, nothing running in the background, ~1 s per page.
 
 `cgi_bridge.sh status` shows the mode; `cgi_bridge.sh off` removes the bridge (then *Start app* again).
 

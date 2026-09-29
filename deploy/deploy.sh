@@ -60,8 +60,7 @@ main() {
 
   echo "→ Restarting app"
   touch tmp/restart.txt
-  # The FastCGI bridge (deploy/cgi_bridge.sh fast) keeps Python running: make it reload the new code.
-  pkill -HUP -u "$(id -u)" -f "fcgi-bin/nexopay\.fcgi" 2>/dev/null || true
+  bash deploy/appserver.sh reload  # the bridge's fast mode keeps Python running: load the new code
   echo "✓ Deployed $(git rev-parse --short HEAD)"
 }
 

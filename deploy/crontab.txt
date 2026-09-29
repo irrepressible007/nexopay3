@@ -7,3 +7,7 @@
 
 # Mondays 04:30: prune finished background-task rows.
 30 4 * * 1 cd $HOME/nexopay3 && $HOME/virtualenv/nexopay3/3.11/bin/python manage.py prune_db_task_results >> $HOME/nexopay3/logs/cron.log 2>&1
+
+# Only with the CGI bridge's fast mode (deploy/cgi_bridge.sh fast adds this line itself):
+# keeps the always-on app server running; does nothing while it is up.
+# * * * * * bash $HOME/nexopay3/deploy/appserver.sh start >/dev/null 2>&1 # nexopay-appserver
