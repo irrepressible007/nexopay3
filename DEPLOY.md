@@ -83,6 +83,8 @@ through `deploy/cgi_bridge.sh` instead (it only edits the block it adds to the d
 3. Or `bash ~/nexopay3/deploy/cgi_bridge.sh on` — plain CGI, nothing running in the background, ~1 s per page.
 
 `cgi_bridge.sh status` shows the mode; `cgi_bridge.sh off` removes the bridge (then *Start app* again).
+`bash ~/nexopay3/deploy/speedtest.sh` times each layer (Cloudflare, web server, PHP, CGI, app server) to show
+where page time goes.
 
 ## 3. Cron (cPanel › Cron Jobs)
 

@@ -74,7 +74,7 @@ run() {
   rm -f "$SOCK"
   cd "$APP_DIR"
   exec "$VENV/bin/gunicorn" bridge_wsgi:application \
-    --bind "unix:$SOCK" \
+    --config "$APP_DIR/deploy/gunicorn.conf.py" --bind "unix:$SOCK" \
     --workers "${APP_WORKERS:-2}" --worker-class gthread --threads "${APP_THREADS:-4}" \
     --timeout 60 --graceful-timeout 30 \
     --max-requests 2000 --max-requests-jitter 200 \
