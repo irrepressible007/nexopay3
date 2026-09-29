@@ -54,6 +54,7 @@ main() {
 
   echo "→ Collecting static files"
   python manage.py collectstatic --noinput --verbosity 0
+  web_readable
 
   echo "→ Checking configuration"
   python manage.py check --deploy --fail-level ERROR
@@ -62,6 +63,15 @@ main() {
   touch tmp/restart.txt
   bash deploy/appserver.sh reload  # the bridge's fast mode keeps Python running: load the new code
   echo "✓ Deployed $(git rev-parse --short HEAD)"
+}
+
+# The web server serves static and uploaded files itself, so it must be able to read them.
+web_readable() {
+  local var dir
+  for var in STATIC_ROOT MEDIA_ROOT; do
+    dir="$(grep -E "^$var=" .env | cut -d= -f2- || true)"
+    if [ -n "$dir" ] && [ -d "$dir" ]; then chmod -R go+rX "$dir"; fi
+  done
 }
 
 main "$@"

@@ -11,6 +11,7 @@ main() {
   VENV="${VENV:-$(ls -d "$HOME"/virtualenv/"$APP_NAME"/3.* 2>/dev/null | sort -V | tail -1)}"
   local static_root site scheme host port
   static_root="$(grep -E '^STATIC_ROOT=' "$APP_DIR/.env" | cut -d= -f2-)"
+  MEDIA_ROOT="$(grep -E '^MEDIA_ROOT=' "$APP_DIR/.env" | cut -d= -f2- || true)"
   site="$(grep -E '^SITE_URL=' "$APP_DIR/.env" | cut -d= -f2-)"
   DOCROOT="${static_root%/static}"
   SOCK="$APP_DIR/tmp/appserver/app.sock"
@@ -47,6 +48,11 @@ main() {
     row "PHP -> app server" "$(ttfb "$site/$tag/relay.php" "${direct[@]}")"
     echo "    relay says: $(curl -sk -m 30 "${direct[@]}" "$site/$tag/relay.php" | head -c 200 || true)"
     row "Home page (current bridge)" "$(ttfb "$site/" "${direct[@]}")"
+    if curl -sI -m 20 "${direct[@]}" "$site/static/css/app.css" | tr -d '\r' | grep -qi '^cross-origin-opener-policy:'; then
+      echo "    static files are served by: Django, through the bridge (slow - the web server can't read them?)"
+    else
+      echo "    static files are served by: the web server (good)"
+    fi
   else
     echo "Web server directly: couldn't reach it without Cloudflare - skipped."
   fi
@@ -57,7 +63,11 @@ main() {
   row "Home page" "$(ttfb "$site/")"
   echo "    one home page request: $(curl -s -m 30 -o /dev/null -w 'connect %{time_connect}s, TLS %{time_appconnect}s, first byte %{time_starttransfer}s, cf-cache: ' "$site/" || true)$(curl -s -m 30 -D - -o /dev/null "$site/" | tr -d '\r' | awk -F': ' 'tolower($1)=="cf-cache-status"{print $2}' || true)"
   echo
-  bash "$APP_DIR/deploy/appserver.sh" status
+  echo "Permissions (umask $(umask)):"
+  stat -c '  %A %U:%G %n' "$DOCROOT" "$DOCROOT/static" "$DOCROOT/static/css" "$DOCROOT/static/css/app.css" \
+    "${MEDIA_ROOT:-$DOCROOT/media}" 2>/dev/null || true
+  echo
+  bash "$APP_DIR/deploy/cgi_bridge.sh" status
 }
 
 write_probes() {

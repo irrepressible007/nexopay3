@@ -75,16 +75,17 @@ through `deploy/cgi_bridge.sh` instead (it only edits the block it adds to the d
 
 1. cPanel › Setup Python App › the app › **Stop app** (never *Destroy*, never *Save* — Save rewrites
    `passenger_wsgi.py`). Keep the app: its virtualenv is what the bridge runs.
-2. `bash ~/nexopay3/deploy/cgi_bridge.sh fast` — a tiny CGI forwarder relays each request to an always-on
-   app server (gunicorn, `deploy/appserver.sh`) on a private socket: pages in tens of milliseconds. It also adds
-   one keep-alive line to your crontab (only its own line, tagged `# nexopay-appserver`) that restarts the app
-   server within a minute if it ever stops; until then pages are served the slow way, never an error.
+2. `bash ~/nexopay3/deploy/cgi_bridge.sh fast` — an always-on app server (gunicorn, `deploy/appserver.sh`) keeps
+   Django loaded on a private socket, and a small forwarder hands it each request: PHP when the server allows it
+   (PHP stays loaded, so pages take milliseconds; the script tests uploads and pages before switching), else a CGI
+   script. It adds one keep-alive line to your crontab (only its own, tagged `# nexopay-appserver`) that restarts
+   the app server within a minute if it ever stops; meanwhile pages are served the slow way, never an error.
    `deploy.sh` reloads the app server without dropping requests. Log: `logs/appserver.log`.
 3. Or `bash ~/nexopay3/deploy/cgi_bridge.sh on` — plain CGI, nothing running in the background, ~1 s per page.
 
 `cgi_bridge.sh status` shows the mode; `cgi_bridge.sh off` removes the bridge (then *Start app* again).
-`bash ~/nexopay3/deploy/speedtest.sh` times each layer (Cloudflare, web server, PHP, CGI, app server) to show
-where page time goes.
+`bash ~/nexopay3/deploy/speedtest.sh` times each layer (Cloudflare, web server, PHP, CGI, app server), shows
+whether static files are served by the web server, and lists folder permissions.
 
 ## 3. Cron (cPanel › Cron Jobs)
 

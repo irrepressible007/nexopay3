@@ -157,6 +157,9 @@ STATIC_ROOT = env("STATIC_ROOT", default=str(BASE_DIR / "staticfiles"))
 STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = env("MEDIA_URL", default="/media/")
 MEDIA_ROOT = env("MEDIA_ROOT", default=str(BASE_DIR / "media"))
+# Uploads may be served straight by the web server, which runs as another user.
+FILE_UPLOAD_PERMISSIONS = 0o644
+FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755
 
 # Cloudflare R2 (S3-compatible). When R2_BUCKET is unset (local dev) media
 # falls back to local disk; production must set it — never store uploads on
