@@ -28,8 +28,8 @@ main() {
   fi
 
   printf '%s' "$new_password" | "$PY" -c "$REWRITE_ENV" "$ENV_FILE" "$ENV_FILE.new"
-  echo "→ Setting a new password for database user $db_user in cPanel"
-  if ! set_password "$db_user" "$new_password"; then
+  echo "→ Setting the new password for database user $db_user in cPanel"
+  if ! set_password "$db_user" "$(uri_encode "$new_password")"; then
     rm -f "$ENV_FILE.new"
     echo "cPanel didn't accept it - nothing was changed." >&2
     exit 1
@@ -38,14 +38,15 @@ main() {
   mv -f "$ENV_FILE.new" "$ENV_FILE"
 
   echo "→ Checking the site can connect with it"
-  if (cd "$APP_DIR" && "$PY" manage.py shell -c "from django.db import connection; connection.ensure_connection()") >/dev/null 2>&1; then
+  if db_ok || retry_as_typed "$db_user" "$new_password"; then
     rm -f "$ENV_FILE.before-rotate"
     bash "$APP_DIR/deploy/appserver.sh" reload
     echo "✓ Database password changed. The old one no longer works anywhere."
   else
     echo "The site couldn't connect with the new password - putting the old one back." >&2
+    echo "  (database said: ${DB_ERROR#*OperationalError: })" >&2
     mv -f "$ENV_FILE.before-rotate" "$ENV_FILE"
-    if set_password "$db_user" "$old_password"; then
+    if set_password "$db_user" "$(uri_encode "$old_password")" && { db_ok || retry_as_typed "$db_user" "$old_password"; }; then
       echo "Old password restored; nothing changed." >&2
     else
       echo "Couldn't restore it either: set a password in cPanel > MySQL Databases, then" >&2
@@ -83,7 +84,29 @@ else:
 PY
 }
 
-set_password() {  # user password -> 0 if cPanel accepted it
+DB_ERROR=""
+
+db_ok() {  # can the site connect with what .env says? (on failure, DB_ERROR has the reason)
+  local out
+  if out="$(cd "$APP_DIR" && "$PY" manage.py shell -c "from django.db import connection; connection.ensure_connection()" 2>&1)"; then
+    return 0
+  fi
+  DB_ERROR="$(printf '%s\n' "$out" | tail -1)"
+  return 1
+}
+
+# uapi decodes %-escapes in the values it's given (so a "+" would arrive as a space): passwords
+# go to it encoded. Should a cPanel store values exactly as given instead, retry as typed.
+uri_encode() {
+  printf '%s' "$1" | "$PY" -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read(), safe=""), end="")'
+}
+
+retry_as_typed() {  # user password
+  [ "$(uri_encode "$2")" != "$2" ] || return 1
+  set_password "$1" "$2" >/dev/null 2>&1 && db_ok
+}
+
+set_password() {  # user password(as uapi should receive it) -> 0 if cPanel accepted it
   uapi --output=json Mysql set_password user="$1" password="$2" 2>/dev/null | "$PY" -c '
 import json, sys
 try:
