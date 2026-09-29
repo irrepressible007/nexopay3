@@ -37,11 +37,16 @@ class SiteSettings(models.Model):
     favicon = models.FileField(upload_to="site/", blank=True)
     og_image = models.ImageField(upload_to="site/", blank=True, help_text=_("Default social share image."))
 
-    # Brand colours → CSS custom properties.
-    primary_color = models.CharField(max_length=7, default="#8B5CF6", validators=[hex_color])
-    secondary_color = models.CharField(max_length=7, default="#D946EF", validators=[hex_color])
-    accent_color = models.CharField(max_length=7, default="#22D3EE", validators=[hex_color])
-    background_color = models.CharField(max_length=7, default="#08051A", validators=[hex_color])
+    # Brand colours → CSS custom properties. Defaults: violet from the logo's indigo, raspberry
+    # as its gradient partner, warm gold to highlight, deep ink behind everything.
+    primary_color = models.CharField(max_length=7, default="#7351F5", validators=[hex_color],
+                                     help_text=_("Buttons, links and highlights. Default #7351F5."))
+    secondary_color = models.CharField(max_length=7, default="#CF3573", validators=[hex_color],
+                                       help_text=_("Blends with the primary colour in gradients. Default #CF3573."))
+    accent_color = models.CharField(max_length=7, default="#FFC04D", validators=[hex_color],
+                                    help_text=_("Small highlights: “coming soon”, stars, countdowns. Default #FFC04D."))
+    background_color = models.CharField(max_length=7, default="#0B0917", validators=[hex_color],
+                                        help_text=_("Page background; must stay dark. Default #0B0917."))
 
     contact_email = models.EmailField(default="support@nexopay.com.bd")
     contact_phone = models.CharField(max_length=30, blank=True)
@@ -85,6 +90,41 @@ class SiteSettings(models.Model):
 
     def __str__(self):
         return "Site settings"
+
+    def clean(self):
+        """Colours an admin picks must keep the site readable (the design uses light text)."""
+        super().clean()
+        from apps.core.colors import contrast
+
+        colors = [self.background_color, self.primary_color, self.secondary_color, self.accent_color]
+        if not all(hex_color.regex.match(c or "") for c in colors):
+            return  # the field validators report malformed values
+        errors = {}
+        if contrast("#F5F3FF", self.background_color) < 7:
+            errors["background_color"] = _("The site uses light text, so the background must be dark (for example #0B0917).")
+        else:
+            for field in ("primary_color", "secondary_color"):
+                if contrast(getattr(self, field), self.background_color) < 3:
+                    errors[field] = _("Too close to the background colour to stand out - pick a brighter colour.")
+            if contrast(self.accent_color, self.background_color) < 4.5:
+                errors["accent_color"] = _("Too dark to read on the background - pick a lighter colour.")
+        if errors:
+            from django.core.exceptions import ValidationError
+
+            raise ValidationError(errors)
+
+    @property
+    def on_brand_color(self) -> str:
+        """Text colour that reads well on buttons and gradients in the brand colours."""
+        from apps.core.colors import readable_text_on
+
+        return readable_text_on(self.primary_color, self.secondary_color)
+
+    @property
+    def on_accent_color(self) -> str:
+        from apps.core.colors import readable_text_on
+
+        return readable_text_on(self.accent_color)
 
     def save(self, *args, **kwargs):
         self.pk = 1

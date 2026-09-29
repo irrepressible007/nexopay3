@@ -40,7 +40,7 @@
   </div>
   {% else %}
   <div class="card grid place-items-center px-6 py-20 text-center">
-    <span class="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-brand text-white shadow-glow">{% icon "ticket" "w-8 h-8" %}</span>
+    <span class="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-brand text-on-brand shadow-glow">{% icon "ticket" "w-8 h-8" %}</span>
     <h2 class="mt-6 font-display text-2xl font-bold">{% translate "No upcoming tickets" %}</h2>
     <p class="mt-2 max-w-sm text-muted">{% translate "When you buy tickets they'll appear here, ready to scan." %}</p>
     <a href="{% url 'events:catalog' %}" class="btn-primary mt-6">{% translate "Find events" %}</a>

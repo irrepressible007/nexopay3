@@ -5,8 +5,8 @@
 <div class="container-x max-w-3xl py-10">
   {% if order.status == "paid" %}
     <div class="relative overflow-hidden rounded-[2rem] bg-surface p-8 text-center ring-1 ring-line sm:p-12 noise">
-      <div class="orb -left-16 -top-16 h-64 w-64 bg-brand"></div>
-      <div class="orb -right-16 -bottom-20 h-64 w-64 bg-brand-2 [animation-delay:-3s]"></div>
+      <div class="orb -left-16 -top-16 h-64 w-64 text-brand"></div>
+      <div class="orb -right-16 -bottom-20 h-64 w-64 text-brand-2 [animation-delay:-3s]"></div>
       {% if just_paid %}{% include "orders/_confetti.html" %}{% endif %}
       <div class="relative">
         <span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-success/15 text-success ring-1 ring-success/30 {% if just_paid %}animate-pop{% endif %}">{% icon "check" "w-8 h-8" %}</span>
@@ -21,7 +21,7 @@
     <div class="mt-8 space-y-3">
       {% for t in order.tickets.all %}
       <a href="{% url 'accounts:ticket' t.code %}" class="ticket-notch flex items-center gap-4 rounded-2xl bg-surface px-6 py-4 ring-1 ring-line transition hover:bg-surface-2 animate-rise" style="animation-delay: {% widthratio forloop.counter0 1 90 %}ms">
-        <span class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-brand text-white">{% icon "ticket" "w-5 h-5" %}</span>
+        <span class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-brand text-on-brand">{% icon "ticket" "w-5 h-5" %}</span>
         <div class="flex-1"><p class="font-semibold">{{ t.ticket_type.name }}</p><p class="font-mono text-xs text-muted">{{ t.code }}</p></div>
         {% icon "chevron-right" "w-5 h-5 text-subtle" %}
       </a>

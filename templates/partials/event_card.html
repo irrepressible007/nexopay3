@@ -1,39 +1,42 @@
 {% load i18n nexo %}
-<a href="{{ event.get_absolute_url }}" class="group relative block {{ card_class|default:'' }}">
-  <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-line">
+{# reveal_from: cards before this position show at once, picture included (they may be the largest thing on screen). #}
+{% if forloop.counter0 >= reveal_from|default:0 %}{% firstof "reveal" as reveal %}{% endif %}
+<a href="{{ event.get_absolute_url }}" data-vt
+   class="group relative block {{ reveal }} {{ card_class|default:'' }}" style="--i: {{ forloop.counter0|default:0 }}">
+  <div data-vt-img class="card-fx relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-line transition duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-glow">
     {% if event.banner_renditions %}
-      <img src="{{ event.banner_renditions|rendition:480 }}" srcset="{{ event.banner_renditions|srcset }}" sizes="(min-width:1024px) 25vw, (min-width:640px) 45vw, 85vw"
-           alt="{{ event.title }}" loading="lazy" decoding="async" width="480" height="360"
-           class="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105">
+      <img src="{{ event.banner_renditions|rendition:480 }}" srcset="{{ event.banner_renditions|srcset }}" sizes="(min-width:1024px) 25vw, (min-width:640px) 45vw, 60vw"
+           alt="{{ event.title }}" loading="lazy" decoding="async" width="480" height="360" {% if reveal %}onload="this.classList.add('is-loaded')"{% endif %}
+           class="{% if reveal %}img-fade {% endif %}h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105">
     {% elif event.banner %}
-      <img src="{{ event.banner.url }}" alt="{{ event.title }}" loading="lazy" decoding="async" class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+      <img src="{{ event.banner.url }}" alt="{{ event.title }}" loading="lazy" decoding="async" {% if reveal %}onload="this.classList.add('is-loaded')"{% endif %} class="{% if reveal %}img-fade {% endif %}h-full w-full object-cover transition duration-700 group-hover:scale-105">
     {% else %}
       {% with cat=event.categories.all.0 %}
-      <div class="grid h-full w-full place-items-center" style="background: radial-gradient(120% 120% at 20% 10%, {{ cat.accent_color|default:'#A855F7' }}55, transparent 60%), linear-gradient(135deg, #1a1726, #0d0b13)">
-        <span class="text-white/70">{% category_icon cat "w-14 h-14" %}</span>
+      <div class="grid h-full w-full place-items-center" style="background: radial-gradient(120% 120% at 20% 10%, {{ cat.accent_color|default:'#7351F5' }}55, transparent 60%), linear-gradient(135deg, var(--color-surface-3), var(--color-ink))">
+        <span class="text-white/70">{% category_icon cat "w-12 h-12 sm:w-14 sm:h-14" %}</span>
       </div>
       {% endwith %}
     {% endif %}
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0"></div>
 
-    <div class="absolute left-3 top-3 flex gap-1.5">
+    <div class="absolute inset-x-2 top-2 flex flex-wrap gap-1 sm:inset-x-3 sm:top-3 sm:gap-1.5">
       {% if event.status == "on_sale" %}<span class="badge bg-success/90 text-ink">{% translate "On sale" %}</span>
-      {% elif event.status == "coming_soon" %}<span class="badge bg-accent/90 text-ink">{% translate "Coming soon" %}</span>
+      {% elif event.status == "coming_soon" %}<span class="badge bg-accent/90 text-on-accent">{% translate "Coming soon" %}</span>
       {% elif event.status == "sold_out" %}<span class="badge bg-danger/90 text-white">{% translate "Sold out" %}</span>
       {% elif event.status == "ended" %}<span class="badge bg-white/15 text-white backdrop-blur">{% translate "Ended" %}</span>
       {% elif event.status == "cancelled" %}<span class="badge bg-white/15 text-white backdrop-blur">{% translate "Cancelled" %}</span>{% endif %}
-      {% if event.featured and event.status != "ended" %}<span class="badge bg-black/50 text-warning backdrop-blur">{% icon "star" "w-3 h-3" %}{% translate "Featured" %}</span>{% endif %}
+      {% if event.featured and event.status != "ended" %}<span class="badge bg-black/55 text-accent backdrop-blur">{% icon "star" "w-3 h-3" %}{% translate "Featured" %}</span>{% endif %}
     </div>
 
-    <div class="absolute bottom-3 left-3 rounded-xl glass px-2.5 py-1.5 text-center leading-none ring-1 ring-white/10">
-      <div class="text-[10px] font-semibold uppercase tracking-widest text-brand-2">{{ event.starts_at|date:"M" }}</div>
+    <div class="absolute bottom-2 left-2 rounded-xl glass px-2.5 py-1.5 text-center leading-none ring-1 ring-white/10 sm:bottom-3 sm:left-3">
+      <div class="text-[10px] font-semibold uppercase tracking-widest text-accent">{{ event.starts_at|date:"M" }}</div>
       <div class="mt-0.5 font-display text-lg font-bold">{{ event.starts_at|date:"j"|bn_digits }}</div>
     </div>
   </div>
-  <div class="px-1 pt-3">
-    <h3 class="line-clamp-2 font-display text-[17px] font-semibold leading-snug text-text group-hover:text-white">{{ event.title }}</h3>
-    <p class="mt-1 flex items-center gap-1.5 truncate text-sm text-muted">{% icon "pin" "w-3.5 h-3.5 shrink-0" %}<span class="truncate">{{ event.venue_name|default:_("Online") }}{% if event.city and not event.is_online %} · {{ event.city }}{% endif %}</span></p>
-    <p class="mt-2 text-sm font-semibold">
+  <div class="px-0.5 pt-2.5 sm:px-1 sm:pt-3">
+    <h3 class="line-clamp-2 font-display text-[15px] font-semibold leading-snug text-text group-hover:text-white sm:text-[17px]">{{ event.title }}</h3>
+    <p class="mt-1 flex items-center gap-1.5 truncate text-[13px] text-muted sm:text-sm">{% icon "pin" "w-3.5 h-3.5 shrink-0" %}<span class="truncate">{{ event.venue_name|default:_("Online") }}{% if event.city and not event.is_online %} · {{ event.city }}{% endif %}</span></p>
+    <p class="mt-1.5 text-sm font-semibold sm:mt-2">
       {% if event.min_price is None %}<span class="text-subtle">{% translate "Tickets TBA" %}</span>
       {% elif event.min_price == 0 %}<span class="text-success">{% translate "Free" %}</span>
       {% else %}<span class="text-subtle font-normal">{% translate "From" %}</span> <span class="price text-text">{{ event.min_price|taka }}</span>{% endif %}

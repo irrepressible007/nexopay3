@@ -1,7 +1,7 @@
 {% load i18n nexo %}
 <nav class="mb-8 flex gap-1 overflow-x-auto rounded-full bg-white/5 p-1 ring-1 ring-line w-fit max-w-full" aria-label="{% translate 'Account' %}">
   {% url 'accounts:tickets' as u1 %}{% url 'accounts:orders' as u2 %}{% url 'accounts:profile' as u3 %}
-  <a href="{{ u1 }}" class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold {% if request.path == u1 %}bg-gradient-brand text-white{% else %}text-muted hover:text-text{% endif %}">{% translate "My tickets" %}</a>
-  <a href="{{ u2 }}" class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold {% if request.path == u2 %}bg-gradient-brand text-white{% else %}text-muted hover:text-text{% endif %}">{% translate "Orders" %}</a>
-  <a href="{{ u3 }}" class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold {% if request.path == u3 %}bg-gradient-brand text-white{% else %}text-muted hover:text-text{% endif %}">{% translate "Profile" %}</a>
+  <a href="{{ u1 }}" class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold {% if request.path == u1 %}bg-gradient-brand text-on-brand{% else %}text-muted hover:text-text{% endif %}">{% translate "My tickets" %}</a>
+  <a href="{{ u2 }}" class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold {% if request.path == u2 %}bg-gradient-brand text-on-brand{% else %}text-muted hover:text-text{% endif %}">{% translate "Orders" %}</a>
+  <a href="{{ u3 }}" class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold {% if request.path == u3 %}bg-gradient-brand text-on-brand{% else %}text-muted hover:text-text{% endif %}">{% translate "Profile" %}</a>
 </nav>

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
   <link rel="manifest" href="{% url 'webmanifest' %}">
   <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
-  <style>:root{--brand:{{ sitecfg.primary_color }};--brand-2:{{ sitecfg.secondary_color }};--accent:{{ sitecfg.accent_color }}}</style>
+  <style>:root{--brand:{{ sitecfg.primary_color }};--brand-2:{{ sitecfg.secondary_color }};--accent:{{ sitecfg.accent_color }};--bg:{{ sitecfg.background_color }};--on-brand:{{ sitecfg.on_brand_color }};--on-accent:{{ sitecfg.on_accent_color }}}</style>
   <script defer src="{% static 'js/alpine.min.js' %}"></script>
 </head>
 <body class="h-dvh overflow-hidden bg-black text-white">

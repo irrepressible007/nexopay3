@@ -3,6 +3,8 @@
 {% block content %}
   {% for block in sections %}
     {% with section=block.section %}
+      {# From the third section on, the browser draws a section only when it scrolls near (faster first paint). #}
+      {% if forloop.counter > 2 %}<div class="cv-auto">{% endif %}
       {% if section.kind == "hero" %}{% include "cms/sections/hero.html" %}
       {% elif section.kind == "categories" %}{% include "cms/sections/categories.html" %}
       {% elif section.kind == "promo_banner" %}{% include "cms/sections/promo_banner.html" %}
@@ -11,6 +13,7 @@
       {% elif section.kind == "faq" %}{% include "cms/sections/faq.html" %}
       {% elif section.kind == "featured" %}{% include "cms/sections/featured.html" %}
       {% else %}{% include "cms/sections/event_row.html" %}{% endif %}
+      {% if forloop.counter > 2 %}</div>{% endif %}
     {% endwith %}
   {% empty %}
     {% include "cms/sections/hero.html" %}

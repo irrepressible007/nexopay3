@@ -58,7 +58,7 @@
               {% else %}
               <button type="button" @click="toggle(types[{{ forloop.counter0 }}])"
                       class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold ring-1 transition"
-                      :class="q[{{ t.pk }}] ? 'bg-gradient-brand text-white ring-transparent' : 'ring-line-strong hover:bg-white/5'">
+                      :class="q[{{ t.pk }}] ? 'bg-gradient-brand text-on-brand ring-transparent' : 'ring-line-strong hover:bg-white/5'">
                 <span x-show="!q[{{ t.pk }}]">{% translate "Select" %}</span>
                 <span x-show="q[{{ t.pk }}]" x-cloak class="inline-flex items-center gap-1">{% icon "check" "w-4 h-4" %}{% translate "Added" %}</span>
               </button>
@@ -72,7 +72,7 @@
       <div class="sticky bottom-0 border-t border-line bg-surface/95 px-6 py-4 backdrop-blur">
         <div class="mb-3 flex items-baseline justify-between">
           <span class="text-sm text-muted" x-text="count ? count + ' {% translate "ticket(s)" as t1 %}{{ t1|escapejs }}' : '{% translate "Select tickets" as t2 %}{{ t2|escapejs }}'">{% translate "Select tickets" %}</span>
-          <span class="font-display text-2xl font-bold" x-text="money(total)">৳0</span>
+          <span class="tick font-display text-2xl font-bold" x-ref="total" x-text="money(total)">৳0</span>
         </div>
         <button class="btn-primary btn-lg w-full" :disabled="count === 0" disabled>
           {% translate "Continue to checkout" %}{% icon "arrow-right" "w-5 h-5" %}

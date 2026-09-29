@@ -41,7 +41,7 @@
     </ul>
     {% else %}
     <div class="grid place-items-center px-6 py-16 text-center">
-      <span class="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-brand text-white shadow-glow">{% icon "rocket" "w-7 h-7" %}</span>
+      <span class="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-brand text-on-brand shadow-glow">{% icon "rocket" "w-7 h-7" %}</span>
       <p class="mt-4 font-display text-xl font-bold">{% translate "Your first event is a few minutes away" %}</p>
       <a href="{% url 'organizers:event_new' %}" class="btn-primary mt-5">{% translate "Create event" %}</a>
     </div>

@@ -21,8 +21,11 @@
   <link rel="manifest" href="{% url 'webmanifest' %}">
   <link rel="preload" href="{% static 'fonts/outfit-latin.woff2' %}" as="font" type="font/woff2" crossorigin>
   {% if LANG == "bn" %}<link rel="preload" href="{% static 'fonts/hind-bn-400.woff2' %}" as="font" type="font/woff2" crossorigin>{% endif %}
+  {% comment %}Runs before the first paint, so revealed content never flashes; only where motion is welcome.
+  Placed before the stylesheet: an inline script after it would make the parser wait for the CSS.{% endcomment %}
+  <script>if(matchMedia("(prefers-reduced-motion: no-preference)").matches&&"IntersectionObserver"in window)document.documentElement.classList.add("reveal-ready")</script>
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
-  <style>:root{--brand:{{ sitecfg.primary_color }};--brand-2:{{ sitecfg.secondary_color }};--accent:{{ sitecfg.accent_color }};--bg:{{ sitecfg.background_color }}}</style>
+  <style>:root{--brand:{{ sitecfg.primary_color }};--brand-2:{{ sitecfg.secondary_color }};--accent:{{ sitecfg.accent_color }};--bg:{{ sitecfg.background_color }};--on-brand:{{ sitecfg.on_brand_color }};--on-accent:{{ sitecfg.on_accent_color }}}</style>
   <script defer src="{% static 'js/htmx.min.js' %}"></script>
   <script defer src="{% static 'js/app.js' %}"></script>
   <script defer src="{% static 'js/alpine.min.js' %}"></script>
@@ -30,10 +33,11 @@
 </head>
 <body class="min-h-dvh flex flex-col {% block body_class %}{% endblock %}" hx-boost="false">
   {% include "partials/icons.html" %}
+  <div class="loading-bar" aria-hidden="true"></div>
   <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] btn-light">{% translate "Skip to content" %}</a>
 
   {% if sitecfg.announcement_enabled and sitecfg.announcement_text %}
-  <div class="relative z-40 bg-gradient-brand text-white text-center text-sm font-medium px-4 py-2">
+  <div class="relative z-40 bg-gradient-brand text-on-brand text-center text-sm font-medium px-4 py-2">
     {% if sitecfg.announcement_url %}<a href="{{ sitecfg.announcement_url }}" class="inline-flex items-center gap-1.5 hover:underline">{{ sitecfg.announcement_text }} {% icon "arrow-right" "w-4 h-4" %}</a>{% else %}{{ sitecfg.announcement_text }}{% endif %}
   </div>
   {% endif %}

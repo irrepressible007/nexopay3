@@ -9,7 +9,7 @@
     {% for e in events %}
     <li>
       <a href="{% url 'scan:event' e.slug %}" class="card flex items-center gap-4 p-4 transition hover:ring-line-strong">
-        <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-brand text-white">{% icon "scan" "w-6 h-6" %}</span>
+        <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-brand text-on-brand">{% icon "scan" "w-6 h-6" %}</span>
         <div class="min-w-0 flex-1"><p class="truncate font-semibold">{{ e.title }}</p><p class="text-sm text-muted">{{ e.starts_at|date:"D, j M · g:i A" }} · {{ e.venue_name }}</p></div>
         {% icon "chevron-right" "w-5 h-5 text-subtle" %}
       </a>

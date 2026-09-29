@@ -3,7 +3,7 @@
 {% block title %}{% translate "Events" %} — {{ sitecfg.site_name }}{% endblock %}
 {% block content %}
 <section class="relative overflow-hidden border-b border-line">
-  <div class="orb -right-24 -top-32 h-80 w-80 bg-brand opacity-30"></div>
+  <div class="orb -right-24 -top-32 h-80 w-80 text-brand opacity-30"></div>
   <div class="container-x relative py-10 sm:py-14">
     <h1 class="font-display text-4xl font-extrabold sm:text-5xl">{% translate "Find your next" %} <span class="text-gradient">{% translate "experience" %}</span></h1>
     <div class="mt-6 flex max-w-2xl items-center gap-2 rounded-full bg-white/[.06] p-1.5 ring-1 ring-line-strong focus-within:ring-brand">
@@ -41,7 +41,7 @@
             {% for value, label in status_choices %}
             <label class="cursor-pointer">
               <input type="radio" name="status" value="{{ value }}" class="peer sr-only" {% if status == value %}checked{% endif %}>
-              <span class="block rounded-full py-1.5 text-center text-sm font-semibold text-muted transition peer-checked:bg-gradient-brand peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-accent">{{ label }}</span>
+              <span class="block rounded-full py-1.5 text-center text-sm font-semibold text-muted transition peer-checked:bg-gradient-brand peer-checked:text-on-brand peer-focus-visible:ring-2 peer-focus-visible:ring-accent">{{ label }}</span>
             </label>
             {% endfor %}
           </div>
@@ -57,7 +57,7 @@
             <li>
               <label class="group flex cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2 transition hover:bg-white/5">
                 <input type="checkbox" name="category" value="{{ c.slug }}" class="peer sr-only" {% if c.slug in selected %}checked{% endif %}>
-                <span class="grid h-5 w-5 shrink-0 place-items-center rounded-md ring-1 ring-line-strong text-transparent transition peer-checked:bg-gradient-brand peer-checked:text-white peer-checked:ring-transparent peer-focus-visible:ring-2 peer-focus-visible:ring-accent">{% icon "check" "w-3.5 h-3.5" %}</span>
+                <span class="grid h-5 w-5 shrink-0 place-items-center rounded-md ring-1 ring-line-strong text-transparent transition peer-checked:bg-gradient-brand peer-checked:text-on-brand peer-checked:ring-transparent peer-focus-visible:ring-2 peer-focus-visible:ring-accent">{% icon "check" "w-3.5 h-3.5" %}</span>
                 <span class="flex-1 text-sm text-muted transition group-hover:text-text peer-checked:text-text">{{ c.name }}</span>
                 <span id="cnt-{{ c.slug }}" class="rounded-full px-2 py-0.5 text-xs tabular-nums {% if c.n %}bg-white/5 text-muted{% else %}text-subtle/60{% endif %}">{{ c.n|bn_digits }}</span>
               </label>
@@ -77,9 +77,9 @@
       </div>
       <div id="results" class="results-dim">
         {% if page.object_list %}
-        <div class="grid gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
+        <div class="grid grid-cols-1 gap-x-3 gap-y-7 min-[340px]:grid-cols-2 sm:gap-x-6 sm:gap-y-10 xl:grid-cols-3">
           {% for event in page.object_list %}
-            <div class="animate-rise" style="animation-delay: {% widthratio forloop.counter0 1 60 %}ms">{% include "partials/event_card.html" %}</div>
+            {% include "partials/event_card.html" with reveal_from=3 %}
           {% endfor %}
         </div>
         {% if page.has_other_pages %}

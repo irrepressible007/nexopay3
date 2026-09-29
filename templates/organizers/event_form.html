@@ -10,8 +10,8 @@
       <h1 class="mt-2 font-display text-3xl font-extrabold">{% if event.pk %}{{ event.title }}{% else %}{% translate "Create an event" %}{% endif %}</h1>
     </div>
     <div class="flex rounded-full bg-white/5 p-1 ring-1 ring-line text-sm font-semibold">
-      <button type="button" @click="lang = 'en'" class="rounded-full px-4 py-1.5" :class="lang === 'en' ? 'bg-gradient-brand text-white' : 'text-muted'">English</button>
-      <button type="button" @click="lang = 'bn'" class="rounded-full px-4 py-1.5" :class="lang === 'bn' ? 'bg-gradient-brand text-white' : 'text-muted'">বাংলা</button>
+      <button type="button" @click="lang = 'en'" class="rounded-full px-4 py-1.5" :class="lang === 'en' ? 'bg-gradient-brand text-on-brand' : 'text-muted'">English</button>
+      <button type="button" @click="lang = 'bn'" class="rounded-full px-4 py-1.5" :class="lang === 'bn' ? 'bg-gradient-brand text-on-brand' : 'text-muted'">বাংলা</button>
     </div>
   </div>
 

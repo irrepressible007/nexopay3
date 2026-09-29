@@ -166,6 +166,41 @@ def test_admin_saves_payment_credentials_encrypted(client):
     assert b"SECRET" not in client.get(url).content
 
 
+class TestBrandColours:
+    """Whatever colours an admin picks, text on them stays readable and the dark design holds."""
+
+    def test_defaults_are_the_new_palette_and_readable(self):
+        from apps.core.colors import contrast
+
+        site = SiteSettings.load()  # created by a seed migration with older defaults, then migrated
+        assert (site.primary_color, site.secondary_color, site.accent_color, site.background_color) == (
+            "#7351F5", "#CF3573", "#FFC04D", "#0B0917")
+        assert site.on_brand_color == "#FFFFFF" and site.on_accent_color == "#0B0917"
+        assert min(contrast("#FFFFFF", site.primary_color), contrast("#FFFFFF", site.secondary_color)) >= 4.5
+        site.clean()
+
+    def test_light_background_is_refused(self):
+        site = SiteSettings.load()
+        site.background_color = "#F4F4F4"
+        with pytest.raises(ValidationError) as error:
+            site.clean()
+        assert "background_color" in error.value.message_dict
+
+    def test_colours_that_vanish_into_the_background_are_refused(self):
+        site = SiteSettings.load()
+        site.primary_color, site.accent_color = "#15122A", "#3B2F5E"
+        with pytest.raises(ValidationError) as error:
+            site.clean()
+        assert {"primary_color", "accent_color"} <= set(error.value.message_dict)
+
+    def test_light_brand_colours_get_dark_text(self, client):
+        site = SiteSettings.load()
+        site.primary_color, site.secondary_color, site.accent_color = "#FFD166", "#F9A8D4", "#5EEAD4"
+        site.save()
+        assert site.on_brand_color == "#0B0917"
+        assert b"--on-brand:#0B0917" in client.get("/").content
+
+
 class TestOutgoingEmailSettings:
     def form(self, **changes):
         from django.db.models.fields.files import FieldFile

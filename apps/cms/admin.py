@@ -115,7 +115,9 @@ class SiteSettingsAdmin(ModelAdmin, TranslationAdmin):
         ("Brand", {"fields": ("site_name", "tagline", "logo", "logo_on_color", "favicon", "og_image"),
                    "description": "Empty logo fields use the built-in Nexopay logo."}),
         ("Colours", {"fields": ("primary_color", "secondary_color", "accent_color", "background_color"),
-                     "description": "Hex colours used across the whole site. Changes apply instantly."}),
+                     "description": "Hex colours used across the whole site; changes apply instantly. Panels and "
+                                    "muted text are mixed from these, and text on buttons switches between white and "
+                                    "dark by itself so it stays readable. The background must stay dark."}),
         ("Announcement bar", {"fields": ("announcement_enabled", "announcement_text", "announcement_url")}),
         ("Contact & social", {"fields": ("contact_email", "contact_phone", "address", "facebook_url", "instagram_url",
                                           "youtube_url", "tiktok_url", "linkedin_url", "footer_text")}),

@@ -1,15 +1,18 @@
 {% load i18n nexo %}{% get_current_language as LANG %}
-<header x-data="{ open: false, scrolled: false }" @scroll.window.throttle.50ms="scrolled = window.scrollY > 8"
+<header id="site-header" x-data="{ open: false, scrolled: false }" @scroll.window.throttle.50ms="scrolled = window.scrollY > 8"
         @keydown.escape.window="open = false"
-        :class="scrolled || open ? 'glass ring-1 ring-line' : 'bg-transparent'"
+        :class="scrolled || open ? 'glass' : 'bg-transparent'"
         class="sticky top-0 z-50 transition-colors duration-300">
+  {# A hairline in the brand gradient once the page scrolls under the header. #}
+  <span class="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-brand/70 to-transparent transition-opacity duration-300"
+        :class="scrolled || open ? 'opacity-100' : 'opacity-0'" aria-hidden="true"></span>
   <div class="container-x flex h-16 items-center gap-3">
     <a href="{% url 'cms:home' %}" class="shrink-0 text-text" aria-label="{{ sitecfg.site_name }}">{% include "partials/logo.html" %}</a>
 
     <nav class="no-scrollbar hidden min-w-0 flex-1 items-center gap-1 overflow-x-auto text-sm font-medium text-muted lg:flex" aria-label="{% translate 'Main' %}">
       {% for link in header_links %}
       <a href="{{ link.url|localize_url }}" {% if link.new_tab %}target="_blank" rel="noopener"{% endif %}
-         class="shrink-0 whitespace-nowrap rounded-full px-3 py-2 hover:bg-white/5 hover:text-text">{{ link.label }}</a>
+         class="relative shrink-0 whitespace-nowrap rounded-full px-3 py-2 transition-colors hover:text-text after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-gradient-brand after:transition-transform after:duration-300 hover:after:scale-x-100">{{ link.label }}</a>
       {% endfor %}
     </nav>
 
@@ -39,7 +42,10 @@
     </div>
   </div>
 
-  <div id="mobile-menu" x-show="open" x-cloak x-transition.opacity class="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line lg:hidden">
+  <div id="mobile-menu" x-show="open" x-cloak
+       x-transition:enter="transition duration-200 ease-out" x-transition:enter-start="opacity-0 -translate-y-2"
+       x-transition:leave="transition duration-150 ease-in" x-transition:leave-end="opacity-0 -translate-y-1"
+       class="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line lg:hidden">
     <nav class="container-x flex flex-col py-3 text-base font-medium" aria-label="{% translate 'Menu' %}">
       <form action="{% url 'events:catalog' %}" method="get" class="mb-2" role="search">
         <input type="search" name="q" placeholder="{% translate 'Search events, venues…' %}" aria-label="{% translate 'Search' %}" class="input">

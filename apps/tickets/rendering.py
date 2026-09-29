@@ -85,7 +85,7 @@ def render_tickets_pdf(tickets, language: str = "en") -> bytes:
             # Header band in the brand gradient.
             with pdf.use_pattern(LinearGradient(0, 0, w, 34, [primary, secondary])):
                 pdf.rect(0, 0, w, 34, "F")
-            pdf.set_text_color(255, 255, 255)
+            pdf.set_text_color(*_hex_to_rgb(site.on_brand_color))
             try:
                 if hasattr(logo, "seek"):
                     logo.seek(0)

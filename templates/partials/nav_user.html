@@ -3,7 +3,7 @@
 {% if user.is_authenticated %}
   <span class="hidden md:block"><a href="{% url 'accounts:tickets' %}" class="btn-ghost max-w-[11rem] !py-2" title="{% translate 'My tickets' %}">{% icon "ticket" "w-4 h-4 shrink-0" %}<span class="truncate">{% translate "My tickets" %}</span></a></span>
   <div class="relative" x-data="{ m: false }" @click.outside="m = false" @keydown.escape="m = false">
-    <button type="button" @click="m = !m" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-brand text-sm font-bold text-white" aria-label="{% translate 'Account' %}" :aria-expanded="m">
+    <button type="button" @click="m = !m" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-brand text-sm font-bold text-on-brand" aria-label="{% translate 'Account' %}" :aria-expanded="m">
       {{ user.get_short_name|slice:":1"|upper }}
     </button>
     <div x-show="m" x-cloak x-transition.origin.top.right class="absolute right-0 mt-2 w-[min(15rem,calc(100vw-2rem))] card p-2 shadow-2xl">

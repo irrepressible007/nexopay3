@@ -7,8 +7,8 @@
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#15131d;border-radius:18px;overflow:hidden">
         <tr><td style="background:linear-gradient(120deg,{{ sitecfg.primary_color }},{{ sitecfg.secondary_color }});background-color:{{ sitecfg.primary_color }};padding:28px 28px 22px">
           <img src="{{ logo_url }}" alt="{{ sitecfg.site_name }}" height="28" style="height:28px;width:auto;display:block;border:0">
-          <div style="font-size:24px;line-height:1.25;font-weight:700;color:#fff;margin-top:10px">{% translate "You're going!" %} 🎉</div>
-          <div style="font-size:16px;color:#fff;margin-top:6px">{{ event.title }}</div>
+          <div style="font-size:24px;line-height:1.25;font-weight:700;color:{{ sitecfg.on_brand_color }};margin-top:10px">{% translate "You're going!" %} 🎉</div>
+          <div style="font-size:16px;color:{{ sitecfg.on_brand_color }};margin-top:6px">{{ event.title }}</div>
         </td></tr>
         <tr><td style="padding:24px 28px">
           <p style="margin:0 0 16px;font-size:15px;line-height:1.6">{% blocktranslate with name=order.buyer_name %}Hi {{ name }}, your order is confirmed. Your tickets are attached as a PDF.{% endblocktranslate %}</p>
@@ -25,7 +25,7 @@
           </div>
           {% endfor %}
           <div style="text-align:center;margin:26px 0 8px">
-            <a href="{{ site_url }}/account/tickets/" style="display:inline-block;background:{{ sitecfg.primary_color }};color:#fff;text-decoration:none;font-weight:700;padding:13px 26px;border-radius:999px">{% translate "Open my tickets" %}</a>
+            <a href="{{ site_url }}/account/tickets/" style="display:inline-block;background:{{ sitecfg.primary_color }};color:{{ sitecfg.on_brand_color }};text-decoration:none;font-weight:700;padding:13px 26px;border-radius:999px">{% translate "Open my tickets" %}</a>
           </div>
           <p style="font-size:12px;color:#8A8699;line-height:1.6;text-align:center;margin:16px 0 0">{% translate "Show the QR code at the entrance. Each ticket can be scanned only once — don't share it." %}</p>
         </td></tr>

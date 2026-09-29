@@ -51,30 +51,31 @@
 </section>
 {% else %}
 <section class="relative -mt-16 overflow-hidden noise">
-  <div class="orb -left-32 -top-24 h-[28rem] w-[28rem] bg-brand"></div>
-  <div class="orb right-[-10rem] top-10 h-[26rem] w-[26rem] bg-brand-2 [animation-delay:-3s]"></div>
-  <div class="orb bottom-[-12rem] left-1/3 h-[22rem] w-[22rem] bg-accent opacity-25 [animation-delay:-6s]"></div>
-  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_0%,var(--color-ink)_70%)]"></div>
+  <div class="orb -left-40 -top-32 h-[34rem] w-[34rem] text-brand opacity-60"></div>
+  <div class="orb right-[-12rem] top-0 h-[32rem] w-[32rem] text-brand-2 opacity-50 [animation-delay:-3s]"></div>
+  <div class="orb bottom-[-14rem] left-1/3 h-[28rem] w-[28rem] text-accent opacity-25 [animation-delay:-6s]"></div>
+  <div class="absolute inset-0 bg-grid" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_0%,var(--color-ink)_72%)]"></div>
 
-  <div class="container-x relative grid items-center gap-14 pb-20 pt-32 lg:grid-cols-[1.1fr_.9fr] lg:pb-28 lg:pt-40">
-    <div class="animate-rise">
-      <span class="inline-flex max-w-full items-center gap-2 rounded-full bg-white/5 px-3 py-1.5 text-sm font-medium text-muted ring-1 ring-line-strong">
+  <div class="container-x relative grid items-center gap-14 pb-4 pt-24 sm:pb-10 sm:pt-32 lg:grid-cols-[1.1fr_.9fr] lg:pb-14 lg:pt-36">
+    <div>
+      <span class="inline-flex max-w-full animate-rise items-center gap-2 rounded-full bg-white/5 px-3 py-1.5 text-sm font-medium text-muted ring-1 ring-line-strong">
         <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-success"></span></span>
         {% translate "Live events across Bangladesh" %}
       </span>
-      <h1 class="mt-6 font-display text-[clamp(2.25rem,8vw,4.5rem)] font-extrabold leading-[1.04]">
+      <h1 class="mt-5 animate-rise font-display text-[clamp(2.25rem,8vw,4.5rem)] font-extrabold leading-[1.04] sm:mt-6">
         {% if section.title %}{{ section.title|highlight }}{% else %}{{ sitecfg.tagline|highlight }}{% endif %}
       </h1>
-      <p class="mt-6 max-w-xl text-base text-muted sm:text-lg">{% if section.subtitle %}{{ section.subtitle }}{% else %}{% translate "Concerts, festivals, competitions, workshops and more. Pay with bKash, Nagad or card, and get an instant QR ticket on your phone." %}{% endif %}</p>
+      <p class="mt-4 max-w-xl animate-rise text-base text-muted [animation-delay:90ms] sm:mt-6 sm:text-lg">{% if section.subtitle %}{{ section.subtitle }}{% else %}{% translate "Concerts, festivals, competitions, workshops and more. Pay with bKash, Nagad or card, and get an instant QR ticket on your phone." %}{% endif %}</p>
 
-      <form action="{% url 'events:catalog' %}" method="get" class="mt-8 flex max-w-xl items-center gap-2 rounded-full bg-white/[.06] p-1.5 ring-1 ring-line-strong focus-within:ring-brand transition" role="search">
+      <form action="{% url 'events:catalog' %}" method="get" class="mt-6 flex max-w-xl animate-rise items-center gap-2 rounded-full bg-white/[.06] p-1.5 ring-1 ring-line-strong transition [animation-delay:170ms] focus-within:bg-white/[.09] focus-within:ring-brand focus-within:shadow-glow sm:mt-8" role="search">
         <span class="shrink-0 pl-3 text-subtle">{% icon "search" "w-5 h-5" %}</span>
         <input type="search" name="q" placeholder="{% translate 'Search artists, events or venues' %}" aria-label="{% translate 'Search' %}" class="min-w-0 flex-1 bg-transparent py-2.5 text-base outline-none placeholder:text-subtle">
         <button class="btn-primary shrink-0 !px-4 sm:!px-5">{% icon "search" "w-4 h-4 sm:hidden" %}<span class="hidden sm:inline">{% translate "Search" %}</span></button>
       </form>
 
       {% if block.hero_categories %}
-      <div class="mt-6 flex flex-wrap gap-2">
+      <div class="mt-6 flex animate-rise flex-wrap gap-2 [animation-delay:250ms]">
         {% for cat in block.hero_categories %}
         <a href="{% url 'events:catalog' %}?category={{ cat.slug }}" class="chip max-w-full">{% category_icon cat "w-4 h-4 shrink-0" %}<span class="truncate">{{ cat.name }}</span></a>
         {% endfor %}

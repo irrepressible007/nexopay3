@@ -1,5 +1,5 @@
 {% load i18n %}
-<section class="container-x mt-16 sm:mt-20">
+<section class="container-x section-gap">
   {% if section.kind == "upcoming" %}{% url 'events:catalog' as base %}{% with see_all=base|add:"?status=upcoming" %}{% include "cms/sections/_heading.html" %}{% endwith %}
   {% elif section.kind == "category_spotlight" and section.category %}{% url 'events:catalog' as base %}{% with see_all=base|add:"?category="|add:section.category.slug %}{% include "cms/sections/_heading.html" %}{% endwith %}
   {% else %}{% url 'events:catalog' as see_all %}{% include "cms/sections/_heading.html" %}{% endif %}

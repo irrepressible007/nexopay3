@@ -50,9 +50,28 @@ document.addEventListener("alpine:init", () => {
     inc(t) { if (this.q[t.id] < this.limit(t)) this.q[t.id]++; },
     dec(t) { if (this.q[t.id] > 0) this.q[t.id]--; },
     toggle(t) { this.q[t.id] = this.q[t.id] ? 0 : Math.min(1, this.limit(t)); },
+    init() {
+      // The total gives a small bump whenever it changes.
+      this.$watch("total", () => {
+        const el = this.$refs.total;
+        if (el && el.animate && !reduceMotion) {
+          el.animate([{ transform: "scale(1.14)" }, { transform: "scale(1)" }], { duration: 280, easing: "cubic-bezier(.2,1.4,.4,1)" });
+        }
+      });
+    },
     money(v) {
       const s = v.toLocaleString("en-IN", { maximumFractionDigits: 2 });
       return "৳" + (lang === "bn" ? s.replace(/[0-9]/g, (d) => "০১২৩৪৫৬৭৮৯"[d]) : s);
+    },
+  }));
+
+  /* Phones: a "Get tickets" bar at the bottom whenever the ticket panel is off-screen. */
+  Alpine.data("ticketBar", (targetId = "tickets") => ({
+    show: false,
+    init() {
+      const target = document.getElementById(targetId);
+      if (!target || !("IntersectionObserver" in window)) return;
+      new IntersectionObserver(([entry]) => { this.show = !entry.isIntersecting; }, { threshold: 0.05 }).observe(target);
     },
   }));
 
@@ -138,3 +157,68 @@ document.addEventListener("alpine:init", () => {
 window.nxWakeLock = async () => {
   try { if ("wakeLock" in navigator) await navigator.wakeLock.request("screen"); } catch (_) {}
 };
+
+/* Motion & polish. Each part is independent and does nothing where it isn't supported. */
+(() => {
+  const root = document.documentElement;
+  const motion = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+
+  /* Scroll reveal: `.reveal` elements fade up as they come into view (see app.css). */
+  if (root.classList.contains("reveal-ready")) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.08 });
+    const scan = (scope) => scope.querySelectorAll(".reveal:not(.is-in)").forEach((el) => io.observe(el));
+    scan(document);
+    root.classList.add("reveal-live");
+    document.addEventListener("htmx:afterSettle", (e) => scan(e.target));
+  }
+
+  /* Mouse-following glow on `.spotlight` elements (real mouse only; one update per frame). */
+  if (motion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    let frame = 0, last = null;
+    document.addEventListener("pointermove", (e) => {
+      last = e;
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const el = last.target instanceof Element && last.target.closest(".spotlight");
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        el.style.setProperty("--mx", `${last.clientX - r.left}px`);
+        el.style.setProperty("--my", `${last.clientY - r.top}px`);
+      });
+    }, { passive: true });
+  }
+
+  /* Event card -> event page: name the clicked card's picture so it morphs into the banner. */
+  const clearNames = () => document.querySelectorAll("[data-vt-img]").forEach((el) => { el.style.viewTransitionName = ""; });
+  document.addEventListener("click", (e) => {
+    const link = e.target instanceof Element && e.target.closest("a[data-vt]");
+    if (!link || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    clearNames();
+    const img = link.querySelector("[data-vt-img]");
+    if (img) img.style.viewTransitionName = "event-banner";
+  });
+
+  /* Top loading bar: while htmx loads results, and after clicking through to another page. */
+  const busy = (on) => root.classList.toggle("is-loading", on);
+  const leaving = () => { busy(true); setTimeout(() => busy(false), 8000); }; // e.g. a download never leaves
+  document.addEventListener("htmx:beforeRequest", (e) => {
+    // Only what the visitor did (typing, clicking) - not background refreshes like the ticket panel's.
+    const trigger = e.detail && e.detail.requestConfig && e.detail.requestConfig.triggeringEvent;
+    if (trigger && trigger.isTrusted) busy(true);
+  });
+  document.addEventListener("htmx:afterRequest", () => busy(false));
+  document.addEventListener("click", (e) => {
+    const a = e.target instanceof Element && e.target.closest("a[href]");
+    if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (a.target && a.target !== "_self") return;
+    if (a.hasAttribute("download") || a.origin !== location.origin) return;
+    if (a.pathname === location.pathname && a.search === location.search) return; // same page / #anchor
+    leaving();
+  });
+  // htmx and Alpine cancel the forms they handle, so only real page submits get here.
+  document.addEventListener("submit", (e) => { if (!e.defaultPrevented && !e.target.target) leaving(); });
+  window.addEventListener("pageshow", () => { busy(false); clearNames(); }); // back/forward cache
+})();

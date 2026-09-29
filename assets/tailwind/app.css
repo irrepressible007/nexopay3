@@ -34,29 +34,33 @@
 }
 
 /* --------------------------------------------------------------- tokens -- */
-/* Brand values come from SiteSettings (admin) as --brand, --brand-2, … on :root. */
+/* Brand values come from SiteSettings (admin) as --brand, --brand-2, --accent, --bg and the
+   matching readable text colours --on-brand / --on-accent. Panels and muted text are mixed
+   from them, so the whole palette stays coherent whatever colours an admin picks. */
 @theme {
   --font-sans: "Outfit", "Hind Siliguri", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
   --font-display: "Outfit", "Hind Siliguri", ui-sans-serif, system-ui, sans-serif;
 
-  --color-brand: var(--brand, #8b5cf6);
-  --color-brand-2: var(--brand-2, #d946ef);
-  --color-accent: var(--accent, #22d3ee);
-  --color-ink: var(--bg, #08051a);
-  --color-surface: #110c24;
-  --color-surface-2: #181233;
-  --color-surface-3: #221a45;
+  --color-brand: var(--brand, #7351f5);
+  --color-brand-2: var(--brand-2, #cf3573);
+  --color-accent: var(--accent, #ffc04d);
+  --color-on-brand: var(--on-brand, #ffffff);
+  --color-on-accent: var(--on-accent, #0b0917);
+  --color-ink: var(--bg, #0b0917);
+  --color-surface: color-mix(in oklab, var(--color-ink), var(--color-brand) 7%);
+  --color-surface-2: color-mix(in oklab, var(--color-ink), var(--color-brand) 11%);
+  --color-surface-3: color-mix(in oklab, var(--color-ink), var(--color-brand) 17%);
   --color-line: rgb(255 255 255 / 0.08);
   --color-line-strong: rgb(255 255 255 / 0.14);
-  --color-text: #f3f1f9;
-  --color-muted: #9e9ab0;
-  --color-subtle: #6d6880;
+  --color-text: #f5f3ff;
+  --color-muted: color-mix(in oklab, var(--color-text) 66%, var(--color-ink));
+  --color-subtle: color-mix(in oklab, var(--color-text) 45%, var(--color-ink));
   --color-success: #34d399;
   --color-warning: #fbbf24;
   --color-danger: #f87171;
 
   --radius-card: 1.25rem;
-  --shadow-glow: 0 0 0 1px rgb(255 255 255 / 0.06), 0 20px 60px -20px color-mix(in oklab, var(--brand, #8b5cf6) 55%, transparent);
+  --shadow-glow: 0 0 0 1px rgb(255 255 255 / 0.06), 0 20px 60px -20px color-mix(in oklab, var(--color-brand) 60%, transparent);
 
   --animate-float: float 9s ease-in-out infinite;
   --animate-marquee: marquee 40s linear infinite;
@@ -73,7 +77,15 @@
 
 /* ----------------------------------------------------------------- base -- */
 @layer base {
-  html { color-scheme: dark; -webkit-tap-highlight-color: transparent; }
+  /* Side gutter; notched phones in landscape get at least their safe area. */
+  :root { --gutter: 1rem; }
+  @media (min-width: 640px) { :root { --gutter: 1.5rem; } }
+  @media (min-width: 1024px) { :root { --gutter: 2rem; } }
+
+  html { color-scheme: dark; -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  /* Large and 2K/4K monitors: scale the whole (rem-based) layout up a little. */
+  @media (min-width: 1920px) { html { font-size: 106.25%; } }
+  @media (min-width: 2400px) { html { font-size: 118.75%; } }
   html[lang="bn"] body { font-family: "Hind Siliguri", "Outfit", ui-sans-serif, system-ui, sans-serif; }
   body {
     @apply bg-ink text-text font-sans antialiased;
@@ -88,28 +100,42 @@
   :where(img) { height: auto; }
   :where(input, select, textarea, button) { min-width: 0; max-width: 100%; }
   ::selection { background: color-mix(in oklab, var(--color-brand) 60%, transparent); color: white; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
   :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 6px; }
   [x-cloak] { display: none !important; }
   h1, h2, h3, h4 { @apply font-display tracking-tight; text-wrap: balance; }
   p { text-wrap: pretty; }
 }
 
-/* Cross-document page transitions (Chrome/Edge; others simply navigate). */
+/* Cross-document page transitions (Chrome/Edge; others simply navigate). The header stays put,
+   and an event card's picture morphs into the event page's banner (named by app.js on click). */
 @view-transition { navigation: auto; }
 ::view-transition-old(root) { animation: 160ms ease both vt-out; }
 ::view-transition-new(root) { animation: 220ms ease both vt-in; }
 @keyframes vt-out { to { opacity: 0; transform: translateY(-6px) } }
 @keyframes vt-in { from { opacity: 0; transform: translateY(8px) } }
+#site-header { view-transition-name: site-header; }
+::view-transition-group(site-header) { animation: none; }
+::view-transition-group(event-banner) { animation-duration: .45s; animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
+::view-transition-old(event-banner), ::view-transition-new(event-banner) { height: 100%; object-fit: cover; overflow: clip; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
-  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
 
 /* ------------------------------------------------------------ utilities -- */
-@utility container-x { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+@utility container-x {
+  @apply mx-auto w-full max-w-7xl 2xl:max-w-[88rem];
+  padding-left: max(var(--gutter), env(safe-area-inset-left));
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
+}
+@utility no-scrollbar { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
+@utility section-gap { @apply mt-12 sm:mt-16 lg:mt-20; }
+/* Brand gradient on text. Deliberately still: moving a text gradient repaints it every frame,
+   which measured at 0.5-0.8 s of extra paint work per page load on a mid-range phone. */
 @utility text-gradient {
-  background: linear-gradient(100deg, var(--color-brand), var(--color-brand-2) 55%, var(--color-accent));
+  background: linear-gradient(100deg, var(--color-brand), var(--color-brand-2) 45%, var(--color-accent));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 @utility bg-gradient-brand { background-image: linear-gradient(120deg, var(--color-brand), var(--color-brand-2)); }
@@ -117,15 +143,31 @@
   @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-200 select-none disabled:opacity-50 disabled:pointer-events-none active:scale-[.97];
 }
 @utility btn-lg { @apply px-7 py-3.5 text-base; }
-@utility btn-primary { @apply btn text-white bg-gradient-brand shadow-glow hover:brightness-110; }
-@utility btn-ghost { @apply btn bg-white/5 text-text ring-1 ring-line-strong hover:bg-white/10; }
+/* The gradient flows on hover and a light sheen sweeps across (transform only). */
+@utility btn-primary {
+  @apply btn text-on-brand shadow-glow relative isolate overflow-hidden;
+  background-image: linear-gradient(110deg, var(--color-brand), var(--color-brand-2) 50%, var(--color-brand));
+  background-size: 200% 100%;
+  transition: background-position .6s ease, transform .2s ease, box-shadow .3s ease, opacity .2s ease;
+  &::after {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / .28) 50%, transparent 65%);
+    transform: translateX(-120%);
+  }
+  @media (hover: hover) {
+    &:hover { background-position: 100% 0; }
+    &:hover::after { transform: translateX(120%); transition: transform .8s cubic-bezier(.2, .8, .2, 1); }
+  }
+}
+@utility btn-ghost { @apply btn bg-white/5 text-text ring-1 ring-line-strong hover:bg-white/10 hover:ring-white/25; }
 @utility btn-light { @apply btn bg-white text-ink hover:bg-white/90; }
 @utility card { @apply rounded-(--radius-card) bg-surface ring-1 ring-line; }
-@utility glass { @apply bg-ink/60 backdrop-blur-xl backdrop-saturate-150; }
+/* Frosted glass. A modest blur: large blurs re-render on every scroll frame and stutter on phones. */
+@utility glass { @apply bg-ink/75 backdrop-blur-md backdrop-saturate-150; }
 @utility chip {
   @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium ring-1 ring-line-strong bg-white/[.03] text-muted transition hover:text-text hover:bg-white/[.07];
 }
-@utility chip-active { @apply text-white ring-transparent bg-gradient-brand; }
+@utility chip-active { @apply text-on-brand ring-transparent bg-gradient-brand; }
 @utility badge { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider; }
 @utility input {
   @apply w-full rounded-xl bg-surface-2 px-4 py-3 text-text ring-1 ring-line-strong placeholder:text-subtle outline-none transition focus:ring-2 focus:ring-brand;
@@ -137,7 +179,49 @@
   background-size: 400% 100%;
   @apply animate-shimmer rounded-xl;
 }
-@utility orb { @apply pointer-events-none absolute rounded-full blur-3xl opacity-40 animate-float; }
+/* A soft glow in the current text colour (text-brand, text-accent, …). Painted as a radial
+   gradient: it looks like a blurred circle but costs far less than filter: blur(). */
+@utility orb {
+  @apply pointer-events-none absolute rounded-full opacity-50;
+  background-image: radial-gradient(closest-side, currentColor, transparent);
+  /* Drifting only where there's a mouse: on phones the glow stays still, saving frames and battery. */
+  @media (hover: hover) { @apply animate-float; will-change: transform; }
+}
+/* Faint grid that fades out from the top centre. */
+@utility bg-grid {
+  background-image: linear-gradient(rgb(255 255 255 / .05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgb(255 255 255 / .05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 0%, #000 25%, transparent 75%);
+          mask-image: radial-gradient(ellipse 75% 65% at 50% 0%, #000 25%, transparent 75%);
+}
+/* Hover effects for pictures: a gradient edge lights up and a sheen sweeps across. */
+@utility card-fx {
+  position: relative; isolation: isolate;
+  &::before {
+    content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; border-radius: inherit; padding: 1.5px;
+    background: linear-gradient(135deg, var(--color-brand), var(--color-brand-2), var(--color-accent));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity: 0; transition: opacity .35s ease;
+  }
+  &::after {
+    content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background: linear-gradient(105deg, transparent 38%, rgb(255 255 255 / .16) 50%, transparent 62%);
+    transform: translateX(-110%);
+  }
+}
+/* A glow that follows the mouse (app.js sets --mx/--my); tint with --spot. */
+@utility spotlight {
+  position: relative; isolation: isolate;
+  &::after {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
+    background: radial-gradient(16rem circle at var(--mx, 50%) var(--my, 0%), color-mix(in oklab, var(--spot, var(--color-brand)) 26%, transparent), transparent 70%);
+    opacity: 0; transition: opacity .35s ease;
+  }
+}
+/* Below-the-fold sections are only drawn when scrolled near: faster first paint on long pages. */
+@utility cv-auto { content-visibility: auto; contain-intrinsic-size: auto 40rem; }
 
 /* ----------------------------------------------------------- components -- */
 @layer components {
@@ -184,6 +268,51 @@
 .allauth-page #main button, .allauth-page #main [type=submit] { @apply btn-primary; }
 .allauth-page #main ul.errorlist { @apply field-error; }
 
+/* ------------------------------------------------------------ motion -- */
+/* Only transform and opacity animate (the graphics chip does those without repainting), hover
+   effects need a real mouse, and the reduced-motion rule above switches everything off. */
+@media (hover: hover) {
+  .group:hover > .card-fx::before, .card-fx:hover::before, .group:focus-visible > .card-fx::before { opacity: 1; }
+  .group:hover > .card-fx::after, .card-fx:hover::after { transform: translateX(110%); transition: transform .9s cubic-bezier(.2, .8, .2, 1); }
+  .spotlight:hover::after { opacity: 1; }
+}
+
+/* Scroll reveal. `reveal-ready` is set in <head> (before the first paint, only when motion is
+   welcome); app.js adds `is-in` as each element scrolls into view. If app.js never runs,
+   `reveal-live` is never set and everything fades in after 2.5 s anyway. */
+@keyframes reveal-in { from { opacity: 0; transform: translate3d(0, 22px, 0) } to { opacity: 1; transform: none } }
+.reveal-ready .reveal:not(.is-in) { opacity: 0; }
+.reveal-ready .reveal.is-in { animation: reveal-in .7s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(min(var(--i, 0), 10) * 60ms); }
+.reveal-ready:not(.reveal-live) .reveal:not(.is-in) { animation: reveal-in .6s ease 2.5s both; }
+
+/* Pictures further down the page fade in once loaded instead of popping in. (Never the first
+   pictures on screen: a fade delays the moment the browser counts the page as shown.) */
+.reveal-ready .img-fade { opacity: 0; transition: opacity .6s ease, transform .7s cubic-bezier(.2, .8, .2, 1); }
+.reveal-ready .img-fade.is-loaded { opacity: 1; }
+
+/* Thin progress bar at the top while a page or filter result loads. */
+.loading-bar {
+  position: fixed; inset: 0 0 auto 0; z-index: 100; height: 2px; pointer-events: none;
+  background: linear-gradient(90deg, var(--color-brand), var(--color-brand-2), var(--color-accent));
+  transform-origin: 0 50%; transform: scaleX(0); opacity: 0; transition: opacity .3s ease;
+}
+html.is-loading .loading-bar { opacity: 1; animation: load-progress 3s cubic-bezier(.1, .7, .2, 1) forwards; }
+@keyframes load-progress { from { transform: scaleX(.06) } to { transform: scaleX(.9) } }
+
+/* Swipe rows: cards ease into focus as they reach the middle (browsers with scroll-driven
+   animations; the rest simply scroll). */
+@keyframes carousel-focus { 0%, 100% { opacity: .55; transform: scale(.93) } 32%, 68% { opacity: 1; transform: none } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .carousel-focus > * { animation: carousel-focus linear both; animation-timeline: view(inline); }
+  }
+}
+
+/* Numbers that change (ticket total) give a small bump; app.js triggers it. */
+.tick { display: inline-block; }
+
+html { scrollbar-color: color-mix(in oklab, var(--color-brand) 40%, var(--color-surface-3)) transparent; }
+
 /* Letter-spacing breaks Bangla conjuncts apart — keep Bangla text untracked. */
 html[lang="bn"] :is(.tracking-wider, .tracking-widest, .tracking-tight, .tracking-\[\.2em\], .tracking-\[\.25em\], .uppercase) {
   letter-spacing: normal;
@@ -200,9 +329,6 @@ html[lang="bn"] :is(.tracking-wider, .tracking-widest, .tracking-tight, .trackin
 /* Small atoms (prices, badges, counts) never get squeezed into a vertical column of letters. */
 :where(.tabular-nums, .badge, .price) { flex-shrink: 0; white-space: nowrap; overflow-wrap: normal; }
 :where(.badge) { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
-/* Buttons and table headings break between words only, never inside one. */
-:where(.btn, .btn-primary, .btn-ghost, .btn-light, th) { overflow-wrap: normal; }
-:where(th) { white-space: nowrap; }
 /* Buttons and table headings break between words only, never inside one. */
 :where(.btn, .btn-primary, .btn-ghost, .btn-light, th) { overflow-wrap: normal; }
 :where(th) { white-space: nowrap; }
