@@ -3,7 +3,7 @@
 {% if forloop.counter0 >= reveal_from|default:0 %}{% firstof "reveal" as reveal %}{% endif %}
 <a href="{{ event.get_absolute_url }}" data-vt
    class="group relative block {{ reveal }} {{ card_class|default:'' }}" style="--i: {{ forloop.counter0|default:0 }}">
-  <div data-vt-img class="card-fx relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-line transition duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-glow">
+  <div data-vt-img class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-white/[.07] transition duration-500 ease-out group-hover:-translate-y-1 group-hover:ring-white/20 group-hover:shadow-[0_24px_48px_-24px_rgb(0_0_0/.8)] group-active:translate-y-0 group-active:scale-[.99]">
     {% if event.banner_renditions %}
       <img src="{{ event.banner_renditions|rendition:480 }}" srcset="{{ event.banner_renditions|srcset }}" sizes="(min-width:1024px) 25vw, (min-width:640px) 45vw, 60vw"
            alt="{{ event.title }}" loading="lazy" decoding="async" width="480" height="360" {% if reveal %}onload="this.classList.add('is-loaded')"{% endif %}

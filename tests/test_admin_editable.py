@@ -118,7 +118,8 @@ class TestMenusAndSettings:
         hero.title_en = "Big *nights* ahead"
         hero.save()
         content = client.get("/").content.decode()
-        assert 'Big <span class="text-gradient">nights</span> ahead' in content
+        assert ('<span class="word" style="--i:0">Big</span> <span class="word text-gradient" style="--i:1">nights</span> '
+                '<span class="word" style="--i:2">ahead</span>') in content
 
 
 def test_all_admin_editing_screens_open(client):

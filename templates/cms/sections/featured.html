@@ -15,7 +15,7 @@
   <div x-ref="row" class="scroll-row carousel-focus -mx-4 px-4 sm:mx-0 sm:px-0">
     {% for event in block.events %}
     <a href="{{ event.get_absolute_url }}" data-vt class="group relative block w-[85%] sm:w-[520px]">
-      <div data-vt-img class="card-fx relative aspect-[16/10] overflow-hidden rounded-3xl ring-1 ring-line transition duration-500 group-hover:shadow-glow">
+      <div data-vt-img class="relative aspect-[16/10] overflow-hidden rounded-3xl ring-1 ring-white/[.07] transition duration-500 ease-out group-hover:ring-white/20 group-hover:shadow-[0_24px_48px_-24px_rgb(0_0_0/.8)] group-active:scale-[.99]">
         {% if event.banner_renditions %}
         <img src="{{ event.banner_renditions|rendition:960 }}" srcset="{{ event.banner_renditions|srcset }}" sizes="(min-width:640px) 520px, 85vw" alt="{{ event.title }}" {% if forloop.first %}loading="eager"{% else %}loading="lazy"{% endif %} decoding="async" class="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105">
         {% else %}<div class="h-full w-full bg-gradient-brand"></div>{% endif %}

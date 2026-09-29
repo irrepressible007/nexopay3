@@ -29,9 +29,8 @@ def _section_payload(section: HomeSection):
     if kind == K.HERO:
         slides = list(HeroSlide.objects.visible().select_related("event"))
         if not slides:
-            # Brand hero: admin headline + quick category links + featured card stack.
+            # Brand hero: admin headline, search and quick category links (featured events follow below).
             return {
-                "events": _event_cards(Event.objects.featured().order_by("featured_rank", "starts_at"), 5),
                 "hero_categories": list(Category.objects.filter(is_active=True, show_in_hero=True)[:8]),
                 "brand": True,
             }

@@ -47,9 +47,10 @@
   --color-on-brand: var(--on-brand, #ffffff);
   --color-on-accent: var(--on-accent, #0b0917);
   --color-ink: var(--bg, #0b0917);
-  --color-surface: color-mix(in oklab, var(--color-ink), var(--color-brand) 7%);
-  --color-surface-2: color-mix(in oklab, var(--color-ink), var(--color-brand) 11%);
-  --color-surface-3: color-mix(in oklab, var(--color-ink), var(--color-brand) 17%);
+  /* Mostly neutral panels with only a hint of the brand colour: calmer and more premium. */
+  --color-surface: color-mix(in oklab, color-mix(in oklab, var(--color-ink), var(--color-brand) 3%), white 3.5%);
+  --color-surface-2: color-mix(in oklab, color-mix(in oklab, var(--color-ink), var(--color-brand) 4%), white 6%);
+  --color-surface-3: color-mix(in oklab, color-mix(in oklab, var(--color-ink), var(--color-brand) 5%), white 10%);
   --color-line: rgb(255 255 255 / 0.08);
   --color-line-strong: rgb(255 255 255 / 0.14);
   --color-text: #f5f3ff;
@@ -60,7 +61,7 @@
   --color-danger: #f87171;
 
   --radius-card: 1.25rem;
-  --shadow-glow: 0 0 0 1px rgb(255 255 255 / 0.06), 0 20px 60px -20px color-mix(in oklab, var(--color-brand) 60%, transparent);
+  --shadow-glow: 0 10px 30px -12px color-mix(in oklab, var(--color-brand) 55%, transparent);
 
   --animate-float: float 9s ease-in-out infinite;
   --animate-marquee: marquee 40s linear infinite;
@@ -135,37 +136,41 @@
 /* Brand gradient on text. Deliberately still: moving a text gradient repaints it every frame,
    which measured at 0.5-0.8 s of extra paint work per page load on a mid-range phone. */
 @utility text-gradient {
-  background: linear-gradient(100deg, var(--color-brand), var(--color-brand-2) 45%, var(--color-accent));
+  background: linear-gradient(95deg, color-mix(in oklab, var(--color-brand), white 22%), color-mix(in oklab, var(--color-brand-2), white 12%));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 @utility bg-gradient-brand { background-image: linear-gradient(120deg, var(--color-brand), var(--color-brand-2)); }
+/* Buttons press down on click, and a trailing arrow nudges forward on hover. */
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-200 select-none disabled:opacity-50 disabled:pointer-events-none active:scale-[.97];
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-200 ease-out select-none disabled:opacity-50 disabled:pointer-events-none active:scale-[.97];
+  & > svg { transition: translate .25s cubic-bezier(.2, .8, .2, 1); }
+  @media (hover: hover) { &:hover > svg:last-child:not(:first-child) { translate: 3px 0; } }
 }
 @utility btn-lg { @apply px-7 py-3.5 text-base; }
-/* The gradient flows on hover and a light sheen sweeps across (transform only). */
+/* Solid brand colour: a touch brighter and lifted on hover. */
 @utility btn-primary {
-  @apply btn text-on-brand shadow-glow relative isolate overflow-hidden;
-  background-image: linear-gradient(110deg, var(--color-brand), var(--color-brand-2) 50%, var(--color-brand));
-  background-size: 200% 100%;
-  transition: background-position .6s ease, transform .2s ease, box-shadow .3s ease, opacity .2s ease;
-  &::after {
-    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / .28) 50%, transparent 65%);
-    transform: translateX(-120%);
-  }
+  @apply btn bg-brand text-on-brand shadow-glow;
   @media (hover: hover) {
-    &:hover { background-position: 100% 0; }
-    &:hover::after { transform: translateX(120%); transition: transform .8s cubic-bezier(.2, .8, .2, 1); }
+    &:hover { background-color: color-mix(in oklab, var(--color-brand), white 12%); translate: 0 -1px; }
   }
 }
-@utility btn-ghost { @apply btn bg-white/5 text-text ring-1 ring-line-strong hover:bg-white/10 hover:ring-white/25; }
+@utility btn-ghost { @apply btn bg-white/[.05] text-text ring-1 ring-white/10 hover:bg-white/10 hover:ring-white/20; }
 @utility btn-light { @apply btn bg-white text-ink hover:bg-white/90; }
-@utility card { @apply rounded-(--radius-card) bg-surface ring-1 ring-line; }
+@utility card { @apply rounded-(--radius-card) bg-surface ring-1 ring-white/[.07]; }
 /* Frosted glass. A modest blur: large blurs re-render on every scroll frame and stutter on phones. */
 @utility glass { @apply bg-ink/75 backdrop-blur-md backdrop-saturate-150; }
 @utility chip {
-  @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium ring-1 ring-line-strong bg-white/[.03] text-muted transition hover:text-text hover:bg-white/[.07];
+  @apply inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium ring-1 ring-white/10 bg-white/[.03] text-muted transition duration-300 ease-out hover:text-text hover:bg-white/[.07] hover:ring-white/20 hover:-translate-y-0.5 active:translate-y-0 active:scale-95;
+}
+/* Category pill: lifts, and picks up its category colour (--c) as a soft ring and glow. */
+@utility cat-pill {
+  @apply inline-flex shrink-0 items-center gap-2.5 rounded-full bg-surface py-2.5 pl-3.5 pr-4 text-sm font-medium text-text ring-1 ring-white/[.07] transition duration-300 ease-out active:scale-95;
+  @media (hover: hover) {
+    &:hover {
+      translate: 0 -2px;
+      box-shadow: 0 0 0 1px color-mix(in oklab, var(--c) 55%, transparent), 0 12px 28px -14px var(--c);
+    }
+  }
 }
 @utility chip-active { @apply text-on-brand ring-transparent bg-gradient-brand; }
 @utility badge { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider; }
@@ -182,7 +187,7 @@
 /* A soft glow in the current text colour (text-brand, text-accent, …). Painted as a radial
    gradient: it looks like a blurred circle but costs far less than filter: blur(). */
 @utility orb {
-  @apply pointer-events-none absolute rounded-full opacity-50;
+  @apply pointer-events-none absolute rounded-full opacity-35;
   background-image: radial-gradient(closest-side, currentColor, transparent);
   /* Drifting only where there's a mouse: on phones the glow stays still, saving frames and battery. */
   @media (hover: hover) { @apply animate-float; will-change: transform; }
@@ -216,7 +221,7 @@
   position: relative; isolation: isolate;
   &::after {
     content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
-    background: radial-gradient(16rem circle at var(--mx, 50%) var(--my, 0%), color-mix(in oklab, var(--spot, var(--color-brand)) 26%, transparent), transparent 70%);
+    background: radial-gradient(var(--spot-size, 16rem) circle at var(--mx, 50%) var(--my, 0%), color-mix(in oklab, var(--spot, var(--color-brand)) 22%, transparent), transparent 70%);
     opacity: 0; transition: opacity .35s ease;
   }
 }
@@ -280,9 +285,9 @@
 /* Scroll reveal. `reveal-ready` is set in <head> (before the first paint, only when motion is
    welcome); app.js adds `is-in` as each element scrolls into view. If app.js never runs,
    `reveal-live` is never set and everything fades in after 2.5 s anyway. */
-@keyframes reveal-in { from { opacity: 0; transform: translate3d(0, 22px, 0) } to { opacity: 1; transform: none } }
+@keyframes reveal-in { from { opacity: 0; transform: translate3d(0, 14px, 0) } to { opacity: 1; transform: none } }
 .reveal-ready .reveal:not(.is-in) { opacity: 0; }
-.reveal-ready .reveal.is-in { animation: reveal-in .7s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(min(var(--i, 0), 10) * 60ms); }
+.reveal-ready .reveal.is-in { animation: reveal-in .6s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(min(var(--i, 0), 12) * 40ms); }
 .reveal-ready:not(.reveal-live) .reveal:not(.is-in) { animation: reveal-in .6s ease 2.5s both; }
 
 /* Pictures further down the page fade in once loaded instead of popping in. (Never the first
@@ -306,6 +311,29 @@ html.is-loading .loading-bar { opacity: 1; animation: load-progress 3s cubic-bez
   @media (prefers-reduced-motion: no-preference) {
     .carousel-focus > * { animation: carousel-focus linear both; animation-timeline: view(inline); }
   }
+}
+
+/* Hero: the headline rises in word by word (reveal_words filter), over one soft glow that
+   breathes slowly (only where there's a mouse; on phones it stays still). */
+.word { display: inline-block; }
+@keyframes word-in { from { opacity: 0; transform: translate3d(0, .4em, 0) } to { opacity: 1; transform: none } }
+@media (prefers-reduced-motion: no-preference) {
+  .word { animation: word-in .65s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i, 0) * 65ms + 40ms); }
+}
+.hero-glow {
+  position: absolute; left: 50%; top: -14rem; z-index: -1; pointer-events: none;
+  width: min(64rem, 150vw); height: 40rem; translate: -50% 0; opacity: .55;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--color-brand) 70%, transparent), transparent),
+              radial-gradient(closest-side at 70% 60%, color-mix(in oklab, var(--color-brand-2) 40%, transparent), transparent);
+}
+@keyframes breathe { 0%, 100% { transform: scale(1); opacity: .55 } 50% { transform: scale(1.08); opacity: .7 } }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .hero-glow { animation: breathe 9s ease-in-out infinite; } }
+
+/* Search bar: lights up in the brand colour while typing. */
+.search-bar { transition: box-shadow .3s ease, background-color .3s ease; }
+.search-bar:focus-within {
+  background-color: var(--color-surface-2);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-brand) 70%, transparent), 0 10px 40px -12px color-mix(in oklab, var(--color-brand) 60%, transparent);
 }
 
 /* Numbers that change (ticket total) give a small bump; app.js triggers it. */
