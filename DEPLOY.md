@@ -87,10 +87,12 @@ through `deploy/cgi_bridge.sh` instead (it only edits the block it adds to the d
 `bash ~/nexopay3/deploy/speedtest.sh` times each layer (Cloudflare, web server, PHP, CGI, app server), shows
 whether static files are served by the web server, and lists folder permissions.
 
-## 3. Cron (cPanel › Cron Jobs)
+## 3. Scheduled jobs (cron)
 
-Paste the lines from `deploy/crontab.txt` (adjust `3.12`). The every-minute job releases expired ticket
-holds, opens/closes event sales, reconciles payments and sends ticket emails. Check `logs/cron.log`.
+`bash ~/nexopay3/deploy/cron.sh install` adds the jobs from `deploy/crontab.txt` to your crontab (only its own
+lines, tagged `# nexopay-cron`; run it again after `crontab.txt` changes; `cron.sh status` / `remove`). The
+every-minute job releases expired ticket holds, opens/closes event sales, reconciles payments and sends ticket
+emails. Check `logs/cron.log`.
 
 ## 4. Admin configuration (https://nexopay.com.bd/<ADMIN_URL>)
 
