@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load i18n nexo %}
-{% block title %}{{ ticket.ticket_type.name }} — {{ ticket.event.title }}{% endblock %}
+{% block title %}{{ ticket.ticket_type.name }} | {{ ticket.event.title }}{% endblock %}
 {% block content %}
 <div class="container-x py-8">
-  <a href="{% url 'accounts:tickets' %}" class="inline-flex items-center gap-1.5 text-sm text-muted hover:text-text">{% icon "chevron-left" "w-4 h-4" %}{% translate "My tickets" %}</a>
+  <a href="{% url 'accounts:tickets' %}" class="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-text">{% icon "chevron-left" "w-4 h-4" %}{% translate "My tickets" %}</a>
   <div class="mt-6">{% include "accounts/_pass.html" %}</div>
   <div class="mx-auto mt-6 grid max-w-sm grid-cols-2 gap-2" x-data="share('{{ share_url|escapejs }}', '{{ ticket.event.title|escapejs }}')">
     <a href="{% url 'accounts:ticket_pdf' ticket.code %}" class="btn-ghost">{% icon "download" "w-4 h-4" %}{% translate "PDF" %}</a>

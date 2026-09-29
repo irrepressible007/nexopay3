@@ -1,7 +1,7 @@
 """Colour contrast (WCAG 2), so admin-chosen brand colours always stay readable."""
 
 LIGHT_TEXT = "#FFFFFF"
-DARK_TEXT = "#0B0917"
+DARK_TEXT = "#0C0C0F"
 
 
 def luminance(hex_color: str) -> float:

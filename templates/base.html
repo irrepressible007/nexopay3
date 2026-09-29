@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>{% block title %}{{ sitecfg.site_name }} — {{ sitecfg.tagline }}{% endblock %}</title>
+  <title>{% block title %}{{ sitecfg.site_name }} | {{ sitecfg.tagline }}{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}{{ sitecfg.meta_description|default:sitecfg.tagline }}{% endblock %}">
   <meta name="theme-color" content="{{ sitecfg.background_color }}">
   <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
@@ -13,13 +13,13 @@
   {% block og %}
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="{{ sitecfg.site_name }}">
-  <meta property="og:title" content="{{ sitecfg.site_name }} — {{ sitecfg.tagline }}">
+  <meta property="og:title" content="{{ sitecfg.site_name }} | {{ sitecfg.tagline }}">
   {% if sitecfg.og_image %}<meta property="og:image" content="{{ sitecfg.og_image.url }}">{% endif %}
   {% endblock %}
   {% if sitecfg.favicon %}<link rel="icon" href="{{ sitecfg.favicon.url }}">{% else %}<link rel="icon" href="{% static 'img/favicon.ico' %}" sizes="any"><link rel="icon" href="{% static 'img/favicon-48.png' %}" type="image/png">{% endif %}
   <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
   <link rel="manifest" href="{% url 'webmanifest' %}">
-  <link rel="preload" href="{% static 'fonts/outfit-latin.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{% static 'fonts/Satoshi-Variable.woff2' %}" as="font" type="font/woff2" crossorigin>
   {% if LANG == "bn" %}<link rel="preload" href="{% static 'fonts/hind-bn-400.woff2' %}" as="font" type="font/woff2" crossorigin>{% endif %}
   {% comment %}Runs before the first paint, so revealed content never flashes; only where motion is welcome.
   Placed before the stylesheet: an inline script after it would make the parser wait for the CSS.{% endcomment %}
@@ -37,14 +37,14 @@
   <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] btn-light">{% translate "Skip to content" %}</a>
 
   {% if sitecfg.announcement_enabled and sitecfg.announcement_text %}
-  <div class="relative z-40 bg-gradient-brand text-on-brand text-center text-sm font-medium px-4 py-2">
+  <div class="relative z-40 bg-brand px-4 py-2 text-center text-sm font-semibold text-on-brand">
     {% if sitecfg.announcement_url %}<a href="{{ sitecfg.announcement_url }}" class="inline-flex items-center gap-1.5 hover:underline">{{ sitecfg.announcement_text }} {% icon "arrow-right" "w-4 h-4" %}</a>{% else %}{{ sitecfg.announcement_text }}{% endif %}
   </div>
   {% endif %}
 
   {% include "partials/header.html" %}
 
-  <div id="toasts" class="pointer-events-none fixed inset-x-0 top-20 z-[60] flex flex-col items-center gap-2 px-4">
+  <div id="toasts" class="pointer-events-none fixed inset-x-0 top-20 z-[60] flex flex-col items-center gap-2 px-4" aria-live="polite">
     {% if not request.public_cache %}{% include "partials/messages.html" %}{% endif %}
   </div>
 

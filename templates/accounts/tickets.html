@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load i18n nexo %}
-{% block title %}{% translate "My tickets" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block title %}{% translate "My tickets" %} | {{ sitecfg.site_name }}{% endblock %}
 {% block content %}
-<div class="container-x py-10">
-  <h1 class="font-display text-3xl font-extrabold sm:text-4xl">{% translate "My tickets" %}</h1>
+<div class="container-x py-10 sm:py-12">
+  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{% translate "My tickets" %}</h1>
   <p class="mt-2 text-muted">{% translate "Open a ticket and show its QR code at the entrance." %}</p>
   <div class="mt-6">{% include "accounts/_nav.html" %}</div>
 
@@ -11,26 +11,26 @@
   <div class="grid gap-6 lg:grid-cols-2">
     {% for event, tickets in upcoming %}
     <article class="card overflow-hidden animate-rise" style="animation-delay: {% widthratio forloop.counter0 1 80 %}ms">
-      <div class="relative h-36 overflow-hidden">
-        {% if event.banner_renditions %}<img src="{{ event.banner_renditions|rendition:960 }}" alt="" class="h-full w-full object-cover" loading="lazy">{% else %}<div class="h-full bg-gradient-brand"></div>{% endif %}
-        <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent"></div>
+      <div class="relative h-40 overflow-hidden">
+        {% if event.banner_renditions %}<img src="{{ event.banner_renditions|rendition:960 }}" alt="" class="h-full w-full object-cover" loading="lazy">{% else %}<div class="poster-fallback h-full"></div>{% endif %}
+        <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent"></div>
         <div class="absolute bottom-3 left-5 right-5">
-          <p class="text-xs font-semibold uppercase tracking-widest text-brand-2">{{ event.starts_at|date:"D, j M · g:i A" }}</p>
-          <h2 class="mt-1 line-clamp-1 font-display text-xl font-bold">{{ event.title }}</h2>
+          <p class="text-[13px] font-semibold text-brand-fg">{{ event.starts_at|date:"D, j M"|bn_digits }} · {{ event.starts_at|date:"g:i A"|bn_digits }}</p>
+          <h2 class="mt-0.5 line-clamp-1 text-xl font-bold">{{ event.title }}</h2>
         </div>
       </div>
       <ul class="divide-y divide-line">
         {% for t in tickets %}
         <li>
-          <a href="{% url 'accounts:ticket' t.code %}" class="flex items-center gap-4 px-5 py-3.5 transition hover:bg-white/[.03]">
-            <span class="grid h-10 w-10 place-items-center rounded-xl {% if t.status == 'redeemed' %}bg-white/5 text-subtle{% else %}bg-brand/15 text-brand{% endif %}">{% icon "qr" "w-5 h-5" %}</span>
+          <a href="{% url 'accounts:ticket' t.code %}" class="group flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-white/[.03]">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full {% if t.status == 'redeemed' %}bg-white/[.06] text-subtle{% else %}bg-brand/15 text-brand-fg{% endif %}">{% icon "qr" "w-5 h-5" %}</span>
             <div class="min-w-0 flex-1">
               <p class="truncate font-semibold">{{ t.ticket_type.name }}</p>
               <p class="font-mono text-xs text-subtle">{{ t.code }}</p>
             </div>
             {% if t.status == "redeemed" %}<span class="badge bg-white/10 text-muted">{% translate "Checked in" %}</span>
             {% else %}<span class="badge bg-success/15 text-success">{% translate "Valid" %}</span>{% endif %}
-            {% icon "chevron-right" "w-4 h-4 text-subtle" %}
+            <span class="text-subtle transition-transform group-hover:translate-x-0.5">{% icon "chevron-right" "w-4 h-4" %}</span>
           </a>
         </li>
         {% endfor %}
@@ -39,23 +39,23 @@
     {% endfor %}
   </div>
   {% else %}
-  <div class="card grid place-items-center px-6 py-20 text-center">
-    <span class="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-brand text-on-brand shadow-glow">{% icon "ticket" "w-8 h-8" %}</span>
-    <h2 class="mt-6 font-display text-2xl font-bold">{% translate "No upcoming tickets" %}</h2>
+  <div class="grid place-items-center rounded-2xl border border-dashed border-line-strong px-6 py-20 text-center">
+    <span class="grid h-16 w-16 place-items-center rounded-full bg-brand/15 text-brand-fg">{% icon "ticket" "w-7 h-7" %}</span>
+    <h2 class="mt-6 text-2xl font-bold">{% translate "No upcoming tickets" %}</h2>
     <p class="mt-2 max-w-sm text-muted">{% translate "When you buy tickets they'll appear here, ready to scan." %}</p>
-    <a href="{% url 'events:catalog' %}" class="btn-primary mt-6">{% translate "Find events" %}</a>
+    <a href="{% url 'events:catalog' %}" class="btn-primary mt-6">{% translate "Find events" %}{% icon "arrow-right" "w-4 h-4" %}</a>
   </div>
   {% endif %}
 
   {% if past %}
-  <details class="mt-12 group">
-    <summary class="flex cursor-pointer list-none items-center gap-2 font-display text-lg font-bold text-muted hover:text-text">
-      {% translate "Past events" %}<span class="transition group-open:rotate-180">{% icon "chevron-down" "w-5 h-5" %}</span>
+  <details class="group mt-14">
+    <summary class="flex w-fit cursor-pointer list-none items-center gap-2 text-lg font-bold text-muted transition-colors hover:text-text">
+      {% translate "Past events" %}<span class="transition-transform duration-300 group-open:rotate-180">{% icon "chevron-down" "w-5 h-5" %}</span>
     </summary>
     <ul class="mt-4 grid gap-3 sm:grid-cols-2">
       {% for event, tickets in past %}
       <li class="card flex items-center gap-4 p-4 opacity-80">
-        <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-white/5 text-center leading-none"><span><span class="block text-[10px] uppercase text-subtle">{{ event.starts_at|date:"M" }}</span><span class="font-bold">{{ event.starts_at|date:"j" }}</span></span></span>
+        <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-white/[.06] text-center leading-none"><span><span class="block text-[11px] text-subtle">{{ event.starts_at|date:"M" }}</span><span class="font-bold">{{ event.starts_at|date:"j"|bn_digits }}</span></span></span>
         <div class="min-w-0"><p class="truncate font-semibold">{{ event.title }}</p><p class="text-sm text-subtle">{% blocktranslate count n=tickets|length %}{{ n }} ticket{% plural %}{{ n }} tickets{% endblocktranslate %}</p></div>
       </li>
       {% endfor %}

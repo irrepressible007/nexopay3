@@ -2,23 +2,26 @@
 {% load i18n nexo %}
 {% block title %}{% translate "Sell tickets on Nexopay" %}{% endblock %}
 {% block content %}
-<section class="relative -mt-16 overflow-hidden noise">
-  <div class="orb -left-24 top-10 h-96 w-96 text-brand"></div>
-  <div class="orb right-0 top-40 h-80 w-80 text-accent opacity-30 [animation-delay:-4s]"></div>
-  <div class="container-x relative pb-20 pt-36 text-center">
-    <p class="text-xs font-bold uppercase tracking-[.25em] text-accent">{% translate "For organizers" %}</p>
-    <h1 class="mx-auto mt-4 max-w-3xl font-display text-5xl font-extrabold leading-[1.05] sm:text-7xl">{% translate "Sell out your next event" %} <span class="text-gradient">{% translate "on Nexopay" %}</span></h1>
-    <p class="mx-auto mt-6 max-w-xl text-lg text-muted">{% translate "Flat or multi-segment tickets, local payments, instant QR delivery and gate scanning from any phone." %}</p>
-    <div class="mt-9 flex flex-wrap justify-center gap-3">
+<section class="relative overflow-hidden">
+  <div class="pointer-events-none absolute left-1/2 top-0 h-[30rem] w-[min(60rem,150vw)] -translate-x-1/2 -translate-y-1/3 bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--color-brand)_30%,transparent),transparent)]" aria-hidden="true"></div>
+  <div class="container-x relative pb-16 pt-14 text-center sm:pb-20 sm:pt-24">
+    <p class="hero-in text-sm font-semibold text-brand-fg" style="--d: 0">{% translate "For organizers" %}</p>
+    <h1 class="hero-in mx-auto mt-4 max-w-3xl text-[clamp(2.4rem,6.5vw,4.5rem)] font-bold leading-[1.03] tracking-[-0.035em]" style="--d: 1">{% translate "Sell out your next event" %} {% translate "on Nexopay" %}</h1>
+    <p class="hero-in mx-auto mt-6 max-w-xl text-lg text-muted" style="--d: 2">{% translate "Flat or multi-segment tickets, local payments, instant QR delivery and gate scanning from any phone." %}</p>
+    <div class="hero-in mt-9 flex flex-wrap justify-center gap-3" style="--d: 3">
       <a href="{% url 'account_signup' %}?next={% url 'organizers:apply' %}" class="btn-primary btn-lg">{% translate "Create an account to apply" %}{% icon "arrow-right" "w-5 h-5" %}</a>
       <a href="{% url 'account_login' %}?next={% url 'organizers:apply' %}" class="btn-ghost btn-lg">{% translate "I already have an account" %}</a>
     </div>
   </div>
 </section>
-<section class="container-x grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-  <div class="card p-6"><span class="text-brand-2">{% icon "ticket" "w-7 h-7" %}</span><h3 class="mt-4 font-semibold">{% translate "Any ticket structure" %}</h3><p class="mt-1.5 text-sm text-muted">{% translate "One price, or entry + per-activity combos + an all-access bundle." %}</p></div>
-  <div class="card p-6"><span class="text-accent">{% icon "phone-device" "w-7 h-7" %}</span><h3 class="mt-4 font-semibold">{% translate "Local payments" %}</h3><p class="mt-1.5 text-sm text-muted">{% translate "bKash, Nagad, Upay, Pathao Pay and cards." %}</p></div>
-  <div class="card p-6"><span class="text-success">{% icon "scan" "w-7 h-7" %}</span><h3 class="mt-4 font-semibold">{% translate "Scan at the gate" %}</h3><p class="mt-1.5 text-sm text-muted">{% translate "Any phone becomes a scanner. Screenshots can't get in twice." %}</p></div>
-  <div class="card p-6"><span class="text-warning">{% icon "chart" "w-7 h-7" %}</span><h3 class="mt-4 font-semibold">{% translate "Live dashboard" %}</h3><p class="mt-1.5 text-sm text-muted">{% translate "Sales, revenue and check-ins in real time. Export attendees anytime." %}</p></div>
+<section class="container-x">
+  <ul class="grid gap-x-10 gap-y-10 border-t border-line pt-12 sm:grid-cols-2 lg:grid-cols-4">
+    {% with ic="grid h-11 w-11 place-items-center rounded-full bg-brand/15 text-brand-fg transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110" %}
+    <li class="reveal group" style="--i: 0"><span class="{{ ic }}">{% icon "ticket" "w-5 h-5" %}</span><h3 class="mt-4 font-semibold">{% translate "Any ticket structure" %}</h3><p class="mt-1.5 text-sm leading-relaxed text-muted">{% translate "One price, or entry + per-activity combos + an all-access bundle." %}</p></li>
+    <li class="reveal group" style="--i: 1"><span class="{{ ic }}">{% icon "phone-device" "w-5 h-5" %}</span><h3 class="mt-4 font-semibold">{% translate "Local payments" %}</h3><p class="mt-1.5 text-sm leading-relaxed text-muted">{% translate "bKash, Nagad, Upay, Pathao Pay and cards." %}</p></li>
+    <li class="reveal group" style="--i: 2"><span class="{{ ic }}">{% icon "scan" "w-5 h-5" %}</span><h3 class="mt-4 font-semibold">{% translate "Scan at the gate" %}</h3><p class="mt-1.5 text-sm leading-relaxed text-muted">{% translate "Any phone becomes a scanner. Screenshots can't get in twice." %}</p></li>
+    <li class="reveal group" style="--i: 3"><span class="{{ ic }}">{% icon "chart" "w-5 h-5" %}</span><h3 class="mt-4 font-semibold">{% translate "Live dashboard" %}</h3><p class="mt-1.5 text-sm leading-relaxed text-muted">{% translate "Sales, revenue and check-ins in real time. Export attendees anytime." %}</p></li>
+    {% endwith %}
+  </ul>
 </section>
 {% endblock %}

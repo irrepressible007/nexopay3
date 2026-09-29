@@ -2,7 +2,7 @@
 document.addEventListener("alpine:init", () => {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* Auto-advancing slider used by the hero and the featured card stack. */
+  /* Auto-advancing slider for admin hero slides. */
   Alpine.data("slider", (count, interval = 6000) => ({
     i: 0,
     timer: null,
@@ -16,12 +16,38 @@ document.addEventListener("alpine:init", () => {
     next() { this.i = (this.i + 1) % count; },
     prev() { this.i = (this.i - 1 + count) % count; },
     go(n) { this.i = n; this.play(); },
-    stackStyle(n) {
-      const d = (n - this.i + count) % count;
-      if (d > 2) return "opacity:0;transform:translateY(40px) scale(.85);z-index:0;pointer-events:none";
-      const r = [-2, 4, -6][d];
-      return `z-index:${10 - d};opacity:${1 - d * 0.25};transform:translateY(${d * 34}px) scale(${1 - d * 0.07}) rotate(${r}deg)`;
+  }));
+
+  /* Hero poster stack: on large screens the posters fan out and the front one is dealt away every
+     few seconds. Phones show the same cards as a swipeable row (`stacked` stays false there). */
+  Alpine.data("posterStack", (count, interval = 5500) => ({
+    i: 0, out: null, timer: null, stacked: false,
+    init() {
+      const wide = window.matchMedia("(min-width: 1024px)");
+      const update = () => { this.stacked = wide.matches; this.stacked && this.visible ? this.play() : this.pause(); };
+      wide.addEventListener("change", update);
+      // Only deal while the stack is on screen.
+      this.visible = true;
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(([e]) => { this.visible = e.isIntersecting; update(); }).observe(this.$el);
+      }
+      update();
     },
+    depth(n) { return (n - this.i + count) % count; },
+    play() {
+      if (count < 2 || reduceMotion || !this.stacked) return;
+      this.pause();
+      this.timer = setInterval(() => this.show((this.i + 1) % count), interval);
+    },
+    pause() { clearInterval(this.timer); this.timer = null; },
+    show(n) {
+      if (n === this.i) return;
+      this.out = this.i;
+      this.i = n;
+      clearTimeout(this.outTimer);
+      this.outTimer = setTimeout(() => (this.out = null), 450);
+    },
+    go(n) { this.show(n); this.play(); },
   }));
 
   /* Live countdown: x-data="countdown('2026-11-14T12:00:00Z')" */
@@ -172,23 +198,6 @@ window.nxWakeLock = async () => {
     scan(document);
     root.classList.add("reveal-live");
     document.addEventListener("htmx:afterSettle", (e) => scan(e.target));
-  }
-
-  /* Mouse-following glow on `.spotlight` elements (real mouse only; one update per frame). */
-  if (motion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    let frame = 0, last = null;
-    document.addEventListener("pointermove", (e) => {
-      last = e;
-      if (frame) return;
-      frame = requestAnimationFrame(() => {
-        frame = 0;
-        const el = last.target instanceof Element && last.target.closest(".spotlight");
-        if (!el) return;
-        const r = el.getBoundingClientRect();
-        el.style.setProperty("--mx", `${last.clientX - r.left}px`);
-        el.style.setProperty("--my", `${last.clientY - r.top}px`);
-      });
-    }, { passive: true });
   }
 
   /* Event card -> event page: name the clicked card's picture so it morphs into the banner. */

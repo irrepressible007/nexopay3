@@ -37,16 +37,16 @@ class SiteSettings(models.Model):
     favicon = models.FileField(upload_to="site/", blank=True)
     og_image = models.ImageField(upload_to="site/", blank=True, help_text=_("Default social share image."))
 
-    # Brand colours → CSS custom properties. Defaults: violet from the logo's indigo, raspberry
-    # as its gradient partner, warm gold to highlight, deep ink behind everything.
+    # Brand colours → CSS custom properties. Poster-first dark design: a neutral near-black page so
+    # event pictures bring the colour, and one accent (the logo's violet) for every action.
     primary_color = models.CharField(max_length=7, default="#7351F5", validators=[hex_color],
-                                     help_text=_("Buttons, links and highlights. Default #7351F5."))
+                                     help_text=_("The one accent colour: buttons, links and focus rings. Default #7351F5."))
     secondary_color = models.CharField(max_length=7, default="#CF3573", validators=[hex_color],
-                                       help_text=_("Blends with the primary colour in gradients. Default #CF3573."))
+                                       help_text=_("Tints the artwork of events that have no picture. Default #CF3573."))
     accent_color = models.CharField(max_length=7, default="#FFC04D", validators=[hex_color],
                                     help_text=_("Small highlights: “coming soon”, stars, countdowns. Default #FFC04D."))
-    background_color = models.CharField(max_length=7, default="#0B0917", validators=[hex_color],
-                                        help_text=_("Page background; must stay dark. Default #0B0917."))
+    background_color = models.CharField(max_length=7, default="#0C0C0F", validators=[hex_color],
+                                        help_text=_("Page background; must stay dark and neutral so event pictures stand out. Default #0C0C0F."))
 
     contact_email = models.EmailField(default="support@nexopay.com.bd")
     contact_phone = models.CharField(max_length=30, blank=True)
@@ -100,8 +100,8 @@ class SiteSettings(models.Model):
         if not all(hex_color.regex.match(c or "") for c in colors):
             return  # the field validators report malformed values
         errors = {}
-        if contrast("#F5F3FF", self.background_color) < 7:
-            errors["background_color"] = _("The site uses light text, so the background must be dark (for example #0B0917).")
+        if contrast("#F2F2F4", self.background_color) < 7:
+            errors["background_color"] = _("The site uses light text, so the background must be dark (for example #0C0C0F).")
         else:
             for field in ("primary_color", "secondary_color"):
                 if contrast(getattr(self, field), self.background_color) < 3:
@@ -115,10 +115,10 @@ class SiteSettings(models.Model):
 
     @property
     def on_brand_color(self) -> str:
-        """Text colour that reads well on buttons and gradients in the brand colours."""
+        """Text colour that reads well on buttons in the brand colour."""
         from apps.core.colors import readable_text_on
 
-        return readable_text_on(self.primary_color, self.secondary_color)
+        return readable_text_on(self.primary_color)
 
     @property
     def on_accent_color(self) -> str:
@@ -178,7 +178,10 @@ class HomeSection(models.Model):
         "events.Category", null=True, blank=True, on_delete=models.SET_NULL,
         help_text=_("Only for 'Category spotlight'."),
     )
-    image = models.ImageField(upload_to="home/", blank=True, help_text=_("Only for 'Promo banner'."))
+    image = models.ImageField(
+        upload_to="home/", blank=True,
+        help_text=_("Promo banner picture. For the hero: shown when no featured event has a picture."),
+    )
     link_url = models.CharField(max_length=300, blank=True)
     cta_label = models.CharField(max_length=60, blank=True)
     item_limit = models.PositiveSmallIntegerField(default=8)

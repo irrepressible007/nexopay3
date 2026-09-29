@@ -143,7 +143,8 @@ bash ~/nexopay3/deploy/deploy.sh     # pull, install, migrate, collectstatic, ch
 
 ```bash
 docker run --rm -v "%cd%:/app" -w /app python:3.12-slim sh -c \
- "apt-get update -qq && apt-get install -y -qq gettext && pip install -q -r requirements.txt PyMySQL && \
+ "apt-get update -qq && apt-get install -y -qq gettext && grep -v mysqlclient requirements.txt > /tmp/r.txt && \
+  pip install -q -r /tmp/r.txt PyMySQL && \
   DATABASE_URL=sqlite:////tmp/x.db python manage.py makemessages -l bn --ignore=.venv --ignore=bin --ignore=static --no-obsolete"
 python manage.py fill_translations
 ```

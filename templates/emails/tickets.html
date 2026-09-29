@@ -1,36 +1,36 @@
 {% load i18n %}<!doctype html>
 <html lang="{{ order.language }}">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ event.title }}</title></head>
-<body style="margin:0;padding:0;background:#0b0a10;font-family:'Hind Siliguri',Segoe UI,Roboto,Arial,sans-serif;color:#ECEAF4">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0b0a10;padding:24px 12px">
+<body style="margin:0;padding:0;background:#0c0c0f;font-family:'Hind Siliguri',Segoe UI,Roboto,Arial,sans-serif;color:#f2f2f4">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0c0c0f;padding:24px 12px">
     <tr><td align="center">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#15131d;border-radius:18px;overflow:hidden">
-        <tr><td style="background:linear-gradient(120deg,{{ sitecfg.primary_color }},{{ sitecfg.secondary_color }});background-color:{{ sitecfg.primary_color }};padding:28px 28px 22px">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#161619;border-radius:16px;overflow:hidden">
+        <tr><td style="background-color:{{ sitecfg.primary_color }};padding:28px 28px 22px">
           <img src="{{ logo_url }}" alt="{{ sitecfg.site_name }}" height="28" style="height:28px;width:auto;display:block;border:0">
-          <div style="font-size:24px;line-height:1.25;font-weight:700;color:{{ sitecfg.on_brand_color }};margin-top:10px">{% translate "You're going!" %} 🎉</div>
+          <div style="font-size:24px;line-height:1.25;font-weight:700;color:{{ sitecfg.on_brand_color }};margin-top:10px">{% translate "You're going!" %}</div>
           <div style="font-size:16px;color:{{ sitecfg.on_brand_color }};margin-top:6px">{{ event.title }}</div>
         </td></tr>
         <tr><td style="padding:24px 28px">
           <p style="margin:0 0 16px;font-size:15px;line-height:1.6">{% blocktranslate with name=order.buyer_name %}Hi {{ name }}, your order is confirmed. Your tickets are attached as a PDF.{% endblocktranslate %}</p>
-          <table role="presentation" width="100%" style="font-size:14px;line-height:1.6;color:#C9C6D6">
-            <tr><td style="color:#8A8699;width:110px">{% translate "Order" %}</td><td style="color:#fff;font-weight:600">{{ order.reference }}</td></tr>
-            <tr><td style="color:#8A8699">{% translate "When" %}</td><td style="color:#fff">{{ event.starts_at|date:"l, j F Y · g:i A" }}</td></tr>
-            <tr><td style="color:#8A8699">{% translate "Where" %}</td><td style="color:#fff">{{ event.venue_name|default:_("Online") }}</td></tr>
+          <table role="presentation" width="100%" style="font-size:14px;line-height:1.6;color:#c8c8cd">
+            <tr><td style="color:#8e8e95;width:110px">{% translate "Order" %}</td><td style="color:#fff;font-weight:600">{{ order.reference }}</td></tr>
+            <tr><td style="color:#8e8e95">{% translate "When" %}</td><td style="color:#fff">{{ event.starts_at|date:"l, j F Y · g:i A" }}</td></tr>
+            <tr><td style="color:#8e8e95">{% translate "Where" %}</td><td style="color:#fff">{{ event.venue_name|default:_("Online") }}</td></tr>
           </table>
-          <div style="margin:20px 0 8px;font-size:12px;letter-spacing:2px;color:#8A8699">{% translate "TICKETS" %}</div>
+          <div style="margin:20px 0 8px;font-size:12px;letter-spacing:2px;color:#8e8e95">{% translate "TICKETS" %}</div>
           {% for t in tickets %}
-          <div style="background:#1e1b29;border-radius:12px;padding:12px 14px;margin-bottom:8px;font-size:14px">
+          <div style="background:#1f1f23;border-radius:12px;padding:12px 14px;margin-bottom:8px;font-size:14px">
             <span style="color:#fff;font-weight:600">{{ t.ticket_type.name }}</span>
-            <span style="float:right;color:{{ sitecfg.primary_color }};font-family:monospace">{{ t.code }}</span>
+            <span style="float:right;color:#d8d8dd;font-family:monospace">{{ t.code }}</span>
           </div>
           {% endfor %}
           <div style="text-align:center;margin:26px 0 8px">
             <a href="{{ site_url }}/account/tickets/" style="display:inline-block;background:{{ sitecfg.primary_color }};color:{{ sitecfg.on_brand_color }};text-decoration:none;font-weight:700;padding:13px 26px;border-radius:999px">{% translate "Open my tickets" %}</a>
           </div>
-          <p style="font-size:12px;color:#8A8699;line-height:1.6;text-align:center;margin:16px 0 0">{% translate "Show the QR code at the entrance. Each ticket can be scanned only once — don't share it." %}</p>
+          <p style="font-size:12px;color:#8e8e95;line-height:1.6;text-align:center;margin:16px 0 0">{% translate "Show the QR code at the entrance. Each ticket can be scanned only once, so don't share it." %}</p>
         </td></tr>
       </table>
-      <p style="font-size:11px;color:#5d596b;margin-top:14px">© {{ sitecfg.site_name }} · {{ site_url }}</p>
+      <p style="font-size:11px;color:#5f5f66;margin-top:14px">© {{ sitecfg.site_name }} · {{ site_url }}</p>
     </td></tr>
   </table>
 </body>

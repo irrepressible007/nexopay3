@@ -1,6 +1,7 @@
 {% load i18n nexo %}
 {% if block.slides %}
-<section class="relative -mt-16 h-[82svh] min-h-[540px] max-h-[860px] overflow-hidden"
+{# Admin hero slides: full-width pictures with a headline, rotating slowly. #}
+<section class="relative h-[78svh] min-h-[520px] max-h-[820px] overflow-hidden"
          x-data="slider({{ block.slides|length }}, 6500)" @mouseenter="pause()" @mouseleave="play()"
          aria-roledescription="carousel">
   {% for s in block.slides %}
@@ -10,23 +11,21 @@
     <picture>
       {% if s.mobile_image %}<source media="(max-width: 640px)" srcset="{{ s.mobile_image.url }}">{% endif %}
       <img src="{{ s.image_renditions|rendition:1600|default:s.image.url }}" {% if s.image_renditions %}srcset="{{ s.image_renditions|srcset }}" sizes="100vw"{% endif %}
-           alt="" class="h-full w-full object-cover scale-105 animate-[kenburns_14s_ease-out_both]"
+           alt="" class="h-full w-full object-cover"
            {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
     </picture>
-    <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/10"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/20 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/35 to-ink/5"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-ink/75 via-ink/15 to-transparent"></div>
     <div class="container-x relative flex h-full flex-col justify-end pb-20 sm:pb-24">
       <div class="max-w-2xl animate-rise">
         {% if s.event and s.event.starts_at %}
-        <p class="mb-3 inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-sm font-medium ring-1 ring-white/10">
-          {% icon "calendar" "w-4 h-4 text-brand-2" %}{{ s.event.starts_at|date:"D, j M · g:i A" }}
-        </p>
+        <p class="mb-3 text-sm font-semibold text-white/80">{{ s.event.starts_at|date:"D, j M"|bn_digits }} · {{ s.event.starts_at|date:"g:i A"|bn_digits }}</p>
         {% endif %}
-        <h1 class="line-clamp-4 font-display text-[clamp(2rem,7vw,4rem)] font-extrabold leading-[1.05]">{{ s.title|highlight }}</h1>
+        <h1 class="line-clamp-3 text-[clamp(2.25rem,6vw,4.25rem)] font-bold leading-[1.03] tracking-[-0.035em]">{{ s.title|highlight }}</h1>
         {% if s.subtitle %}<p class="mt-4 line-clamp-3 max-w-xl text-base text-white/80 sm:text-lg">{{ s.subtitle }}</p>{% endif %}
         {% if s.link %}
         <div class="mt-7 flex flex-wrap gap-3">
-          <a href="{{ s.link }}" class="btn-primary btn-lg">{% icon "ticket" "w-5 h-5" %}{{ s.cta_label|default:_("Get tickets") }}</a>
+          <a href="{{ s.link }}" class="btn-primary btn-lg">{{ s.cta_label|default:_("Get tickets") }}{% icon "arrow-right" "w-5 h-5" %}</a>
           <a href="{% url 'events:catalog' %}" class="btn-ghost btn-lg">{% translate "Explore events" %}</a>
         </div>
         {% endif %}
@@ -38,48 +37,102 @@
   <div class="absolute inset-x-0 bottom-7 z-10">
     <div class="container-x flex items-center gap-2">
       {% for s in block.slides %}
-      <button type="button" @click="go({{ forloop.counter0 }})" class="h-1.5 rounded-full transition-all duration-500"
-              :class="i === {{ forloop.counter0 }} ? 'w-10 bg-white' : 'w-4 bg-white/35 hover:bg-white/60'" aria-label="{% blocktranslate with n=forloop.counter %}Slide {{ n }}{% endblocktranslate %}"></button>
+      <button type="button" @click="go({{ forloop.counter0 }})" class="h-1.5 rounded-full transition-[width,background-color] duration-500"
+              :class="i === {{ forloop.counter0 }} ? 'w-8 bg-white' : 'w-3 bg-white/35 hover:bg-white/60'" aria-label="{% blocktranslate with n=forloop.counter %}Slide {{ n }}{% endblocktranslate %}"></button>
       {% endfor %}
       <div class="ml-auto hidden gap-2 sm:flex">
-        <button type="button" @click="prev()" class="grid h-10 w-10 place-items-center rounded-full glass ring-1 ring-white/15 hover:bg-white/10" aria-label="{% translate 'Previous' %}">{% icon "chevron-left" "w-5 h-5" %}</button>
-        <button type="button" @click="next()" class="grid h-10 w-10 place-items-center rounded-full glass ring-1 ring-white/15 hover:bg-white/10" aria-label="{% translate 'Next' %}">{% icon "chevron-right" "w-5 h-5" %}</button>
+        <button type="button" @click="prev()" class="btn-icon bg-black/40" aria-label="{% translate 'Previous' %}">{% icon "chevron-left" "w-5 h-5" %}</button>
+        <button type="button" @click="next()" class="btn-icon bg-black/40" aria-label="{% translate 'Next' %}">{% icon "chevron-right" "w-5 h-5" %}</button>
       </div>
     </div>
   </div>
   {% endif %}
 </section>
 {% else %}
-{# Centred, one soft glow that breathes, plus a light that follows the mouse (desktop). #}
-<section class="spotlight relative -mt-16 overflow-hidden" style="--spot-size: 36rem">
-  <div class="hero-glow" aria-hidden="true"></div>
+{% with posters=block.posters %}
+{% if posters or section.image %}{% firstof "1" as visual %}{% endif %}
+<section class="relative">
+  <div class="container-x grid items-center gap-10 pb-6 pt-8 sm:pt-14 lg:gap-14 lg:pb-2 lg:pt-14 xl:gap-20
+              {% if visual %}lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]{% else %}justify-items-center pb-4 pt-16 text-center sm:pt-24{% endif %}">
+    <div class="min-w-0 {% if visual %}max-w-[40rem]{% else %}max-w-3xl{% endif %}">
+      <h1 class="hero-in text-[clamp(2.4rem,5.2vw,3.75rem)] font-bold leading-[1.04] tracking-[-0.035em]" style="--d: 0">
+        {% if section.title %}{{ section.title|highlight }}{% else %}{{ sitecfg.tagline|highlight }}{% endif %}
+      </h1>
+      <p class="hero-in mt-5 max-w-lg text-base leading-relaxed text-muted sm:text-lg {% if not visual %}mx-auto{% endif %}" style="--d: 1">{% if section.subtitle %}{{ section.subtitle }}{% else %}{% translate "Concerts, festivals, competitions, workshops and more. Pay with bKash, Nagad or card, and get an instant QR ticket on your phone." %}{% endif %}</p>
 
-  <div class="container-x relative flex flex-col items-center pb-6 pt-28 text-center sm:pb-10 sm:pt-36 lg:pt-44">
-    <span class="inline-flex max-w-full animate-rise items-center gap-2 rounded-full bg-white/[.04] px-3.5 py-1.5 text-sm font-medium text-muted ring-1 ring-white/10">
-      <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-success"></span></span>
-      {% translate "Live events across Bangladesh" %}
-    </span>
-    <h1 class="mt-6 max-w-4xl font-display text-[clamp(2.4rem,7.2vw,5rem)] font-extrabold leading-[1.03]">
-      {% if section.title %}{{ section.title|reveal_words }}{% else %}{{ sitecfg.tagline|reveal_words }}{% endif %}
-    </h1>
-    <p class="mt-5 max-w-2xl animate-rise text-base text-muted [animation-delay:.35s] sm:text-lg">{% if section.subtitle %}{{ section.subtitle }}{% else %}{% translate "Concerts, festivals, competitions, workshops and more. Pay with bKash, Nagad or card, and get an instant QR ticket on your phone." %}{% endif %}</p>
+      <form action="{% url 'events:catalog' %}" method="get" role="search" style="--d: 2"
+            class="hero-in search-bar mt-8 flex w-full max-w-xl items-center gap-2 rounded-full bg-surface p-1.5 pl-5 ring-1 ring-inset ring-white/10 {% if not visual %}mx-auto{% endif %}">
+        <span class="shrink-0 text-subtle">{% icon "search" "w-5 h-5" %}</span>
+        <input type="search" name="q" placeholder="{% translate 'Search artists, events or venues' %}" aria-label="{% translate 'Search' %}" class="min-w-0 flex-1 bg-transparent py-2.5 text-base outline-none placeholder:text-subtle">
+        <button class="btn-primary h-11 w-11 shrink-0 !p-0 sm:w-auto sm:!px-5" aria-label="{% translate 'Search' %}">{% icon "search" "w-5 h-5 sm:hidden" %}<span class="hidden sm:inline">{% translate "Search" %}</span></button>
+      </form>
 
-    <form action="{% url 'events:catalog' %}" method="get" role="search"
-          class="search-bar mt-8 flex w-full max-w-xl animate-rise items-center gap-2 rounded-full bg-surface p-1.5 ring-1 ring-white/10 [animation-delay:.45s]">
-      <span class="shrink-0 pl-3 text-subtle">{% icon "search" "w-5 h-5" %}</span>
-      <input type="search" name="q" placeholder="{% translate 'Search artists, events or venues' %}" aria-label="{% translate 'Search' %}" class="min-w-0 flex-1 bg-transparent py-2.5 text-base outline-none placeholder:text-subtle">
-      <button class="btn-primary shrink-0 !px-4 sm:!px-5">{% icon "search" "w-4 h-4 sm:hidden" %}<span class="hidden sm:inline">{% translate "Search" %}</span></button>
-    </form>
+      {% if block.hero_categories %}
+      <div class="hero-in no-scrollbar -mx-4 mt-5 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 {% if not visual %}sm:justify-center{% endif %}" style="--d: 3">
+        {% for cat in block.hero_categories %}
+        <a href="{% url 'events:catalog' %}?category={{ cat.slug }}" class="chip group shrink-0" style="--c: {{ cat.accent_color }}">
+          <span class="text-[var(--c)] transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110">{% category_icon cat "w-4 h-4 shrink-0" %}</span><span class="whitespace-nowrap">{{ cat.name }}</span>
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
 
-    {% if block.hero_categories %}
-    <div class="mt-6 flex animate-rise flex-wrap justify-center gap-2 [animation-delay:.55s]">
-      {% for cat in block.hero_categories %}
-      <a href="{% url 'events:catalog' %}?category={{ cat.slug }}" class="chip group max-w-full" style="--c: {{ cat.accent_color }}">
-        <span class="transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110 group-hover:text-[var(--c)]">{% category_icon cat "w-4 h-4 shrink-0" %}</span><span class="truncate">{{ cat.name }}</span>
-      </a>
-      {% endfor %}
+    {% if posters %}
+    {# Featured posters: a swipeable row on phones, a fanned stack that deals itself forward on large screens. #}
+    <div class="poster-stack-in min-w-0 lg:pr-[14%]" x-data="posterStack({{ posters|length }})"
+         @mouseenter="pause()" @mouseleave="play()" @focusin="pause()" @focusout="play()"
+         aria-roledescription="carousel" aria-label="{% translate 'Featured events' %}">
+      <div class="poster-stack no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:block lg:aspect-[4/3] lg:overflow-visible lg:px-0">
+        {# The front poster's own colours, blurred into a soft light behind the stack. #}
+        <div class="pointer-events-none absolute -inset-[8%] -z-10 hidden lg:block" aria-hidden="true">
+          {% for e in posters %}
+          <img src="{{ e.banner_renditions|rendition:480|default:e.banner.url }}" alt="" loading="lazy" decoding="async"
+               class="poster-glow absolute inset-0 h-full w-full rounded-full object-cover blur-[72px] saturate-150 {% if forloop.first %}opacity-25{% else %}opacity-0{% endif %}"
+               :class="depth({{ forloop.counter0 }}) === 0 ? 'opacity-25' : 'opacity-0'">
+          {% endfor %}
+        </div>
+        {% for e in posters %}
+        <a href="{{ e.get_absolute_url }}" data-vt aria-roledescription="slide"
+           class="poster-card group relative block aspect-[4/3] w-[84%] shrink-0 snap-start overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-inset ring-white/10 sm:w-[58%] lg:w-auto"
+           style="--depth: {{ forloop.counter0 }}" data-depth="{{ forloop.counter0 }}" {% if forloop.counter0 > 2 %}data-hidden{% endif %}
+           :style="'--depth:' + Math.min(depth({{ forloop.counter0 }}), 3)" :data-depth="depth({{ forloop.counter0 }})"
+           :data-hidden="depth({{ forloop.counter0 }}) > 2 ? '' : null" :class="out === {{ forloop.counter0 }} && 'is-out'"
+           :tabindex="stacked && depth({{ forloop.counter0 }}) ? -1 : null" :aria-hidden="stacked && depth({{ forloop.counter0 }}) ? 'true' : null">
+          <img data-vt-img src="{{ e.banner_renditions|rendition:960|default:e.banner.url }}" {% if e.banner_renditions %}srcset="{{ e.banner_renditions|srcset }}"{% endif %}
+               sizes="(min-width:1280px) 520px, (min-width:1024px) 40vw, (min-width:640px) 58vw, 84vw" alt="{{ e.title }}" decoding="async"
+               {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %} width="960" height="720"
+               class="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.03]">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+          <div class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 sm:p-5">
+            <div class="min-w-0">
+              <p class="text-[13px] font-semibold text-white/75">{{ e.starts_at|date:"D, j M"|bn_digits }} · {{ e.starts_at|date:"g:i A"|bn_digits }}</p>
+              <p class="mt-1 line-clamp-2 text-lg font-bold leading-tight text-white sm:text-xl xl:text-2xl">{{ e.title }}</p>
+              <p class="mt-1 truncate text-sm text-white/70">{{ e.venue_name|default:_("Online") }}</p>
+            </div>
+            <span class="price shrink-0 rounded-full bg-white px-3.5 py-1.5 text-sm font-bold text-ink transition-colors duration-300 group-hover:bg-brand group-hover:text-on-brand">
+              {% if e.min_price == 0 %}{% translate "Free" %}{% elif e.min_price %}{{ e.min_price|taka }}{% else %}{% translate "Details" %}{% endif %}
+            </span>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% if posters|length > 1 %}
+      <div class="mt-8 hidden items-center gap-1.5 lg:flex">
+        {% for e in posters %}
+        <button type="button" @click="go({{ forloop.counter0 }})" class="h-1.5 rounded-full transition-[width,background-color] duration-500"
+                :class="i === {{ forloop.counter0 }} ? 'w-6 bg-text' : 'w-1.5 bg-white/25 hover:bg-white/50'"
+                aria-label="{{ e.title }}"></button>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    {% elif section.image %}
+    <div class="poster-stack-in min-w-0">
+      <img src="{{ section.image.url }}" alt="" fetchpriority="high" class="aspect-[4/3] w-full rounded-2xl object-cover ring-1 ring-inset ring-white/10">
     </div>
     {% endif %}
   </div>
 </section>
+{% endwith %}
 {% endif %}

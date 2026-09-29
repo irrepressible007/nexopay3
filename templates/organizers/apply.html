@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load i18n nexo %}
-{% block title %}{% translate "Apply as an organizer" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block title %}{% translate "Apply as an organizer" %} | {{ sitecfg.site_name }}{% endblock %}
 {% block content %}
-<div class="container-x max-w-3xl py-12">
-  <p class="text-xs font-bold uppercase tracking-[.2em] text-accent">{% translate "Organizer application" %}</p>
-  <h1 class="mt-2 font-display text-4xl font-extrabold">{% translate "Tell us about you" %}</h1>
-  <p class="mt-3 text-muted">{% translate "Every organizer is reviewed before they can list events — it keeps buyers safe. Most applications are answered within 1–2 working days." %}</p>
+<div class="container-x max-w-3xl py-10 sm:py-14">
+  <p class="text-sm font-semibold text-brand-fg">{% translate "Organizer application" %}</p>
+  <h1 class="mt-2 text-4xl font-bold tracking-tight">{% translate "Tell us about you" %}</h1>
+  <p class="mt-3 text-muted">{% translate "Every organizer is reviewed before they can list events, which keeps buyers safe. Most applications are answered within 1-2 working days." %}</p>
   {% if profile and profile.status == "rejected" %}
-  <div class="mt-6 rounded-2xl bg-danger/10 p-4 text-sm text-danger ring-1 ring-danger/30">
+  <div class="mt-6 rounded-2xl bg-danger/10 p-4 text-sm text-danger ring-1 ring-inset ring-danger/30" role="alert">
     <p class="font-semibold">{% translate "Your previous application wasn't approved." %}</p>
     {% if profile.review_note %}<p class="mt-1">{{ profile.review_note }}</p>{% endif %}
     <p class="mt-1">{% translate "You can update the details below and apply again." %}</p>
@@ -15,8 +15,8 @@
   {% endif %}
   <form method="post" enctype="multipart/form-data" class="mt-8 space-y-6">
     {% csrf_token %}
-    <section class="card grid gap-4 p-6 sm:grid-cols-2">
-      <h2 class="font-display text-lg font-bold sm:col-span-2">{% translate "Public profile" %}</h2>
+    <section class="card grid gap-4 p-5 sm:grid-cols-2 sm:p-7">
+      <h2 class="text-lg font-bold sm:col-span-2">{% translate "Public profile" %}</h2>
       {% include "partials/field.html" with field=form.name %}
       {% include "partials/field.html" with field=form.organization_type %}
       {% include "partials/field.html" with field=form.contact_email %}
@@ -26,8 +26,8 @@
       {% include "partials/field.html" with field=form.about wrap="sm:col-span-2" %}
       {% include "partials/field.html" with field=form.logo wrap="sm:col-span-2" %}
     </section>
-    <section class="card grid gap-4 p-6 sm:grid-cols-2">
-      <h2 class="font-display text-lg font-bold sm:col-span-2">{% translate "Verification (private)" %}</h2>
+    <section class="card grid gap-4 p-5 sm:grid-cols-2 sm:p-7">
+      <h2 class="text-lg font-bold sm:col-span-2">{% translate "Verification (private)" %}</h2>
       {% include "partials/field.html" with field=form.trade_license_no %}
       {% include "partials/field.html" with field=form.verification_document %}
       {% include "partials/field.html" with field=form.application_note wrap="sm:col-span-2" %}

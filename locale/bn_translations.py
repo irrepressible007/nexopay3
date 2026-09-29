@@ -38,7 +38,8 @@ TR = {
     "Partner logos": "পার্টনার লোগো",
     "FAQ teaser": "সাধারণ জিজ্ঞাসা (সংক্ষেপে)",
     "Only for 'Category spotlight'.": "শুধু 'ক্যাটাগরি স্পটলাইট'-এর জন্য।",
-    "Only for 'Promo banner'.": "শুধু 'প্রোমো ব্যানার'-এর জন্য।",
+    "Promo banner picture. For the hero: shown when no featured event has a picture.":
+        "প্রোমো ব্যানারের ছবি। হিরোর জন্য: কোনো ফিচার্ড ইভেন্টের ছবি না থাকলে এটি দেখানো হয়।",
     "homepage section": "হোমপেজ সেকশন",
     "homepage sections": "হোমপেজ সেকশন",
     "Leave blank to link to the event.": "ইভেন্টে লিংক করতে ফাঁকা রাখুন।",
@@ -264,7 +265,7 @@ TR = {
     "Create an account": "অ্যাকাউন্ট খুলুন",
     "Sign up": "সাইন আপ",
     "Create your account": "আপনার অ্যাকাউন্ট খুলুন",
-    "One account for all your tickets — always re-downloadable.": "আপনার সব টিকিটের জন্য একটি অ্যাকাউন্ট — যেকোনো সময় আবার ডাউনলোড করা যাবে।",
+    "One account for all your tickets, always re-downloadable.": "আপনার সব টিকিটের জন্য একটি অ্যাকাউন্ট, যেকোনো সময় আবার ডাউনলোড করা যাবে।",
     "By signing up you agree to our": "সাইন আপ করে আপনি সম্মত হচ্ছেন আমাদের",
     "terms": "শর্তাবলী",
     "and": "ও",
@@ -353,8 +354,8 @@ TR = {
     "Where": "কোথায়",
     "TICKETS": "টিকিট",
     "Open my tickets": "আমার টিকিট খুলুন",
-    "Show the QR code at the entrance. Each ticket can be scanned only once — don't share it.":
-        "প্রবেশপথে QR কোড দেখান। প্রতিটি টিকিট একবারই স্ক্যান করা যায় — শেয়ার করবেন না।",
+    "Show the QR code at the entrance. Each ticket can be scanned only once, so don't share it.":
+        "প্রবেশপথে QR কোড দেখান। প্রতিটি টিকিট একবারই স্ক্যান করা যায়, তাই শেয়ার করবেন না।",
     "Your tickets for %(event)s are confirmed.": "%(event)s-এর টিকিট নিশ্চিত হয়েছে।",
     "Date": "তারিখ",
     "Your tickets are attached as a PDF. You can also open them any time in My tickets:": "টিকিট PDF হিসেবে সংযুক্ত। 'আমার টিকিট'-এ যেকোনো সময় খুলতে পারবেন:",
@@ -393,10 +394,10 @@ TR = {
     "Apply filters": "ফিল্টার প্রয়োগ",
     "Pagination": "পৃষ্ঠাসমূহ",
     "Page %(p)s of %(t)s": "পৃষ্ঠা %(p)s / %(t)s",
-    "No events match — yet": "কোনো ইভেন্ট মেলেনি — এখনো",
+    "No events match yet": "এখনো কোনো ইভেন্ট মেলেনি",
     "Try another category or clear your filters. New events land every week.": "অন্য ক্যাটাগরি দেখুন বা ফিল্টার মুছুন। প্রতি সপ্তাহে নতুন ইভেন্ট আসে।",
     "Clear filters": "ফিল্টার মুছুন",
-    "Preview — this event is a draft and not visible to the public.": "প্রিভিউ — ইভেন্টটি খসড়া, সবার জন্য দৃশ্যমান নয়।",
+    "Preview: this event is a draft and not visible to the public.": "প্রিভিউ: ইভেন্টটি খসড়া, সবার জন্য দৃশ্যমান নয়।",
     "Event ended": "ইভেন্ট শেষ",
     "Online event": "অনলাইন ইভেন্ট",
     "Organized by": "আয়োজনে",
@@ -424,8 +425,8 @@ TR = {
     "Pay %(t)s": "%(t)s পরিশোধ করুন",
     "Processing…": "প্রক্রিয়াকরণ চলছে…",
     "Tickets are held for you while you pay.": "পেমেন্টের সময় টিকিট আপনার জন্য সংরক্ষিত থাকবে।",
-    'Your tickets are on their way to <strong class="text-text">%(email)s</strong> — and always in your account.':
-        'আপনার টিকিট <strong class="text-text">%(email)s</strong>-এ পাঠানো হচ্ছে — আর সবসময় আপনার অ্যাকাউন্টে থাকবে।',
+    'Your tickets are on their way to <strong class="text-text">%(email)s</strong>, and always in your account.':
+        'আপনার টিকিট <strong class="text-text">%(email)s</strong>-এ পাঠানো হচ্ছে, আর সবসময় আপনার অ্যাকাউন্টে থাকবে।',
     "View my tickets": "আমার টিকিট দেখুন",
     "Download PDF": "PDF ডাউনলোড",
     "Complete your payment": "পেমেন্ট সম্পন্ন করুন",
@@ -455,8 +456,8 @@ TR = {
     "Apply as an organizer": "আয়োজক হিসেবে আবেদন",
     "Organizer application": "আয়োজকের আবেদন",
     "Tell us about you": "আপনার সম্পর্কে বলুন",
-    "Every organizer is reviewed before they can list events — it keeps buyers safe. Most applications are answered within 1–2 working days.":
-        "ইভেন্ট যোগ করার আগে প্রত্যেক আয়োজককে যাচাই করা হয় — এতে ক্রেতারা নিরাপদ থাকেন। বেশিরভাগ আবেদনের উত্তর ১–২ কর্মদিবসে দেওয়া হয়।",
+    "Every organizer is reviewed before they can list events, which keeps buyers safe. Most applications are answered within 1-2 working days.":
+        "ইভেন্ট যোগ করার আগে প্রত্যেক আয়োজককে যাচাই করা হয়, এতে ক্রেতারা নিরাপদ থাকেন। বেশিরভাগ আবেদনের উত্তর ১-২ কর্মদিবসে দেওয়া হয়।",
     "Your previous application wasn't approved.": "আপনার আগের আবেদনটি অনুমোদিত হয়নি।",
     "You can update the details below and apply again.": "নিচের তথ্য হালনাগাদ করে আবার আবেদন করতে পারেন।",
     "Public profile": "পাবলিক প্রোফাইল",
@@ -529,10 +530,10 @@ TR = {
     "Description (English)": "বিবরণ (ইংরেজি)",
     "Description (Bangla)": "বিবরণ (বাংলা)",
     "Leave Bangla fields empty to show the English text to Bangla visitors.": "বাংলা ঘর ফাঁকা রাখলে বাংলা ভিজিটররা ইংরেজি লেখা দেখবেন।",
-    "One ticket type for a simple event, or several — each with its own price and stock.": "সাধারণ ইভেন্টের জন্য একটি টিকিট, অথবা একাধিক — প্রতিটির আলাদা মূল্য ও সংখ্যা।",
+    "One ticket type for a simple event, or several, each with its own price and stock.": "সাধারণ ইভেন্টের জন্য একটি টিকিট, অথবা একাধিক, প্রতিটির আলাদা মূল্য ও সংখ্যা।",
     "Multi-segment preset": "মাল্টি-সেগমেন্ট প্রিসেট",
     "Add ticket": "টিকিট যোগ করুন",
-    "No tickets yet — add one or start from the multi-segment preset.": "এখনো কোনো টিকিট নেই — একটি যোগ করুন বা মাল্টি-সেগমেন্ট প্রিসেট দিয়ে শুরু করুন।",
+    "No tickets yet. Add one or start from the multi-segment preset.": "এখনো কোনো টিকিট নেই। একটি যোগ করুন বা মাল্টি-সেগমেন্ট প্রিসেট দিয়ে শুরু করুন।",
     "Shown on your event page, on top of Nexopay's platform terms.": "নেক্সোপের প্ল্যাটফর্ম শর্তাবলীর পাশাপাশি আপনার ইভেন্ট পেজে দেখানো হবে।",
     "Banner": "ব্যানার",
     "Publish event": "ইভেন্ট প্রকাশ করুন",
@@ -568,8 +569,8 @@ TR = {
     "Check": "যাচাই",
     "Checked in at": "প্রবেশের সময়",
     "Tap to scan the next ticket": "পরের টিকিট স্ক্যান করতে ট্যাপ করুন",
-    "Camera unavailable — allow camera access, or type ticket codes below.": "ক্যামেরা পাওয়া যাচ্ছে না — ক্যামেরার অনুমতি দিন, অথবা নিচে টিকিট কোড লিখুন।",
-    "Connection problem — try again": "সংযোগে সমস্যা — আবার চেষ্টা করুন",
+    "Camera unavailable. Allow camera access, or type ticket codes below.": "ক্যামেরা পাওয়া যাচ্ছে না। ক্যামেরার অনুমতি দিন, অথবা নিচে টিকিট কোড লিখুন।",
+    "Connection problem, try again": "সংযোগে সমস্যা, আবার চেষ্টা করুন",
     # --- contact
     "How can we": "কীভাবে আমরা",
     "help?": "সাহায্য করতে পারি?",
@@ -577,6 +578,21 @@ TR = {
     "Read the FAQ": "সাধারণ জিজ্ঞাসা পড়ুন",
     "Send message": "বার্তা পাঠান",
     "%(n)s sold": "%(n)sটি বিক্রি",
+    # --- brand colours (site settings)
+    "The one accent colour: buttons, links and focus rings. Default #7351F5.":
+        "সাইটের একমাত্র অ্যাকসেন্ট রঙ: বাটন, লিংক ও ফোকাস রিং। ডিফল্ট #7351F5।",
+    "Tints the artwork of events that have no picture. Default #CF3573.":
+        "ছবি ছাড়া ইভেন্টের আর্টওয়ার্কে এই রঙের আভা থাকে। ডিফল্ট #CF3573।",
+    "Small highlights: “coming soon”, stars, countdowns. Default #FFC04D.":
+        "ছোট হাইলাইট: “শীঘ্রই আসছে”, তারকা, কাউন্টডাউন। ডিফল্ট #FFC04D।",
+    "Page background; must stay dark and neutral so event pictures stand out. Default #0C0C0F.":
+        "পেজের ব্যাকগ্রাউন্ড; গাঢ় ও নিরপেক্ষ রাখতে হবে যাতে ইভেন্টের ছবি ফুটে ওঠে। ডিফল্ট #0C0C0F।",
+    "The site uses light text, so the background must be dark (for example #0C0C0F).":
+        "সাইটে হালকা রঙের লেখা ব্যবহার হয়, তাই ব্যাকগ্রাউন্ড গাঢ় হতে হবে (যেমন #0C0C0F)।",
+    "Too close to the background colour to stand out - pick a brighter colour.":
+        "ব্যাকগ্রাউন্ডের রঙের খুব কাছাকাছি, আলাদা করে চোখে পড়বে না। আরও উজ্জ্বল রঙ বেছে নিন।",
+    "Too dark to read on the background - pick a lighter colour.":
+        "ব্যাকগ্রাউন্ডে পড়ার জন্য খুব গাঢ়। আরও হালকা রঙ বেছে নিন।",
 }
 
 # Plural entries: (singular, plural). Bangla doesn't inflect for number, so both forms match.

@@ -3,10 +3,10 @@
 <html lang="{{ LANG }}">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#000000">
   <meta name="robots" content="noindex">
-  <title>{% translate "Scanner" %} — {{ event.title }}</title>
+  <title>{% translate "Scanner" %} | {{ event.title }}</title>
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
   <link rel="manifest" href="{% url 'webmanifest' %}">
   <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
@@ -20,12 +20,12 @@
   <header class="relative z-20 flex items-center gap-3 bg-gradient-to-b from-black/90 to-transparent px-4 pb-6 pt-[max(env(safe-area-inset-top),12px)]">
     <a href="{% url 'scan:home' %}" class="grid h-10 w-10 place-items-center rounded-full bg-white/10" aria-label="{% translate 'Back' %}">{% icon "chevron-left" "w-5 h-5" %}</a>
     <div class="min-w-0 flex-1">
-      <p class="truncate font-display font-bold">{{ event.title }}</p>
+      <p class="truncate font-bold">{{ event.title }}</p>
       <p class="text-xs text-white/60">{{ event.starts_at|date:"D, j M · g:i A" }}</p>
     </div>
     <div class="rounded-2xl bg-white/10 px-3 py-1.5 text-right leading-tight">
-      <p class="font-display text-lg font-bold tabular-nums"><span x-text="checkedIn">{{ counts.checked_in }}</span><span class="text-sm text-white/50">/<span x-text="total">{{ counts.total }}</span></span></p>
-      <p class="text-[10px] uppercase tracking-widest text-white/60">{% translate "checked in" %}</p>
+      <p class="text-lg font-bold tabular-nums"><span x-text="checkedIn">{{ counts.checked_in }}</span><span class="text-sm text-white/50">/<span x-text="total">{{ counts.total }}</span></span></p>
+      <p class="text-[11px] text-white/60">{% translate "checked in" %}</p>
     </div>
   </header>
 
@@ -39,7 +39,7 @@
         <span class="absolute right-0 top-0 h-10 w-10 rounded-tr-3xl border-r-4 border-t-4 border-white"></span>
         <span class="absolute bottom-0 left-0 h-10 w-10 rounded-bl-3xl border-b-4 border-l-4 border-white"></span>
         <span class="absolute bottom-0 right-0 h-10 w-10 rounded-br-3xl border-b-4 border-r-4 border-white"></span>
-        <span class="absolute inset-x-4 top-1/2 h-0.5 bg-gradient-brand shadow-glow animate-pulse"></span>
+        <span class="absolute inset-x-4 top-1/2 h-0.5 rounded-full bg-brand-fg shadow-[0_0_16px_2px_var(--color-brand)] animate-pulse"></span>
       </div>
     </div>
     <p x-show="cameraError" x-cloak class="absolute inset-x-6 top-1/3 rounded-2xl bg-black/80 p-4 text-center text-sm" x-text="cameraError"></p>
@@ -47,7 +47,7 @@
 
   <!-- manual entry -->
   <form @submit.prevent="submit(manual); manual = ''" class="relative z-20 mt-auto flex gap-2 bg-gradient-to-t from-black/90 to-transparent px-4 pb-[max(env(safe-area-inset-bottom),16px)] pt-10">
-    <input x-model="manual" placeholder="{% translate 'Or type the ticket code' %}" autocomplete="off" autocapitalize="characters"
+    <input x-model="manual" spellcheck="false" aria-label="{% translate 'Or type the ticket code' %}" placeholder="{% translate 'Or type the ticket code' %}" autocomplete="off" autocapitalize="characters"
            class="min-w-0 flex-1 rounded-full bg-white/10 px-5 py-3 font-mono uppercase tracking-wider outline-none ring-1 ring-white/20 placeholder:font-sans placeholder:normal-case placeholder:tracking-normal placeholder:text-white/50 focus:ring-brand">
     <button class="btn-primary">{% translate "Check" %}</button>
   </form>
@@ -61,7 +61,7 @@
         <span x-show="result && result.ok">{% icon "check" "w-16 h-16" %}</span>
         <span x-show="result && !result.ok">{% icon "x" "w-16 h-16" %}</span>
       </div>
-      <p class="mt-6 font-display text-4xl font-extrabold" x-text="result && result.message"></p>
+      <p class="mt-6 text-4xl font-bold tracking-tight" x-text="result && result.message"></p>
       <template x-if="result && result.ticket">
         <div class="mt-4 space-y-1 text-lg">
           <p class="font-semibold" x-text="result.ticket.type"></p>
@@ -91,7 +91,7 @@ function scanner() {
         this.$refs.video.srcObject = stream;
         await this.$refs.video.play();
       } catch (e) {
-        this.cameraError = "{% translate 'Camera unavailable — allow camera access, or type ticket codes below.' as t_cam %}{{ t_cam|escapejs }}";
+        this.cameraError = "{% translate 'Camera unavailable. Allow camera access, or type ticket codes below.' as t_cam %}{{ t_cam|escapejs }}";
         return;
       }
       if ("BarcodeDetector" in window) {
@@ -141,7 +141,7 @@ function scanner() {
         clearTimeout(this.hideTimer);
         this.hideTimer = setTimeout(() => this.dismiss(), data.ok ? 1800 : 4500);
       } catch (e) {
-        this.result = { ok: false, message: "{% translate 'Connection problem — try again' as t_conn %}{{ t_conn|escapejs }}" };
+        this.result = { ok: false, message: "{% translate 'Connection problem, try again' as t_conn %}{{ t_conn|escapejs }}" };
         this.feedback(false);
       } finally { this.busy = false; }
     },

@@ -118,8 +118,7 @@ class TestMenusAndSettings:
         hero.title_en = "Big *nights* ahead"
         hero.save()
         content = client.get("/").content.decode()
-        assert ('<span class="word" style="--i:0">Big</span> <span class="word text-gradient" style="--i:1">nights</span> '
-                '<span class="word" style="--i:2">ahead</span>') in content
+        assert 'Big <span class="text-hl">nights</span> ahead' in content
 
 
 def test_all_admin_editing_screens_open(client):
@@ -175,9 +174,9 @@ class TestBrandColours:
 
         site = SiteSettings.load()  # created by a seed migration with older defaults, then migrated
         assert (site.primary_color, site.secondary_color, site.accent_color, site.background_color) == (
-            "#7351F5", "#CF3573", "#FFC04D", "#0B0917")
-        assert site.on_brand_color == "#FFFFFF" and site.on_accent_color == "#0B0917"
-        assert min(contrast("#FFFFFF", site.primary_color), contrast("#FFFFFF", site.secondary_color)) >= 4.5
+            "#7351F5", "#CF3573", "#FFC04D", "#0C0C0F")
+        assert site.on_brand_color == "#FFFFFF" and site.on_accent_color == "#0C0C0F"
+        assert contrast("#FFFFFF", site.primary_color) >= 4.5
         site.clean()
 
     def test_light_background_is_refused(self):
@@ -198,8 +197,8 @@ class TestBrandColours:
         site = SiteSettings.load()
         site.primary_color, site.secondary_color, site.accent_color = "#FFD166", "#F9A8D4", "#5EEAD4"
         site.save()
-        assert site.on_brand_color == "#0B0917"
-        assert b"--on-brand:#0B0917" in client.get("/").content
+        assert site.on_brand_color == "#0C0C0F"
+        assert b"--on-brand:#0C0C0F" in client.get("/").content
 
 
 class TestOutgoingEmailSettings:

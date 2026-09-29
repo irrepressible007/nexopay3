@@ -21,22 +21,33 @@ def _event_cards(qs, limit):
     )
 
 
-def _section_payload(section: HomeSection):
+HERO_POSTERS = 4  # featured events shown as the hero's poster stack
+
+
+def _section_payload(section: HomeSection, shown: set):
+    """What one homepage section shows. `shown` collects the events the hero already displays,
+    so the Featured row below doesn't repeat them."""
     now = timezone.now()
     public = Event.objects.public()
     kind = section.kind
     K = HomeSection.Kind
     if kind == K.HERO:
         slides = list(HeroSlide.objects.visible().select_related("event"))
-        if not slides:
-            # Brand hero: admin headline, search and quick category links (featured events follow below).
-            return {
-                "hero_categories": list(Category.objects.filter(is_active=True, show_in_hero=True)[:8]),
-                "brand": True,
-            }
-        return {"slides": slides}
+        if slides:
+            return {"slides": slides}
+        # Headline, search and quick category links beside a stack of featured event posters.
+        posters = _event_cards(
+            Event.objects.featured().exclude(banner="").order_by("featured_rank", "starts_at"), HERO_POSTERS
+        )
+        shown.update(e.pk for e in posters)
+        return {
+            "hero_categories": list(Category.objects.filter(is_active=True, show_in_hero=True)[:8]),
+            "posters": posters,
+            "brand": True,
+        }
     if kind == K.FEATURED:
-        return {"events": _event_cards(Event.objects.featured().order_by("featured_rank", "starts_at"), section.item_limit)}
+        qs = Event.objects.featured().exclude(pk__in=shown).order_by("featured_rank", "starts_at")
+        return {"events": _event_cards(qs, section.item_limit)}
     if kind == K.CATEGORIES:
         cats = Category.objects.filter(is_active=True, show_on_home=True).annotate(
             n=Count("events", filter=Q(events__status__in=("on_sale", "sold_out", "coming_soon")))
@@ -65,9 +76,9 @@ def home(request):
     key = versioned_key("home", get_language())
     sections = cache.get(key)
     if sections is None:
-        sections = []
+        sections, shown = [], set()
         for section in HomeSection.objects.visible():
-            payload = _section_payload(section)
+            payload = _section_payload(section, shown)
             has_content = any(payload.values()) or section.kind in (
                 HomeSection.Kind.HERO,
                 HomeSection.Kind.PROMO_BANNER,

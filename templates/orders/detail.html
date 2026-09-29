@@ -1,45 +1,49 @@
 {% extends "base.html" %}
 {% load i18n nexo %}
-{% block title %}{% translate "Order" %} {{ order.reference }} — {{ sitecfg.site_name }}{% endblock %}
+{% block title %}{% translate "Order" %} {{ order.reference }} | {{ sitecfg.site_name }}{% endblock %}
 {% block content %}
-<div class="container-x max-w-3xl py-10">
+<div class="container-x max-w-3xl py-10 sm:py-14">
   {% if order.status == "paid" %}
-    <div class="relative overflow-hidden rounded-[2rem] bg-surface p-8 text-center ring-1 ring-line sm:p-12 noise">
-      <div class="orb -left-16 -top-16 h-64 w-64 text-brand"></div>
-      <div class="orb -right-16 -bottom-20 h-64 w-64 text-brand-2 [animation-delay:-3s]"></div>
+    <div class="relative overflow-hidden rounded-3xl bg-surface px-6 py-10 text-center ring-1 ring-inset ring-white/[.07] sm:px-12 sm:py-14">
+      {% if order.event.banner_renditions %}
+      <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+        <img src="{{ order.event.banner_renditions|rendition:480 }}" alt="" class="h-full w-full scale-125 object-cover opacity-25 blur-3xl saturate-150">
+        <div class="absolute inset-0 bg-gradient-to-b from-surface/30 to-surface"></div>
+      </div>
+      {% endif %}
       {% if just_paid %}{% include "orders/_confetti.html" %}{% endif %}
       <div class="relative">
-        <span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-success/15 text-success ring-1 ring-success/30 {% if just_paid %}animate-pop{% endif %}">{% icon "check" "w-8 h-8" %}</span>
-        <h1 class="mt-6 font-display text-3xl font-extrabold sm:text-4xl">{% translate "You're going!" %}</h1>
-        <p class="mt-3 text-muted">{% blocktranslate with email=order.delivery_email %}Your tickets are on their way to <strong class="text-text">{{ email }}</strong> — and always in your account.{% endblocktranslate %}</p>
-        <div class="mt-7 flex flex-wrap justify-center gap-3">
+        <span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-success text-ink {% if just_paid %}animate-pop{% endif %}">{% icon "check" "w-8 h-8" %}</span>
+        <h1 class="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">{% translate "You're going!" %}</h1>
+        <p class="mx-auto mt-3 max-w-md text-muted">{% blocktranslate with email=order.delivery_email %}Your tickets are on their way to <strong class="text-text">{{ email }}</strong>, and always in your account.{% endblocktranslate %}</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
           <a href="{% url 'accounts:tickets' %}" class="btn-primary btn-lg">{% icon "qr" "w-5 h-5" %}{% translate "View my tickets" %}</a>
           <a href="{% url 'accounts:order_pdf' order.reference %}" class="btn-ghost btn-lg">{% icon "download" "w-5 h-5" %}{% translate "Download PDF" %}</a>
         </div>
       </div>
     </div>
-    <div class="mt-8 space-y-3">
+    <div class="mt-6 space-y-3">
       {% for t in order.tickets.all %}
-      <a href="{% url 'accounts:ticket' t.code %}" class="ticket-notch flex items-center gap-4 rounded-2xl bg-surface px-6 py-4 ring-1 ring-line transition hover:bg-surface-2 animate-rise" style="animation-delay: {% widthratio forloop.counter0 1 90 %}ms">
-        <span class="grid h-11 w-11 place-items-center rounded-xl bg-gradient-brand text-on-brand">{% icon "ticket" "w-5 h-5" %}</span>
-        <div class="flex-1"><p class="font-semibold">{{ t.ticket_type.name }}</p><p class="font-mono text-xs text-muted">{{ t.code }}</p></div>
-        {% icon "chevron-right" "w-5 h-5 text-subtle" %}
+      <a href="{% url 'accounts:ticket' t.code %}" class="ticket-notch group flex items-center gap-4 rounded-2xl bg-surface px-6 py-4 ring-1 ring-inset ring-white/[.07] transition-colors hover:bg-surface-2 animate-rise" style="animation-delay: {% widthratio forloop.counter0 1 90 %}ms">
+        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-brand/15 text-brand-fg">{% icon "ticket" "w-5 h-5" %}</span>
+        <div class="min-w-0 flex-1"><p class="truncate font-semibold">{{ t.ticket_type.name }}</p><p class="font-mono text-xs text-muted">{{ t.code }}</p></div>
+        <span class="text-subtle transition-transform group-hover:translate-x-0.5">{% icon "chevron-right" "w-5 h-5" %}</span>
       </a>
       {% endfor %}
     </div>
 
   {% elif order.status == "pending_payment" and not order.is_hold_expired %}
-    <div class="card p-8 text-center sm:p-10" x-data="holdTimer('{{ order.expires_at|date:'c' }}')">
+    <div class="card px-6 py-10 text-center sm:px-10" x-data="holdTimer('{{ order.expires_at|date:'c' }}')">
       <span class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-warning/15 text-warning">{% icon "clock" "w-7 h-7" %}</span>
-      <h1 class="mt-5 font-display text-3xl font-extrabold">{% translate "Complete your payment" %}</h1>
-      <p class="mt-2 text-muted" x-show="!expired">{% translate "Your tickets are held for" %} <span class="font-display text-lg font-bold text-text tabular-nums" x-text="left"></span></p>
+      <h1 class="mt-5 text-3xl font-bold tracking-tight">{% translate "Complete your payment" %}</h1>
+      <p class="mt-2 text-muted" x-show="!expired">{% translate "Your tickets are held for" %} <span class="text-lg font-bold text-text tabular-nums" x-text="left"></span></p>
       <p class="mt-2 text-danger" x-show="expired" x-cloak>{% translate "Your hold has expired. Please start again from the event page." %}</p>
       <form method="post" action="{% url 'orders:pay' order.reference %}" class="mx-auto mt-8 max-w-md text-left" x-show="!expired">
         {% csrf_token %}
         <div class="grid gap-2">
           {% for m in methods %}
-          <label class="flex cursor-pointer items-center gap-3 rounded-2xl bg-white/[.03] p-4 ring-1 ring-line-strong has-[:checked]:bg-brand/10 has-[:checked]:ring-2 has-[:checked]:ring-brand">
-            <input type="radio" name="payment_method" value="{{ m.provider }}" class="accent-[var(--color-brand)]" {% if forloop.first %}checked{% endif %}>
+          <label class="flex cursor-pointer items-center gap-3 rounded-2xl bg-white/[.03] p-4 ring-1 ring-inset ring-white/10 transition hover:bg-white/[.06] has-[:checked]:bg-brand/10 has-[:checked]:ring-2 has-[:checked]:ring-brand">
+            <input type="radio" name="payment_method" value="{{ m.provider }}" {% if forloop.first %}checked{% endif %}>
             <span class="font-semibold">{{ m }}</span>
           </label>
           {% endfor %}
@@ -49,12 +53,12 @@
     </div>
 
   {% else %}
-    <div class="card p-8 text-center sm:p-10">
-      <span class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-white/5 text-muted">{% icon "alert" "w-7 h-7" %}</span>
-      <h1 class="mt-5 font-display text-2xl font-bold">
+    <div class="card px-6 py-10 text-center sm:px-10">
+      <span class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-white/[.06] text-muted">{% icon "alert" "w-7 h-7" %}</span>
+      <h1 class="mt-5 text-2xl font-bold">
         {% if order.status == "refunded" %}{% translate "This order was refunded" %}{% elif order.status == "partially_refunded" %}{% translate "This order was partly refunded" %}{% else %}{% translate "This order expired" %}{% endif %}
       </h1>
-      <p class="mt-2 text-muted">{% translate "If money left your account for this order, it will be refunded. Contact support with your order reference if you need help." %}</p>
+      <p class="mx-auto mt-2 max-w-md text-muted">{% translate "If money left your account for this order, it will be refunded. Contact support with your order reference if you need help." %}</p>
       <div class="mt-6 flex flex-wrap justify-center gap-3">
         <a href="{{ order.event.get_absolute_url }}" class="btn-primary">{% translate "Back to event" %}</a>
         <a href="{% url 'support:contact' %}?reason=payment_issue" class="btn-ghost">{% translate "Contact support" %}</a>
@@ -62,11 +66,11 @@
     </div>
   {% endif %}
 
-  <div class="mt-8 card p-6 text-sm">
+  <div class="card mt-6 p-6 text-sm">
     <div class="flex items-center justify-between gap-3"><span class="text-muted">{% translate "Order reference" %}</span><span class="font-mono font-semibold">{{ order.reference }}</span></div>
     <div class="mt-2 flex items-center justify-between gap-3"><span class="shrink-0 text-muted">{% translate "Event" %}</span><a href="{{ order.event.get_absolute_url }}" class="min-w-0 text-right font-semibold hover:underline">{{ order.event.title }}</a></div>
     <ul class="mt-4 space-y-2 border-t border-line pt-4">
-      {% for item in order.items.all %}<li class="flex justify-between gap-3"><span class="min-w-0">{{ item.quantity }} × {{ item.ticket_type.name }}</span><span class="tabular-nums">{{ item.line_total|taka }}</span></li>{% endfor %}
+      {% for item in order.items.all %}<li class="flex justify-between gap-3"><span class="min-w-0">{{ item.quantity|bn_digits }} × {{ item.ticket_type.name }}</span><span class="tabular-nums">{{ item.line_total|taka }}</span></li>{% endfor %}
       {% if order.buyer_fee %}<li class="flex justify-between text-muted"><span>{% translate "Service fee" %}</span><span class="tabular-nums">{{ order.buyer_fee|taka }}</span></li>{% endif %}
       <li class="flex justify-between border-t border-line pt-2 font-semibold"><span>{% translate "Total" %}</span><span class="tabular-nums">{% if order.total == 0 %}{% translate "Free" %}{% else %}{{ order.total|taka }}{% endif %}</span></li>
     </ul>

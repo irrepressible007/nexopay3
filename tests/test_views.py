@@ -34,6 +34,15 @@ class TestPublicPages:
         assert not response.cookies  # no session/csrf cookie → Cloudflare may cache it
         assert b'hx-get="/_/nav/"' in response.content
 
+    def test_hero_shows_featured_posters_and_featured_row_skips_them(self, client):
+        posters = [EventFactory(featured=True, featured_rank=i, banner=f"events/poster-{i}.jpg") for i in range(5)]
+        no_picture = EventFactory(featured=True, featured_rank=9)
+        response = client.get("/")
+        blocks = {b["section"].kind: b for b in response.context["sections"]}
+        assert blocks["hero"]["posters"] == posters[:4]  # only events with a picture, at most four
+        assert blocks["featured"]["events"] == [posters[4], no_picture]  # no repeats below the hero
+        assert response.content.decode().count('class="poster-card') == 4
+
     def test_bangla_url_prefix(self, client, event):
         response = client.get("/bn/events/")
         assert response.status_code == 200

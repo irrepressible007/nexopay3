@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n nexo %}
-{% block title %}{{ event.title }} — {{ sitecfg.site_name }}{% endblock %}
+{% block title %}{{ event.title }} | {{ sitecfg.site_name }}{% endblock %}
 {% block meta_description %}{{ event.summary|default:event.description|striptags|truncatechars:160 }}{% endblock %}
 {% block og %}
 <meta property="og:type" content="website">
@@ -31,131 +31,133 @@
 
 {% block content %}
 {% if preview %}
-<div class="bg-warning/15 text-warning text-center text-sm font-semibold py-2">{% translate "Preview — this event is a draft and not visible to the public." %}</div>
+<div class="bg-warning/15 py-2 text-center text-sm font-semibold text-warning">{% translate "Preview: this event is a draft and not visible to the public." %}</div>
 {% endif %}
 
-<!-- Backdrop -->
-<section class="relative -mt-16 overflow-hidden pt-16">
+<div class="relative">
+  {# The event's own picture, blurred into a soft light at the top of the page. #}
   {% if event.banner_renditions %}
-  <div class="absolute inset-0 -z-10">
-    <img src="{{ event.banner_renditions|rendition:480 }}" alt="" class="h-full w-full scale-125 object-cover opacity-40 blur-3xl saturate-150" aria-hidden="true">
-    <div class="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/80 to-ink"></div>
+  <div class="pointer-events-none absolute inset-x-0 -top-16 -z-10 h-[38rem] overflow-hidden" aria-hidden="true">
+    <img src="{{ event.banner_renditions|rendition:480 }}" alt="" class="h-full w-full scale-125 object-cover opacity-30 blur-3xl saturate-150">
+    <div class="absolute inset-0 bg-gradient-to-b from-ink/10 via-ink/70 to-ink"></div>
   </div>
-  {% else %}
-  <div class="orb -left-20 top-0 h-96 w-96 text-brand -z-10"></div>
   {% endif %}
 
-  <div class="container-x pb-6 pt-8 sm:pt-12">
-    <div class="flex flex-wrap items-center gap-2">
-      {% for c in event.categories.all %}
-      <a href="{% url 'events:catalog' %}?category={{ c.slug }}" class="chip !py-1 text-xs" style="color: {{ c.accent_color }}">{% category_icon c "w-3.5 h-3.5" %}{{ c.name }}</a>
-      {% endfor %}
-      {% if event.status == "sold_out" %}<span class="badge bg-danger/90 text-white">{% translate "Sold out" %}</span>
-      {% elif event.status == "ended" %}<span class="badge bg-white/10 text-muted">{% translate "Event ended" %}</span>
-      {% elif event.status == "cancelled" %}<span class="badge bg-danger/20 text-danger">{% translate "Cancelled" %}</span>
-      {% elif event.status == "coming_soon" %}<span class="badge bg-accent/90 text-on-accent">{% translate "Coming soon" %}</span>{% endif %}
-    </div>
-    <h1 class="mt-4 max-w-4xl font-display text-[clamp(2rem,6vw,3.75rem)] font-extrabold leading-[1.06]">{{ event.title }}</h1>
-    {% if event.summary %}<p class="mt-4 max-w-2xl text-base text-muted sm:text-lg">{{ event.summary }}</p>{% endif %}
-    <div class="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm">
-      <span class="flex items-center gap-2"><span class="grid h-9 w-9 place-items-center rounded-xl bg-white/5 text-brand-2 ring-1 ring-line">{% icon "calendar" "w-4 h-4" %}</span><span><span class="block font-semibold">{{ event.starts_at|date:"l, j F Y" }}</span><span class="text-muted">{{ event.starts_at|date:"g:i A" }}{% if event.ends_at %} – {{ event.ends_at|date:"g:i A" }}{% endif %}</span></span></span>
-      <span class="flex items-center gap-2"><span class="grid h-9 w-9 place-items-center rounded-xl bg-white/5 text-accent ring-1 ring-line">{% icon "pin" "w-4 h-4" %}</span><span><span class="block font-semibold">{{ event.venue_name|default:_("Online event") }}</span><span class="text-muted">{{ event.city }}</span></span></span>
-      <span class="flex items-center gap-2"><span class="grid h-9 w-9 place-items-center rounded-xl bg-white/5 text-warning ring-1 ring-line">{% icon "building" "w-4 h-4" %}</span><span><span class="block text-muted">{% translate "Organized by" %}</span><span class="font-semibold">{{ event.organizer.name }}</span></span></span>
-    </div>
-  </div>
-</section>
-
-{# Phones: banner, then tickets, then the details. Desktop: tickets in a sticky sidebar beside both. #}
-<div class="container-x grid gap-8 pb-10 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-x-10 lg:gap-y-10">
-  <div class="min-w-0 lg:col-start-1 lg:row-start-1">
+  {# Phones: picture, title, tickets, details. Large screens: tickets in a sticky column beside the rest. #}
+  <div class="container-x grid gap-x-10 gap-y-8 pb-10 pt-4 sm:pt-8 lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_400px] xl:gap-x-14">
     {# event-banner: an event card's picture morphs into this on the way in (see app.css / app.js). #}
-    <div class="overflow-hidden rounded-2xl ring-1 ring-line sm:rounded-3xl" style="view-transition-name: event-banner">
+    <div class="min-w-0 overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-inset ring-white/[.07] lg:col-start-1 lg:row-start-1" style="view-transition-name: event-banner">
       {% if event.banner_renditions %}
-      <img src="{{ event.banner_renditions|rendition:960 }}" srcset="{{ event.banner_renditions|srcset }}" sizes="(min-width:1024px) 60vw, 100vw" alt="{{ event.title }}" fetchpriority="high" class="aspect-[16/9] w-full object-cover" width="960" height="540">
+      <img src="{{ event.banner_renditions|rendition:960 }}" srcset="{{ event.banner_renditions|srcset }}" sizes="(min-width:1280px) 820px, (min-width:1024px) 62vw, 100vw" alt="{{ event.title }}" fetchpriority="high" class="aspect-[16/9] w-full object-cover" width="960" height="540">
       {% elif event.banner %}<img src="{{ event.banner.url }}" alt="{{ event.title }}" class="aspect-[16/9] w-full object-cover">
-      {% else %}<div class="aspect-[16/9] bg-gradient-brand opacity-70"></div>{% endif %}
+      {% else %}<div class="poster-fallback grid aspect-[16/9] place-items-center">{% with cat=event.categories.all.0 %}<span class="text-white/75" style="color: {{ cat.accent_color|default:'' }}">{% category_icon cat "w-16 h-16" %}</span>{% endwith %}</div>{% endif %}
     </div>
-  </div>
 
-  <!-- Ticket panel -->
-  <aside id="tickets" class="min-w-0 scroll-mt-20 lg:sticky lg:top-24 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
-    <div hx-get="{% url 'events:ticket_panel' event.slug %}" hx-trigger="load, every 45s [document.visibilityState === 'visible' && !document.querySelector('#ticket-panel [data-dirty]')]" hx-swap="innerHTML">
-      <div class="card space-y-3 p-6">
-        <div class="h-6 w-32 skeleton"></div>
-        <div class="h-20 skeleton"></div>
-        <div class="h-20 skeleton"></div>
-        <div class="h-12 skeleton rounded-full"></div>
+    <header class="min-w-0 lg:col-start-1 lg:row-start-2">
+      <div class="flex flex-wrap items-center gap-2">
+        {% if event.status == "sold_out" %}<span class="badge bg-danger text-white">{% translate "Sold out" %}</span>
+        {% elif event.status == "ended" %}<span class="badge bg-white/10 text-muted">{% translate "Event ended" %}</span>
+        {% elif event.status == "cancelled" %}<span class="badge bg-danger/20 text-danger">{% translate "Cancelled" %}</span>
+        {% elif event.status == "coming_soon" %}<span class="badge bg-accent text-on-accent">{% translate "Coming soon" %}</span>{% endif %}
+        {% for c in event.categories.all %}
+        <a href="{% url 'events:catalog' %}?category={{ c.slug }}" class="chip !gap-1.5 !px-3 !py-1 text-[13px]"><span style="color: {{ c.accent_color }}">{% category_icon c "w-3.5 h-3.5" %}</span>{{ c.name }}</a>
+        {% endfor %}
       </div>
-    </div>
+      <h1 class="mt-4 text-[clamp(1.9rem,4.6vw,3.25rem)] font-bold leading-[1.06] tracking-[-0.03em]">{{ event.title }}</h1>
+      {% if event.summary %}<p class="mt-3 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{{ event.summary }}</p>{% endif %}
+      <dl class="mt-6 grid gap-4 text-sm sm:grid-cols-3">
+        {% with ic="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted ring-1 ring-inset ring-white/[.08]" %}
+        <div class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "calendar" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><dt class="sr-only">{% translate "Date" %}</dt><dd class="font-semibold">{{ event.starts_at|date:"D, j F Y"|bn_digits }}</dd><dd class="text-muted">{{ event.starts_at|date:"g:i A"|bn_digits }}{% if event.ends_at %} - {{ event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</dd></div></div>
+        <div class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "pin" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><dt class="sr-only">{% translate "Venue" %}</dt><dd class="truncate font-semibold">{{ event.venue_name|default:_("Online event") }}</dd><dd class="truncate text-muted">{{ event.city }}</dd></div></div>
+        <div class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "building" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><dt class="text-muted">{% translate "Organized by" %}</dt><dd class="truncate font-semibold">{{ event.organizer.name }}</dd></div></div>
+        {% endwith %}
+      </dl>
+    </header>
 
-    <div class="mt-4 grid grid-cols-2 gap-2" x-data="share('{{ share_url|escapejs }}', '{{ event.title|escapejs }}')">
-      <a class="btn-ghost !px-3 !py-2.5" target="_blank" rel="noopener"
-         href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text={{ event.title|urlencode }}&amp;dates={{ event.starts_at|date:'Ymd\THis' }}/{{ end_time|date:'Ymd\THis' }}&amp;ctz=Asia/Dhaka&amp;location={{ event.venue_name|urlencode }}&amp;details={{ share_url|urlencode }}">{% icon "calendar" "w-4 h-4 shrink-0" %}{% translate "Google Calendar" %}</a>
-      <a class="btn-ghost !px-3 !py-2.5" href="{% url 'events:ics' event.slug %}">{% icon "download" "w-4 h-4 shrink-0" %}{% translate "Add to calendar" %}</a>
-      <a class="btn-ghost !px-3 !py-2.5" target="_blank" rel="noopener" href="https://wa.me/?text={{ event.title|urlencode }}%20{{ share_url|urlencode }}">{% icon "whatsapp" "w-4 h-4 shrink-0" %}{% translate "WhatsApp" %}</a>
-      <a class="btn-ghost !px-3 !py-2.5" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}">{% icon "facebook" "w-4 h-4 shrink-0" %}{% translate "Facebook" %}</a>
-      <button type="button" class="btn-ghost col-span-2 !py-2.5" @click="native()">
-        <span x-show="!copied">{% icon "share" "w-4 h-4" %}</span><span x-show="copied" x-cloak class="text-success">{% icon "check" "w-4 h-4" %}</span>
-        <span x-text="copied ? '{% translate "Link copied" as t1 %}{{ t1|escapejs }}' : '{% translate "Share event" as t2 %}{{ t2|escapejs }}'">{% translate "Share event" %}</span>
-      </button>
-    </div>
-  </aside>
-
-  <div class="min-w-0 space-y-10 lg:col-start-1 lg:row-start-2">
-    {% if event.description %}
-    <section class="reveal">
-      <h2 class="font-display text-2xl font-bold">{% translate "About this event" %}</h2>
-      <div class="prose-nx mt-4 text-[15px]">{{ event.description|safe }}</div>
-    </section>
-    {% endif %}
-
-    <section class="reveal">
-      <h2 class="font-display text-2xl font-bold">{% translate "Venue" %}</h2>
-      <div class="mt-4 card flex items-start gap-4 p-5">
-        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent/15 text-accent">{% icon "pin" "w-5 h-5" %}</span>
-        <div class="flex-1">
-          <p class="font-semibold">{{ event.venue_name|default:_("Online event") }}</p>
-          <p class="text-sm text-muted">{{ event.venue_address }}{% if event.venue_address %}, {% endif %}{{ event.city }}</p>
+    <!-- Ticket panel -->
+    <aside id="tickets" class="min-w-0 scroll-mt-20 lg:sticky lg:top-24 lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:self-start">
+      <div hx-get="{% url 'events:ticket_panel' event.slug %}" hx-trigger="load, every 45s [document.visibilityState === 'visible' && !document.querySelector('#ticket-panel [data-dirty]')]" hx-swap="innerHTML">
+        <div class="card space-y-3 p-6">
+          <div class="h-6 w-32 skeleton"></div>
+          <div class="h-20 skeleton"></div>
+          <div class="h-20 skeleton"></div>
+          <div class="h-12 skeleton rounded-full"></div>
         </div>
-        {% if event.map_url %}<a href="{{ event.map_url }}" target="_blank" rel="noopener" class="btn-ghost !py-2 shrink-0">{% translate "Map" %}{% icon "external" "w-4 h-4" %}</a>{% endif %}
       </div>
-    </section>
 
-    {% if event.terms_and_conditions %}
-    <section x-data="{ open: false }" class="reveal card">
-      <button type="button" @click="open = !open" class="flex w-full items-center justify-between gap-4 p-5 text-left" :aria-expanded="open">
-        <span class="font-display text-lg font-bold">{% translate "Event terms & conditions" %}</span>
-        <span class="text-muted transition" :class="open && 'rotate-180'">{% icon "chevron-down" "w-5 h-5" %}</span>
-      </button>
-      <div x-show="open" x-transition.opacity x-cloak class="prose-nx border-t border-line px-5 pb-5 text-sm">{{ event.terms_and_conditions|safe }}</div>
-    </section>
-    {% endif %}
-
-    <section class="reveal">
-      <h2 class="font-display text-2xl font-bold">{% translate "Organizer" %}</h2>
-      <div class="mt-4 card flex flex-col gap-5 p-5 sm:flex-row sm:items-center">
-        <div class="flex flex-1 items-center gap-4">
-          {% if event.organizer.logo %}<img src="{{ event.organizer.logo.url }}" alt="" class="h-14 w-14 rounded-2xl object-cover ring-1 ring-line" loading="lazy">
-          {% else %}<span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gradient-brand font-display text-xl font-bold text-on-brand">{{ event.organizer.name|slice:":1" }}</span>{% endif %}
-          <div>
-            <p class="font-semibold">{{ event.organizer.name }}</p>
-            {% if event.organizer.about %}<p class="line-clamp-2 text-sm text-muted">{{ event.organizer.about }}</p>{% endif %}
+      <div class="mt-4 grid grid-cols-2 gap-2" x-data="share('{{ share_url|escapejs }}', '{{ event.title|escapejs }}')">
+        <a class="btn-ghost btn-sm" href="{% url 'events:ics' event.slug %}">{% icon "download" "w-4 h-4 shrink-0" %}{% translate "Add to calendar" %}</a>
+        <a class="btn-ghost btn-sm" target="_blank" rel="noopener"
+           href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text={{ event.title|urlencode }}&amp;dates={{ event.starts_at|date:'Ymd\THis' }}/{{ end_time|date:'Ymd\THis' }}&amp;ctz=Asia/Dhaka&amp;location={{ event.venue_name|urlencode }}&amp;details={{ share_url|urlencode }}">{% icon "calendar" "w-4 h-4 shrink-0" %}{% translate "Google Calendar" %}</a>
+        <div class="col-span-2 mt-2 flex items-center justify-between gap-3 border-t border-line pt-4">
+          <span class="text-sm font-medium text-muted">{% translate "Share event" %}</span>
+          <div class="flex gap-2">
+            <a class="btn-icon" target="_blank" rel="noopener" href="https://wa.me/?text={{ event.title|urlencode }}%20{{ share_url|urlencode }}" aria-label="{% translate 'WhatsApp' %}" title="{% translate 'WhatsApp' %}">{% icon "whatsapp" "w-4 h-4" %}</a>
+            <a class="btn-icon" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}" aria-label="{% translate 'Facebook' %}" title="{% translate 'Facebook' %}">{% icon "facebook" "w-4 h-4" %}</a>
+            <button type="button" class="btn-icon" @click="native()" aria-label="{% translate 'Share event' %}" title="{% translate 'Share event' %}">
+              <span x-show="!copied">{% icon "share" "w-4 h-4" %}</span><span x-show="copied" x-cloak class="text-success">{% icon "check" "w-4 h-4" %}</span>
+            </button>
           </div>
         </div>
-        <div class="flex flex-wrap gap-2">
-          <a href="mailto:{{ event.organizer.contact_email }}" class="btn-ghost !py-2">{% icon "mail" "w-4 h-4" %}{% translate "Email" %}</a>
-          <a href="tel:{{ event.organizer.contact_phone }}" class="btn-ghost !py-2">{% icon "phone" "w-4 h-4" %}{% translate "Call" %}</a>
-          {% if event.organizer.facebook_url %}<a href="{{ event.organizer.facebook_url }}" target="_blank" rel="noopener" class="btn-ghost !py-2">{% icon "facebook" "w-4 h-4" %}</a>{% endif %}
-        </div>
       </div>
-    </section>
+    </aside>
+
+    <div class="min-w-0 space-y-12 lg:col-start-1 lg:row-start-3">
+      {% if event.description %}
+      <section>
+        <h2 class="text-2xl font-bold tracking-tight">{% translate "About this event" %}</h2>
+        <div class="prose-nx mt-4 max-w-[70ch] text-[15px] sm:text-base">{{ event.description|safe }}</div>
+      </section>
+      {% endif %}
+
+      <section>
+        <h2 class="text-2xl font-bold tracking-tight">{% translate "Venue" %}</h2>
+        <div class="card mt-4 flex items-center gap-4 p-5">
+          <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-brand/15 text-brand-fg">{% icon "pin" "w-5 h-5" %}</span>
+          <div class="min-w-0 flex-1">
+            <p class="font-semibold">{{ event.venue_name|default:_("Online event") }}</p>
+            <p class="text-sm text-muted">{{ event.venue_address }}{% if event.venue_address %}, {% endif %}{{ event.city }}</p>
+          </div>
+          {% if event.map_url %}<a href="{{ event.map_url }}" target="_blank" rel="noopener" class="btn-ghost btn-sm shrink-0">{% translate "Map" %}{% icon "external" "w-4 h-4" %}</a>{% endif %}
+        </div>
+      </section>
+
+      {% if event.terms_and_conditions %}
+      <section x-data="{ open: false }" class="border-y border-line">
+        <button type="button" @click="open = !open" class="group flex w-full items-center justify-between gap-4 py-5 text-left" :aria-expanded="open">
+          <span class="text-lg font-bold transition-colors group-hover:text-brand-fg">{% translate "Event terms & conditions" %}</span>
+          <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted transition duration-300" :class="open && 'rotate-45 bg-brand text-on-brand'">{% icon "plus" "w-4 h-4" %}</span>
+        </button>
+        <div x-show="open" x-transition.opacity x-cloak class="prose-nx max-w-[70ch] pb-6 text-sm">{{ event.terms_and_conditions|safe }}</div>
+      </section>
+      {% endif %}
+
+      <section>
+        <h2 class="text-2xl font-bold tracking-tight">{% translate "Organizer" %}</h2>
+        <div class="card mt-4 flex flex-col gap-5 p-5 sm:flex-row sm:items-center">
+          <div class="flex min-w-0 flex-1 items-center gap-4">
+            {% if event.organizer.logo %}<img src="{{ event.organizer.logo.url }}" alt="" class="h-14 w-14 shrink-0 rounded-full object-cover ring-1 ring-line" loading="lazy">
+            {% else %}<span class="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-brand text-xl font-bold text-on-brand">{{ event.organizer.name|slice:":1" }}</span>{% endif %}
+            <div class="min-w-0">
+              <p class="font-semibold">{{ event.organizer.name }}</p>
+              {% if event.organizer.about %}<p class="line-clamp-2 text-sm text-muted">{{ event.organizer.about }}</p>{% endif %}
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <a href="mailto:{{ event.organizer.contact_email }}" class="btn-ghost btn-sm">{% icon "mail" "w-4 h-4" %}{% translate "Email" %}</a>
+            <a href="tel:{{ event.organizer.contact_phone }}" class="btn-ghost btn-sm">{% icon "phone" "w-4 h-4" %}{% translate "Call" %}</a>
+            {% if event.organizer.facebook_url %}<a href="{{ event.organizer.facebook_url }}" target="_blank" rel="noopener" class="btn-icon" aria-label="Facebook">{% icon "facebook" "w-4 h-4" %}</a>{% endif %}
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </div>
 
 {% if related %}
-<section class="container-x mt-10">
-  <h2 class="reveal mb-6 font-display text-2xl font-bold sm:mb-7 sm:text-3xl">{% translate "You might also like" %}</h2>
-  <div class="grid grid-cols-1 gap-x-3 gap-y-7 min-[340px]:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4">
+<section class="container-x section-gap">
+  <h2 class="mb-6 text-2xl font-bold tracking-tight sm:mb-8 sm:text-[1.875rem]">{% translate "You might also like" %}</h2>
+  <div class="grid grid-cols-1 gap-x-3 gap-y-8 min-[340px]:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4">
     {% for event in related %}{% include "partials/event_card.html" %}{% endfor %}
   </div>
 </section>
@@ -168,9 +170,9 @@
   <div class="container-x flex items-center justify-between gap-3 py-3">
     <div class="min-w-0">
       <p class="text-xs text-muted">{% translate "From" %}</p>
-      <p class="price font-display text-lg font-bold leading-tight">{% if min_price == 0 %}{% translate "Free" %}{% else %}{{ min_price|taka }}{% endif %}</p>
+      <p class="price text-lg font-bold leading-tight">{% if min_price == 0 %}{% translate "Free" %}{% else %}{{ min_price|taka }}{% endif %}</p>
     </div>
-    <a href="#tickets" class="btn-primary shrink-0">{% icon "ticket" "w-4 h-4" %}{% translate "Get tickets" %}</a>
+    <a href="#tickets" class="btn-primary shrink-0">{% translate "Get tickets" %}{% icon "arrow-right" "w-4 h-4" %}</a>
   </div>
 </div>
 <div class="h-16 lg:hidden" aria-hidden="true"></div>

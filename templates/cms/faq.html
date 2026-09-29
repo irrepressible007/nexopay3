@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 {% load i18n nexo %}
-{% block title %}{% translate "FAQ" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block title %}{% translate "FAQ" %} | {{ sitecfg.site_name }}{% endblock %}
 {% block content %}
-<div class="container-x max-w-3xl py-14">
-  <h1 class="font-display text-4xl font-extrabold sm:text-5xl">{% translate "Frequently asked questions" %}</h1>
-  <div class="mt-10 divide-y divide-line rounded-2xl bg-surface ring-1 ring-line" x-data="{ open: 1 }">
+<div class="container-x max-w-3xl py-10 sm:py-16">
+  <h1 class="text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.05] tracking-[-0.03em]">{% translate "Frequently asked questions" %}</h1>
+  <div class="mt-10 divide-y divide-line border-y border-line" x-data="{ open: 1 }">
     {% for f in faqs %}
     <div>
-      <button type="button" class="flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-semibold" @click="open = open === {{ forloop.counter }} ? 0 : {{ forloop.counter }}" :aria-expanded="open === {{ forloop.counter }}">
-        {{ f.question }}<span class="shrink-0 text-muted transition" :class="open === {{ forloop.counter }} && 'rotate-180'">{% icon "chevron-down" "w-5 h-5" %}</span>
+      <button type="button" class="group flex w-full items-center justify-between gap-6 py-5 text-left text-base font-semibold sm:text-lg" @click="open = open === {{ forloop.counter }} ? 0 : {{ forloop.counter }}" :aria-expanded="open === {{ forloop.counter }}">
+        <span class="transition-colors group-hover:text-brand-fg">{{ f.question }}</span>
+        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted transition duration-300 {% if forloop.first %}rotate-45 bg-brand text-on-brand{% endif %}" :class="open === {{ forloop.counter }} ? 'rotate-45 !bg-brand !text-on-brand' : '!rotate-0 !bg-white/[.06] !text-muted'">{% icon "plus" "w-4 h-4" %}</span>
       </button>
-      <div x-show="open === {{ forloop.counter }}" x-transition.opacity {% if not forloop.first %}x-cloak{% endif %} class="prose-nx px-6 pb-6">{{ f.answer|safe }}</div>
+      <div x-show="open === {{ forloop.counter }}" x-transition.opacity {% if not forloop.first %}x-cloak{% endif %} class="prose-nx pb-6 pr-12">{{ f.answer|safe }}</div>
     </div>
     {% endfor %}
   </div>
-  <p class="mt-8 text-center text-muted">{% translate "Still stuck?" %} <a href="{% url 'support:contact' %}" class="font-semibold text-accent hover:underline">{% translate "Contact our team" %}</a></p>
+  <p class="mt-10 text-center text-muted">{% translate "Still stuck?" %} <a href="{% url 'support:contact' %}" class="link">{% translate "Contact our team" %}</a></p>
 </div>
 {% endblock %}

@@ -1,65 +1,63 @@
 {% extends "base.html" %}
 {% load i18n nexo %}
-{% block title %}{% translate "Events" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block title %}{% translate "Events" %} | {{ sitecfg.site_name }}{% endblock %}
 {% block content %}
-<section class="relative overflow-hidden border-b border-line">
-  <div class="orb -right-24 -top-32 h-80 w-80 text-brand opacity-30"></div>
-  <div class="container-x relative py-10 sm:py-14">
-    <h1 class="font-display text-4xl font-extrabold sm:text-5xl">{% translate "Find your next" %} <span class="text-gradient">{% translate "experience" %}</span></h1>
-    <div class="mt-6 flex max-w-2xl items-center gap-2 rounded-full bg-white/[.06] p-1.5 ring-1 ring-line-strong focus-within:ring-brand">
-      <span class="pl-3 text-subtle">{% icon "search" "w-5 h-5" %}</span>
-      <input id="q" type="search" name="q" value="{{ query }}" placeholder="{% translate 'Search artists, events or venues' %}"
-             class="min-w-0 flex-1 bg-transparent py-2 outline-none placeholder:text-subtle"
-             hx-get="{% url 'events:catalog' %}" hx-trigger="input changed delay:400ms, search" hx-include="#filters"
-             hx-target="#results" hx-select="#results" hx-swap="outerHTML" hx-push-url="true" hx-indicator="#results"
-             hx-select-oob="{% for c in categories %}#cnt-{{ c.slug }},{% endfor %}#result-count">
-    </div>
+<section class="container-x pb-6 pt-8 sm:pb-8 sm:pt-12">
+  <h1 class="text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.05] tracking-[-0.03em]">{% translate "Find your next" %} {% translate "experience" %}</h1>
+  <div class="search-bar mt-6 flex max-w-2xl items-center gap-2 rounded-full bg-surface p-1.5 pl-5 ring-1 ring-inset ring-white/10">
+    <span class="shrink-0 text-subtle">{% icon "search" "w-5 h-5" %}</span>
+    <input id="q" type="search" name="q" value="{{ query }}" placeholder="{% translate 'Search artists, events or venues' %}" aria-label="{% translate 'Search' %}"
+           class="min-w-0 flex-1 bg-transparent py-2.5 outline-none placeholder:text-subtle"
+           hx-get="{% url 'events:catalog' %}" hx-trigger="input changed delay:400ms, search" hx-include="#filters"
+           hx-target="#results" hx-select="#results" hx-swap="outerHTML" hx-push-url="true" hx-indicator="#results"
+           hx-select-oob="{% for c in categories %}#cnt-{{ c.slug }},{% endfor %}#result-count">
   </div>
 </section>
 
-<div class="container-x py-8" x-data="{ drawer: false }">
-  <div class="grid gap-8 lg:grid-cols-[260px_1fr]">
+<div class="container-x" x-data="{ drawer: false }">
+  <div class="grid gap-8 border-t border-line pt-8 lg:grid-cols-[16.5rem_1fr] lg:gap-12">
     <!-- Filters -->
     <aside>
-      <button type="button" class="btn-ghost w-full lg:hidden" @click="drawer = true">{% icon "filter" "w-4 h-4" %}{% translate "Filters" %}{% if selected %} · {{ selected|length }}{% endif %}</button>
+      <button type="button" class="btn-ghost w-full lg:hidden" @click="drawer = true">{% icon "filter" "w-4 h-4" %}{% translate "Filters" %}{% if selected %}<span class="grid h-5 min-w-5 place-items-center rounded-full bg-brand px-1.5 text-xs text-on-brand">{{ selected|length|bn_digits }}</span>{% endif %}</button>
       <div class="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm lg:hidden" x-show="drawer" x-transition.opacity x-cloak @click="drawer = false"></div>
       <form id="filters" action="{% url 'events:catalog' %}" method="get"
             hx-get="{% url 'events:catalog' %}" hx-trigger="change" hx-include="#q"
             hx-target="#results" hx-select="#results" hx-swap="outerHTML" hx-push-url="true" hx-indicator="#results"
             hx-select-oob="{% for c in categories %}#cnt-{{ c.slug }},{% endfor %}#result-count"
             :class="drawer ? 'translate-y-0' : 'translate-y-full lg:translate-y-0'"
-            class="fixed inset-x-0 bottom-0 z-[80] max-h-[85dvh] translate-y-full overflow-y-auto rounded-t-3xl bg-surface p-6 ring-1 ring-line transition-transform duration-300
-                   lg:sticky lg:top-24 lg:z-auto lg:max-h-[calc(100dvh-7rem)] lg:translate-y-0 lg:rounded-2xl lg:bg-transparent lg:p-0 lg:ring-0">
+            class="fixed inset-x-0 bottom-0 z-[80] max-h-[85dvh] translate-y-full overflow-y-auto overscroll-contain rounded-t-3xl bg-surface p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] ring-1 ring-line transition-transform duration-300 ease-[cubic-bezier(.16,1,.3,1)]
+                   lg:sticky lg:top-24 lg:z-auto lg:max-h-[calc(100dvh-7rem)] lg:translate-y-0 lg:rounded-none lg:bg-transparent lg:p-0 lg:ring-0">
+        <div class="mx-auto mb-4 h-1 w-10 rounded-full bg-white/15 lg:hidden" aria-hidden="true"></div>
         <div class="mb-5 flex items-center justify-between lg:hidden">
-          <h2 class="font-display text-lg font-bold">{% translate "Filters" %}</h2>
-          <button type="button" @click="drawer = false" class="text-muted" aria-label="{% translate 'Close' %}">{% icon "x" "w-5 h-5" %}</button>
+          <h2 class="text-lg font-bold">{% translate "Filters" %}</h2>
+          <button type="button" @click="drawer = false" class="btn-icon h-9 w-9" aria-label="{% translate 'Close' %}">{% icon "x" "w-4 h-4" %}</button>
         </div>
 
         <fieldset>
-          <legend class="mb-3 text-xs font-bold uppercase tracking-widest text-subtle">{% translate "When" %}</legend>
-          <div class="grid grid-cols-3 gap-1 rounded-full bg-white/5 p-1 ring-1 ring-line">
+          <legend class="mb-3 text-sm font-semibold text-text">{% translate "When" %}</legend>
+          <div class="grid grid-cols-3 gap-1 rounded-full bg-white/[.05] p-1 ring-1 ring-inset ring-white/[.08]">
             {% for value, label in status_choices %}
             <label class="cursor-pointer">
               <input type="radio" name="status" value="{{ value }}" class="peer sr-only" {% if status == value %}checked{% endif %}>
-              <span class="block rounded-full py-1.5 text-center text-sm font-semibold text-muted transition peer-checked:bg-gradient-brand peer-checked:text-on-brand peer-focus-visible:ring-2 peer-focus-visible:ring-accent">{{ label }}</span>
+              <span class="block whitespace-nowrap rounded-full px-1 py-1.5 text-center text-sm font-semibold text-muted transition-colors duration-200 hover:text-text peer-checked:bg-text peer-checked:text-ink peer-focus-visible:ring-2 peer-focus-visible:ring-brand-fg">{{ label }}</span>
             </label>
             {% endfor %}
           </div>
         </fieldset>
 
-        <fieldset class="mt-7">
-          <div class="mb-3 flex items-center justify-between">
-            <legend class="text-xs font-bold uppercase tracking-widest text-subtle">{% translate "Categories" %}</legend>
-            {% if selected %}<a href="{% url 'events:catalog' %}?status={{ status }}" class="text-xs font-semibold text-accent hover:underline">{% translate "Clear" %}</a>{% endif %}
+        <fieldset class="mt-8">
+          <div class="mb-2 flex items-center justify-between">
+            <legend class="text-sm font-semibold text-text">{% translate "Categories" %}</legend>
+            {% if selected %}<a href="{% url 'events:catalog' %}?status={{ status }}" class="text-xs font-semibold text-brand-fg hover:underline">{% translate "Clear" %}</a>{% endif %}
           </div>
-          <ul class="space-y-0.5">
+          <ul class="-mx-2.5 space-y-0.5">
             {% for c in categories %}
             <li>
-              <label class="group flex cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2 transition hover:bg-white/5">
+              <label class="group flex cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2 transition-colors hover:bg-white/[.05]">
                 <input type="checkbox" name="category" value="{{ c.slug }}" class="peer sr-only" {% if c.slug in selected %}checked{% endif %}>
-                <span class="grid h-5 w-5 shrink-0 place-items-center rounded-md ring-1 ring-line-strong text-transparent transition peer-checked:bg-gradient-brand peer-checked:text-on-brand peer-checked:ring-transparent peer-focus-visible:ring-2 peer-focus-visible:ring-accent">{% icon "check" "w-3.5 h-3.5" %}</span>
-                <span class="flex-1 text-sm text-muted transition group-hover:text-text peer-checked:text-text">{{ c.name }}</span>
-                <span id="cnt-{{ c.slug }}" class="rounded-full px-2 py-0.5 text-xs tabular-nums {% if c.n %}bg-white/5 text-muted{% else %}text-subtle/60{% endif %}">{{ c.n|bn_digits }}</span>
+                <span class="grid h-5 w-5 shrink-0 place-items-center rounded-md text-transparent ring-1 ring-inset ring-white/20 transition peer-checked:bg-brand peer-checked:text-on-brand peer-checked:ring-transparent peer-focus-visible:ring-2 peer-focus-visible:ring-brand-fg">{% icon "check" "w-3.5 h-3.5" %}</span>
+                <span class="flex-1 text-sm text-muted transition-colors group-hover:text-text peer-checked:font-semibold peer-checked:text-text">{{ c.name }}</span>
+                <span id="cnt-{{ c.slug }}" class="text-xs tabular-nums {% if c.n %}text-muted{% else %}text-subtle/60{% endif %}">{{ c.n|bn_digits }}</span>
               </label>
             </li>
             {% endfor %}
@@ -71,29 +69,27 @@
     </aside>
 
     <!-- Results -->
-    <div>
-      <div class="mb-5 flex items-center justify-between">
-        <p id="result-count" class="text-sm text-muted">{% blocktranslate count n=page.paginator.count %}{{ n }} event{% plural %}{{ n }} events{% endblocktranslate %}</p>
-      </div>
+    <div class="min-w-0">
+      <p id="result-count" class="mb-6 text-sm text-muted">{% blocktranslate count n=page.paginator.count %}{{ n }} event{% plural %}{{ n }} events{% endblocktranslate %}</p>
       <div id="results" class="results-dim">
         {% if page.object_list %}
-        <div class="grid grid-cols-1 gap-x-3 gap-y-7 min-[340px]:grid-cols-2 sm:gap-x-6 sm:gap-y-10 xl:grid-cols-3">
+        <div class="grid grid-cols-1 gap-x-3 gap-y-8 min-[340px]:grid-cols-2 sm:gap-x-6 sm:gap-y-10 xl:grid-cols-3">
           {% for event in page.object_list %}
             {% include "partials/event_card.html" with reveal_from=3 %}
           {% endfor %}
         </div>
         {% if page.has_other_pages %}
-        <nav class="mt-12 flex items-center justify-center gap-2" aria-label="{% translate 'Pagination' %}"
+        <nav class="mt-14 flex items-center justify-center gap-3" aria-label="{% translate 'Pagination' %}"
              hx-boost="true" hx-target="#results" hx-select="#results" hx-swap="outerHTML show:window:top" hx-indicator="#results">
-          {% if page.has_previous %}<a href="?{% for c in selected %}category={{ c }}&amp;{% endfor %}status={{ status }}&amp;q={{ query|urlencode }}&amp;page={{ page.previous_page_number }}" class="btn-ghost">{% icon "chevron-left" "w-4 h-4" %}{% translate "Previous" %}</a>{% endif %}
-          <span class="px-3 text-sm text-muted">{% blocktranslate with p=page.number t=page.paginator.num_pages %}Page {{ p }} of {{ t }}{% endblocktranslate %}</span>
-          {% if page.has_next %}<a href="?{% for c in selected %}category={{ c }}&amp;{% endfor %}status={{ status }}&amp;q={{ query|urlencode }}&amp;page={{ page.next_page_number }}" class="btn-ghost">{% translate "Next" %}{% icon "chevron-right" "w-4 h-4" %}</a>{% endif %}
+          {% if page.has_previous %}<a href="?{% for c in selected %}category={{ c }}&amp;{% endfor %}status={{ status }}&amp;q={{ query|urlencode }}&amp;page={{ page.previous_page_number }}" class="btn-ghost btn-sm">{% icon "chevron-left" "w-4 h-4" %}{% translate "Previous" %}</a>{% endif %}
+          <span class="px-2 text-sm text-muted">{% blocktranslate with p=page.number t=page.paginator.num_pages %}Page {{ p }} of {{ t }}{% endblocktranslate %}</span>
+          {% if page.has_next %}<a href="?{% for c in selected %}category={{ c }}&amp;{% endfor %}status={{ status }}&amp;q={{ query|urlencode }}&amp;page={{ page.next_page_number }}" class="btn-ghost btn-sm">{% translate "Next" %}{% icon "chevron-right" "w-4 h-4" %}</a>{% endif %}
         </nav>
         {% endif %}
         {% else %}
-        <div class="card grid place-items-center px-6 py-20 text-center">
-          <span class="grid h-14 w-14 place-items-center rounded-2xl bg-white/5 text-brand-2">{% icon "search" "w-7 h-7" %}</span>
-          <h2 class="mt-5 font-display text-xl font-bold">{% translate "No events match — yet" %}</h2>
+        <div class="grid place-items-center rounded-2xl border border-dashed border-line-strong px-6 py-20 text-center">
+          <span class="grid h-14 w-14 place-items-center rounded-full bg-white/[.06] text-muted">{% icon "search" "w-6 h-6" %}</span>
+          <h2 class="mt-5 text-xl font-bold">{% translate "No events match yet" %}</h2>
           <p class="mt-2 max-w-sm text-muted">{% translate "Try another category or clear your filters. New events land every week." %}</p>
           <a href="{% url 'events:catalog' %}" class="btn-ghost mt-6">{% translate "Clear filters" %}</a>
         </div>

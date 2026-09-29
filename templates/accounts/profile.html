@@ -1,23 +1,25 @@
 {% extends "base.html" %}
-{% load i18n %}
-{% block title %}{% translate "Profile" %} — {{ sitecfg.site_name }}{% endblock %}
+{% load i18n nexo %}
+{% block title %}{% translate "Profile" %} | {{ sitecfg.site_name }}{% endblock %}
 {% block content %}
-<div class="container-x py-10">
-  <h1 class="font-display text-3xl font-extrabold sm:text-4xl">{% translate "Profile" %}</h1>
+<div class="container-x py-10 sm:py-12">
+  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{% translate "Profile" %}</h1>
   <div class="mt-6">{% include "accounts/_nav.html" %}</div>
   <div class="grid gap-6 lg:grid-cols-[1fr_320px]">
-    <form method="post" class="card space-y-5 p-6">
+    <form method="post" class="card space-y-5 p-5 sm:p-7">
       {% csrf_token %}
-      <div><label class="label">{% translate "Email" %}</label><input class="input opacity-60" value="{{ user.email }}" disabled></div>
+      <div><label class="label">{% translate "Email" %}</label><input class="input cursor-not-allowed opacity-60" value="{{ user.email }}" disabled aria-label="{% translate 'Email' %}"></div>
       {% include "partials/field.html" with field=form.full_name %}
       {% include "partials/field.html" with field=form.phone %}
       {% include "partials/field.html" with field=form.preferred_language %}
       <button class="btn-primary">{% translate "Save changes" %}</button>
     </form>
-    <div class="card space-y-3 p-6 text-sm">
-      <h2 class="font-display text-lg font-bold">{% translate "Security" %}</h2>
-      <a href="{% url 'account_change_password' %}" class="block text-accent hover:underline">{% translate "Change password" %}</a>
-      <a href="{% url 'account_email' %}" class="block text-accent hover:underline">{% translate "Manage email addresses" %}</a>
+    <div class="card self-start p-5 text-sm sm:p-7">
+      <h2 class="text-lg font-bold">{% translate "Security" %}</h2>
+      <div class="mt-3 divide-y divide-line">
+        <a href="{% url 'account_change_password' %}" class="group flex items-center justify-between py-3 font-semibold transition-colors hover:text-brand-fg">{% translate "Change password" %}<span class="text-subtle transition-transform group-hover:translate-x-0.5">{% icon "chevron-right" "w-4 h-4" %}</span></a>
+        <a href="{% url 'account_email' %}" class="group flex items-center justify-between py-3 font-semibold transition-colors hover:text-brand-fg">{% translate "Manage email addresses" %}<span class="text-subtle transition-transform group-hover:translate-x-0.5">{% icon "chevron-right" "w-4 h-4" %}</span></a>
+      </div>
     </div>
   </div>
 </div>

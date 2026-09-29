@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load i18n nexo %}
-{% block title %}{% translate "Organizer account" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block title %}{% translate "Organizer account" %} | {{ sitecfg.site_name }}{% endblock %}
 {% block content %}
 <div class="container-x grid min-h-[60vh] max-w-xl place-items-center py-16">
   <div class="card w-full p-8 text-center sm:p-10">
     {% if profile.status == "approved" %}
       <span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-success/15 text-success">{% icon "check" "w-8 h-8" %}</span>
-      <h1 class="mt-5 font-display text-3xl font-extrabold">{% translate "You're approved!" %}</h1>
+      <h1 class="mt-5 text-3xl font-bold tracking-tight">{% translate "You're approved!" %}</h1>
       <p class="mt-2 text-muted">{% translate "Create your first event and start selling." %}</p>
       <div class="mt-7 flex flex-wrap justify-center gap-3">
         <a href="{% url 'organizers:event_new' %}" class="btn-primary btn-lg">{% icon "plus" "w-5 h-5" %}{% translate "Create event" %}</a>
@@ -14,9 +14,9 @@
       </div>
     {% else %}
       <span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-warning/15 text-warning">{% icon "clock" "w-8 h-8" %}</span>
-      <h1 class="mt-5 font-display text-3xl font-extrabold">{% translate "Application under review" %}</h1>
+      <h1 class="mt-5 text-3xl font-bold tracking-tight">{% translate "Application under review" %}</h1>
       <p class="mt-2 text-muted">{% blocktranslate with name=profile.name %}Thanks, {{ name }}! Our team is reviewing your details. We'll email you as soon as there's a decision.{% endblocktranslate %}</p>
-      <p class="mt-6 text-sm text-subtle">{% translate "Questions?" %} <a href="{% url 'support:contact' %}?reason=list_event" class="text-accent hover:underline">{% translate "Contact the organizer team" %}</a></p>
+      <p class="mt-6 text-sm text-subtle">{% translate "Questions?" %} <a href="{% url 'support:contact' %}?reason=list_event" class="link">{% translate "Contact the organizer team" %}</a></p>
     {% endif %}
   </div>
 </div>

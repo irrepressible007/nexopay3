@@ -1,35 +1,35 @@
 {% load i18n nexo %}
 <div id="nav-user" class="flex items-center gap-1.5">
 {% if user.is_authenticated %}
-  <span class="hidden md:block"><a href="{% url 'accounts:tickets' %}" class="btn-ghost max-w-[11rem] !py-2" title="{% translate 'My tickets' %}">{% icon "ticket" "w-4 h-4 shrink-0" %}<span class="truncate">{% translate "My tickets" %}</span></a></span>
+  <span class="hidden md:block"><a href="{% url 'accounts:tickets' %}" class="btn-ghost btn-sm max-w-[11rem]" title="{% translate 'My tickets' %}">{% icon "ticket" "w-4 h-4 shrink-0" %}<span class="truncate">{% translate "My tickets" %}</span></a></span>
   <div class="relative" x-data="{ m: false }" @click.outside="m = false" @keydown.escape="m = false">
-    <button type="button" @click="m = !m" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-brand text-sm font-bold text-on-brand" aria-label="{% translate 'Account' %}" :aria-expanded="m">
+    <button type="button" @click="m = !m" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand text-sm font-bold text-on-brand ring-2 ring-transparent transition hover:ring-brand-fg/40" aria-label="{% translate 'Account' %}" :aria-expanded="m">
       {{ user.get_short_name|slice:":1"|upper }}
     </button>
-    <div x-show="m" x-cloak x-transition.origin.top.right class="absolute right-0 mt-2 w-[min(15rem,calc(100vw-2rem))] card p-2 shadow-2xl">
+    <div x-show="m" x-cloak x-transition.origin.top.right class="absolute right-0 mt-2 w-[min(15rem,calc(100vw-2rem))] rounded-2xl bg-surface-2 p-2 shadow-(--shadow-float) ring-1 ring-inset ring-white/10">
       <div class="px-3 py-2 text-sm"><div class="font-semibold text-text truncate">{{ user.get_full_name }}</div><div class="text-subtle truncate">{{ user.email }}</div></div>
       <div class="my-1 h-px bg-line"></div>
-      <a href="{% url 'accounts:tickets' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "ticket" "w-4 h-4 shrink-0" %}{% translate "My tickets" %}</a>
-      <a href="{% url 'accounts:orders' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "calendar" "w-4 h-4" %}{% translate "Orders" %}</a>
-      <a href="{% url 'accounts:profile' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "user" "w-4 h-4" %}{% translate "Profile" %}</a>
+      <a href="{% url 'accounts:tickets' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/[.06]">{% icon "ticket" "w-4 h-4 shrink-0" %}{% translate "My tickets" %}</a>
+      <a href="{% url 'accounts:orders' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/[.06]">{% icon "calendar" "w-4 h-4" %}{% translate "Orders" %}</a>
+      <a href="{% url 'accounts:profile' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/[.06]">{% icon "user" "w-4 h-4" %}{% translate "Profile" %}</a>
       {% if user.organizer %}
-      <a href="{% url 'organizers:dashboard' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "chart" "w-4 h-4" %}{% translate "Organizer dashboard" %}</a>
+      <a href="{% url 'organizers:dashboard' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/[.06]">{% icon "chart" "w-4 h-4" %}{% translate "Organizer dashboard" %}</a>
       {% endif %}
       {% if user.scanner_access.exists %}
-      <a href="{% url 'scan:home' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "scan" "w-4 h-4" %}{% translate "Scan tickets" %}</a>
+      <a href="{% url 'scan:home' %}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/[.06]">{% icon "scan" "w-4 h-4" %}{% translate "Scan tickets" %}</a>
       {% endif %}
       {% if user.is_staff %}
-      <a href="/{{ ADMIN_URL|default:'control-room/' }}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5">{% icon "shield" "w-4 h-4" %}{% translate "Admin" %}</a>
+      <a href="/{{ ADMIN_URL|default:'control-room/' }}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/[.06]">{% icon "shield" "w-4 h-4" %}{% translate "Admin" %}</a>
       {% endif %}
       <div class="my-1 h-px bg-line"></div>
       <form method="post" action="{% url 'account_logout' %}">{% csrf_token %}
-        <button class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-danger hover:bg-white/5">{% icon "logout" "w-4 h-4" %}{% translate "Log out" %}</button>
+        <button class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-danger hover:bg-white/[.06]">{% icon "logout" "w-4 h-4" %}{% translate "Log out" %}</button>
       </form>
     </div>
   </div>
 {% else %}
-  <a href="{% url 'account_login' %}?next={{ request.headers.HX_Current_URL|default:request.get_full_path|urlencode }}" class="hidden max-w-[8rem] truncate px-3 py-2 text-sm font-semibold text-muted hover:text-text md:block">{% translate "Log in" %}</a>
-  <span class="hidden sm:block"><a href="{% url 'account_signup' %}" class="btn-primary max-w-[11rem] !px-4 !py-2" title="{% translate 'Sign up' %}"><span class="truncate">{% translate "Sign up" %}</span></a></span>
+  <a href="{% url 'account_login' %}?next={{ request.headers.HX_Current_URL|default:request.get_full_path|urlencode }}" class="hidden max-w-[8rem] truncate rounded-full px-3 py-2 text-sm font-semibold text-muted transition-colors hover:text-text md:block">{% translate "Log in" %}</a>
+  <span class="hidden sm:block"><a href="{% url 'account_signup' %}" class="btn-primary btn-sm max-w-[11rem]" title="{% translate 'Sign up' %}"><span class="truncate">{% translate "Sign up" %}</span></a></span>
 {% endif %}
 </div>
 {% if oob %}<div id="toasts" hx-swap-oob="innerHTML">{% include "partials/messages.html" %}</div>{% endif %}

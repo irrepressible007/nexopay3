@@ -115,27 +115,8 @@ _HIGHLIGHT = re.compile(r"\*([^*]+)\*")
 
 @register.filter
 def highlight(text):
-    """Admins wrap words in *asterisks* to show them in the brand gradient."""
+    """Admins wrap words in *asterisks* to show them in the accent colour."""
     from django.utils.html import escape
 
     escaped = escape(text or "")
-    return mark_safe(_HIGHLIGHT.sub(r'<span class="text-gradient">\1</span>', escaped))
-
-
-@register.filter
-def reveal_words(text):
-    """Like `highlight`, but each word is its own span (with its position in --i) so a headline
-    can animate in word by word. Splits on spaces only, so Bangla words stay whole."""
-    from django.utils.html import escape
-
-    text, words, pos = text or "", [], 0
-    parts = []
-    for match in _HIGHLIGHT.finditer(text):
-        parts += [(text[pos:match.start()], False), (match.group(1), True)]
-        pos = match.end()
-    parts.append((text[pos:], False))
-    for part, marked in parts:
-        for word in part.split():
-            css = "word text-gradient" if marked else "word"
-            words.append(f'<span class="{css}" style="--i:{len(words)}">{escape(word)}</span>')
-    return mark_safe(" ".join(words))
+    return mark_safe(_HIGHLIGHT.sub(r'<span class="text-hl">\1</span>', escaped))

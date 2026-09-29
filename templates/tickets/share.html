@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block title %}{{ ticket.event.title }} — {% translate "Ticket" %}{% endblock %}
+{% block title %}{{ ticket.event.title }} | {% translate "Ticket" %}{% endblock %}
 {% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
 {% block content %}
 <div class="container-x py-10">{% include "accounts/_pass.html" %}</div>

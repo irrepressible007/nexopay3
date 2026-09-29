@@ -1,19 +1,21 @@
 {% extends "base.html" %}
 {% load i18n nexo %}
-{% block title %}{% translate "Contact us" %} — {{ sitecfg.site_name }}{% endblock %}
+{% block title %}{% translate "Contact us" %} | {{ sitecfg.site_name }}{% endblock %}
 {% block content %}
-<div class="container-x py-14">
-  <div class="grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
+<div class="container-x py-10 sm:py-16">
+  <div class="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
     <div>
-      <h1 class="font-display text-4xl font-extrabold sm:text-5xl">{% translate "How can we" %} <span class="text-gradient">{% translate "help?" %}</span></h1>
-      <p class="mt-4 text-muted">{% translate "Pick a topic so your message reaches the right team straight away." %}</p>
+      <h1 class="text-[clamp(2.1rem,5vw,3.25rem)] font-bold leading-[1.05] tracking-[-0.03em]">{% translate "How can we" %} {% translate "help?" %}</h1>
+      <p class="mt-4 max-w-md text-muted">{% translate "Pick a topic so your message reaches the right team straight away." %}</p>
       <ul class="mt-8 space-y-3 text-sm">
-        {% if sitecfg.contact_email %}<li class="flex items-center gap-3"><span class="grid h-10 w-10 place-items-center rounded-xl bg-white/5 text-brand-2 ring-1 ring-line">{% icon "mail" "w-4 h-4" %}</span>{{ sitecfg.contact_email }}</li>{% endif %}
-        {% if sitecfg.contact_phone %}<li class="flex items-center gap-3"><span class="grid h-10 w-10 place-items-center rounded-xl bg-white/5 text-accent ring-1 ring-line">{% icon "phone" "w-4 h-4" %}</span>{{ sitecfg.contact_phone }}</li>{% endif %}
+        {% with ic="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted ring-1 ring-inset ring-white/[.08]" %}
+        {% if sitecfg.contact_email %}<li><a href="mailto:{{ sitecfg.contact_email }}" class="flex min-w-0 items-center gap-3 font-medium transition-colors hover:text-brand-fg"><span class="{{ ic }}">{% icon "mail" "w-4 h-4" %}</span><span class="min-w-0 [overflow-wrap:break-word]">{{ sitecfg.contact_email }}</span></a></li>{% endif %}
+        {% if sitecfg.contact_phone %}<li><a href="tel:{{ sitecfg.contact_phone }}" class="flex items-center gap-3 font-medium transition-colors hover:text-brand-fg"><span class="{{ ic }}">{% icon "phone" "w-4 h-4" %}</span>{{ sitecfg.contact_phone }}</a></li>{% endif %}
+        {% endwith %}
       </ul>
-      <a href="{% url 'cms:faq' %}" class="btn-ghost mt-8">{% translate "Read the FAQ" %}</a>
+      <a href="{% url 'cms:faq' %}" class="btn-ghost mt-8">{% translate "Read the FAQ" %}{% icon "arrow-right" "w-4 h-4" %}</a>
     </div>
-    <form method="post" class="card space-y-4 p-6 sm:p-8">
+    <form method="post" class="card space-y-4 p-5 sm:p-8">
       {% csrf_token %}
       {{ form.website }}
       {% include "partials/field.html" with field=form.reason %}

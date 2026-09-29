@@ -12,7 +12,6 @@ from django.conf import settings
 from django.utils import timezone, translation
 from django.utils.formats import date_format
 from fpdf import FPDF
-from fpdf.pattern import LinearGradient
 
 FONT_DIR = Path(settings.BASE_DIR) / "assets" / "fonts"
 
@@ -73,7 +72,6 @@ def render_tickets_pdf(tickets, language: str = "en") -> bytes:
     site = SiteSettings.load()
     logo = _header_logo()
     primary = _hex_to_rgb(site.primary_color)
-    secondary = _hex_to_rgb(site.secondary_color)
     pdf = _TicketPDF()
 
     with translation.override(language):
@@ -82,9 +80,9 @@ def render_tickets_pdf(tickets, language: str = "en") -> bytes:
             pdf.add_page()
             w = pdf.w
 
-            # Header band in the brand gradient.
-            with pdf.use_pattern(LinearGradient(0, 0, w, 34, [primary, secondary])):
-                pdf.rect(0, 0, w, 34, "F")
+            # Header band in the brand colour.
+            pdf.set_fill_color(*primary)
+            pdf.rect(0, 0, w, 34, "F")
             pdf.set_text_color(*_hex_to_rgb(site.on_brand_color))
             try:
                 if hasattr(logo, "seek"):
