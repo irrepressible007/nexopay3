@@ -164,3 +164,84 @@ def test_admin_saves_payment_credentials_encrypted(client):
     assert setting.get_credentials()["app_secret"] == "SECRET"
     # The saved secret is never sent back to the browser.
     assert b"SECRET" not in client.get(url).content
+
+
+class TestOutgoingEmailSettings:
+    def form(self, **changes):
+        from django.db.models.fields.files import FieldFile
+        from django.forms.models import model_to_dict
+
+        from apps.cms.admin import SiteSettingsForm
+
+        site = SiteSettings.load()
+        data = {k: v for k, v in model_to_dict(site).items() if v is not None and not isinstance(v, FieldFile)}
+        data.update(changes)
+        return SiteSettingsForm(data=data, instance=site)
+
+    def test_personal_address_with_the_cpanel_server_is_refused(self):
+        form = self.form(email_host="mail.nexopay.com.bd", email_username="someone@gmail.com", email_password="pw")
+        assert not form.is_valid()
+        assert "Gmail address only works" in str(form.errors["email_username"])
+
+    def test_gmail_address_with_gmail_server_is_accepted(self):
+        form = self.form(email_host="smtp.gmail.com", email_username="someone@gmail.com", email_password="app-pw",
+                         email_from_address="someone@gmail.com")
+        assert form.is_valid(), form.errors
+
+    def test_from_address_defaults_to_the_mailbox(self):
+        form = self.form(email_host="mail.nexopay.com.bd", email_username="tickets@nexopay.com.bd",
+                         email_password="pw", email_from_address="")
+        assert form.is_valid(), form.errors
+        site = form.save()
+        assert site.email_from_address == "tickets@nexopay.com.bd"
+        assert site.email_password == "pw"
+
+    def test_port_and_security_must_match(self):
+        form = self.form(email_host="mail.nexopay.com.bd", email_username="tickets@nexopay.com.bd",
+                         email_password="pw", email_port=587, email_use_ssl=True, email_use_tls=False)
+        assert not form.is_valid()
+        assert "Port 587 needs SSL off and TLS on" in str(form.errors)
+
+    def test_empty_host_needs_nothing_else(self):
+        assert self.form(email_host="", email_username="", email_from_address="").is_valid()
+
+    def test_browser_autofill_is_switched_off(self, client):
+        import re
+
+        client.force_login(UserFactory(is_staff=True, is_superuser=True))
+        html = client.get(reverse("admin:cms_sitesettings_change", args=[SiteSettings.load().pk])).content.decode()
+        assert 'autocomplete="new-password"' in re.search(r'<input[^>]*name="email_password"[^>]*>', html).group(0)
+        assert 'autocomplete="off"' in re.search(r'<input[^>]*name="email_username"[^>]*>', html).group(0)
+
+
+def test_send_test_email_button(client, settings):
+    from django.contrib.messages import get_messages
+    from django.core import mail
+
+    client.force_login(UserFactory(is_staff=True, is_superuser=True, email="boss@example.com"))
+    url = reverse("admin:cms_sitesettings_send_test_email", args=[SiteSettings.load().pk])
+    response = client.get(url)
+    assert response.status_code == 302
+    assert [message.to for message in mail.outbox] == [["boss@example.com"]]
+    assert "Test email sent to boss@example.com" in [str(m) for m in get_messages(response.wsgi_request)][-1]
+
+    # A mail server that can't be reached is explained to the admin, not raised.
+    settings.EMAIL_BACKEND = "apps.core.mail.SiteEmailBackend"
+    site = SiteSettings.load()
+    site.email_host, site.email_port, site.email_use_ssl, site.email_use_tls = "127.0.0.1", 1, False, False
+    site.save()
+    response = client.get(url)
+    assert response.status_code == 302
+    assert "couldn't reach the mail server" in [str(m) for m in get_messages(response.wsgi_request)][-1]
+
+
+def test_payment_credential_fields_are_not_autofilled(client):
+    import re
+
+    from apps.payments.models import PaymentProviderSetting
+
+    client.force_login(UserFactory(is_staff=True, is_superuser=True))
+    setting = PaymentProviderSetting.objects.get(provider="bkash")
+    html = client.get(reverse("admin:payments_paymentprovidersetting_change", args=[setting.pk])).content.decode()
+    assert 'autocomplete="off"' in re.search(r'<input[^>]*name="cred_username"[^>]*>', html).group(0)
+    assert 'autocomplete="new-password"' in re.search(r'<input[^>]*name="cred_password"[^>]*>', html).group(0)

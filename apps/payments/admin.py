@@ -5,6 +5,7 @@ from django.utils.html import format_html
 from modeltranslation.admin import TranslationAdmin
 from unfold.admin import ModelAdmin
 from unfold.decorators import action, display
+from unfold.widgets import UnfoldAdminPasswordToggleWidget, UnfoldAdminTextareaWidget, UnfoldAdminTextInputWidget
 
 from .models import PaymentAttempt, PaymentProviderSetting, Payout, Refund
 from .registry import provider_class
@@ -29,11 +30,14 @@ class ProviderSettingForm(forms.ModelForm):
         for spec in self.credential_specs:
             name = f"cred_{spec.name}"
             has_value = bool(saved.get(spec.name))
+            # autocomplete: these are the provider's credentials - the browser must not fill in a saved login.
             if spec.secret:
-                widget = forms.Textarea(attrs={"rows": 3}) if spec.multiline else forms.PasswordInput(render_value=False)
+                widget = (UnfoldAdminTextareaWidget(attrs={"rows": 3, "autocomplete": "off"}) if spec.multiline
+                          else UnfoldAdminPasswordToggleWidget(attrs={"autocomplete": "new-password"}))
                 help_text = ("Saved ✓ — leave empty to keep it. " if has_value else "") + spec.help
             else:
-                widget = forms.Textarea(attrs={"rows": 3}) if spec.multiline else forms.TextInput()
+                widget = (UnfoldAdminTextareaWidget(attrs={"rows": 3, "autocomplete": "off"}) if spec.multiline
+                          else UnfoldAdminTextInputWidget(attrs={"autocomplete": "off"}))
                 help_text = spec.help
             self.fields[name] = forms.CharField(
                 label=spec.label, required=False, widget=widget, help_text=help_text,

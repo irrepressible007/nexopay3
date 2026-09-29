@@ -1,5 +1,9 @@
+import smtplib
+import ssl
+
 from django import forms
 from django.contrib import admin, messages
+from django.core.mail import EmailMessage, get_connection
 from django.db import models
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -7,6 +11,7 @@ from django.utils.html import format_html
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
 from unfold.admin import ModelAdmin, TabularInline
 from unfold.decorators import action, display
+from unfold.widgets import UnfoldAdminPasswordToggleWidget
 
 from .models import (
     FaqItem, FooterColumn, HeaderLink, HeroSlide, HomeSection, MenuItem, Page, Partner, SiteSettings, SiteText,
@@ -16,15 +21,63 @@ from apps.core.cache import bump_content_version
 from .sitetext import bump_version
 
 
+# Personal mail services only send their own addresses, through their own servers.
+PERSONAL_MAIL = {
+    "gmail.com": ("Gmail", ("gmail", "google")),
+    "googlemail.com": ("Gmail", ("gmail", "google")),
+    "yahoo.com": ("Yahoo Mail", ("yahoo",)),
+    "outlook.com": ("Outlook", ("outlook", "office365")),
+    "hotmail.com": ("Outlook", ("outlook", "office365")),
+    "live.com": ("Outlook", ("outlook", "office365")),
+}
+
+
 class SiteSettingsForm(forms.ModelForm):
     email_password = forms.CharField(
-        required=False, widget=forms.PasswordInput(render_value=False),
-        help_text="Leave empty to keep the saved password.",
+        required=False,
+        # "new-password": the browser must not fill in a saved login here - this is the mailbox's own password.
+        widget=UnfoldAdminPasswordToggleWidget(attrs={"autocomplete": "new-password"}),
     )
 
     class Meta:
         model = SiteSettings
         fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["email_username"].widget.attrs["autocomplete"] = "off"
+        self.fields["email_username"].help_text = "The mailbox's full address, e.g. tickets@nexopay.com.bd"
+        self.fields["email_password"].help_text = (
+            "Saved ✓ — leave empty to keep it." if self.instance.email_password_encrypted
+            else "The mailbox's password (cPanel › Email Accounts)."
+        )
+
+    def clean(self):
+        data = super().clean()
+        host = (data.get("email_host") or "").strip().lower()
+        if not host:  # the server's own mail configuration is used
+            return data
+        user = (data.get("email_username") or "").strip()
+        domain = user.rpartition("@")[2].lower()
+        if not user:
+            self.add_error("email_username", "Enter the mailbox's full address, e.g. tickets@nexopay.com.bd.")
+        elif domain in PERSONAL_MAIL and not any(word in host for word in PERSONAL_MAIL[domain][1]):
+            name = PERSONAL_MAIL[domain][0]
+            self.add_error("email_username", f"A {name} address only works with {name}'s own mail server, not "
+                                             f"{host}. Enter the cPanel mailbox's address, e.g. tickets@nexopay.com.bd.")
+        if not data.get("email_from_address"):
+            if "@" in user:
+                data["email_from_address"] = user
+            else:
+                self.add_error("email_from_address", "Enter the address emails are sent from.")
+        if not data.get("email_password") and not self.instance.email_password_encrypted:
+            self.add_error("email_password", "Enter the mailbox's password.")
+        port, use_ssl, use_tls = data.get("email_port"), data.get("email_use_ssl"), data.get("email_use_tls")
+        if port == 465 and (not use_ssl or use_tls):
+            self.add_error("email_use_ssl", "Port 465 needs SSL on and TLS off.")
+        elif port == 587 and (use_ssl or not use_tls):
+            self.add_error("email_use_tls", "Port 587 needs SSL off and TLS on.")
+        return data
 
     def save(self, commit=True):
         obj = super().save(commit=False)
@@ -33,6 +86,21 @@ class SiteSettingsForm(forms.ModelForm):
         if commit:
             obj.save()
         return obj
+
+
+def explain_mail_error(exc: Exception) -> str:
+    """The likely cause of an SMTP failure, in plain words."""
+    if isinstance(exc, smtplib.SMTPAuthenticationError):
+        return "the mail server rejected the username or password."
+    if isinstance(exc, smtplib.SMTPSenderRefused):
+        return "the mail server won't send from that 'from' address - use the mailbox's own address."
+    if isinstance(exc, smtplib.SMTPRecipientsRefused):
+        return "the mail server refused the recipient address."
+    if isinstance(exc, (ssl.SSLError, smtplib.SMTPServerDisconnected)):
+        return "the connection security didn't match the port - 465 needs SSL on, 587 needs TLS on."
+    if isinstance(exc, OSError):
+        return "couldn't reach the mail server - check the host and port."
+    return "the mail server returned an error."
 
 
 @admin.register(SiteSettings)
@@ -56,6 +124,28 @@ class SiteSettingsAdmin(ModelAdmin, TranslationAdmin):
                                            "Leave the host empty to use the server configuration."}),
         ("Operations", {"fields": ("maintenance_mode",)}),
     )
+    actions_detail = ["send_test_email"]
+
+    @action(description="Send a test email", url_path="send-test-email", permissions=["change"])
+    def send_test_email(self, request, object_id):
+        back = redirect(reverse("admin:cms_sitesettings_change", args=[object_id]))
+        recipient = request.user.email
+        if not recipient:
+            messages.error(request, "Your admin account has no email address to send the test to.")
+            return back
+        try:
+            EmailMessage(
+                subject=f"{SiteSettings.load().site_name}: test email",
+                body="This test was sent from Site settings › Outgoing email. Ticket emails go out the same way.",
+                to=[recipient],
+                connection=get_connection(timeout=20),
+            ).send()
+        except Exception as exc:  # any failure is reported to the admin, not raised
+            messages.error(request, f"Sending failed: {explain_mail_error(exc)} (Details: {exc})")
+        else:
+            messages.success(request, f"Test email sent to {recipient} with the saved settings. "
+                                      "Check the inbox and the spam folder.")
+        return back
 
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()
