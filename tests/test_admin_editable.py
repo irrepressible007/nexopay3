@@ -235,6 +235,56 @@ def test_send_test_email_button(client, settings):
     assert "couldn't reach the mail server" in [str(m) for m in get_messages(response.wsgi_request)][-1]
 
 
+FAKE_SENDMAIL = """
+import os, pathlib, sys
+pathlib.Path(os.environ["FAKE_SENDMAIL_LOG"]).write_text(repr(sys.argv[1:]) + "\\n" + sys.stdin.read())
+if os.environ.get("FAKE_SENDMAIL_REFUSE"):
+    sys.stderr.write("550 sender not allowed")
+    sys.exit(1)
+"""
+
+
+class TestServerMailProgram:
+    """With no email host in the admin, mail goes to the server's own mail program (sendmail)."""
+
+    @pytest.fixture
+    def fake_sendmail(self, settings, tmp_path, monkeypatch):
+        import sys
+
+        script = tmp_path / "fake_sendmail.py"
+        script.write_text(FAKE_SENDMAIL)
+        log = tmp_path / "sent.txt"
+        monkeypatch.setenv("FAKE_SENDMAIL_LOG", str(log))
+        settings.SENDMAIL_COMMAND = [sys.executable, str(script)]
+        settings.EMAIL_BACKEND = "apps.core.mail.SiteEmailBackend"
+        site = SiteSettings.load()
+        site.email_host, site.email_from_name, site.email_from_address = "", "Nexopay", "tickets@nexopay.com.bd"
+        site.save()
+        return log
+
+    def test_message_is_handed_to_the_mail_program(self, fake_sendmail):
+        from ast import literal_eval
+
+        from django.core.mail import EmailMessage
+
+        sent = EmailMessage("Your tickets", "Body text", to=["buyer@example.com"], bcc=["copy@example.com"]).send()
+        assert sent == 1
+        args, message = fake_sendmail.read_text().split("\n", 1)
+        assert literal_eval(args) ==["-i", "-f", "tickets@nexopay.com.bd", "--", "buyer@example.com", "copy@example.com"]
+        assert "From: Nexopay <tickets@nexopay.com.bd>" in message
+        assert "Subject: Your tickets" in message
+        assert "copy@example.com" not in message  # Bcc stays hidden
+
+    def test_refusal_is_explained_by_the_test_button(self, fake_sendmail, client, monkeypatch):
+        from django.contrib.messages import get_messages
+
+        monkeypatch.setenv("FAKE_SENDMAIL_REFUSE", "1")
+        client.force_login(UserFactory(is_staff=True, is_superuser=True, email="boss@example.com"))
+        response = client.get(reverse("admin:cms_sitesettings_send_test_email", args=[SiteSettings.load().pk]))
+        message = [str(m) for m in get_messages(response.wsgi_request)][-1]
+        assert "mail program didn't accept it" in message and "550 sender not allowed" in message
+
+
 def test_payment_credential_fields_are_not_autofilled(client):
     import re
 

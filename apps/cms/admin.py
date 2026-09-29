@@ -17,6 +17,7 @@ from .models import (
     FaqItem, FooterColumn, HeaderLink, HeroSlide, HomeSection, MenuItem, Page, Partner, SiteSettings, SiteText,
 )
 from apps.core.cache import bump_content_version
+from apps.core.mail import MailProgramError
 
 from .sitetext import bump_version
 
@@ -45,6 +46,8 @@ class SiteSettingsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["email_host"].help_text = ("Empty = this server's own mail system (recommended). "
+                                               "Only for an outside mail service, e.g. smtp.gmail.com.")
         self.fields["email_username"].widget.attrs["autocomplete"] = "off"
         self.fields["email_username"].help_text = "The mailbox's full address, e.g. tickets@nexopay.com.bd"
         self.fields["email_password"].help_text = (
@@ -90,6 +93,8 @@ class SiteSettingsForm(forms.ModelForm):
 
 def explain_mail_error(exc: Exception) -> str:
     """The likely cause of an SMTP failure, in plain words."""
+    if isinstance(exc, MailProgramError):
+        return "the server's mail program didn't accept it."
     if isinstance(exc, smtplib.SMTPAuthenticationError):
         return "the mail server rejected the username or password."
     if isinstance(exc, smtplib.SMTPSenderRefused):
@@ -120,8 +125,10 @@ class SiteSettingsAdmin(ModelAdmin, TranslationAdmin):
                       "description": "Default fees apply to organizers without their own fee settings."}),
         ("Outgoing email", {"fields": ("email_from_name", "email_from_address", "email_host", "email_port",
                                        "email_use_ssl", "email_use_tls", "email_username", "email_password"),
-                            "description": "Fill in the mailbox that sends tickets (from cPanel › Email Accounts). "
-                                           "Leave the host empty to use the server configuration."}),
+                            "description": "Leave “Email host” empty to send through this server's own mail system "
+                                           "(recommended on cPanel: no password needed) - just set the from address, "
+                                           "a mailbox that exists in cPanel › Email Accounts. Fill in the host only "
+                                           "to use an outside mail service instead."}),
         ("Operations", {"fields": ("maintenance_mode",)}),
     )
     actions_detail = ["send_test_email"]
