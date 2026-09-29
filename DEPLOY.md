@@ -107,10 +107,18 @@ holds, opens/closes event sales, reconciles payments and sends ticket emails. Ch
 
 ## 5. Cloudflare caching (after the site works)
 
-Rules › Cache Rules → *Eligible for cache*, respect origin `Cache-Control`, for requests where
-URI path does **not** start with `/control-room`, `/account`, `/checkout`, `/orders`, `/payments`, `/scan`,
-`/organizers`, `/accounts`, `/t/`, `/_/`. Public pages send `s-maxage=60`, so Cloudflare absorbs traffic spikes
-when a big event goes on sale — that is what keeps us inside the 20-entry-process limit.
+Caching › Cache Rules → Create rule, custom filter expression (Edit expression):
+
+```
+(http.host eq "nexopay.com.bd" and not starts_with(http.request.uri.path, "/static/") and not starts_with(http.request.uri.path, "/media/") and not starts_with(http.request.uri.path, "/control-room"))
+```
+
+Then: Cache eligibility **Eligible for cache**; Edge TTL **Use cache-control header if present, bypass cache if
+not**; Browser TTL **Respect origin TTL**. Only pages built with `public_cache` (home, event list and detail,
+CMS pages, FAQ) send `s-maxage` — identical for every visitor, no cookies; per-user parts load as HTMX
+fragments — so only they are cached; everything else (accounts, checkout, admin, …) has no such header and is
+bypassed. Static and media files keep Cloudflare's default caching. Cloudflare then absorbs traffic spikes when
+a big event goes on sale — that is what keeps us inside the 20-entry-process limit.
 Also: Speed › Optimization → enable Brotli; Caching › Configuration → Browser cache TTL "Respect existing headers".
 
 ## 6. Updating

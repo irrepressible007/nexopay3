@@ -373,13 +373,14 @@ strip_block() {
 # --- CGI script ----------------------------------------------------------------------------
 # direct:   loads Django for every request (slow)
 # forward:  relays to the app server; loads Django itself only while that is down
-# fallback: like forward, but answers only the PHP forwarder (it must show the shared key)
+# fallback: the PHP forwarder's fallback. Like forward, but loads Django itself only for that
+#           forwarder (it shows the shared key): anyone else calling it gets forwarded or a 503.
 
 write_cgi() {
-  local mode="$1" forward=True local_only=False flags=" -S"
+  local mode="$1" forward=True php_fallback=False flags=" -S"
   case "$mode" in
     direct) forward=False; flags="" ;;
-    fallback) local_only=True ;;
+    fallback) php_fallback=True ;;
   esac
   mkdir -p "$(dirname "$CGI_SCRIPT")"
   {
@@ -394,7 +395,7 @@ import sys
 APP_DIR = "$APP_DIR"
 APP_SOCKET = "$SOCK"
 FORWARD = $forward
-LOCAL_ONLY = $local_only
+PHP_FALLBACK = $php_fallback
 BRIDGE_KEY = "${BRIDGE_KEY:-}"
 PY
     cat <<'PY'
@@ -406,13 +407,18 @@ SKIP_ENV = {b"HTTP_CONNECTION", b"HTTP_KEEP_ALIVE", b"HTTP_PROXY_CONNECTION", b"
             b"HTTP_TRANSFER_ENCODING", b"HTTP_UPGRADE", b"HTTP_PROXY", b"HTTP_CONTENT_LENGTH", b"HTTP_CONTENT_TYPE"}
 
 
+_php_caller = None
+
+
 def called_by_php_forwarder():
     """True only for this site's PHP forwarder, which proves it with the shared key."""
-    if not BRIDGE_KEY:
-        return False
-    import hmac
+    global _php_caller
+    if _php_caller is None:
+        import hmac
 
-    return hmac.compare_digest(os.environb.get(b"HTTP_X_NEXOPAY_BRIDGE_KEY", b""), BRIDGE_KEY.encode())
+        given = os.environb.get(b"HTTP_X_NEXOPAY_BRIDGE_KEY", b"")
+        _php_caller = bool(BRIDGE_KEY) and hmac.compare_digest(given, BRIDGE_KEY.encode())
+    return _php_caller
 
 
 def visitor():
@@ -512,19 +518,24 @@ def forward(conn):
     return True
 
 
+def unavailable():
+    sys.stdout.write("Status: 503 Service Unavailable\r\nContent-Type: text/plain\r\nRetry-After: 5\r\n\r\n"
+                     "The site is restarting. Please go back and try again in a moment.\n")
+
+
 def main():
-    if LOCAL_ONLY and not called_by_php_forwarder():
-        sys.stdout.write("Status: 404 Not Found\r\nContent-Type: text/plain\r\n\r\nNot found\n")
-        return
     if not FORWARD or os.environ.get("NEXOPAY_BRIDGE_DIRECT"):
         return run_directly()
+    # Loading Django here takes a second of CPU: as the PHP forwarder's fallback, only for that forwarder.
+    may_run_directly = not PHP_FALLBACK or called_by_php_forwarder()
     conn = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     conn.settimeout(3)
     try:
         conn.connect(APP_SOCKET)
     except OSError:
         conn.close()
-        return run_directly()  # app server down: serve the slow way rather than fail
+        # App server down: serve the slow way rather than fail.
+        return run_directly() if may_run_directly else unavailable()
     conn.settimeout(120)
     try:
         if forward(conn):
@@ -533,10 +544,9 @@ def main():
         pass
     finally:
         conn.close()
-    if os.environ.get("REQUEST_METHOD", "GET") in ("GET", "HEAD"):
+    if may_run_directly and os.environ.get("REQUEST_METHOD", "GET") in ("GET", "HEAD"):
         return run_directly()  # nothing was sent yet and it's safe to repeat
-    sys.stdout.write("Status: 503 Service Unavailable\r\nContent-Type: text/plain\r\nRetry-After: 5\r\n\r\n"
-                     "The site is restarting. Please go back and try again in a moment.\n")
+    unavailable()
 
 
 main()
