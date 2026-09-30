@@ -1,6 +1,7 @@
 """
-Layout audit: loads every page at common screen sizes and reports anything that
-overflows the screen or its own box. Run against a dev server after
+Layout audit: loads every page at common screen sizes (280 px folding phones to 4K) and
+reports anything that overflows the screen or its own box. Run it twice when the home page
+has variants: with featured events that have pictures (poster hero) and without (text hero). Run against a dev server after
 `python manage.py seed_stress` to test worst-case admin content.
 
     python tools/layout_audit.py [--base http://127.0.0.1:8000] [--shots out_dir] [--only mobile]
@@ -15,8 +16,11 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 VIEWPORTS = {
+    # Folding phones (cover screens) and very narrow Androids first: the easiest place to break.
+    "fold-280": (280, 653, True), "narrow-300": (300, 640, True), "fold-344": (344, 882, True),
     "phone-320": (320, 568, True), "phone-360": (360, 740, True), "phone-375": (375, 667, True),
-    "phone-390": (390, 844, True), "phone-414": (414, 896, True), "phone-landscape": (844, 390, True),
+    "phone-390": (390, 844, True), "phone-414": (414, 896, True), "phone-430": (430, 932, True),
+    "phone-landscape": (844, 390, True), "small-landscape": (568, 320, True), "tablet-600": (600, 960, True),
     "tablet-768": (768, 1024, True), "tablet-820": (820, 1180, True), "tablet-landscape": (1024, 768, False),
     "laptop-1280": (1280, 800, False), "laptop-1366": (1366, 768, False), "desktop-1440": (1440, 900, False),
     "desktop-1920": (1920, 1080, False), "desktop-2560": (2560, 1440, False),

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 06:14+0600\n"
+"POT-Creation-Date: 2026-09-30 09:11+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2043,7 +2043,6 @@ msgid "Profile"
 msgstr "প্রোফাইল"
 
 #: templates/accounts/_pass.html:47 templates/accounts/_pass.html:64
-#| msgid "Event ended"
 msgid "Event details"
 msgstr "ইভেন্টের বিস্তারিত"
 
@@ -2247,8 +2246,9 @@ msgstr ""
 "পেমেন্ট করুন, সাথে সাথে ফোনে QR টিকিট পান।"
 
 #: templates/cms/sections/hero.html:66 templates/events/catalog.html:9
-msgid "Search artists, events or venues"
-msgstr "শিল্পী, ইভেন্ট বা ভেন্যু খুঁজুন"
+#| msgid "Search events, venues…"
+msgid "Search events…"
+msgstr "ইভেন্ট খুঁজুন…"
 
 #: templates/cms/sections/hero.html:66 templates/cms/sections/hero.html:67
 #: templates/events/catalog.html:9 templates/partials/header.html:20

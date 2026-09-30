@@ -68,8 +68,8 @@
       <dl class="mt-6 grid gap-4 text-sm sm:grid-cols-3">
         {% with ic="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted ring-1 ring-inset ring-white/[.08]" %}
         <div class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "calendar" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><dt class="sr-only">{% translate "Date" %}</dt><dd class="font-semibold">{{ event.starts_at|date:"D, j F Y"|bn_digits }}</dd><dd class="text-muted">{{ event.starts_at|date:"g:i A"|bn_digits }}{% if event.ends_at %} - {{ event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</dd></div></div>
-        <div class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "pin" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><dt class="sr-only">{% translate "Venue" %}</dt><dd class="truncate font-semibold">{{ event.venue_name|default:_("Online event") }}</dd><dd class="truncate text-muted">{{ event.city }}</dd></div></div>
-        <div class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "building" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><dt class="text-muted">{% translate "Organized by" %}</dt><dd class="truncate font-semibold">{{ event.organizer.name }}</dd></div></div>
+        <div class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "pin" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><dt class="sr-only">{% translate "Venue" %}</dt><dd class="font-semibold">{{ event.venue_name|default:_("Online event") }}</dd><dd class="text-muted">{{ event.city }}</dd></div></div>
+        <div class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "building" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><dt class="text-muted">{% translate "Organized by" %}</dt><dd class="font-semibold">{{ event.organizer.name }}</dd></div></div>
         {% endwith %}
       </dl>
     </header>
@@ -140,7 +140,7 @@
             {% else %}<span class="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-brand text-xl font-bold text-on-brand">{{ event.organizer.name|slice:":1" }}</span>{% endif %}
             <div class="min-w-0">
               <p class="font-semibold">{{ event.organizer.name }}</p>
-              {% if event.organizer.about %}<p class="line-clamp-2 text-sm text-muted">{{ event.organizer.about }}</p>{% endif %}
+              {% if event.organizer.about %}<p class="line-clamp-4 text-sm text-muted">{{ event.organizer.about }}</p>{% endif %}
             </div>
           </div>
           <div class="flex flex-wrap gap-2">

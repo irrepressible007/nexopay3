@@ -52,9 +52,9 @@
 {% with posters=block.posters %}
 {% if posters or section.image %}{% firstof "1" as visual %}{% endif %}
 <section class="relative">
-  <div class="container-x grid items-center gap-10 pb-6 pt-8 sm:pt-14 lg:gap-14 lg:pb-2 lg:pt-14 xl:gap-20
+  <div class="container-x grid grid-cols-1 items-center gap-10 pb-6 pt-8 sm:pt-14 lg:gap-14 lg:pb-2 lg:pt-14 xl:gap-20
               {% if visual %}lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]{% else %}justify-items-center pb-4 pt-16 text-center sm:pt-24{% endif %}">
-    <div class="min-w-0 {% if visual %}max-w-[40rem]{% else %}max-w-3xl{% endif %}">
+    <div class="w-full min-w-0 {% if visual %}max-w-[40rem]{% else %}max-w-3xl{% endif %}">
       <h1 class="hero-in text-[clamp(2.4rem,5.2vw,3.75rem)] font-bold leading-[1.04] tracking-[-0.035em]" style="--d: 0">
         {% if section.title %}{{ section.title|highlight }}{% else %}{{ sitecfg.tagline|highlight }}{% endif %}
       </h1>
@@ -63,15 +63,15 @@
       <form action="{% url 'events:catalog' %}" method="get" role="search" style="--d: 2"
             class="hero-in search-bar mt-8 flex w-full max-w-xl items-center gap-2 rounded-full bg-surface p-1.5 pl-5 ring-1 ring-inset ring-white/10 {% if not visual %}mx-auto{% endif %}">
         <span class="shrink-0 text-subtle">{% icon "search" "w-5 h-5" %}</span>
-        <input type="search" name="q" placeholder="{% translate 'Search artists, events or venues' %}" aria-label="{% translate 'Search' %}" class="min-w-0 flex-1 bg-transparent py-2.5 text-base outline-none placeholder:text-subtle">
+        <input type="search" name="q" placeholder="{% translate 'Search events…' %}" aria-label="{% translate 'Search' %}" class="min-w-0 flex-1 bg-transparent py-2.5 text-base outline-none placeholder:text-subtle">
         <button class="btn-primary h-11 w-11 shrink-0 !p-0 sm:w-auto sm:!px-5" aria-label="{% translate 'Search' %}">{% icon "search" "w-5 h-5 sm:hidden" %}<span class="hidden sm:inline">{% translate "Search" %}</span></button>
       </form>
 
       {% if block.hero_categories %}
-      <div class="hero-in no-scrollbar -mx-4 mt-5 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 {% if not visual %}sm:justify-center{% endif %}" style="--d: 3">
+      <div class="hero-in mt-5 flex flex-wrap gap-2 {% if not visual %}justify-center{% endif %}" style="--d: 3">
         {% for cat in block.hero_categories %}
-        <a href="{% url 'events:catalog' %}?category={{ cat.slug }}" class="chip group shrink-0" style="--c: {{ cat.accent_color }}">
-          <span class="text-[var(--c)] transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110">{% category_icon cat "w-4 h-4 shrink-0" %}</span><span class="whitespace-nowrap">{{ cat.name }}</span>
+        <a href="{% url 'events:catalog' %}?category={{ cat.slug }}" class="chip group max-w-full" style="--c: {{ cat.accent_color }}">
+          <span class="text-[var(--c)] transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110">{% category_icon cat "w-4 h-4 shrink-0" %}</span><span class="min-w-0 truncate">{{ cat.name }}</span>
         </a>
         {% endfor %}
       </div>
@@ -83,7 +83,7 @@
     <div class="poster-stack-in min-w-0 lg:pr-[14%]" data-parallax x-data="posterStack({{ posters|length }})"
          @mouseenter="pause()" @mouseleave="play()" @focusin="pause()" @focusout="play()"
          aria-roledescription="carousel" aria-label="{% translate 'Featured events' %}">
-      <div class="poster-stack no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:block lg:aspect-[4/3] lg:overflow-visible lg:px-0">
+      <div class="poster-stack edge-fade-lg no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:block lg:aspect-[4/3] lg:overflow-visible lg:px-0">
         {# The front poster's own colours, blurred into a soft light behind the stack. #}
         <div class="pointer-events-none absolute -inset-[8%] -z-10 hidden lg:block" aria-hidden="true">
           {% for e in posters %}
@@ -94,7 +94,7 @@
         </div>
         {% for e in posters %}
         <a href="{{ e.get_absolute_url }}" data-vt aria-roledescription="slide"
-           class="poster-card group relative block aspect-[4/3] w-[84%] shrink-0 snap-start overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-inset ring-white/10 sm:w-[58%] lg:w-auto"
+           class="poster-card group relative block aspect-square w-[84%] shrink-0 snap-start sm:aspect-[4/3] overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-inset ring-white/10 sm:w-[58%] lg:w-auto"
            style="--depth: {{ forloop.counter0 }}" data-depth="{{ forloop.counter0 }}" {% if forloop.counter0 > 2 %}data-hidden{% endif %}
            :style="'--depth:' + Math.min(depth({{ forloop.counter0 }}), 3)" :data-depth="depth({{ forloop.counter0 }})"
            :data-hidden="depth({{ forloop.counter0 }}) > 2 ? '' : null" :class="out === {{ forloop.counter0 }} && 'is-out'"
@@ -108,8 +108,8 @@
           <div class="absolute inset-x-0 bottom-0 z-[3] flex items-end justify-between gap-3 p-4 sm:p-5">
             <div class="min-w-0">
               <p class="text-[13px] font-semibold text-white/75">{{ e.starts_at|date:"D, j M"|bn_digits }} · {{ e.starts_at|date:"g:i A"|bn_digits }}</p>
-              <p class="mt-1 line-clamp-2 text-lg font-bold leading-tight text-white sm:text-xl xl:text-2xl">{{ e.title }}</p>
-              <p class="mt-1 truncate text-sm text-white/70">{{ e.venue_name|default:_("Online") }}</p>
+              <p class="mt-1 line-clamp-3 text-lg font-bold leading-tight text-white sm:line-clamp-2 sm:text-xl xl:text-2xl">{{ e.title }}</p>
+              <p class="mt-1 line-clamp-2 text-sm text-white/70">{{ e.venue_name|default:_("Online") }}</p>
             </div>
             <span class="price shrink-0 rounded-full bg-white px-3.5 py-1.5 text-sm font-bold text-ink transition-colors duration-300 group-hover:bg-brand group-hover:text-on-brand">
               {% if e.min_price == 0 %}{% translate "Free" %}{% elif e.min_price %}{{ e.min_price|taka }}{% else %}{% translate "Details" %}{% endif %}

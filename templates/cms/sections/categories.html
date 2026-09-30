@@ -2,7 +2,7 @@
 <section class="container-x section-gap">
   {% include "cms/sections/_heading.html" %}
   {# Pills: one swipeable row on phones, wrapping on larger screens. Counts only when there is something to count. #}
-  <div class="no-scrollbar -mx-4 flex snap-x gap-2.5 overflow-x-auto px-4 py-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
+  <div class="edge-fade no-scrollbar -mx-4 flex snap-x gap-2.5 overflow-x-auto px-4 py-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
     {% for cat in block.categories %}
     <a href="{% url 'events:catalog' %}?category={{ cat.slug }}"
        class="reveal cat-pill group snap-start" style="--c: {{ cat.accent_color }}; --i: {{ forloop.counter0 }}">

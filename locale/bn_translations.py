@@ -578,6 +578,7 @@ TR = {
     "Read the FAQ": "সাধারণ জিজ্ঞাসা পড়ুন",
     "Send message": "বার্তা পাঠান",
     "%(n)s sold": "%(n)sটি বিক্রি",
+    "Search events…": "ইভেন্ট খুঁজুন…",
     # --- ticket pass
     "Event details": "ইভেন্টের বিস্তারিত",
     "Show QR code": "QR কোড দেখান",

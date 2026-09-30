@@ -233,6 +233,20 @@
   background-size: 400% 100%;
   @apply animate-shimmer rounded-xl;
 }
+/* Swipe rows on phones (edge-fade) and up to tablets (edge-fade-lg) fade out at the right edge,
+   so the half-visible next item reads as "swipe for more" rather than as something cut off. */
+@utility edge-fade {
+  @media (max-width: 639px) {
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 3rem), transparent);
+            mask-image: linear-gradient(90deg, #000 calc(100% - 3rem), transparent);
+  }
+}
+@utility edge-fade-lg {
+  @media (max-width: 1023px) {
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 3rem), transparent);
+            mask-image: linear-gradient(90deg, #000 calc(100% - 3rem), transparent);
+  }
+}
 /* Below-the-fold sections are only drawn when scrolled near: faster first paint on long pages. */
 @utility cv-auto { content-visibility: auto; contain-intrinsic-size: auto 40rem; }
 

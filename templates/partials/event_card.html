@@ -25,9 +25,9 @@
     {% elif event.status == "cancelled" %}<span class="badge absolute left-2.5 top-2.5 bg-black/70 text-white sm:left-3 sm:top-3">{% translate "Cancelled" %}</span>{% endif %}
   </div>
   <div class="px-0.5 pt-3">
-    <p class="truncate text-[13px] font-semibold text-brand-fg"><time datetime="{{ event.starts_at|date:'c' }}">{{ event.starts_at|date:"D, j M"|bn_digits }} · {{ event.starts_at|date:"g:i A"|bn_digits }}</time></p>
-    <h3 class="mt-1 line-clamp-2 text-[15px] font-bold leading-snug text-text sm:text-base">{{ event.title }}</h3>
-    <p class="mt-1 truncate text-[13px] text-muted sm:text-sm">{{ event.venue_name|default:_("Online") }}{% if event.city and not event.is_online %}, {{ event.city }}{% endif %}</p>
+    <p class="text-[13px] font-semibold text-brand-fg"><time datetime="{{ event.starts_at|date:'c' }}">{{ event.starts_at|date:"D, j M"|bn_digits }} · {{ event.starts_at|date:"g:i A"|bn_digits }}</time></p>
+    <h3 class="mt-1 line-clamp-3 text-[15px] font-bold leading-snug text-text sm:text-base">{{ event.title }}</h3>
+    <p class="mt-1 line-clamp-2 text-[13px] text-muted sm:text-sm">{{ event.venue_name|default:_("Online") }}{% if event.city and not event.is_online %}, {{ event.city }}{% endif %}</p>
     <p class="mt-2 text-sm">
       {% if event.min_price is None %}<span class="text-subtle">{% translate "Tickets TBA" %}</span>
       {% elif event.min_price == 0 %}<span class="font-semibold text-success">{% translate "Free" %}</span>

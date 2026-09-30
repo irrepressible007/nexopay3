@@ -1,4 +1,4 @@
-{% load static %}{% if sitecfg.logo %}<img src="{{ sitecfg.logo.url }}" alt="{{ sitecfg.site_name }}" class="block h-7 w-auto max-w-[9.5rem] object-contain object-left sm:h-8 sm:max-w-[12rem]" height="32">{% else %}<picture>
+{% load static %}{% if sitecfg.logo %}<img src="{{ sitecfg.logo.url }}" alt="{{ sitecfg.site_name }}" class="block h-auto max-h-7 w-auto max-w-[min(9.5rem,100%)] object-contain object-left sm:max-h-8 sm:max-w-[12rem]" height="32">{% else %}<picture>
   <source srcset="{% static 'img/logo-on-dark.webp' %}" type="image/webp">
-  <img src="{% static 'img/logo-on-dark.png' %}" alt="{{ sitecfg.site_name }}" width="163" height="32" class="block h-7 w-auto sm:h-8">
+  <img src="{% static 'img/logo-on-dark.png' %}" alt="{{ sitecfg.site_name }}" width="163" height="32" class="block h-auto max-h-7 w-auto max-w-full sm:max-h-8">
 </picture>{% endif %}

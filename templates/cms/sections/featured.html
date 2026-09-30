@@ -12,7 +12,7 @@
     </div>
     {% endif %}
   </div>
-  <div x-ref="row" class="scroll-row -mx-4 px-4 sm:mx-0 sm:px-0">
+  <div x-ref="row" class="scroll-row edge-fade -mx-4 px-4 sm:mx-0 sm:px-0">
     {% for event in block.events %}
     <a href="{{ event.get_absolute_url }}" data-vt class="reveal group relative block w-[85%] sm:w-[31rem]" style="--i: {{ forloop.counter0 }}">
       <div data-vt-img data-tilt="6" class="relative aspect-[16/10] overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-inset ring-white/[.06] transition-[box-shadow,scale] duration-300 group-hover:shadow-(--shadow-float) group-active:scale-[.99]">
@@ -25,8 +25,8 @@
         <div class="absolute inset-x-0 bottom-0 z-[3] flex items-end justify-between gap-3 p-5 sm:p-6">
           <div class="min-w-0">
             <p class="text-[13px] font-semibold text-white/75">{{ event.starts_at|date:"D, j M"|bn_digits }} · {{ event.starts_at|date:"g:i A"|bn_digits }}</p>
-            <h3 class="mt-1 line-clamp-2 text-xl font-bold leading-tight text-white sm:text-2xl">{{ event.title }}</h3>
-            <p class="mt-1 truncate text-sm text-white/70">{{ event.venue_name|default:_("Online") }}</p>
+            <h3 class="mt-1 line-clamp-3 text-xl font-bold leading-tight text-white sm:line-clamp-2 sm:text-2xl">{{ event.title }}</h3>
+            <p class="mt-1 line-clamp-2 text-sm text-white/70">{{ event.venue_name|default:_("Online") }}</p>
           </div>
           <span class="price shrink-0 rounded-full bg-white px-3.5 py-1.5 text-sm font-bold text-ink transition-colors duration-300 group-hover:bg-brand group-hover:text-on-brand">
             {% if event.min_price == 0 %}{% translate "Free" %}{% elif event.min_price %}{{ event.min_price|taka }}{% else %}{% translate "Details" %}{% endif %}

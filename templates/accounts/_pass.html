@@ -34,7 +34,7 @@
         <div class="ticket-notch relative mt-5 border-t border-dashed border-line-strong px-6 py-5">
           <dl class="grid grid-cols-2 gap-4 text-left text-sm">
             <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Ticket" %}</dt><dd class="font-semibold">{{ ticket.ticket_type.name }}</dd></div>
-            <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Name" %}</dt><dd class="truncate font-semibold">{{ ticket.holder_name|default:ticket.owner.get_full_name }}</dd></div>
+            <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Name" %}</dt><dd class="font-semibold">{{ ticket.holder_name|default:ticket.owner.get_full_name }}</dd></div>
             <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Code" %}</dt><dd class="font-mono font-semibold tracking-wider">{{ ticket.code }}</dd></div>
             <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Order" %}</dt><dd class="font-mono font-semibold">{{ ticket.order.reference }}</dd></div>
           </dl>
