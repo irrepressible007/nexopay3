@@ -65,6 +65,10 @@ CHECK_JS = """
       continue;
     }
     const s = getComputedStyle(el);
+    // Phones: nothing may scroll sideways (a swipe row hides content people rarely find).
+    if (vw < 640 && ['auto', 'scroll'].includes(s.overflowX) && el.scrollWidth > el.clientWidth + 2) {
+      issues.push(`scrolls sideways on a phone (${el.scrollWidth} > ${el.clientWidth}): ${describe(el)}`);
+    }
     const textish = el.childNodes.length && [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
     if (textish && s.overflowX === 'visible' && s.display !== 'inline' && el.scrollWidth > el.clientWidth + 2
         && el.clientWidth > 0 && !clipped(el)) {

@@ -27,18 +27,18 @@
 
 <section class="mt-8 card overflow-hidden">
   <h2 class="border-b border-line px-6 py-4 text-lg font-bold">{% translate "Sales by ticket type" %}</h2>
-  <div class="overflow-x-auto">
-    <table class="w-full min-w-[640px] text-sm">
+  <div class="sm:overflow-x-auto">
+    <table class="table-stack w-full text-sm sm:min-w-[640px]">
       <thead class="text-left text-xs font-semibold text-subtle"><tr><th class="px-6 py-3">{% translate "Ticket" %}</th><th class="px-3 py-3 text-right">{% translate "Price" %}</th><th class="px-3 py-3">{% translate "Sold" %}</th><th class="px-3 py-3 text-right">{% translate "Held" %}</th><th class="px-6 py-3 text-right">{% translate "Revenue" %}</th></tr></thead>
       <tbody class="divide-y divide-line">
         {% for t in types %}
         {% with r=revenue|get_item:t.pk %}
         <tr>
-          <td class="px-6 py-3 font-medium">{{ t.name }}{% if not t.is_available %} <span class="badge bg-white/10 text-subtle">{% translate "Off sale" %}</span>{% endif %}</td>
-          <td class="px-3 py-3 text-right tabular-nums">{{ t.price|taka }}</td>
-          <td class="px-3 py-3"><div class="flex items-center gap-3"><div class="h-1.5 w-28 overflow-hidden rounded-full bg-white/10"><div class="h-full rounded-full bg-brand" style="width: {% widthratio t.sold_count t.stock 100 %}%"></div></div><span class="tabular-nums">{{ t.sold_count }} / {{ t.stock }}</span></div></td>
-          <td class="px-3 py-3 text-right tabular-nums text-muted">{{ t.held_count }}</td>
-          <td class="px-6 py-3 text-right font-semibold tabular-nums">{{ r.gross|default:0|taka }}</td>
+          <td class="px-6 py-3 font-medium" data-label="{% translate 'Ticket' %}">{{ t.name }}{% if not t.is_available %} <span class="badge bg-white/10 text-subtle">{% translate "Off sale" %}</span>{% endif %}</td>
+          <td class="px-3 py-3 text-right tabular-nums" data-label="{% translate 'Price' %}">{{ t.price|taka }}</td>
+          <td class="px-3 py-3" data-label="{% translate 'Sold' %}"><div class="flex items-center gap-3"><div class="h-1.5 w-28 overflow-hidden rounded-full bg-white/10"><div class="h-full rounded-full bg-brand" style="width: {% widthratio t.sold_count t.stock 100 %}%"></div></div><span class="tabular-nums">{{ t.sold_count }} / {{ t.stock }}</span></div></td>
+          <td class="px-3 py-3 text-right tabular-nums text-muted" data-label="{% translate 'Held' %}">{{ t.held_count }}</td>
+          <td class="px-6 py-3 text-right font-semibold tabular-nums" data-label="{% translate 'Revenue' %}">{{ r.gross|default:0|taka }}</td>
         </tr>
         {% endwith %}
         {% endfor %}

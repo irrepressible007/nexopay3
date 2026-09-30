@@ -2,12 +2,12 @@
 {% load i18n nexo %}
 {% block content %}
 <div class="border-b border-line">
-  <div class="container-x flex items-center gap-4 overflow-x-auto py-3 text-sm">
-    <span class="flex shrink-0 items-center gap-2 font-semibold">
+  <div class="container-x flex flex-wrap items-center gap-x-4 gap-y-2 py-3 text-sm">
+    <span class="flex min-w-0 basis-full items-center gap-2 font-semibold sm:basis-auto">
       {% if request.organizer.logo %}<img src="{{ request.organizer.logo.url }}" alt="" class="h-7 w-7 rounded-lg object-cover">{% else %}<span class="grid h-7 w-7 place-items-center rounded-lg bg-brand text-xs font-bold text-on-brand">{{ request.organizer.name|slice:":1" }}</span>{% endif %}
       {{ request.organizer.name }}
     </span>
-    <span class="h-5 w-px shrink-0 bg-line"></span>
+    <span class="hidden h-5 w-px shrink-0 bg-line sm:block"></span>
     {% url 'organizers:dashboard' as d %}{% url 'organizers:event_new' as n %}{% url 'scan:home' as s %}
     <a href="{{ d }}" class="relative isolate shrink-0 rounded-full px-3.5 py-1.5 font-semibold transition-colors {% if request.path == d %}text-ink{% else %}text-muted hover:text-text{% endif %}">{% if request.path == d %}<span class="absolute inset-0 -z-10 rounded-full bg-text" style="view-transition-name: org-tab" aria-hidden="true"></span>{% endif %}{% translate "Dashboard" %}</a>
     <a href="{{ n }}" class="relative isolate shrink-0 rounded-full px-3.5 py-1.5 font-semibold transition-colors {% if request.path == n %}text-ink{% else %}text-muted hover:text-text{% endif %}">{% if request.path == n %}<span class="absolute inset-0 -z-10 rounded-full bg-text" style="view-transition-name: org-tab" aria-hidden="true"></span>{% endif %}{% translate "New event" %}</a>

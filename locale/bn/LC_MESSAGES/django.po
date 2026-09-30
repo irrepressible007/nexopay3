@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 09:11+0600\n"
+"POT-Creation-Date: 2026-09-30 09:30+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1903,7 +1903,7 @@ msgstr "অনলাইন"
 
 #: apps/tickets/rendering.py:105 templates/accounts/_pass.html:36
 #: templates/accounts/_pass.html:54 templates/organizers/event_detail.html:32
-#: templates/tickets/share.html:3
+#: templates/organizers/event_detail.html:37 templates/tickets/share.html:3
 msgid "Ticket"
 msgstr "টিকিট"
 
@@ -2193,6 +2193,12 @@ msgstr "পেজটি হালনাগাদ করা হচ্ছে। �
 msgid "See all"
 msgstr "সব দেখুন"
 
+#: templates/cms/sections/categories.html:17
+#, python-format
+#| msgid "%(n)s orders"
+msgid "%(n)s more"
+msgstr "আরও %(n)sটি"
+
 #: templates/cms/sections/faq.html:5
 msgid "Questions, answered"
 msgstr "আপনার প্রশ্নের উত্তর"
@@ -2246,7 +2252,6 @@ msgstr ""
 "পেমেন্ট করুন, সাথে সাথে ফোনে QR টিকিট পান।"
 
 #: templates/cms/sections/hero.html:66 templates/events/catalog.html:9
-#| msgid "Search events, venues…"
 msgid "Search events…"
 msgstr "ইভেন্ট খুঁজুন…"
 
@@ -2981,18 +2986,22 @@ msgid "Sales by ticket type"
 msgstr "টিকিটের ধরন অনুযায়ী বিক্রি"
 
 #: templates/organizers/event_detail.html:32
+#: templates/organizers/event_detail.html:38
 msgid "Price"
 msgstr "মূল্য"
 
 #: templates/organizers/event_detail.html:32
+#: templates/organizers/event_detail.html:39
 msgid "Sold"
 msgstr "বিক্রি"
 
 #: templates/organizers/event_detail.html:32
+#: templates/organizers/event_detail.html:40
 msgid "Held"
 msgstr "সংরক্ষিত"
 
 #: templates/organizers/event_detail.html:32
+#: templates/organizers/event_detail.html:41
 msgid "Revenue"
 msgstr "আয়"
 

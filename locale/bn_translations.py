@@ -579,6 +579,7 @@ TR = {
     "Send message": "বার্তা পাঠান",
     "%(n)s sold": "%(n)sটি বিক্রি",
     "Search events…": "ইভেন্ট খুঁজুন…",
+    "%(n)s more": "আরও %(n)sটি",
     # --- ticket pass
     "Event details": "ইভেন্টের বিস্তারিত",
     "Show QR code": "QR কোড দেখান",

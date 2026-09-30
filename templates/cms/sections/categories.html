@@ -1,15 +1,21 @@
 {% load i18n nexo %}
-<section class="container-x section-gap">
+<section class="container-x section-gap" x-data="{ all: false }">
   {% include "cms/sections/_heading.html" %}
-  {# Pills: one swipeable row on phones, wrapping on larger screens. Counts only when there is something to count. #}
-  <div class="edge-fade no-scrollbar -mx-4 flex snap-x gap-2.5 overflow-x-auto px-4 py-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
+  {# Pills wrap onto lines (nothing scrolls sideways). Phones show the first eight until "+N more" is tapped. Counts only when there is something to count. #}
+  <div class="flex flex-wrap gap-2.5">
     {% for cat in block.categories %}
     <a href="{% url 'events:catalog' %}?category={{ cat.slug }}"
-       class="reveal cat-pill group snap-start" style="--c: {{ cat.accent_color }}; --i: {{ forloop.counter0 }}">
-      <span class="text-[var(--c)] transition-transform duration-300 ease-out group-hover:-rotate-12 group-hover:scale-110">{% category_icon cat "w-[1.125rem] h-[1.125rem]" %}</span>
-      <span class="whitespace-nowrap">{{ cat.name }}</span>
+       class="reveal cat-pill group max-w-full {% if forloop.counter > 8 %}max-sm:hidden{% endif %}" style="--c: {{ cat.accent_color }}; --i: {{ forloop.counter0 }}"
+       {% if forloop.counter > 8 %}:class="all && 'max-sm:inline-flex!'"{% endif %}>
+      <span class="shrink-0 text-[var(--c)] transition-transform duration-300 ease-out group-hover:-rotate-12 group-hover:scale-110">{% category_icon cat "w-[1.125rem] h-[1.125rem]" %}</span>
+      <span class="min-w-0 truncate">{{ cat.name }}</span>
       {% if cat.n %}<span class="text-xs font-semibold tabular-nums text-subtle transition-colors group-hover:text-muted">{{ cat.n|bn_digits }}</span>{% endif %}
     </a>
     {% endfor %}
+    {% if block.categories|length > 8 %}
+    <button type="button" class="cat-pill sm:hidden" x-show="!all" @click="all = true" style="--c: var(--color-brand-fg)">
+      <span class="text-brand-fg">{% icon "plus" "w-4 h-4" %}</span>{% blocktranslate with n=block.categories|length|add:"-8"|bn_digits %}{{ n }} more{% endblocktranslate %}
+    </button>
+    {% endif %}
   </div>
 </section>

@@ -69,36 +69,96 @@ document.addEventListener("alpine:init", () => {
     go(n) { this.i = n; this.play(); },
   }));
 
-  /* Hero poster stack: on large screens the posters fan out and the front one is dealt away every
-     few seconds. Phones show the same cards as a swipeable row (`stacked` stays false there). */
+  /* Hero poster deck: the front poster is dealt away every few seconds (while on screen), and on any
+     screen it can be flicked away by finger or mouse: it follows the drag and flies off to that
+     side; a short drag springs back and still opens the event on tap. Phones get a one-time
+     wiggle as a hint that the deck can be flicked. */
   Alpine.data("posterStack", (count, interval = 5500) => ({
-    i: 0, out: null, timer: null, stacked: false,
+    i: 0, out: null, dir: -1, timer: null, visible: true, held: false,
     init() {
-      const wide = window.matchMedia("(min-width: 1024px)");
-      const update = () => { this.stacked = wide.matches; this.stacked && this.visible ? this.play() : this.pause(); };
-      wide.addEventListener("change", update);
-      // Only deal while the stack is on screen.
-      this.visible = true;
       if ("IntersectionObserver" in window) {
-        new IntersectionObserver(([e]) => { this.visible = e.isIntersecting; update(); }).observe(this.$el);
+        new IntersectionObserver(([e]) => { this.visible = e.isIntersecting; this.visible ? this.play() : this.pause(); }).observe(this.$el);
       }
-      update();
+      this.play();
+      if (count > 1) this.swipe();
     },
     depth(n) { return (n - this.i + count) % count; },
+    front() { return this.$refs.deck && this.$refs.deck.querySelector('.poster-card[data-depth="0"]'); },
     play() {
-      if (count < 2 || reduceMotion || !this.stacked) return;
+      if (count < 2 || reduceMotion || !this.visible || this.held) return;
       this.pause();
       this.timer = setInterval(() => this.show((this.i + 1) % count), interval);
     },
     pause() { clearInterval(this.timer); this.timer = null; },
-    show(n) {
+    show(n, dir = -1) {
       if (n === this.i) return;
+      this.dir = dir;
       this.out = this.i;
       this.i = n;
       clearTimeout(this.outTimer);
       this.outTimer = setTimeout(() => (this.out = null), 450);
     },
     go(n) { this.show(n); this.play(); },
+    swipe() {
+      const deck = this.$refs.deck;
+      let x0 = 0, y0 = 0, dx = 0, id = null, dragging = false, card = null, blockClick = false;
+      const end = (commit) => {
+        if (card) {
+          card.classList.remove("is-dragging");
+          card.style.removeProperty("--drag");
+          card.style.removeProperty("--drag-deg");
+        }
+        if (commit) { haptic(); this.show((this.i + 1) % count, dx > 0 ? 1 : -1); }
+        dragging = false; card = null; id = null; this.held = false; this.play();
+      };
+      deck.addEventListener("pointerdown", (e) => {
+        if (e.button > 0 || id !== null) return;
+        card = this.front();
+        if (!card || !card.contains(e.target)) { card = null; return; }
+        id = e.pointerId; x0 = e.clientX; y0 = e.clientY; dx = 0; blockClick = false;
+        this.held = true; this.pause();
+      });
+      deck.addEventListener("pointermove", (e) => {
+        if (e.pointerId !== id || !card) return;
+        dx = e.clientX - x0;
+        const dy = e.clientY - y0;
+        if (!dragging) {
+          if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { end(false); return; } // scrolling the page
+          if (Math.abs(dx) < 8) return;
+          dragging = true;
+          card.classList.add("is-dragging");
+          try { deck.setPointerCapture(id); } catch (_) {}
+        }
+        card.style.setProperty("--drag", `${dx}px`);
+        card.style.setProperty("--drag-deg", (dx / 18).toFixed(2));
+      });
+      const release = (e) => {
+        if (e.pointerId !== id) return;
+        if (dragging) blockClick = true;
+        end(dragging && Math.abs(dx) > Math.min(90, deck.clientWidth * 0.22));
+      };
+      deck.addEventListener("pointerup", release);
+      deck.addEventListener("pointercancel", release);
+      // A drag is not a tap: don't open the event the card was flicked from.
+      deck.addEventListener("click", (e) => { if (blockClick) { e.preventDefault(); e.stopPropagation(); blockClick = false; } }, true);
+      // Touch screens: the first time the deck comes into view, the top card wiggles to show it moves.
+      if (!reduceMotion && window.matchMedia("(pointer: coarse)").matches) {
+        let hinted = false;
+        try { hinted = sessionStorage.getItem("nx-deck-hint") === "1"; } catch (_) {}
+        if (!hinted && "IntersectionObserver" in window) {
+          const io = new IntersectionObserver(([e]) => {
+            if (!e.isIntersecting) return;
+            io.disconnect();
+            setTimeout(() => {
+              const c = this.front();
+              if (c && c.animate) c.animate([{ translate: "0 0", rotate: "0deg" }, { translate: "-34px 0", rotate: "-4deg" }, { translate: "10px 0", rotate: "1.5deg" }, { translate: "0 0", rotate: "0deg" }], { duration: 1100, easing: "cubic-bezier(.34, 1.3, .64, 1)" });
+              try { sessionStorage.setItem("nx-deck-hint", "1"); } catch (_) {}
+            }, 1200);
+          }, { threshold: 0.6 });
+          io.observe(deck);
+        }
+      }
+    },
   }));
 
   /* Live countdown: x-data="countdown('2026-11-14T12:00:00Z')" */

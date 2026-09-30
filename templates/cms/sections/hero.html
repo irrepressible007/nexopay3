@@ -79,11 +79,11 @@
     </div>
 
     {% if posters %}
-    {# Featured posters: a swipeable row on phones, a fanned stack that deals itself forward on large screens. #}
-    <div class="poster-stack-in min-w-0 lg:pr-[14%]" data-parallax x-data="posterStack({{ posters|length }})"
+    {# Featured posters as a deck that deals itself forward: flick the top card away on phones, it fans out with depth on large screens. #}
+    <div class="poster-stack-in mx-auto w-full min-w-0 max-w-[34rem] pt-7 lg:mx-0 lg:max-w-none lg:pr-[14%] lg:pt-0" data-parallax x-data="posterStack({{ posters|length }})"
          @mouseenter="pause()" @mouseleave="play()" @focusin="pause()" @focusout="play()"
          aria-roledescription="carousel" aria-label="{% translate 'Featured events' %}">
-      <div class="poster-stack edge-fade-lg no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:block lg:aspect-[4/3] lg:overflow-visible lg:px-0">
+      <div class="poster-stack aspect-square sm:aspect-[4/3]" x-ref="deck" @dragstart.prevent>
         {# The front poster's own colours, blurred into a soft light behind the stack. #}
         <div class="pointer-events-none absolute -inset-[8%] -z-10 hidden lg:block" aria-hidden="true">
           {% for e in posters %}
@@ -94,13 +94,13 @@
         </div>
         {% for e in posters %}
         <a href="{{ e.get_absolute_url }}" data-vt aria-roledescription="slide"
-           class="poster-card group relative block aspect-square w-[84%] shrink-0 snap-start sm:aspect-[4/3] overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-inset ring-white/10 sm:w-[58%] lg:w-auto"
+           class="poster-card group block overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-inset ring-white/10" draggable="false"
            style="--depth: {{ forloop.counter0 }}" data-depth="{{ forloop.counter0 }}" {% if forloop.counter0 > 2 %}data-hidden{% endif %}
-           :style="'--depth:' + Math.min(depth({{ forloop.counter0 }}), 3)" :data-depth="depth({{ forloop.counter0 }})"
+           :style="'--depth:' + Math.min(depth({{ forloop.counter0 }}), 3) + ';--out:' + dir" :data-depth="depth({{ forloop.counter0 }})"
            :data-hidden="depth({{ forloop.counter0 }}) > 2 ? '' : null" :class="out === {{ forloop.counter0 }} && 'is-out'"
-           :tabindex="stacked && depth({{ forloop.counter0 }}) ? -1 : null" :aria-hidden="stacked && depth({{ forloop.counter0 }}) ? 'true' : null">
+           :tabindex="depth({{ forloop.counter0 }}) ? -1 : null" :aria-hidden="depth({{ forloop.counter0 }}) ? 'true' : null">
           <img data-vt-img src="{{ e.banner_renditions|rendition:960|default:e.banner.url }}" {% if e.banner_renditions %}srcset="{{ e.banner_renditions|srcset }}"{% endif %}
-               sizes="(min-width:1280px) 520px, (min-width:1024px) 40vw, (min-width:640px) 58vw, 84vw" alt="{{ e.title }}" decoding="async"
+               sizes="(min-width:1280px) 520px, (min-width:1024px) 40vw, (min-width:640px) 544px, 92vw" alt="{{ e.title }}" decoding="async" draggable="false"
                {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %} width="960" height="720"
                class="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.03]">
           <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
@@ -119,7 +119,7 @@
         {% endfor %}
       </div>
       {% if posters|length > 1 %}
-      <div class="mt-8 hidden items-center gap-1.5 lg:flex">
+      <div class="mt-6 flex items-center justify-center gap-1.5 lg:mt-8 lg:justify-start">
         {% for e in posters %}
         <button type="button" @click="go({{ forloop.counter0 }})" class="h-1.5 rounded-full transition-[width,background-color] duration-500"
                 :class="i === {{ forloop.counter0 }} ? 'w-6 bg-text' : 'w-1.5 bg-white/25 hover:bg-white/50'"
