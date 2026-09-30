@@ -10,8 +10,8 @@
   {% if upcoming %}
   <div class="grid gap-6 lg:grid-cols-2">
     {% for event, tickets in upcoming %}
-    <article class="card overflow-hidden animate-rise" style="animation-delay: {% widthratio forloop.counter0 1 80 %}ms">
-      <div class="relative h-40 overflow-hidden">
+    <article class="card overflow-hidden animate-rise" style="animation-delay: {% widthratio forloop.counter0 1 80 %}ms" data-vt-scope>
+      <div class="relative h-40 overflow-hidden" data-vt-img>
         {% if event.banner_renditions %}<img src="{{ event.banner_renditions|rendition:960 }}" alt="" class="h-full w-full object-cover" loading="lazy">{% else %}<div class="poster-fallback h-full"></div>{% endif %}
         <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent"></div>
         <div class="absolute bottom-3 left-5 right-5">
@@ -22,8 +22,8 @@
       <ul class="divide-y divide-line">
         {% for t in tickets %}
         <li>
-          <a href="{% url 'accounts:ticket' t.code %}" class="group flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-white/[.03]">
-            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full {% if t.status == 'redeemed' %}bg-white/[.06] text-subtle{% else %}bg-brand/15 text-brand-fg{% endif %}">{% icon "qr" "w-5 h-5" %}</span>
+          <a href="{% url 'accounts:ticket' t.code %}" data-vt class="group flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-white/[.03]">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full transition-transform duration-500 ease-[cubic-bezier(.34,1.56,.64,1)] group-hover:-rotate-12 group-hover:scale-110 {% if t.status == 'redeemed' %}bg-white/[.06] text-subtle{% else %}bg-brand/15 text-brand-fg{% endif %}">{% icon "qr" "w-5 h-5" %}</span>
             <div class="min-w-0 flex-1">
               <p class="truncate font-semibold">{{ t.ticket_type.name }}</p>
               <p class="font-mono text-xs text-subtle">{{ t.code }}</p>
@@ -40,7 +40,7 @@
   </div>
   {% else %}
   <div class="grid place-items-center rounded-2xl border border-dashed border-line-strong px-6 py-20 text-center">
-    <span class="grid h-16 w-16 place-items-center rounded-full bg-brand/15 text-brand-fg">{% icon "ticket" "w-7 h-7" %}</span>
+    <span class="grid h-16 w-16 animate-float-y place-items-center rounded-full bg-brand/15 text-brand-fg">{% icon "ticket" "w-7 h-7" %}</span>
     <h2 class="mt-6 text-2xl font-bold">{% translate "No upcoming tickets" %}</h2>
     <p class="mt-2 max-w-sm text-muted">{% translate "When you buy tickets they'll appear here, ready to scan." %}</p>
     <a href="{% url 'events:catalog' %}" class="btn-primary mt-6">{% translate "Find events" %}{% icon "arrow-right" "w-4 h-4" %}</a>

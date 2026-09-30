@@ -11,9 +11,11 @@
         <div class="absolute inset-0 bg-gradient-to-b from-surface/30 to-surface"></div>
       </div>
       {% endif %}
-      {% if just_paid %}{% include "orders/_confetti.html" %}{% endif %}
       <div class="relative">
-        <span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-success text-ink {% if just_paid %}animate-pop{% endif %}">{% icon "check" "w-8 h-8" %}</span>
+        <span class="success-check relative mx-auto grid h-16 w-16 place-items-center rounded-full bg-success text-ink animate-pop" {% if just_paid %}x-data x-init="setTimeout(() => nxBurst($el), 380)"{% endif %}>
+          <span class="success-ring" aria-hidden="true"></span>
+          <svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="check-draw" pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </span>
         <h1 class="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">{% translate "You're going!" %}</h1>
         <p class="mx-auto mt-3 max-w-md text-muted">{% blocktranslate with email=order.delivery_email %}Your tickets are on their way to <strong class="text-text">{{ email }}</strong>, and always in your account.{% endblocktranslate %}</p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
@@ -24,8 +26,8 @@
     </div>
     <div class="mt-6 space-y-3">
       {% for t in order.tickets.all %}
-      <a href="{% url 'accounts:ticket' t.code %}" class="ticket-notch group flex items-center gap-4 rounded-2xl bg-surface px-6 py-4 ring-1 ring-inset ring-white/[.07] transition-colors hover:bg-surface-2 animate-rise" style="animation-delay: {% widthratio forloop.counter0 1 90 %}ms">
-        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-brand/15 text-brand-fg">{% icon "ticket" "w-5 h-5" %}</span>
+      <a href="{% url 'accounts:ticket' t.code %}" class="print-in ticket-notch group flex items-center gap-4 rounded-2xl bg-surface px-6 py-4 ring-1 ring-inset ring-white/[.07] transition-colors hover:bg-surface-2" style="--i: {{ forloop.counter0 }}">
+        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-brand/15 text-brand-fg transition-transform duration-500 ease-[cubic-bezier(.34,1.56,.64,1)] group-hover:-rotate-12 group-hover:scale-110">{% icon "ticket" "w-5 h-5" %}</span>
         <div class="min-w-0 flex-1"><p class="truncate font-semibold">{{ t.ticket_type.name }}</p><p class="font-mono text-xs text-muted">{{ t.code }}</p></div>
         <span class="text-subtle transition-transform group-hover:translate-x-0.5">{% icon "chevron-right" "w-5 h-5" %}</span>
       </a>
@@ -42,7 +44,7 @@
         {% csrf_token %}
         <div class="grid gap-2">
           {% for m in methods %}
-          <label class="flex cursor-pointer items-center gap-3 rounded-2xl bg-white/[.03] p-4 ring-1 ring-inset ring-white/10 transition hover:bg-white/[.06] has-[:checked]:bg-brand/10 has-[:checked]:ring-2 has-[:checked]:ring-brand">
+          <label data-ripple style="--i: {{ forloop.counter0 }}" class="pay-option relative isolate flex cursor-pointer items-center gap-3 overflow-hidden rounded-2xl bg-white/[.03] p-4 ring-1 ring-inset ring-white/10 hover:bg-white/[.06] has-[:checked]:bg-brand/10 has-[:checked]:ring-2 has-[:checked]:ring-brand">
             <input type="radio" name="payment_method" value="{{ m.provider }}" {% if forloop.first %}checked{% endif %}>
             <span class="font-semibold">{{ m }}</span>
           </label>

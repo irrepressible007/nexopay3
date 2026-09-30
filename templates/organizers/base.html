@@ -9,8 +9,8 @@
     </span>
     <span class="h-5 w-px shrink-0 bg-line"></span>
     {% url 'organizers:dashboard' as d %}{% url 'organizers:event_new' as n %}{% url 'scan:home' as s %}
-    <a href="{{ d }}" class="shrink-0 rounded-full px-3.5 py-1.5 font-semibold transition-colors {% if request.path == d %}bg-text text-ink{% else %}text-muted hover:text-text{% endif %}">{% translate "Dashboard" %}</a>
-    <a href="{{ n }}" class="shrink-0 rounded-full px-3.5 py-1.5 font-semibold transition-colors {% if request.path == n %}bg-text text-ink{% else %}text-muted hover:text-text{% endif %}">{% translate "New event" %}</a>
+    <a href="{{ d }}" class="relative isolate shrink-0 rounded-full px-3.5 py-1.5 font-semibold transition-colors {% if request.path == d %}text-ink{% else %}text-muted hover:text-text{% endif %}">{% if request.path == d %}<span class="absolute inset-0 -z-10 rounded-full bg-text" style="view-transition-name: org-tab" aria-hidden="true"></span>{% endif %}{% translate "Dashboard" %}</a>
+    <a href="{{ n }}" class="relative isolate shrink-0 rounded-full px-3.5 py-1.5 font-semibold transition-colors {% if request.path == n %}text-ink{% else %}text-muted hover:text-text{% endif %}">{% if request.path == n %}<span class="absolute inset-0 -z-10 rounded-full bg-text" style="view-transition-name: org-tab" aria-hidden="true"></span>{% endif %}{% translate "New event" %}</a>
     <a href="{{ s }}" class="shrink-0 rounded-full px-3.5 py-1.5 font-semibold text-muted transition-colors hover:text-text">{% translate "Scanner" %}</a>
   </div>
 </div>

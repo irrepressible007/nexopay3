@@ -1,11 +1,12 @@
 {% load i18n nexo %}{% for message in messages %}
 <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 6000)" x-show="show" x-transition.opacity.duration.300ms
-     class="pointer-events-auto flex w-full max-w-md items-start gap-3 rounded-2xl bg-surface-2 px-4 py-3 text-sm shadow-(--shadow-float) ring-1 ring-inset animate-pop
+     class="toast-in pointer-events-auto relative flex w-full max-w-md items-start gap-3 overflow-hidden rounded-2xl bg-surface-2 px-4 py-3 text-sm shadow-(--shadow-float) ring-1 ring-inset
             {% if message.tags == 'error' %}ring-danger/40{% elif message.tags == 'success' %}ring-success/40{% else %}ring-white/10{% endif %}" role="status">
   <span class="mt-0.5 {% if message.tags == 'error' %}text-danger{% elif message.tags == 'success' %}text-success{% else %}text-brand-fg{% endif %}">
     {% if message.tags == 'success' %}{% icon "check" "w-4 h-4" %}{% elif message.tags == 'error' %}{% icon "alert" "w-4 h-4" %}{% else %}{% icon "info" "w-4 h-4" %}{% endif %}
   </span>
   <p class="flex-1 text-text">{{ message }}</p>
   <button type="button" @click="show = false" class="text-subtle transition-colors hover:text-text" aria-label="{% translate 'Close' %}">{% icon "x" "w-4 h-4" %}</button>
+  <span class="toast-timer {% if message.tags == 'error' %}text-danger{% elif message.tags == 'success' %}text-success{% else %}text-brand-fg{% endif %}" aria-hidden="true"></span>
 </div>
 {% endfor %}

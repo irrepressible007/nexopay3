@@ -578,6 +578,9 @@ TR = {
     "Read the FAQ": "সাধারণ জিজ্ঞাসা পড়ুন",
     "Send message": "বার্তা পাঠান",
     "%(n)s sold": "%(n)sটি বিক্রি",
+    # --- ticket pass
+    "Event details": "ইভেন্টের বিস্তারিত",
+    "Show QR code": "QR কোড দেখান",
     # --- brand colours (site settings)
     "The one accent colour: buttons, links and focus rings. Default #7351F5.":
         "সাইটের একমাত্র অ্যাকসেন্ট রঙ: বাটন, লিংক ও ফোকাস রিং। ডিফল্ট #7351F5।",

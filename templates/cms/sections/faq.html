@@ -9,7 +9,7 @@
       {% for f in block.faqs %}
       <div>
         <button type="button" class="group flex w-full items-center justify-between gap-6 py-5 text-left text-base font-semibold sm:text-lg" @click="open = open === {{ forloop.counter }} ? 0 : {{ forloop.counter }}" :aria-expanded="open === {{ forloop.counter }}">
-          <span class="transition-colors group-hover:text-brand-fg">{{ f.question }}</span>
+          <span class="transition duration-300 group-hover:translate-x-1 group-hover:text-brand-fg">{{ f.question }}</span>
           <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted transition duration-300" :class="open === {{ forloop.counter }} && 'rotate-45 bg-brand text-on-brand'">{% icon "plus" "w-4 h-4" %}</span>
         </button>
         <div x-show="open === {{ forloop.counter }}" x-cloak x-transition:enter="transition duration-300 ease-out" x-transition:enter-start="opacity-0 -translate-y-1" class="prose-nx max-w-2xl pb-6 pr-12 text-[15px]">{{ f.answer|safe }}</div>

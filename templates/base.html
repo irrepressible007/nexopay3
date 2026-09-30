@@ -34,7 +34,7 @@
 <body class="min-h-dvh flex flex-col {% block body_class %}{% endblock %}" hx-boost="false">
   {% include "partials/icons.html" %}
   <div class="loading-bar" aria-hidden="true"></div>
-  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] btn-light">{% translate "Skip to content" %}</a>
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-text focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-ink">{% translate "Skip to content" %}</a>
 
   {% if sitecfg.announcement_enabled and sitecfg.announcement_text %}
   <div class="relative z-40 bg-brand px-4 py-2 text-center text-sm font-semibold text-on-brand">

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 05:22+0600\n"
+"POT-Creation-Date: 2026-09-30 06:14+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -234,7 +234,7 @@ msgstr "নতুন পাসওয়ার্ড"
 msgid "New Password (again)"
 msgstr "নতুন পাসওয়ার্ড (আবার)"
 
-#: apps/accounts/allauth_texts.py:62 templates/accounts/_pass.html:32
+#: apps/accounts/allauth_texts.py:62 templates/accounts/_pass.html:38
 msgid "Code"
 msgstr "কোড"
 
@@ -959,7 +959,7 @@ msgid "Happening this week"
 msgstr "এই সপ্তাহে"
 
 #: apps/cms/models.py:166 apps/events/models.py:74
-#: templates/events/detail.html:61 templates/partials/event_card.html:22
+#: templates/events/detail.html:61 templates/partials/event_card.html:23
 msgid "Coming soon"
 msgstr "শীঘ্রই আসছে"
 
@@ -1171,17 +1171,17 @@ msgid "On sale"
 msgstr "বিক্রি চলছে"
 
 #: apps/events/models.py:76 templates/events/_ticket_panel.html:49
-#: templates/events/detail.html:58 templates/partials/event_card.html:21
+#: templates/events/detail.html:58 templates/partials/event_card.html:22
 msgid "Sold out"
 msgstr "বিক্রি শেষ"
 
-#: apps/events/models.py:77 templates/partials/event_card.html:23
+#: apps/events/models.py:77 templates/partials/event_card.html:24
 msgid "Ended"
 msgstr "শেষ হয়েছে"
 
 #: apps/events/models.py:78 apps/orders/models.py:28
 #: apps/payments/models.py:63 templates/events/detail.html:60
-#: templates/partials/event_card.html:24
+#: templates/partials/event_card.html:25
 msgid "Cancelled"
 msgstr "বাতিল"
 
@@ -1361,7 +1361,7 @@ msgid "Expired"
 msgstr "মেয়াদোত্তীর্ণ"
 
 #: apps/orders/models.py:29 apps/payments/models.py:96
-#: apps/tickets/models.py:31 templates/accounts/_pass.html:24
+#: apps/tickets/models.py:31 templates/accounts/_pass.html:30
 msgid "Refunded"
 msgstr "রিফান্ড হয়েছে"
 
@@ -1455,7 +1455,7 @@ msgstr ""
 msgid "Please upload a file smaller than 5 MB."
 msgstr "৫ এমবির চেয়ে ছোট ফাইল আপলোড করুন।"
 
-#: apps/organizers/forms.py:50 templates/events/catalog.html:50
+#: apps/organizers/forms.py:50 templates/events/catalog.html:51
 msgid "Categories"
 msgstr "ক্যাটাগরি"
 
@@ -1851,7 +1851,7 @@ msgid "Valid"
 msgstr "বৈধ"
 
 #: apps/tickets/models.py:30 apps/tickets/models.py:99
-#: templates/accounts/_pass.html:19 templates/accounts/tickets.html:31
+#: templates/accounts/_pass.html:25 templates/accounts/tickets.html:31
 #: templates/organizers/dashboard.html:16
 #: templates/organizers/event_detail.html:22
 msgid "Checked in"
@@ -1889,23 +1889,25 @@ msgstr "অবৈধ কোড"
 msgid "Date & time"
 msgstr "তারিখ ও সময়"
 
-#: apps/tickets/rendering.py:104 templates/emails/tickets.txt:7
-#: templates/events/detail.html:71 templates/events/detail.html:114
+#: apps/tickets/rendering.py:104 templates/accounts/_pass.html:52
+#: templates/emails/tickets.txt:7 templates/events/detail.html:71
+#: templates/events/detail.html:114
 msgid "Venue"
 msgstr "ভেন্যু"
 
-#: apps/tickets/rendering.py:104 templates/cms/sections/featured.html:28
-#: templates/cms/sections/hero.html:111 templates/emails/tickets.html:18
-#: templates/emails/tickets.txt:7 templates/partials/event_card.html:29
+#: apps/tickets/rendering.py:104 templates/cms/sections/featured.html:29
+#: templates/cms/sections/hero.html:112 templates/emails/tickets.html:18
+#: templates/emails/tickets.txt:7 templates/partials/event_card.html:30
 msgid "Online"
 msgstr "অনলাইন"
 
-#: apps/tickets/rendering.py:105 templates/accounts/_pass.html:30
-#: templates/organizers/event_detail.html:32 templates/tickets/share.html:3
+#: apps/tickets/rendering.py:105 templates/accounts/_pass.html:36
+#: templates/accounts/_pass.html:54 templates/organizers/event_detail.html:32
+#: templates/tickets/share.html:3
 msgid "Ticket"
 msgstr "টিকিট"
 
-#: apps/tickets/rendering.py:106 templates/accounts/_pass.html:31
+#: apps/tickets/rendering.py:106 templates/accounts/_pass.html:37
 msgid "Name"
 msgstr "নাম"
 
@@ -1917,7 +1919,7 @@ msgstr ""
 "প্রবেশপথে এই QR কোড দেখান। এটি একবারই স্ক্যান করা যায় — কারও সাথে শেয়ার "
 "করবেন না।"
 
-#: apps/tickets/rendering.py:143 templates/accounts/_pass.html:33
+#: apps/tickets/rendering.py:143 templates/accounts/_pass.html:39
 #: templates/emails/refund.txt:5 templates/emails/tickets.html:16
 #: templates/emails/tickets.txt:5 templates/orders/detail.html:3
 msgid "Order"
@@ -1953,7 +1955,7 @@ msgid "Bangla"
 msgstr "বাংলা"
 
 #: templates/account/login.html:3 templates/account/login.html:29
-#: templates/account/signup.html:23 templates/partials/header.html:58
+#: templates/account/signup.html:23 templates/partials/header.html:59
 #: templates/partials/nav_user.html:31
 msgid "Log in"
 msgstr "লগ ইন"
@@ -1991,7 +1993,7 @@ msgid "Create an account"
 msgstr "অ্যাকাউন্ট খুলুন"
 
 #: templates/account/signup.html:3 templates/account/signup.html:20
-#: templates/partials/header.html:59 templates/partials/nav_user.html:32
+#: templates/partials/header.html:60 templates/partials/nav_user.html:32
 msgid "Sign up"
 msgstr "সাইন আপ"
 
@@ -2000,7 +2002,6 @@ msgid "Create your account"
 msgstr "আপনার অ্যাকাউন্ট খুলুন"
 
 #: templates/account/signup.html:10
-#| msgid "One account for all your tickets — always re-downloadable."
 msgid "One account for all your tickets, always re-downloadable."
 msgstr ""
 "আপনার সব টিকিটের জন্য একটি অ্যাকাউন্ট, যেকোনো সময় আবার ডাউনলোড করা যাবে।"
@@ -2031,7 +2032,7 @@ msgstr "অ্যাকাউন্ট"
 
 #: templates/accounts/_nav.html:5 templates/accounts/ticket_detail.html:6
 #: templates/accounts/tickets.html:3 templates/accounts/tickets.html:6
-#: templates/partials/header.html:57 templates/partials/nav_user.html:4
+#: templates/partials/header.html:58 templates/partials/nav_user.html:4
 #: templates/partials/nav_user.html:12
 msgid "My tickets"
 msgstr "আমার টিকিট"
@@ -2041,16 +2042,39 @@ msgstr "আমার টিকিট"
 msgid "Profile"
 msgstr "প্রোফাইল"
 
-#: templates/accounts/_pass.html:37
+#: templates/accounts/_pass.html:47 templates/accounts/_pass.html:64
+#| msgid "Event ended"
+msgid "Event details"
+msgstr "ইভেন্টের বিস্তারিত"
+
+#: templates/accounts/_pass.html:51 templates/emails/tickets.txt:6
+#: templates/events/detail.html:70
+msgid "Date"
+msgstr "তারিখ"
+
+#: templates/accounts/_pass.html:52 templates/events/detail.html:71
+#: templates/events/detail.html:118
+msgid "Online event"
+msgstr "অনলাইন ইভেন্ট"
+
+#: templates/accounts/_pass.html:53 templates/events/detail.html:72
+msgid "Organized by"
+msgstr "আয়োজনে"
+
+#: templates/accounts/_pass.html:57 templates/accounts/_pass.html:67
 msgid ""
 "Turn your screen brightness up at the gate. Each ticket scans only once."
 msgstr ""
 "গেটে স্ক্রিনের উজ্জ্বলতা বাড়িয়ে নিন। প্রতিটি টিকিট একবারই স্ক্যান হয়।"
 
-#: templates/accounts/orders.html:21 templates/cms/sections/featured.html:31
-#: templates/cms/sections/hero.html:114 templates/events/_ticket_panel.html:47
+#: templates/accounts/_pass.html:64
+msgid "Show QR code"
+msgstr "QR কোড দেখান"
+
+#: templates/accounts/orders.html:21 templates/cms/sections/featured.html:32
+#: templates/cms/sections/hero.html:115 templates/events/_ticket_panel.html:47
 #: templates/events/detail.html:173 templates/orders/checkout.html:81
-#: templates/orders/detail.html:75 templates/partials/event_card.html:32
+#: templates/orders/detail.html:77 templates/partials/event_card.html:33
 msgid "Free"
 msgstr "ফ্রি"
 
@@ -2187,17 +2211,17 @@ msgid "Featured events"
 msgstr "ফিচার্ড ইভেন্ট"
 
 #: templates/cms/sections/featured.html:10 templates/cms/sections/hero.html:44
-#: templates/events/catalog.html:84
+#: templates/events/catalog.html:85
 msgid "Previous"
 msgstr "আগের"
 
 #: templates/cms/sections/featured.html:11 templates/cms/sections/hero.html:45
-#: templates/events/catalog.html:86
+#: templates/events/catalog.html:87
 msgid "Next"
 msgstr "পরের"
 
-#: templates/cms/sections/featured.html:31
-#: templates/cms/sections/hero.html:114
+#: templates/cms/sections/featured.html:32
+#: templates/cms/sections/hero.html:115
 msgid "Details"
 msgstr "বিস্তারিত"
 
@@ -2227,8 +2251,8 @@ msgid "Search artists, events or venues"
 msgstr "শিল্পী, ইভেন্ট বা ভেন্যু খুঁজুন"
 
 #: templates/cms/sections/hero.html:66 templates/cms/sections/hero.html:67
-#: templates/events/catalog.html:9 templates/partials/header.html:19
-#: templates/partials/header.html:50
+#: templates/events/catalog.html:9 templates/partials/header.html:20
+#: templates/partials/header.html:51
 msgid "Search"
 msgstr "খুঁজুন"
 
@@ -2307,7 +2331,7 @@ msgstr ""
 msgid "Questions? Reply to this email or contact us:"
 msgstr "কোনো প্রশ্ন? এই ইমেইলের উত্তর দিন বা যোগাযোগ করুন:"
 
-#: templates/emails/tickets.html:10 templates/orders/detail.html:17
+#: templates/emails/tickets.html:10 templates/orders/detail.html:19
 msgid "You're going!"
 msgstr "আপনি যাচ্ছেন!"
 
@@ -2337,9 +2361,6 @@ msgid "Open my tickets"
 msgstr "আমার টিকিট খুলুন"
 
 #: templates/emails/tickets.html:30
-#| msgid ""
-#| "Show the QR code at the entrance. Each ticket can be scanned only once — "
-#| "don't share it."
 msgid ""
 "Show the QR code at the entrance. Each ticket can be scanned only once, so "
 "don't share it."
@@ -2351,10 +2372,6 @@ msgstr ""
 #, python-format
 msgid "Your tickets for %(event)s are confirmed."
 msgstr "%(event)s-এর টিকিট নিশ্চিত হয়েছে।"
-
-#: templates/emails/tickets.txt:6 templates/events/detail.html:70
-msgid "Date"
-msgstr "তারিখ"
 
 #: templates/emails/tickets.txt:11
 msgid ""
@@ -2476,65 +2493,54 @@ msgstr "ফিল্টার"
 msgid "Close"
 msgstr "বন্ধ"
 
-#: templates/events/catalog.html:51
+#: templates/events/catalog.html:52
 msgid "Clear"
 msgstr "মুছুন"
 
-#: templates/events/catalog.html:66
+#: templates/events/catalog.html:67
 msgid "Show results"
 msgstr "ফলাফল দেখুন"
 
-#: templates/events/catalog.html:67
+#: templates/events/catalog.html:68
 msgid "Apply filters"
 msgstr "ফিল্টার প্রয়োগ"
 
-#: templates/events/catalog.html:73
+#: templates/events/catalog.html:74
 #, python-format
 msgid "%(n)s event"
 msgid_plural "%(n)s events"
 msgstr[0] "%(n)sটি ইভেন্ট"
 msgstr[1] "%(n)sটি ইভেন্ট"
 
-#: templates/events/catalog.html:82
+#: templates/events/catalog.html:83
 msgid "Pagination"
 msgstr "পৃষ্ঠাসমূহ"
 
-#: templates/events/catalog.html:85
+#: templates/events/catalog.html:86
 #, python-format
 msgid "Page %(p)s of %(t)s"
 msgstr "পৃষ্ঠা %(p)s / %(t)s"
 
-#: templates/events/catalog.html:92
-#| msgid "No events match — yet"
+#: templates/events/catalog.html:93
 msgid "No events match yet"
 msgstr "এখনো কোনো ইভেন্ট মেলেনি"
 
-#: templates/events/catalog.html:93
+#: templates/events/catalog.html:94
 msgid ""
 "Try another category or clear your filters. New events land every week."
 msgstr "অন্য ক্যাটাগরি দেখুন বা ফিল্টার মুছুন। প্রতি সপ্তাহে নতুন ইভেন্ট আসে।"
 
-#: templates/events/catalog.html:94
+#: templates/events/catalog.html:95
 msgid "Clear filters"
 msgstr "ফিল্টার মুছুন"
 
 #: templates/events/detail.html:34
-#| msgid ""
-#| "Preview — this event is a draft and not visible to the public."
 msgid "Preview: this event is a draft and not visible to the public."
 msgstr "প্রিভিউ: ইভেন্টটি খসড়া, সবার জন্য দৃশ্যমান নয়।"
 
 #: templates/events/detail.html:59
 msgid "Event ended"
 msgstr "ইভেন্ট শেষ"
-
-#: templates/events/detail.html:71 templates/events/detail.html:118
-msgid "Online event"
-msgstr "অনলাইন ইভেন্ট"
-
-#: templates/events/detail.html:72
-msgid "Organized by"
-msgstr "আয়োজনে"
 
 #: templates/events/detail.html:89
 msgid "Add to calendar"
@@ -2576,7 +2582,7 @@ msgstr "কল"
 msgid "You might also like"
 msgstr "আপনার ভালো লাগতে পারে"
 
-#: templates/events/detail.html:172 templates/partials/event_card.html:33
+#: templates/events/detail.html:172 templates/partials/event_card.html:34
 msgid "From"
 msgstr "শুরু"
 
@@ -2584,7 +2590,7 @@ msgstr "শুরু"
 msgid "Checkout"
 msgstr "চেকআউট"
 
-#: templates/orders/checkout.html:6 templates/orders/detail.html:63
+#: templates/orders/checkout.html:6 templates/orders/detail.html:65
 msgid "Back to event"
 msgstr "ইভেন্টে ফিরুন"
 
@@ -2612,11 +2618,11 @@ msgstr "রিফান্ড নীতিতে সম্মত"
 msgid "Subtotal"
 msgstr "উপমোট"
 
-#: templates/orders/checkout.html:80 templates/orders/detail.html:74
+#: templates/orders/checkout.html:80 templates/orders/detail.html:76
 msgid "Service fee"
 msgstr "সার্ভিস ফি"
 
-#: templates/orders/checkout.html:81 templates/orders/detail.html:75
+#: templates/orders/checkout.html:81 templates/orders/detail.html:77
 msgid "Total"
 msgstr "মোট"
 
@@ -2624,7 +2630,7 @@ msgstr "মোট"
 msgid "Get free tickets"
 msgstr "ফ্রি টিকিট নিন"
 
-#: templates/orders/checkout.html:85 templates/orders/detail.html:51
+#: templates/orders/checkout.html:85 templates/orders/detail.html:53
 #, python-format
 msgid "Pay %(t)s"
 msgstr "%(t)s পরিশোধ করুন"
@@ -2637,11 +2643,8 @@ msgstr "প্রক্রিয়াকরণ চলছে…"
 msgid "Tickets are held for you while you pay."
 msgstr "পেমেন্টের সময় টিকিট আপনার জন্য সংরক্ষিত থাকবে।"
 
-#: templates/orders/detail.html:18
+#: templates/orders/detail.html:20
 #, python-format
-#| msgid ""
-#| "Your tickets are on their way to <strong class=\"text-"
-#| "text\">%(email)s</strong> — and always in your account."
 msgid ""
 "Your tickets are on their way to <strong class=\"text-"
 "text\">%(email)s</strong>, and always in your account."
@@ -2649,39 +2652,39 @@ msgstr ""
 "আপনার টিকিট <strong class=\"text-text\">%(email)s</strong>-এ পাঠানো হচ্ছে, "
 "আর সবসময় আপনার অ্যাকাউন্টে থাকবে।"
 
-#: templates/orders/detail.html:20
+#: templates/orders/detail.html:22
 msgid "View my tickets"
 msgstr "আমার টিকিট দেখুন"
 
-#: templates/orders/detail.html:21
+#: templates/orders/detail.html:23
 msgid "Download PDF"
 msgstr "PDF ডাউনলোড"
 
-#: templates/orders/detail.html:38
+#: templates/orders/detail.html:40
 msgid "Complete your payment"
 msgstr "পেমেন্ট সম্পন্ন করুন"
 
-#: templates/orders/detail.html:39
+#: templates/orders/detail.html:41
 msgid "Your tickets are held for"
 msgstr "আপনার টিকিট সংরক্ষিত থাকবে আরও"
 
-#: templates/orders/detail.html:40
+#: templates/orders/detail.html:42
 msgid "Your hold has expired. Please start again from the event page."
 msgstr "সংরক্ষণের সময় শেষ। ইভেন্ট পেজ থেকে আবার শুরু করুন।"
 
-#: templates/orders/detail.html:59
+#: templates/orders/detail.html:61
 msgid "This order was refunded"
 msgstr "এই অর্ডারটি রিফান্ড হয়েছে"
 
-#: templates/orders/detail.html:59
+#: templates/orders/detail.html:61
 msgid "This order was partly refunded"
 msgstr "এই অর্ডারটি আংশিক রিফান্ড হয়েছে"
 
-#: templates/orders/detail.html:59
+#: templates/orders/detail.html:61
 msgid "This order expired"
 msgstr "এই অর্ডারের মেয়াদ শেষ"
 
-#: templates/orders/detail.html:61
+#: templates/orders/detail.html:63
 msgid ""
 "If money left your account for this order, it will be refunded. Contact "
 "support with your order reference if you need help."
@@ -2689,15 +2692,15 @@ msgstr ""
 "এই অর্ডারের জন্য টাকা কেটে থাকলে তা রিফান্ড করা হবে। সাহায্যের প্রয়োজনে "
 "অর্ডার রেফারেন্সসহ সাপোর্টে যোগাযোগ করুন।"
 
-#: templates/orders/detail.html:64
+#: templates/orders/detail.html:66
 msgid "Contact support"
 msgstr "সাপোর্টে যোগাযোগ"
 
-#: templates/orders/detail.html:70
+#: templates/orders/detail.html:72
 msgid "Order reference"
 msgstr "অর্ডার রেফারেন্স"
 
-#: templates/orders/detail.html:71
+#: templates/orders/detail.html:73
 msgid "Event"
 msgstr "ইভেন্ট"
 
@@ -2768,9 +2771,6 @@ msgid "Tell us about you"
 msgstr "আপনার সম্পর্কে বলুন"
 
 #: templates/organizers/apply.html:8
-#| msgid ""
-#| "Every organizer is reviewed before they can list events — it keeps buyers "
-#| "safe. Most applications are answered within 1–2 working days."
 msgid ""
 "Every organizer is reviewed before they can list events, which keeps buyers "
 "safe. Most applications are answered within 1-2 working days."
@@ -3096,9 +3096,6 @@ msgid "Leave Bangla fields empty to show the English text to Bangla visitors."
 msgstr "বাংলা ঘর ফাঁকা রাখলে বাংলা ভিজিটররা ইংরেজি লেখা দেখবেন।"
 
 #: templates/organizers/event_form.html:60
-#| msgid ""
-#| "One ticket type for a simple event, or several — each with its own price and"
-#| " stock."
 msgid ""
 "One ticket type for a simple event, or several, each with its own price and "
 "stock."
@@ -3114,8 +3111,6 @@ msgid "Add ticket"
 msgstr "টিকিট যোগ করুন"
 
 #: templates/organizers/event_form.html:72
-#| msgid ""
-#| "No tickets yet — add one or start from the multi-segment preset."
 msgid "No tickets yet. Add one or start from the multi-segment preset."
 msgstr ""
 "এখনো কোনো টিকিট নেই। একটি যোগ করুন বা মাল্টি-সেগমেন্ট প্রিসেট দিয়ে শুরু "
@@ -3142,7 +3137,7 @@ msgstr "খসড়া হিসেবে সংরক্ষণ"
 msgid "Preview"
 msgstr "প্রিভিউ"
 
-#: templates/partials/event_card.html:31
+#: templates/partials/event_card.html:32
 msgid "Tickets TBA"
 msgstr "টিকিট শীঘ্রই"
 
@@ -3162,19 +3157,19 @@ msgstr "পেমেন্ট মাধ্যম"
 msgid "Main"
 msgstr "প্রধান"
 
-#: templates/partials/header.html:19 templates/partials/header.html:50
+#: templates/partials/header.html:20 templates/partials/header.html:51
 msgid "Search events, venues…"
 msgstr "ইভেন্ট, ভেন্যু খুঁজুন…"
 
-#: templates/partials/header.html:26
+#: templates/partials/header.html:27
 msgid "Change language"
 msgstr "ভাষা পরিবর্তন"
 
-#: templates/partials/header.html:37 templates/partials/header.html:47
+#: templates/partials/header.html:38 templates/partials/header.html:48
 msgid "Menu"
 msgstr "মেনু"
 
-#: templates/partials/header.html:60
+#: templates/partials/header.html:61
 msgid "Help & contact"
 msgstr "সহায়তা ও যোগাযোগ"
 
@@ -3224,14 +3219,11 @@ msgid "Tap to scan the next ticket"
 msgstr "পরের টিকিট স্ক্যান করতে ট্যাপ করুন"
 
 #: templates/scan/scanner.html:94
-#| msgid ""
-#| "Camera unavailable — allow camera access, or type ticket codes below."
 msgid "Camera unavailable. Allow camera access, or type ticket codes below."
 msgstr ""
 "ক্যামেরা পাওয়া যাচ্ছে না। ক্যামেরার অনুমতি দিন, অথবা নিচে টিকিট কোড লিখুন।"
 
 #: templates/scan/scanner.html:144
-#| msgid "Connection problem — try again"
 msgid "Connection problem, try again"
 msgstr "সংযোগে সমস্যা, আবার চেষ্টা করুন"
 

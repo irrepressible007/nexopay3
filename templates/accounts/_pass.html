@@ -1,38 +1,68 @@
 {% load i18n nexo %}
-<div class="mx-auto w-full max-w-sm" x-data x-init="nxWakeLock()">
-  <div class="overflow-hidden rounded-3xl bg-surface shadow-(--shadow-float) ring-1 ring-inset ring-white/10">
-    <div class="relative h-36 overflow-hidden">
-      {% if ticket.event.banner_renditions %}<img src="{{ ticket.event.banner_renditions|rendition:480 }}" alt="" class="h-full w-full object-cover">{% else %}<div class="poster-fallback h-full"></div>{% endif %}
-      <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/20 to-transparent"></div>
-    </div>
-    <div class="relative -mt-10 px-6 text-center">
-      <h1 class="text-xl font-bold leading-tight">{{ ticket.event.title }}</h1>
-      <p class="mt-1 text-sm font-semibold text-brand-fg">{{ ticket.event.starts_at|date:"D, j M Y"|bn_digits }} · {{ ticket.event.starts_at|date:"g:i A"|bn_digits }}</p>
-      <p class="text-sm text-muted">{{ ticket.event.venue_name }}</p>
-    </div>
+{# The pass arrives like a card being handed over, tilts under the mouse, shimmers like a hologram (never over the QR, which must stay crisp for the scanner) and flips over for the details. #}
+<div class="pass-scene pass-in mx-auto w-full max-w-sm" x-data="ticketPass()">
+  <div class="pass-tilt relative rounded-3xl" data-tilt="10">
+    <div class="pass-flip" :class="flipped && 'is-flipped'">
+      <!-- Front: the QR code -->
+      <div class="relative overflow-hidden rounded-3xl bg-surface shadow-(--shadow-float) ring-1 ring-inset ring-white/10" :aria-hidden="flipped ? 'true' : null">
+        <div class="pass-holo" aria-hidden="true"></div>
+        <span class="tilt-glare" aria-hidden="true"></span>
+        <div class="vt-banner relative h-36 overflow-hidden">
+          {% if ticket.event.banner_renditions %}<img src="{{ ticket.event.banner_renditions|rendition:480 }}" alt="" class="h-full w-full object-cover">{% else %}<div class="poster-fallback h-full"></div>{% endif %}
+          <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/20 to-transparent"></div>
+        </div>
+        <div class="relative -mt-10 px-6 text-center">
+          <h1 class="text-xl font-bold leading-tight">{{ ticket.event.title }}</h1>
+          <p class="mt-1 text-sm font-semibold text-brand-fg">{{ ticket.event.starts_at|date:"D, j M Y"|bn_digits }} · {{ ticket.event.starts_at|date:"g:i A"|bn_digits }}</p>
+          <p class="text-sm text-muted">{{ ticket.event.venue_name }}</p>
+        </div>
 
-    <div class="relative mx-6 mt-5 rounded-2xl bg-white p-4">
-      <div class="mx-auto aspect-square w-full [&>svg]:h-full [&>svg]:w-full {% if ticket.status != 'valid' %}opacity-15{% endif %}">{{ qr|safe }}</div>
-      {% if ticket.status == "redeemed" %}
-      <div class="absolute inset-0 grid place-items-center">
-        <div class="rotate-[-8deg] rounded-2xl border-4 border-ink/80 px-5 py-2 text-center text-ink">
-          <p class="text-2xl font-extrabold">{% translate "Checked in" %}</p>
-          <p class="text-xs font-semibold">{{ ticket.redeemed_at|date:"j M"|bn_digits }} · {{ ticket.redeemed_at|date:"g:i A"|bn_digits }}</p>
+        <div class="relative z-[3] mx-6 mt-5 rounded-2xl bg-white p-4">
+          <div class="mx-auto aspect-square w-full [&>svg]:h-full [&>svg]:w-full {% if ticket.status != 'valid' %}opacity-15{% endif %}">{{ qr|safe }}</div>
+          {% if ticket.status == "redeemed" %}
+          <div class="absolute inset-0 grid place-items-center">
+            <div class="stamp-in rotate-[-8deg] rounded-2xl border-4 border-ink/80 px-5 py-2 text-center text-ink">
+              <p class="text-2xl font-extrabold">{% translate "Checked in" %}</p>
+              <p class="text-xs font-semibold">{{ ticket.redeemed_at|date:"j M"|bn_digits }} · {{ ticket.redeemed_at|date:"g:i A"|bn_digits }}</p>
+            </div>
+          </div>
+          {% elif ticket.status == "refunded" %}
+          <div class="absolute inset-0 grid place-items-center"><p class="stamp-in rotate-[-8deg] rounded-2xl border-4 border-danger px-5 py-2 text-2xl font-extrabold text-danger">{% translate "Refunded" %}</p></div>
+          {% endif %}
+        </div>
+
+        <div class="ticket-notch relative mt-5 border-t border-dashed border-line-strong px-6 py-5">
+          <dl class="grid grid-cols-2 gap-4 text-left text-sm">
+            <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Ticket" %}</dt><dd class="font-semibold">{{ ticket.ticket_type.name }}</dd></div>
+            <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Name" %}</dt><dd class="truncate font-semibold">{{ ticket.holder_name|default:ticket.owner.get_full_name }}</dd></div>
+            <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Code" %}</dt><dd class="font-mono font-semibold tracking-wider">{{ ticket.code }}</dd></div>
+            <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Order" %}</dt><dd class="font-mono font-semibold">{{ ticket.order.reference }}</dd></div>
+          </dl>
         </div>
       </div>
-      {% elif ticket.status == "refunded" %}
-      <div class="absolute inset-0 grid place-items-center"><p class="rotate-[-8deg] rounded-2xl border-4 border-danger px-5 py-2 text-2xl font-extrabold text-danger">{% translate "Refunded" %}</p></div>
-      {% endif %}
-    </div>
 
-    <div class="ticket-notch mt-5 border-t border-dashed border-line-strong px-6 py-5">
-      <dl class="grid grid-cols-2 gap-4 text-left text-sm">
-        <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Ticket" %}</dt><dd class="font-semibold">{{ ticket.ticket_type.name }}</dd></div>
-        <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Name" %}</dt><dd class="truncate font-semibold">{{ ticket.holder_name|default:ticket.owner.get_full_name }}</dd></div>
-        <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Code" %}</dt><dd class="font-mono font-semibold tracking-wider">{{ ticket.code }}</dd></div>
-        <div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Order" %}</dt><dd class="font-mono font-semibold">{{ ticket.order.reference }}</dd></div>
-      </dl>
+      <!-- Back: the details -->
+      <div class="pass-back relative flex flex-col overflow-hidden rounded-3xl bg-surface p-6 shadow-(--shadow-float) ring-1 ring-inset ring-white/10" :aria-hidden="flipped ? null : 'true'">
+        <div class="pass-holo" aria-hidden="true"></div>
+        <p class="relative text-sm font-semibold text-brand-fg">{% translate "Event details" %}</p>
+        <h2 class="relative mt-1 text-xl font-bold leading-tight">{{ ticket.event.title }}</h2>
+        <dl class="relative mt-6 space-y-5 text-sm">
+          {% with ic="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted" %}
+          <div class="flex items-start gap-3"><span class="{{ ic }}">{% icon "calendar" "w-4 h-4" %}</span><div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Date" %}</dt><dd class="font-semibold">{{ ticket.event.starts_at|date:"l, j F Y"|bn_digits }}</dd><dd class="text-muted">{{ ticket.event.starts_at|date:"g:i A"|bn_digits }}{% if ticket.event.ends_at %} - {{ ticket.event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</dd></div></div>
+          <div class="flex items-start gap-3"><span class="{{ ic }}">{% icon "pin" "w-4 h-4" %}</span><div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Venue" %}</dt><dd class="font-semibold">{{ ticket.event.venue_name|default:_("Online event") }}</dd><dd class="text-muted">{{ ticket.event.venue_address }}{% if ticket.event.venue_address %}, {% endif %}{{ ticket.event.city }}</dd></div></div>
+          <div class="flex items-start gap-3"><span class="{{ ic }}">{% icon "building" "w-4 h-4" %}</span><div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Organized by" %}</dt><dd class="font-semibold">{{ ticket.event.organizer.name }}</dd>{% if ticket.event.organizer.contact_phone %}<dd><a href="tel:{{ ticket.event.organizer.contact_phone }}" class="link text-sm" :tabindex="flipped ? null : -1">{{ ticket.event.organizer.contact_phone }}</a></dd>{% endif %}</div></div>
+          <div class="flex items-start gap-3"><span class="{{ ic }}">{% icon "ticket" "w-4 h-4" %}</span><div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Ticket" %}</dt><dd class="font-semibold">{{ ticket.ticket_type.name }}</dd><dd class="font-mono text-muted">{{ ticket.code }}</dd></div></div>
+          {% endwith %}
+        </dl>
+        <p class="relative mt-auto pt-6 text-xs leading-relaxed text-subtle">{% translate "Turn your screen brightness up at the gate. Each ticket scans only once." %}</p>
+      </div>
     </div>
   </div>
-  {% if ticket.status == "valid" %}<p class="mt-4 text-center text-xs text-subtle">{% translate "Turn your screen brightness up at the gate. Each ticket scans only once." %}</p>{% endif %}
+  <div class="mt-4 text-center">
+    <button type="button" @click="flip()" class="btn-ghost btn-sm" :aria-pressed="flipped ? 'true' : 'false'">
+      <span class="grid"><span class="col-start-1 row-start-1 transition duration-300" :class="flipped && 'scale-50 opacity-0'">{% icon "info" "w-4 h-4" %}</span><span class="col-start-1 row-start-1 scale-50 opacity-0 transition duration-300" :class="flipped && '!scale-100 !opacity-100'">{% icon "qr" "w-4 h-4" %}</span></span>
+      <span x-text="flipped ? '{% translate "Show QR code" as t1 %}{{ t1|escapejs }}' : '{% translate "Event details" as t2 %}{{ t2|escapejs }}'">{% translate "Event details" %}</span>
+    </button>
+  </div>
+  {% if ticket.status == "valid" %}<p class="mt-3 text-center text-xs text-subtle">{% translate "Turn your screen brightness up at the gate. Each ticket scans only once." %}</p>{% endif %}
 </div>

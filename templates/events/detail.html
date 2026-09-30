@@ -46,7 +46,7 @@
   {# Phones: picture, title, tickets, details. Large screens: tickets in a sticky column beside the rest. #}
   <div class="container-x grid gap-x-10 gap-y-8 pb-10 pt-4 sm:pt-8 lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_400px] xl:gap-x-14">
     {# event-banner: an event card's picture morphs into this on the way in (see app.css / app.js). #}
-    <div class="min-w-0 overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-inset ring-white/[.07] lg:col-start-1 lg:row-start-1" style="view-transition-name: event-banner">
+    <div class="vt-banner min-w-0 overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-inset ring-white/[.07] lg:col-start-1 lg:row-start-1">
       {% if event.banner_renditions %}
       <img src="{{ event.banner_renditions|rendition:960 }}" srcset="{{ event.banner_renditions|srcset }}" sizes="(min-width:1280px) 820px, (min-width:1024px) 62vw, 100vw" alt="{{ event.title }}" fetchpriority="high" class="aspect-[16/9] w-full object-cover" width="960" height="540">
       {% elif event.banner %}<img src="{{ event.banner.url }}" alt="{{ event.title }}" class="aspect-[16/9] w-full object-cover">
@@ -95,7 +95,7 @@
             <a class="btn-icon" target="_blank" rel="noopener" href="https://wa.me/?text={{ event.title|urlencode }}%20{{ share_url|urlencode }}" aria-label="{% translate 'WhatsApp' %}" title="{% translate 'WhatsApp' %}">{% icon "whatsapp" "w-4 h-4" %}</a>
             <a class="btn-icon" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}" aria-label="{% translate 'Facebook' %}" title="{% translate 'Facebook' %}">{% icon "facebook" "w-4 h-4" %}</a>
             <button type="button" class="btn-icon" @click="native()" aria-label="{% translate 'Share event' %}" title="{% translate 'Share event' %}">
-              <span x-show="!copied">{% icon "share" "w-4 h-4" %}</span><span x-show="copied" x-cloak class="text-success">{% icon "check" "w-4 h-4" %}</span>
+              <span x-show="!copied">{% icon "share" "w-4 h-4" %}</span><span x-show="copied" x-cloak class="animate-check text-success">{% icon "check" "w-4 h-4" %}</span>
             </button>
           </div>
         </div>

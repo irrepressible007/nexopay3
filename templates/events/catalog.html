@@ -35,11 +35,12 @@
 
         <fieldset>
           <legend class="mb-3 text-sm font-semibold text-text">{% translate "When" %}</legend>
-          <div class="grid grid-cols-3 gap-1 rounded-full bg-white/[.05] p-1 ring-1 ring-inset ring-white/[.08]">
+          <div class="seg relative grid grid-cols-3 rounded-full bg-white/[.05] p-1 ring-1 ring-inset ring-white/[.08]">
+            <span class="seg-thumb" aria-hidden="true"></span>
             {% for value, label in status_choices %}
-            <label class="cursor-pointer">
+            <label class="relative cursor-pointer">
               <input type="radio" name="status" value="{{ value }}" class="peer sr-only" {% if status == value %}checked{% endif %}>
-              <span class="block whitespace-nowrap rounded-full px-1 py-1.5 text-center text-sm font-semibold text-muted transition-colors duration-200 hover:text-text peer-checked:bg-text peer-checked:text-ink peer-focus-visible:ring-2 peer-focus-visible:ring-brand-fg">{{ label }}</span>
+              <span class="block whitespace-nowrap rounded-full px-1 py-1.5 text-center text-sm font-semibold text-muted transition-colors duration-200 hover:text-text peer-checked:text-ink peer-focus-visible:ring-2 peer-focus-visible:ring-brand-fg">{{ label }}</span>
             </label>
             {% endfor %}
           </div>
@@ -55,7 +56,7 @@
             <li>
               <label class="group flex cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2 transition-colors hover:bg-white/[.05]">
                 <input type="checkbox" name="category" value="{{ c.slug }}" class="peer sr-only" {% if c.slug in selected %}checked{% endif %}>
-                <span class="grid h-5 w-5 shrink-0 place-items-center rounded-md text-transparent ring-1 ring-inset ring-white/20 transition peer-checked:bg-brand peer-checked:text-on-brand peer-checked:ring-transparent peer-focus-visible:ring-2 peer-focus-visible:ring-brand-fg">{% icon "check" "w-3.5 h-3.5" %}</span>
+                <span class="grid h-5 w-5 shrink-0 place-items-center rounded-md text-transparent ring-1 ring-inset ring-white/20 transition peer-checked:animate-check peer-checked:bg-brand peer-checked:text-on-brand peer-checked:ring-transparent peer-focus-visible:ring-2 peer-focus-visible:ring-brand-fg">{% icon "check" "w-3.5 h-3.5" %}</span>
                 <span class="flex-1 text-sm text-muted transition-colors group-hover:text-text peer-checked:font-semibold peer-checked:text-text">{{ c.name }}</span>
                 <span id="cnt-{{ c.slug }}" class="text-xs tabular-nums {% if c.n %}text-muted{% else %}text-subtle/60{% endif %}">{{ c.n|bn_digits }}</span>
               </label>
@@ -88,7 +89,7 @@
         {% endif %}
         {% else %}
         <div class="grid place-items-center rounded-2xl border border-dashed border-line-strong px-6 py-20 text-center">
-          <span class="grid h-14 w-14 place-items-center rounded-full bg-white/[.06] text-muted">{% icon "search" "w-6 h-6" %}</span>
+          <span class="grid h-14 w-14 animate-float-y place-items-center rounded-full bg-white/[.06] text-muted">{% icon "search" "w-6 h-6" %}</span>
           <h2 class="mt-5 text-xl font-bold">{% translate "No events match yet" %}</h2>
           <p class="mt-2 max-w-sm text-muted">{% translate "Try another category or clear your filters. New events land every week." %}</p>
           <a href="{% url 'events:catalog' %}" class="btn-ghost mt-6">{% translate "Clear filters" %}</a>
