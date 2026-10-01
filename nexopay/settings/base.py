@@ -101,6 +101,8 @@ DATABASES = {
     "default": env.db("DATABASE_URL", default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
 }
 if DATABASES["default"]["ENGINE"] == "django.db.backends.mysql":
+    # Same as Django's MySQL backend, minus the need for the server's time-zone tables.
+    DATABASES["default"]["ENGINE"] = "nexopay.dbbackend"
     DATABASES["default"].setdefault("OPTIONS", {}).update(
         {
             "charset": "utf8mb4",

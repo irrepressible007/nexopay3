@@ -14,6 +14,7 @@ from django.conf import settings
 from django.core.files import File
 from django.core.files.storage import storages
 from django.core.management.base import BaseCommand, CommandError
+from django.db import connection
 from django.utils import timezone
 
 
@@ -25,7 +26,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, keep=14, **options):
         db = settings.DATABASES["default"]
-        if db["ENGINE"] != "django.db.backends.mysql":
+        if connection.vendor != "mysql":  # Django's MySQL backend or ours (nexopay.dbbackend)
             raise CommandError("backup_db supports MySQL/MariaDB only.")
         dump_bin = shutil.which("mysqldump") or shutil.which("mariadb-dump")
         if not dump_bin:

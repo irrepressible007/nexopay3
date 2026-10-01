@@ -87,3 +87,30 @@ def test_unknown_host_is_refused_quietly(client, mailoutbox, settings):
     settings.ADMINS = [("Ops", "ops@example.com")]
     assert client.get("/", HTTP_HOST="evil.example.com").status_code == 400
     assert mailoutbox == []
+
+
+class TestNoTimeZoneTables:
+    """cPanel MySQL has no time-zone tables: date conversions must use numeric offsets."""
+
+    def test_fixed_offsets(self):
+        from nexopay.dbbackend.base import fixed_offset
+
+        assert fixed_offset("Asia/Dhaka") == "+06:00"
+        assert fixed_offset("UTC") == "+00:00"
+        assert fixed_offset("Europe/London") is None  # has daylight saving: keep the name
+        assert fixed_offset("+05:30") is None and fixed_offset("") is None
+
+    def test_admin_date_drilldown_and_charts_use_offsets(self, client, event, ticket_type):
+        from django.db import connection
+        from django.test.utils import CaptureQueriesContext
+
+        if connection.vendor != "mysql":
+            pytest.skip("MySQL only")
+        client.force_login(UserFactory(is_staff=True, is_superuser=True))
+        with CaptureQueriesContext(connection) as ctx:
+            assert client.get(reverse("admin:events_event_changelist")).status_code == 200
+            assert client.get(reverse("admin:index")).status_code == 200
+        converts = [q["sql"] for q in ctx.captured_queries if "CONVERT_TZ" in q["sql"]]
+        assert converts, "expected the date drill-down to convert time zones"
+        assert all("'+00:00'" in sql and "'+06:00'" in sql for sql in converts), converts[:1]
+        assert not any("Asia/Dhaka" in sql or "'UTC'" in sql for sql in converts)

@@ -13,6 +13,7 @@ RATELIMIT_ENABLE = False
 # locking/concurrency tests against the production engine.
 if env("TEST_DATABASE_URL", default=""):
     DATABASES = {"default": env.db("TEST_DATABASE_URL")}  # noqa: F405
+    DATABASES["default"]["ENGINE"] = "nexopay.dbbackend"
     DATABASES["default"]["OPTIONS"] = {
         "charset": "utf8mb4",
         "isolation_level": "read committed",
