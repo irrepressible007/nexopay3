@@ -30,4 +30,5 @@ TR = {
     "Recent events": "সাম্প্রতিক ইভেন্ট",
     "Recently on Nexopay. New events are on the way.": "সম্প্রতি নেক্সোপেতে হয়েছে। নতুন ইভেন্ট আসছে।",
     "Host yours": "আপনার ইভেন্ট আয়োজন করুন",
+    "Search %(thing)s…": "%(thing)s খুঁজুন…",
 }

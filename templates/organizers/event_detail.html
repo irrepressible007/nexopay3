@@ -72,11 +72,13 @@
           {% else %}<span class="badge bg-white/10 text-subtle">{% translate "Checked in" %}</span>{% endif %}
           {% else %}<span class="badge bg-white/10 text-subtle">{{ o.get_status_display }}</span>{% endif %}
         </div>
-        {% if o.unused and not o.refund_open %}<form x-show="open" x-cloak method="post" action="{% url 'organizers:order_refund' event.slug o.reference %}" class="mt-3 flex gap-2">
+        {% if o.unused and not o.refund_open %}<div class="accordion-panel" :class="{ 'is-open': open }" inert :inert="!open"><div>
+        <form method="post" action="{% url 'organizers:order_refund' event.slug o.reference %}" class="flex gap-2 pt-3">
           {% csrf_token %}
-          <input name="reason" required placeholder="{% translate 'Reason for the refund' %}" class="input !py-2 !text-sm">
+          <input name="reason" required placeholder="{% translate 'Reason for the refund' %}" aria-label="{% translate 'Reason for the refund' %}" class="input !py-2 !text-sm">
           <button class="btn !bg-danger !py-2 text-white">{% if request.organizer.can_issue_refunds %}{% translate "Refund now" %}{% else %}{% translate "Request refund" %}{% endif %}</button>
-        </form>{% endif %}
+        </form>
+        </div></div>{% endif %}
       </li>
       {% empty %}
       <li class="px-6 py-10 text-center text-muted">{% translate "No orders yet." %}</li>

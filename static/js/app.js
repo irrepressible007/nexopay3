@@ -395,6 +395,66 @@ window.nxWakeLock = async () => {
     img.style.viewTransitionName = "event-banner";
   });
 
+  /* Filtering the events list: the result cards are named only while htmx's view transition runs,
+     so they glide to their new places (html.vt-filter in app.css). Named all the time, every card
+     would be captured on every page change. */
+  document.addEventListener("htmx:beforeTransition", () => {
+    root.classList.add("vt-filter");
+    clearTimeout(root.vtFilterTimer);
+    root.vtFilterTimer = setTimeout(() => root.classList.remove("vt-filter"), 900);
+  });
+
+  /* Figures count up from zero the first time they come into view ([data-count] on a plain-text
+     element). The page's own text is the final value, so without motion nothing changes. */
+  if (!calmMotion && "IntersectionObserver" in window) {
+    const BN = "০১২৩৪৫৬৭৮৯";
+    const latin = (s) => s.replace(/[০-৯]/g, (d) => String(BN.indexOf(d)));
+    const counters = new IntersectionObserver((entries) => {
+      for (const { target: el, isIntersecting } of entries) {
+        if (!isIntersecting) continue;
+        counters.unobserve(el);
+        const text = el.textContent;
+        const m = text.match(/[0-9০-৯][0-9০-৯,]*(?:\.[0-9০-৯]+)?/);
+        if (!m) continue;
+        const raw = latin(m[0]).replace(/,/g, "");
+        const end = parseFloat(raw);
+        if (!(end > 0)) continue;
+        const decimals = (raw.split(".")[1] || "").length;
+        const bangla = /[০-৯]/.test(m[0]), grouped = m[0].includes(",");
+        const show = (v) => {
+          const s = grouped ? v.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) : v.toFixed(decimals);
+          return bangla ? s.replace(/[0-9]/g, (d) => BN[d]) : s;
+        };
+        const before = text.slice(0, m.index), after = text.slice(m.index + m[0].length), t0 = performance.now();
+        const tick = (now) => {
+          const p = Math.min((now - t0) / 1100, 1);
+          el.textContent = p < 1 ? before + show(end * (1 - Math.pow(2, -10 * p))) + after : text;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }
+    }, { threshold: 0.6 });
+    document.querySelectorAll("[data-count]").forEach((el) => counters.observe(el));
+  }
+
+  /* The hero search box suggests searches in turn ([data-hints]); it waits while focused or typed in. */
+  if (!calmMotion) document.querySelectorAll("input[data-hints]").forEach((input) => {
+    let hints;
+    try { hints = JSON.parse(input.dataset.hints); } catch (_) { return; }
+    if (!Array.isArray(hints) || !hints.length) return;
+    hints.unshift(input.placeholder);
+    let i = 0;
+    setInterval(() => {
+      if (document.hidden || input.value || document.activeElement === input) return;
+      input.classList.add("hint-swap");
+      setTimeout(() => {
+        i = (i + 1) % hints.length;
+        input.placeholder = hints[i];
+        input.classList.remove("hint-swap");
+      }, 260);
+    }, 2800);
+  });
+
   /* Every press answers: a ripple spreads from where the finger or mouse went down. */
   if (motion) {
     const PRESSABLE = ".btn, .btn-primary, .btn-ghost, .btn-light, .btn-icon, .chip, .cat-pill, [data-ripple]";

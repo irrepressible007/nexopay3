@@ -4,7 +4,7 @@ from django.core.cache import cache
 from django.db.models import Count, Min, Q
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
-from django.utils.translation import get_language
+from django.utils.translation import get_language, gettext as _
 
 from apps.core.cache import versioned_key
 from apps.core.http import private_no_store, public_cache
@@ -62,8 +62,10 @@ def _section_payload(section: HomeSection, shown: set):
         if mode in (SiteSettings.HeroMode.AUTO, SiteSettings.HeroMode.POSTERS):
             posters, past = _hero_posters(site.hero_poster_count, now)
         shown.update(e.pk for e in posters)
+        hero_categories = list(Category.objects.filter(is_active=True, show_in_hero=True)[:8])
         return {
-            "hero_categories": list(Category.objects.filter(is_active=True, show_in_hero=True)[:8]),
+            "hero_categories": hero_categories,
+            "search_hints": [_("Search %(thing)s…") % {"thing": c.name.lower()} for c in hero_categories[:5]],
             "posters": posters,
             "posters_past": past,
             "show_image": mode in (SiteSettings.HeroMode.AUTO, SiteSettings.HeroMode.IMAGE),

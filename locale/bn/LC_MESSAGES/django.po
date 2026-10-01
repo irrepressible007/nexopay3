@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-02 00:40+0600\n"
+"POT-Creation-Date: 2026-10-02 01:00+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -176,7 +176,7 @@ msgstr "অ্যাকাউন্ট"
 
 #: apps/accounts/allauth_texts.py:39 apps/cms/admin.py:158
 #: templates/account/login.html:15 templates/accounts/profile.html:11
-#: templates/events/detail.html:154
+#: templates/events/detail.html:156
 msgid "Email"
 msgstr "ইমেইল"
 
@@ -365,7 +365,7 @@ msgid "Re-send Verification"
 msgstr "আবার যাচাই ইমেইল পাঠান"
 
 #: apps/accounts/allauth_texts.py:86 templates/organizers/_ticket_row.html:13
-#: templates/organizers/event_detail.html:95
+#: templates/organizers/event_detail.html:97
 msgid "Remove"
 msgstr "সরান"
 
@@ -989,7 +989,7 @@ msgid "Preview"
 msgstr "প্রিভিউ"
 
 #: apps/cms/admin.py:201 templates/cms/sections/hero.html:28
-#: templates/events/detail.html:183
+#: templates/events/detail.html:185
 msgid "Get tickets"
 msgstr "টিকিট নিন"
 
@@ -1507,6 +1507,12 @@ msgstr "%(p)s সরান"
 #, python-format
 msgid "Placeholders must stay exactly as in the original: %(details)s."
 msgstr "প্লেসহোল্ডারগুলো মূল লেখার মতোই রাখতে হবে: %(details)s।"
+
+#: apps/cms/views.py:68
+#, python-format
+#| msgid "Search events…"
+msgid "Search %(thing)s…"
+msgstr "%(thing)s খুঁজুন…"
 
 #: apps/core/admin_dashboard.py:55
 msgid "Live payment method switched on"
@@ -2193,7 +2199,7 @@ msgid ""
 msgstr ""
 "এই ইভেন্টের টিকিট আপনার ইতিমধ্যে আছে। প্রত্যেকে এটি একবারই কিনতে পারবেন।"
 
-#: apps/organizers/admin.py:44 templates/events/detail.html:142
+#: apps/organizers/admin.py:44 templates/events/detail.html:144
 msgid "Organizer"
 msgstr "আয়োজক"
 
@@ -2531,7 +2537,7 @@ msgstr "পেমেন্ট সম্পন্ন হয়নি। আবা
 msgid "Reason"
 msgstr "কারণ"
 
-#: apps/support/admin.py:32 templates/events/detail.html:180
+#: apps/support/admin.py:32 templates/events/detail.html:182
 #: templates/partials/event_card.html:34
 msgid "From"
 msgstr "শুরু"
@@ -2873,7 +2879,7 @@ msgstr "ইমেইল ঠিকানা"
 msgid "Homepage"
 msgstr "হোমপেজ"
 
-#: nexopay/settings/base.py:404 templates/organizers/event_detail.html:89
+#: nexopay/settings/base.py:404 templates/organizers/event_detail.html:91
 msgid "Gate staff"
 msgstr "গেট স্টাফ"
 
@@ -3054,7 +3060,7 @@ msgstr "QR কোড দেখান"
 
 #: templates/accounts/orders.html:21 templates/cms/sections/featured.html:32
 #: templates/cms/sections/hero.html:118 templates/events/_ticket_panel.html:47
-#: templates/events/detail.html:181 templates/orders/checkout.html:81
+#: templates/events/detail.html:183 templates/orders/checkout.html:81
 #: templates/orders/detail.html:77 templates/partials/event_card.html:33
 msgid "Free"
 msgstr "ফ্রি"
@@ -3174,7 +3180,7 @@ msgstr "এখনো কোনো পেমেন্ট নেই।"
 msgid "Latest orders"
 msgstr "সর্বশেষ অর্ডার"
 
-#: templates/admin/index.html:77 templates/organizers/event_detail.html:82
+#: templates/admin/index.html:77 templates/organizers/event_detail.html:84
 msgid "No orders yet."
 msgstr "এখনো কোনো অর্ডার নেই।"
 
@@ -3194,15 +3200,15 @@ msgstr "বিক্রি"
 msgid "No upcoming events."
 msgstr "কোনো আসন্ন ইভেন্ট নেই।"
 
-#: templates/base.html:43
+#: templates/base.html:51
 msgid "Skip to content"
 msgstr "মূল কনটেন্টে যান"
 
-#: templates/base.html:46
+#: templates/base.html:54
 msgid "Announcement"
 msgstr "ঘোষণা"
 
-#: templates/base.html:50 templates/events/catalog.html:33
+#: templates/base.html:58 templates/events/catalog.html:33
 #: templates/partials/messages.html:9
 msgid "Close"
 msgstr "বন্ধ"
@@ -3211,11 +3217,11 @@ msgstr "বন্ধ"
 msgid "Frequently asked questions"
 msgstr "সাধারণ জিজ্ঞাসা"
 
-#: templates/cms/faq.html:18
+#: templates/cms/faq.html:20
 msgid "Still stuck?"
 msgstr "এখনো সমস্যা?"
 
-#: templates/cms/faq.html:18
+#: templates/cms/faq.html:20
 msgid "Contact our team"
 msgstr "আমাদের টিমের সাথে যোগাযোগ করুন"
 
@@ -3293,7 +3299,6 @@ msgstr ""
 "পেমেন্ট করুন, সাথে সাথে ফোনে QR টিকিট পান।"
 
 #: templates/cms/sections/hero.html:85
-#| msgid "Different event"
 msgid "Recent events"
 msgstr "সাম্প্রতিক ইভেন্ট"
 
@@ -3302,7 +3307,6 @@ msgid "Recently on Nexopay. New events are on the way."
 msgstr "সম্প্রতি নেক্সোপেতে হয়েছে। নতুন ইভেন্ট আসছে।"
 
 #: templates/cms/sections/hero.html:138
-#| msgid "Hours"
 msgid "Host yours"
 msgstr "আপনার ইভেন্ট আয়োজন করুন"
 
@@ -3620,11 +3624,11 @@ msgstr "ম্যাপ"
 msgid "Event terms & conditions"
 msgstr "ইভেন্টের শর্তাবলী"
 
-#: templates/events/detail.html:155
+#: templates/events/detail.html:157
 msgid "Call"
 msgstr "কল"
 
-#: templates/events/detail.html:167
+#: templates/events/detail.html:169
 msgid "You might also like"
 msgstr "আপনার ভালো লাগতে পারে"
 
@@ -4043,43 +4047,43 @@ msgstr "রিফান্ড প্রক্রিয়াধীন"
 msgid "Refund"
 msgstr "রিফান্ড"
 
-#: templates/organizers/event_detail.html:77
+#: templates/organizers/event_detail.html:78
 msgid "Reason for the refund"
 msgstr "রিফান্ডের কারণ"
 
-#: templates/organizers/event_detail.html:78
+#: templates/organizers/event_detail.html:79
 msgid "Refund now"
 msgstr "এখনই রিফান্ড"
 
-#: templates/organizers/event_detail.html:78
+#: templates/organizers/event_detail.html:79
 msgid "Request refund"
 msgstr "রিফান্ডের অনুরোধ"
 
-#: templates/organizers/event_detail.html:90
+#: templates/organizers/event_detail.html:92
 msgid "People who can scan tickets for this event."
 msgstr "যারা এই ইভেন্টের টিকিট স্ক্যান করতে পারবেন।"
 
-#: templates/organizers/event_detail.html:97
+#: templates/organizers/event_detail.html:99
 msgid "Only you can scan right now."
 msgstr "এখন শুধু আপনি স্ক্যান করতে পারবেন।"
 
-#: templates/organizers/event_detail.html:101
+#: templates/organizers/event_detail.html:103
 msgid "staff@email.com"
 msgstr "staff@email.com"
 
-#: templates/organizers/event_detail.html:101
+#: templates/organizers/event_detail.html:103
 msgid "Gate staff email"
 msgstr "গেট স্টাফের ইমেইল"
 
-#: templates/organizers/event_detail.html:102
+#: templates/organizers/event_detail.html:104
 msgid "Add"
 msgstr "যোগ করুন"
 
-#: templates/organizers/event_detail.html:107
+#: templates/organizers/event_detail.html:109
 msgid "Check-in log"
 msgstr "প্রবেশের লগ"
 
-#: templates/organizers/event_detail.html:115
+#: templates/organizers/event_detail.html:117
 msgid "Scans appear here on event day."
 msgstr "ইভেন্টের দিন স্ক্যানগুলো এখানে দেখা যাবে।"
 

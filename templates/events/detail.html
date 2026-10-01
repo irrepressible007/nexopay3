@@ -130,11 +130,13 @@
 
       {% if event.terms_and_conditions %}
       <section x-data="{ open: false }" class="border-y border-line">
-        <button type="button" @click="open = !open" class="group flex w-full items-center justify-between gap-4 py-5 text-left" :aria-expanded="open">
+        <button type="button" id="terms-q" aria-controls="terms-a" @click="open = !open" class="group flex w-full items-center justify-between gap-4 py-5 text-left" :aria-expanded="open">
           <span class="text-lg font-bold transition-colors group-hover:text-brand-fg">{% translate "Event terms & conditions" %}</span>
-          <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted transition duration-300" :class="open && 'rotate-45 bg-brand text-on-brand'">{% icon "plus" "w-4 h-4" %}</span>
+          <span class="accordion-icon grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted" :class="{ 'rotate-45 !bg-brand !text-on-brand': open }">{% icon "plus" "w-4 h-4" %}</span>
         </button>
-        <div x-show="open" x-transition.opacity x-cloak class="prose-nx max-w-[70ch] pb-6 text-sm">{{ event.terms_and_conditions|safe }}</div>
+        <div id="terms-a" role="region" aria-labelledby="terms-q" class="accordion-panel" :class="{ 'is-open': open }" inert :inert="!open">
+          <div><div class="prose-nx max-w-[70ch] pb-6 text-sm">{{ event.terms_and_conditions|safe }}</div></div>
+        </div>
       </section>
       {% endif %}
 

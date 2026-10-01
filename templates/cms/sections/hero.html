@@ -63,7 +63,7 @@
       <form action="{% url 'events:catalog' %}" method="get" role="search" style="--d: 2"
             class="hero-in search-bar mt-8 flex w-full max-w-xl items-center gap-2 rounded-full bg-surface p-1.5 pl-5 ring-1 ring-inset ring-white/10 {% if not visual %}mx-auto{% endif %}">
         <span class="shrink-0 text-subtle">{% icon "search" "w-5 h-5" %}</span>
-        <input type="search" name="q" placeholder="{% translate 'Search events…' %}" aria-label="{% translate 'Search' %}" class="min-w-0 flex-1 bg-transparent py-2.5 text-base outline-none placeholder:text-subtle">
+        <input type="search" name="q" placeholder="{% translate 'Search events…' %}" aria-label="{% translate 'Search' %}" {% if block.search_hints %}data-hints='{{ block.search_hints|json_script_safe }}'{% endif %} class="min-w-0 flex-1 bg-transparent py-2.5 text-base outline-none placeholder:text-subtle">
         <button class="btn-primary h-11 w-11 shrink-0 !p-0 sm:w-auto sm:!px-5" aria-label="{% translate 'Search' %}">{% icon "search" "w-5 h-5 sm:hidden" %}<span class="hidden sm:inline">{% translate "Search" %}</span></button>
       </form>
 

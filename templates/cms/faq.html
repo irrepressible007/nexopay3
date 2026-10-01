@@ -7,11 +7,13 @@
   <div class="mt-10 divide-y divide-line border-y border-line" x-data="{ open: 1 }">
     {% for f in faqs %}
     <div>
-      <button type="button" class="group flex w-full items-center justify-between gap-6 py-5 text-left text-base font-semibold sm:text-lg" @click="open = open === {{ forloop.counter }} ? 0 : {{ forloop.counter }}" :aria-expanded="open === {{ forloop.counter }}">
+      <button type="button" id="faq-q{{ forloop.counter }}" aria-controls="faq-a{{ forloop.counter }}" class="group flex w-full items-center justify-between gap-6 py-5 text-left text-base font-semibold sm:text-lg" @click="open = open === {{ forloop.counter }} ? 0 : {{ forloop.counter }}" :aria-expanded="open === {{ forloop.counter }}">
         <span class="transition duration-300 group-hover:translate-x-1 group-hover:text-brand-fg">{{ f.question }}</span>
-        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted transition duration-300 {% if forloop.first %}rotate-45 bg-brand text-on-brand{% endif %}" :class="open === {{ forloop.counter }} ? 'rotate-45 !bg-brand !text-on-brand' : '!rotate-0 !bg-white/[.06] !text-muted'">{% icon "plus" "w-4 h-4" %}</span>
+        <span class="accordion-icon grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted {% if forloop.first %}rotate-45 !bg-brand !text-on-brand{% endif %}" :class="{ 'rotate-45 !bg-brand !text-on-brand': open === {{ forloop.counter }} }">{% icon "plus" "w-4 h-4" %}</span>
       </button>
-      <div x-show="open === {{ forloop.counter }}" x-transition.opacity {% if not forloop.first %}x-cloak{% endif %} class="prose-nx pb-6 pr-12">{{ f.answer|safe }}</div>
+      <div id="faq-a{{ forloop.counter }}" role="region" aria-labelledby="faq-q{{ forloop.counter }}" class="accordion-panel {% if forloop.first %}is-open{% endif %}" :class="{ 'is-open': open === {{ forloop.counter }} }" {% if not forloop.first %}inert{% endif %} :inert="open !== {{ forloop.counter }}">
+        <div><div class="prose-nx pb-6 pr-12">{{ f.answer|safe }}</div></div>
+      </div>
     </div>
     {% endfor %}
   </div>

@@ -1,8 +1,8 @@
 {% load i18n nexo %}
 {# reveal_from: cards before this position show at once, picture included (they may be the largest thing on screen). #}
 {% if forloop.counter0 >= reveal_from|default:0 %}{% firstof "reveal" as reveal %}{% endif %}
-<a href="{{ event.get_absolute_url }}" data-vt
-   class="group relative block rounded-2xl {{ reveal }} {{ card_class|default:'' }}" style="--i: {{ forloop.counter0|default:0 }}">
+<a href="{{ event.get_absolute_url }}" data-vt data-vt-card
+   class="group relative block rounded-2xl {{ reveal }} {{ card_class|default:'' }}" style="--i: {{ forloop.counter0|default:0 }}; --vtn: ev-{{ event.pk }}">
   <div data-vt-img data-tilt="8" class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-inset ring-white/[.06] transition-[box-shadow,scale] duration-300 group-hover:shadow-(--shadow-float) group-active:scale-[.985]">
     {% if event.banner_renditions %}
       <img src="{{ event.banner_renditions|rendition:480 }}" srcset="{{ event.banner_renditions|srcset }}" sizes="(min-width:1280px) 22vw, (min-width:1024px) 30vw, (min-width:640px) 45vw, 70vw"

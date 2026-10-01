@@ -121,13 +121,24 @@
   :where(input[type="checkbox"], input[type="radio"]) { accent-color: var(--color-brand); }
 }
 
-/* Cross-document page transitions (Chrome/Edge; others simply navigate). The header stays put,
-   and an event card's picture morphs into the event page's banner (named by app.js on click). */
+/* Cross-document page transitions (Chrome/Edge/Safari; others simply navigate). Moving on, the old
+   page eases out to the left while the new one glides in from the right; going back (the "back"
+   type, set in <head> from the Navigation API) mirrors it. Leaving accelerates, arriving
+   decelerates. The header stays put, and an event card's picture morphs into the event page's
+   banner and back again (named by app.js / the <head> script). */
 @view-transition { navigation: auto; }
-::view-transition-old(root) { animation: 160ms ease both vt-out; }
-::view-transition-new(root) { animation: 240ms var(--ease-out-expo) both vt-in; }
-@keyframes vt-out { to { opacity: 0 } }
-@keyframes vt-in { from { opacity: 0; transform: translateY(6px) } }
+::view-transition-old(root) { animation: 200ms cubic-bezier(.4, 0, 1, 1) both vt-out; }
+::view-transition-new(root) { animation: 460ms var(--ease-out-expo) both vt-in; }
+@keyframes vt-out { to { opacity: 0; transform: translate3d(-18px, 0, 0) } }
+@keyframes vt-in { from { opacity: 0; transform: translate3d(28px, 0, 0) } }
+html:active-view-transition-type(back)::view-transition-old(root) { animation-name: vt-out-back; }
+html:active-view-transition-type(back)::view-transition-new(root) { animation-name: vt-in-back; }
+@keyframes vt-out-back { to { opacity: 0; transform: translate3d(18px, 0, 0) } }
+@keyframes vt-in-back { from { opacity: 0; transform: translate3d(-28px, 0, 0) } }
+@keyframes vt-fade-out { to { opacity: 0 } }
+@keyframes vt-fade-in { from { opacity: 0 } }
+html.motion-calm::view-transition-old(root) { animation-name: vt-fade-out; }
+html.motion-calm::view-transition-new(root) { animation-name: vt-fade-in; }
 #site-header { view-transition-name: site-header; }
 ::view-transition-group(site-header) { animation: none; }
 ::view-transition-group(event-banner) { animation-duration: .5s; animation-timing-function: var(--ease-out-expo); }
@@ -315,6 +326,30 @@ html.motion-calm .tilt-glare { display: none; }
    pictures on screen: a fade delays the moment the browser counts the page as shown.) */
 .reveal-ready .img-fade { opacity: 0; transition: opacity .6s ease, transform .7s var(--ease-out-expo); }
 .reveal-ready .img-fade.is-loaded { opacity: 1; }
+
+/* Accordions (FAQ, terms, organizer forms): the panel's height glides open and shut - its single
+   grid row animates between 0fr and 1fr - and the content fades down just after it starts opening.
+   Closed panels are `inert`, so nothing hidden can take keyboard focus. */
+.accordion-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s var(--ease-out-expo); }
+.accordion-panel > * { min-height: 0; overflow: hidden; }
+.accordion-panel.is-open { grid-template-rows: 1fr; }
+.accordion-panel > * > * { opacity: 0; transform: translate3d(0, -6px, 0); transition: opacity .18s ease, transform .3s var(--ease-out-expo); }
+.accordion-panel.is-open > * > * { opacity: 1; transform: none; transition: opacity .4s ease .1s, transform .55s var(--ease-out-expo) .06s; }
+.accordion-icon { transition: rotate .5s var(--ease-spring), transform .5s var(--ease-spring), background-color .3s ease, color .3s ease; }
+
+/* Filtering the events list: the cards that stay glide to their new places, new ones grow in, gone
+   ones shrink away (a same-page view transition; app.js names the cards only while it runs). */
+html.vt-filter #results [data-vt-card] { view-transition-name: var(--vtn); view-transition-class: ev-card; }
+html.vt-filter::view-transition-old(root), html.vt-filter::view-transition-new(root) { animation: none; }
+::view-transition-group(*.ev-card) { animation-duration: .5s; animation-timing-function: var(--ease-out-expo); }
+::view-transition-new(*.ev-card):only-child { animation: card-in .45s var(--ease-out-expo) both; }
+::view-transition-old(*.ev-card):only-child { animation: card-out .22s cubic-bezier(.4, 0, 1, 1) both; }
+@keyframes card-in { from { opacity: 0; transform: scale(.94) } }
+@keyframes card-out { to { opacity: 0; transform: scale(.94) } }
+
+/* Search hints that take turns in the hero's search box (app.js); the old one fades before the next. */
+input.hint-swap::placeholder { opacity: 0; }
+input::placeholder { transition: opacity .25s ease; }
 
 /* Thin progress bar at the top while a page or filter result loads. */
 .loading-bar {

@@ -24,13 +24,19 @@
   {% if LANG == "bn" %}<link rel="preload" href="{% static 'fonts/hind-bn-400.woff2' %}" as="font" type="font/woff2" crossorigin>{% endif %}
   {% comment %}Runs before the first paint, so revealed content never flashes; only where motion is welcome.
   Placed before the stylesheet: an inline script after it would make the parser wait for the CSS.{% endcomment %}
-  {% if sitecfg.motion_level != "off" %}<script>if(matchMedia("(prefers-reduced-motion: no-preference)").matches&&"IntersectionObserver"in window)document.documentElement.classList.add("reveal-ready")</script>{% endif %}
+  {% if sitecfg.motion_level != "off" %}<script>if(matchMedia("(prefers-reduced-motion: no-preference)").matches&&"IntersectionObserver"in window)document.documentElement.classList.add("reveal-ready")</script>
+  {% comment %}Page transitions: tell the CSS which way we're going (back mirrors forward), and coming back to a list
+  from an event page, let its picture fly back into its card. Must be registered before the first paint.{% endcomment %}
+  <script>addEventListener("pagereveal",function(e){var t=e.viewTransition,a=window.navigation&&navigation.activation;if(!t||!a)return;var back=a.navigationType==="traverse"&&a.from&&a.entry&&a.entry.index<a.from.index;try{t.types.add(back?"back":"forward")}catch(_){}if(!back)return;var path=new URL(a.from.url).pathname,img=null;document.querySelectorAll("a[data-vt]").forEach(function(l){if(!img&&l.pathname===path)img=l.querySelector("[data-vt-img]")});if(img&&!document.querySelector(".vt-banner")){img.style.viewTransitionName="event-banner";t.finished.finally(function(){img.style.viewTransitionName=""})}})</script>{% endif %}
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
   <style>:root{--brand:{{ sitecfg.primary_color }};--brand-2:{{ sitecfg.secondary_color }};--accent:{{ sitecfg.accent_color }};--bg:{{ sitecfg.background_color }};--on-brand:{{ sitecfg.on_brand_color }};--on-accent:{{ sitecfg.on_accent_color }}}{% if sitecfg.font_choice == "system" %}:root{--font-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Hind Siliguri",sans-serif;--font-display:var(--font-sans)}html[lang="bn"] body{font-family:"Hind Siliguri",ui-sans-serif,system-ui,sans-serif}{% endif %}</style>
   {% if sitecfg.custom_css %}<style>{{ sitecfg.custom_css|css_block }}</style>{% endif %}
   {% if sitecfg.google_analytics_id %}<script async src="https://www.googletagmanager.com/gtag/js?id={{ sitecfg.google_analytics_id }}"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","{{ sitecfg.google_analytics_id }}")</script>{% endif %}
   {% if sitecfg.meta_pixel_id %}<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","{{ sitecfg.meta_pixel_id }}");fbq("track","PageView")</script>{% endif %}
+  {% comment %}Pages start loading while the pointer rests on a link (or the finger presses it), so the next page and its
+  transition are ready almost instantly. Never for actions, downloads, payments, the scanner or the control room.{% endcomment %}
+  <script type="speculationrules">{"prefetch":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/accounts/logout/*","/*/accounts/logout/*","/checkout/*","/*/checkout/*","/payments/*","/scan/*","/*/scan/*","/t/*","/*/t/*","/i18n/*","{% url 'admin:index' %}*","/*{% url 'admin:index' %}*","/*.pdf","/*.ics","/*.csv","/*/pdf/"]}},{"not":{"selector_matches":"[download], [target=_blank], [rel~=nofollow], [data-no-prefetch]"}}]},"eagerness":"moderate"}]}</script>
   <script defer src="{% static 'js/htmx.min.js' %}"></script>
   <script defer src="{% static 'js/app.js' %}"></script>
   <script defer src="{% static 'js/alpine.min.js' %}"></script>
