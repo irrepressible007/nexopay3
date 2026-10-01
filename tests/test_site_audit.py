@@ -1,4 +1,6 @@
 """Regressions found in the site audit: favicon, error pages, ticket links, admin query counts."""
+import re
+
 import pytest
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.contenttypes.models import ContentType
@@ -50,7 +52,8 @@ def test_404_page_is_branded_with_search(client):
     response = client.get("/no-such-page-here/")
     assert response.status_code == 404
     html = response.content.decode()
-    assert "This page isn&#x27;t here" in html or "This page isn't here" in html
+    text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", html))  # the title is split into words for its reveal
+    assert "This page isn&#x27;t here" in text or "This page isn't here" in text
     assert 'role="search"' in html
 
 

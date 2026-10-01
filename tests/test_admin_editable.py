@@ -118,7 +118,9 @@ class TestMenusAndSettings:
         hero.title_en = "Big *nights* ahead"
         hero.save()
         content = client.get("/").content.decode()
-        assert 'Big <span class="text-hl">nights</span> ahead' in content
+        # Each word is wrapped for the word-by-word reveal; the accent span still wraps "nights".
+        assert '<span class="text-hl"><span class="sw"><span class="sw-i" style="--wi:1">nights</span></span></span>' in content
+        assert 'style="--wi:0">Big</span>' in content and 'style="--wi:2">ahead</span>' in content
 
 
 def test_all_admin_editing_screens_open(client):

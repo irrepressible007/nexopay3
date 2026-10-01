@@ -339,6 +339,53 @@ html.motion-calm .tilt-glare { display: none; }
 .reveal-ready .reveal.is-in { animation: reveal-in .7s var(--ease-out-expo) both; animation-delay: calc(min(var(--i, 0), 8) * 50ms); }
 .reveal-ready:not(.reveal-live) .reveal:not(.is-in) { animation: reveal-in .6s ease 2.5s both; }
 
+/* With scroll-driven animations (Chrome, Edge, Safari) the reveal follows the scroll instead of
+   playing once: blocks rise and fade in as they come up the screen, a step apart within a row, and
+   sink back if you scroll up again. Elsewhere the play-once version above stays. */
+@supports (animation-timeline: view()) and (width: mod(3px, 2px)) {
+  .reveal-ready .reveal, .reveal-ready .reveal.is-in, .reveal-ready .reveal:not(.is-in),
+  .reveal-ready:not(.reveal-live) .reveal:not(.is-in) {
+    opacity: 1;
+    animation: reveal-scrub linear both;
+    animation-timeline: view();
+    animation-range: entry calc(mod(var(--i, 0), 4) * 6%) cover calc(26% + mod(var(--i, 0), 4) * 4%);
+    animation-timing-function: cubic-bezier(.22, .61, .36, 1);
+  }
+}
+@keyframes reveal-scrub { from { opacity: 0; transform: translate3d(0, 28px, 0) } }
+
+/* Text reveals. |split_words wraps each word: <span class="sw"> (a mask) > <span class="sw-i">
+   (the word, --wi = its number). The mask's padding and matching negative margin keep descenders
+   and Bangla vowel signs from being cut while the word slides through it. */
+.sw { display: inline-block; overflow: hidden; vertical-align: bottom; padding: .14em .05em .22em; margin: -.14em -.05em -.22em; }
+.sw-i { display: inline-block; }
+
+/* On load (hero headline, page titles): word after word slides up out of its line. */
+.words-in .sw-i { animation: word-up 1s var(--ease-out-expo) both; animation-delay: calc(var(--wd, 80ms) + min(var(--wi), 14) * 65ms); }
+@keyframes word-up { from { transform: translate3d(0, 112%, 0) } }
+
+/* The paragraph under a headline sharpens in from a blur once the words are under way. */
+.blur-in { animation: blur-in .9s var(--ease-out-expo) both; animation-delay: var(--bd, 320ms); }
+@keyframes blur-in { from { opacity: 0; filter: blur(10px); transform: translate3d(0, 8px, 0) } }
+
+/* Section headings: words rise and fade in one after another as the heading comes up the screen,
+   tied to the scroll (and back down when scrolling up). Older browsers: once, as it scrolls in. */
+.words-scroll .sw { overflow: visible; }
+@supports (animation-timeline: view()) {
+  .reveal-ready .words-scroll { view-timeline: --words block; }
+  .reveal-ready .words-scroll .sw-i {
+    animation: word-rise linear both;
+    animation-timeline: --words;
+    animation-range: cover calc(min(var(--wi), 12) * 2.5%) cover calc(20% + min(var(--wi), 12) * 2.5%);
+    animation-timing-function: cubic-bezier(.22, .61, .36, 1);
+  }
+}
+@supports not (animation-timeline: view()) {
+  .reveal-ready .words-scroll:not(.is-in) .sw-i { opacity: 0; }
+  .reveal-ready .words-scroll.is-in .sw-i { animation: word-rise .8s var(--ease-out-expo) both; animation-delay: calc(min(var(--wi), 12) * 60ms); }
+}
+@keyframes word-rise { from { opacity: 0; transform: translate3d(0, .55em, 0) } }
+
 /* Pictures further down the page fade in once loaded instead of popping in. (Never the first
    pictures on screen: a fade delays the moment the browser counts the page as shown.) */
 .reveal-ready .img-fade { opacity: 0; transition: opacity .6s ease, transform .7s var(--ease-out-expo); }

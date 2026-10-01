@@ -3,10 +3,10 @@
   <div class="relative overflow-hidden rounded-3xl bg-surface p-6 ring-1 ring-inset ring-white/[.07] sm:p-12 lg:p-16">
     <div class="pointer-events-none absolute -right-40 -top-40 h-96 w-96 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--color-brand)_35%,transparent),transparent)]" aria-hidden="true"></div>
     <div class="relative grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-      <div class="reveal">
-        <h2 class="text-3xl font-bold tracking-tight sm:text-5xl">{{ section.title|default:_("Hosting an event?") }}</h2>
-        <p class="mt-4 max-w-lg text-lg text-muted">{{ section.subtitle|default:_("Sell tickets with bKash, Nagad and cards, and scan guests in at the gate.") }}</p>
-        <a href="{{ section.link_url|default:'/organizers/apply/' }}" class="btn-primary btn-lg mt-8">{{ section.cta_label|default:_("List your event") }}{% icon "arrow-right" "w-5 h-5" %}</a>
+      <div>
+        <h2 class="words-scroll text-3xl font-bold tracking-tight sm:text-5xl">{{ section.title|default:_("Hosting an event?")|split_words }}</h2>
+        <p class="reveal mt-4 max-w-lg text-lg text-muted" style="--i: 1">{{ section.subtitle|default:_("Sell tickets with bKash, Nagad and cards, and scan guests in at the gate.") }}</p>
+        <a href="{{ section.link_url|default:'/organizers/apply/' }}" class="reveal btn-primary btn-lg mt-8" style="--i: 2">{{ section.cta_label|default:_("List your event") }}{% icon "arrow-right" "w-5 h-5" %}</a>
       </div>
       <ul class="grid gap-x-8 gap-y-8 sm:grid-cols-2">
         {% with icon_css="grid h-11 w-11 place-items-center rounded-full bg-brand/15 text-brand-fg transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110" %}

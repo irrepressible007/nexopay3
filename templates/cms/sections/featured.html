@@ -1,9 +1,9 @@
 {% load i18n nexo %}
 <section class="container-x section-gap" x-data="{ scroll(d) { $refs.row.scrollBy({ left: d * $refs.row.clientWidth * .8, behavior: 'smooth' }) } }">
-  <div class="reveal mb-6 flex items-end justify-between gap-4 sm:mb-8">
+  <div class="mb-6 flex items-end justify-between gap-4 sm:mb-8">
     <div class="min-w-0">
-      <h2 class="text-2xl font-bold tracking-tight sm:text-[1.875rem]">{{ section.title|default:_("Featured events") }}</h2>
-      {% if section.subtitle %}<p class="mt-1.5 max-w-2xl text-muted">{{ section.subtitle }}</p>{% endif %}
+      <h2 class="words-scroll text-2xl font-bold tracking-tight sm:text-[1.875rem]">{{ section.title|default:_("Featured events")|split_words }}</h2>
+      {% if section.subtitle %}<p class="reveal mt-1.5 max-w-2xl text-muted" style="--i: 1">{{ section.subtitle }}</p>{% endif %}
     </div>
     {% if block.events|length > 2 %}
     <div class="hidden shrink-0 gap-2 sm:flex">

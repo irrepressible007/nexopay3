@@ -374,7 +374,8 @@ window.nxWakeLock = async () => {
     const io = new IntersectionObserver((entries) => {
       for (const e of entries) if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
     }, { rootMargin: "0px 0px -6% 0px", threshold: 0.08 });
-    const scan = (scope) => scope.querySelectorAll(".reveal:not(.is-in)").forEach((el) => io.observe(el));
+    // (Where the browser ties these to the scroll itself, app.css ignores is-in.)
+    const scan = (scope) => scope.querySelectorAll(".reveal:not(.is-in), .words-scroll:not(.is-in)").forEach((el) => io.observe(el));
     scan(document);
     root.classList.add("reveal-live");
     document.addEventListener("htmx:afterSettle", (e) => scan(e.target));

@@ -3,7 +3,8 @@
 {% block title %}{% translate "FAQ" %} | {{ sitecfg.site_name }}{% endblock %}
 {% block content %}
 <div class="container-x max-w-3xl py-10 sm:py-16">
-  <h1 class="text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.05] tracking-[-0.03em]">{% translate "Frequently asked questions" %}</h1>
+  {% translate "Frequently asked questions" as title %}
+  <h1 class="words-in text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.05] tracking-[-0.03em]">{{ title|split_words }}</h1>
   <div class="mt-10 divide-y divide-line border-y border-line" x-data="{ open: 1 }">
     {% for f in faqs %}
     <div>

@@ -55,12 +55,12 @@
   <div class="container-x grid grid-cols-1 items-center gap-10 pb-6 pt-8 sm:pt-14 lg:gap-14 lg:pb-2 lg:pt-14 xl:gap-20
               {% if visual %}lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]{% else %}justify-items-center pb-4 pt-16 text-center sm:pt-24{% endif %}">
     <div class="w-full min-w-0 {% if visual %}max-w-[40rem]{% else %}max-w-3xl{% endif %}">
-      <h1 class="hero-in text-[clamp(2.4rem,5.2vw,3.75rem)] font-bold leading-[1.04] tracking-[-0.035em]" style="--d: 0">
-        {% if section.title %}{{ section.title|highlight }}{% else %}{{ sitecfg.tagline|highlight }}{% endif %}
+      <h1 class="words-in text-[clamp(2.4rem,5.2vw,3.75rem)] font-bold leading-[1.04] tracking-[-0.035em]">
+        {% if section.title %}{{ section.title|highlight|split_words }}{% else %}{{ sitecfg.tagline|highlight|split_words }}{% endif %}
       </h1>
-      <p class="hero-in mt-5 max-w-lg text-base leading-relaxed text-muted sm:text-lg {% if not visual %}mx-auto{% endif %}" style="--d: 1">{% if section.subtitle %}{{ section.subtitle }}{% else %}{% translate "Concerts, festivals, competitions, workshops and more. Pay with bKash, Nagad or card, and get an instant QR ticket on your phone." %}{% endif %}</p>
+      <p class="blur-in mt-5 max-w-lg text-base leading-relaxed text-muted sm:text-lg {% if not visual %}mx-auto{% endif %}" style="--bd: 380ms">{% if section.subtitle %}{{ section.subtitle }}{% else %}{% translate "Concerts, festivals, competitions, workshops and more. Pay with bKash, Nagad or card, and get an instant QR ticket on your phone." %}{% endif %}</p>
 
-      <form action="{% url 'events:catalog' %}" method="get" role="search" style="--d: 2"
+      <form action="{% url 'events:catalog' %}" method="get" role="search" style="--d: 6"
             class="hero-in search-bar mt-8 flex w-full max-w-xl items-center gap-2 rounded-full bg-surface p-1.5 pl-5 ring-1 ring-inset ring-white/10 {% if not visual %}mx-auto{% endif %}">
         <span class="shrink-0 text-subtle">{% icon "search" "w-5 h-5" %}</span>
         <input type="search" name="q" placeholder="{% translate 'Search events…' %}" aria-label="{% translate 'Search' %}" {% if block.search_hints %}data-hints='{{ block.search_hints|json_script_safe }}'{% endif %} class="min-w-0 flex-1 bg-transparent py-2.5 text-base outline-none placeholder:text-subtle">
@@ -68,7 +68,7 @@
       </form>
 
       {% if block.hero_categories %}
-      <div class="hero-in mt-5 flex flex-wrap gap-2 {% if not visual %}justify-center{% endif %}" style="--d: 3">
+      <div class="hero-in mt-5 flex flex-wrap gap-2 {% if not visual %}justify-center{% endif %}" style="--d: 7">
         {% for cat in block.hero_categories %}
         <a href="{% url 'events:catalog' %}?category={{ cat.slug }}" class="chip group max-w-full" style="--c: {{ cat.accent_color }}">
           <span class="text-[var(--c)] transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110">{% category_icon cat "w-4 h-4 shrink-0" %}</span><span class="min-w-0 truncate">{{ cat.name }}</span>

@@ -63,8 +63,8 @@
         <a href="{% url 'events:catalog' %}?category={{ c.slug }}" class="chip !gap-1.5 !px-3 !py-1 text-[13px]"><span style="color: {{ c.accent_color }}">{% category_icon c "w-3.5 h-3.5" %}</span>{{ c.name }}</a>
         {% endfor %}
       </div>
-      <h1 class="mt-4 text-[clamp(1.9rem,4.6vw,3.25rem)] font-bold leading-[1.06] tracking-[-0.03em]">{{ event.title }}</h1>
-      {% if event.summary %}<p class="mt-3 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{{ event.summary }}</p>{% endif %}
+      <h1 class="words-in mt-4 text-[clamp(1.9rem,4.6vw,3.25rem)] font-bold leading-[1.06] tracking-[-0.03em]" style="--wd: 140ms">{{ event.title|split_words }}</h1>
+      {% if event.summary %}<p class="blur-in mt-3 max-w-2xl text-base leading-relaxed text-muted sm:text-lg" style="--bd: 420ms">{{ event.summary }}</p>{% endif %}
       <ul role="list" class="mt-6 grid gap-4 text-sm sm:grid-cols-3">
         {% with ic="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted ring-1 ring-inset ring-white/[.08]" %}
         <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "calendar" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="sr-only">{% translate "Date" %}</p><p class="font-semibold">{% if event.is_multi_day %}{{ event.starts_at|date:"j M"|bn_digits }} – {{ event.ends_at|date:"j M Y"|bn_digits }}{% else %}{{ event.starts_at|date:"D, j F Y"|bn_digits }}{% endif %}</p><p class="text-muted">{{ event.starts_at|date:"g:i A"|bn_digits }}{% if event.ends_at %} - {{ event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</p></div></li>

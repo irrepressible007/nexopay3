@@ -3,7 +3,8 @@
 {% block title %}{% translate "Events" %} | {{ sitecfg.site_name }}{% endblock %}
 {% block content %}
 <section class="container-x pb-6 pt-8 sm:pb-8 sm:pt-12">
-  <h1 class="text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.05] tracking-[-0.03em]">{% translate "Find your next" %} {% translate "experience" %}</h1>
+  {% translate "Find your next" as t1 %}{% translate "experience" as t2 %}
+  <h1 class="words-in text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.05] tracking-[-0.03em]">{{ t1|add:" "|add:t2|split_words }}</h1>
   <div class="search-bar mt-6 flex max-w-2xl items-center gap-2 rounded-full bg-surface p-1.5 pl-5 ring-1 ring-inset ring-white/10">
     <span class="shrink-0 text-subtle">{% icon "search" "w-5 h-5" %}</span>
     <input id="q" type="search" name="q" value="{{ query }}" placeholder="{% translate 'Search events…' %}" aria-label="{% translate 'Search' %}"

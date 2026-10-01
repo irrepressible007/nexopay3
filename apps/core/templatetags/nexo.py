@@ -131,3 +131,34 @@ def highlight(text):
 
     escaped = escape(text or "")
     return mark_safe(_HIGHLIGHT.sub(r'<span class="text-hl">\1</span>', escaped))
+
+
+_TAG = re.compile(r"(<[^>]+>)")
+_WORD = re.compile(r"(\s+)")
+
+
+@register.filter(is_safe=True)
+def split_words(value):
+    """
+    Wrap every word in a clipping mask for the word-by-word text reveals (.words-in, .words-scroll):
+    <span class="sw"><span class="sw-i" style="--wi:N">word</span></span>. Plain text is escaped
+    first; markup that is already safe (e.g. |highlight's accent spans) keeps its tags. Words are
+    split on spaces only, so Bangla conjuncts and punctuation stay whole.
+    """
+    from django.utils.html import conditional_escape
+
+    html = str(conditional_escape(value or ""))
+    out, n = [], 0
+    for part in _TAG.split(html):
+        if not part or part.startswith("<"):
+            out.append(part)
+            continue
+        for piece in _WORD.split(part):
+            if not piece:
+                continue
+            if piece.isspace():
+                out.append(" ")
+            else:
+                out.append(f'<span class="sw"><span class="sw-i" style="--wi:{n}">{piece}</span></span>')
+                n += 1
+    return mark_safe("".join(out))

@@ -6,8 +6,9 @@
   <div class="pointer-events-none absolute left-1/2 top-0 h-[30rem] w-[min(60rem,150vw)] -translate-x-1/2 -translate-y-1/3 bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--color-brand)_30%,transparent),transparent)]" aria-hidden="true"></div>
   <div class="container-x relative pb-16 pt-14 text-center sm:pb-20 sm:pt-24">
     <p class="hero-in text-sm font-semibold text-brand-fg" style="--d: 0">{% translate "For organizers" %}</p>
-    <h1 class="hero-in mx-auto mt-4 max-w-3xl text-[clamp(2.4rem,6.5vw,4.5rem)] font-bold leading-[1.03] tracking-[-0.035em]" style="--d: 1">{% translate "Sell out your next event" %} {% translate "on Nexopay" %}</h1>
-    <p class="hero-in mx-auto mt-6 max-w-xl text-lg text-muted" style="--d: 2">{% translate "Flat or multi-segment tickets, local payments, instant QR delivery and gate scanning from any phone." %}</p>
+    {% translate "Sell out your next event" as t1 %}{% translate "on Nexopay" as t2 %}
+    <h1 class="words-in mx-auto mt-4 max-w-3xl text-[clamp(2.4rem,6.5vw,4.5rem)] font-bold leading-[1.03] tracking-[-0.035em]" style="--wd: 140ms">{{ t1|add:" "|add:t2|split_words }}</h1>
+    <p class="blur-in mx-auto mt-6 max-w-xl text-lg text-muted" style="--bd: 450ms">{% translate "Flat or multi-segment tickets, local payments, instant QR delivery and gate scanning from any phone." %}</p>
     <div class="hero-in mt-9 flex flex-wrap justify-center gap-3" style="--d: 3">
       <a href="{% url 'account_signup' %}?next={% url 'organizers:apply' %}" class="btn-primary btn-lg">{% translate "Create an account to apply" %}{% icon "arrow-right" "w-5 h-5" %}</a>
       <a href="{% url 'account_login' %}?next={% url 'organizers:apply' %}" class="btn-ghost btn-lg">{% translate "I already have an account" %}</a>
