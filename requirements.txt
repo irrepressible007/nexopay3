@@ -18,4 +18,5 @@ Pillow>=12,<13
 requests>=2.32,<3
 polib>=1.2,<2
 cryptography>=45
+bcrypt>=4.2,<5  # checks passwords of accounts moved from Nexopay 2 (5.x errors on >72-byte passwords)
 gunicorn>=23,<27  # always-on app server for deploy/cgi_bridge.sh fast mode (hosts without lswsgi)

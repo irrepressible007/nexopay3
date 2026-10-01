@@ -15,7 +15,7 @@
           <table role="presentation" width="100%" style="font-size:14px;line-height:1.6;color:#c8c8cd">
             <tr><td style="color:#8e8e95;width:110px">{% translate "Order" %}</td><td style="color:#fff;font-weight:600">{{ order.reference }}</td></tr>
             <tr><td style="color:#8e8e95">{% translate "When" %}</td><td style="color:#fff">{{ event.starts_at|date:"l, j F Y · g:i A" }}</td></tr>
-            <tr><td style="color:#8e8e95">{% translate "Where" %}</td><td style="color:#fff">{{ event.venue_name|default:_("Online") }}</td></tr>
+            <tr><td style="color:#8e8e95">{% translate "Where" %}</td><td style="color:#fff">{{ event.place }}</td></tr>
           </table>
           <div style="margin:20px 0 8px;font-size:12px;letter-spacing:2px;color:#8e8e95">{% translate "TICKETS" %}</div>
           {% for t in tickets %}

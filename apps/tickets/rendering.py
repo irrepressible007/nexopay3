@@ -101,7 +101,7 @@ def render_tickets_pdf(tickets, language: str = "en") -> bytes:
             local_start = timezone.localtime(event.starts_at)
             rows = [
                 (translation.gettext("Date & time"), date_format(local_start, "l, j F Y · g:i A")),
-                (translation.gettext("Venue"), event.venue_name or translation.gettext("Online")),
+                (translation.gettext("Venue"), event.place),
                 (translation.gettext("Ticket"), ticket.ticket_type.name),
                 (translation.gettext("Name"), ticket.holder_name or ticket.owner.get_full_name()),
             ]

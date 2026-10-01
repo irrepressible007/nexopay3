@@ -109,7 +109,7 @@
             <div class="min-w-0">
               <p class="text-[13px] font-semibold text-white/75">{{ e.starts_at|date:"D, j M"|bn_digits }} · {{ e.starts_at|date:"g:i A"|bn_digits }}</p>
               <p class="mt-1 line-clamp-3 text-lg font-bold leading-tight text-white sm:line-clamp-2 sm:text-xl xl:text-2xl">{{ e.title }}</p>
-              <p class="mt-1 line-clamp-2 text-sm text-white/70">{{ e.venue_name|default:_("Online") }}</p>
+              <p class="mt-1 line-clamp-2 text-sm text-white/70">{{ e.place }}</p>
             </div>
             <span class="price shrink-0 rounded-full bg-white px-3.5 py-1.5 text-sm font-bold text-ink transition-colors duration-300 group-hover:bg-brand group-hover:text-on-brand">
               {% if e.min_price == 0 %}{% translate "Free" %}{% elif e.min_price %}{{ e.min_price|taka }}{% else %}{% translate "Details" %}{% endif %}

@@ -149,6 +149,18 @@ Old Nexopay 2 links (`/login`, `/register`, `/event/<slug>`, …) redirect to th
 `www.` redirects to the bare domain. Afterwards in Cloudflare: Purge Everything, Always Use HTTPS,
 Minimum TLS 1.2, and register `https://nexopay.com.bd` with each payment provider.
 
+### Bringing over Nexopay 2's data
+
+Accounts (same email and password), the past event(s) as archives, pages and partner logos.
+Reads Nexopay 2's database read-only with the login in `~/nexopay2/.env` (never printed);
+registrations stay in the old database. Safe to re-run: nothing already here is overwritten.
+
+```bash
+cd ~/nexopay3 && source ~/virtualenv/nexopay3/3.11/bin/activate
+python manage.py import_nexopay2 --venue "BUET"          # dry run: what would come over
+python manage.py import_nexopay2 --venue "BUET" --yes    # do it
+```
+
 ## 8. Going live checklist
 
 - [ ] `python manage.py check --deploy` clean; `DEBUG=False`; admin URL changed; strong superuser password

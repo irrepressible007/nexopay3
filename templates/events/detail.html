@@ -19,7 +19,7 @@
   "endDate": "{{ end_time|date:'c' }}",
   "eventStatus": "{% if event.status == 'cancelled' %}https://schema.org/EventCancelled{% else %}https://schema.org/EventScheduled{% endif %}",
   "eventAttendanceMode": "{% if event.is_online %}https://schema.org/OnlineEventAttendanceMode{% else %}https://schema.org/OfflineEventAttendanceMode{% endif %}",
-  "location": {"@type": "Place", "name": {{ event.venue_name|default:"Online"|json_script_safe }}, "address": {{ event.venue_address|add:" "|add:event.city|json_script_safe }}},
+  "location": {"@type": "Place", "name": {% if event.is_online %}"Online"{% else %}{{ event.venue_name|default:event.city|json_script_safe }}{% endif %}, "address": {{ event.venue_address|add:" "|add:event.city|json_script_safe }}},
   {% if event.banner %}"image": ["{{ event.banner_renditions|rendition:1600|default:event.banner.url }}"],{% endif %}
   "description": {{ event.summary|default:event.description|striptags|truncatechars:300|json_script_safe }},
   "organizer": {"@type": "Organization", "name": {{ event.organizer.name|json_script_safe }}},
@@ -67,8 +67,8 @@
       {% if event.summary %}<p class="mt-3 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{{ event.summary }}</p>{% endif %}
       <ul role="list" class="mt-6 grid gap-4 text-sm sm:grid-cols-3">
         {% with ic="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted ring-1 ring-inset ring-white/[.08]" %}
-        <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "calendar" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="sr-only">{% translate "Date" %}</p><p class="font-semibold">{{ event.starts_at|date:"D, j F Y"|bn_digits }}</p><p class="text-muted">{{ event.starts_at|date:"g:i A"|bn_digits }}{% if event.ends_at %} - {{ event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</p></div></li>
-        <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "pin" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="sr-only">{% translate "Venue" %}</p><p class="font-semibold">{{ event.venue_name|default:_("Online event") }}</p><p class="text-muted">{{ event.city }}</p></div></li>
+        <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "calendar" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="sr-only">{% translate "Date" %}</p><p class="font-semibold">{% if event.is_multi_day %}{{ event.starts_at|date:"j M"|bn_digits }} – {{ event.ends_at|date:"j M Y"|bn_digits }}{% else %}{{ event.starts_at|date:"D, j F Y"|bn_digits }}{% endif %}</p><p class="text-muted">{{ event.starts_at|date:"g:i A"|bn_digits }}{% if event.ends_at %} - {{ event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</p></div></li>
+        <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "pin" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="sr-only">{% translate "Venue" %}</p><p class="font-semibold">{{ event.place }}</p><p class="text-muted">{{ event.city }}</p></div></li>
         <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "building" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="text-muted">{% translate "Organized by" %}</p><p class="font-semibold">{{ event.organizer.name }}</p></div></li>
         {% endwith %}
       </ul>
@@ -85,15 +85,15 @@
         </div>
       </div>
 
-      {% if sitecfg.show_calendar_buttons or sitecfg.show_share_buttons %}
+      {% if sitecfg.show_calendar_buttons and event.status != "ended" and event.status != "cancelled" or sitecfg.show_share_buttons %}
       <div class="mt-4 grid grid-cols-2 gap-2" x-data="share('{{ share_url|escapejs }}', '{{ event.title|escapejs }}')">
-        {% if sitecfg.show_calendar_buttons %}
+        {% if sitecfg.show_calendar_buttons and event.status != "ended" and event.status != "cancelled" %}
         <a class="btn-ghost btn-sm" href="{% url 'events:ics' event.slug %}">{% icon "download" "w-4 h-4 shrink-0" %}{% translate "Add to calendar" %}</a>
         <a class="btn-ghost btn-sm" target="_blank" rel="noopener"
            href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text={{ event.title|urlencode }}&amp;dates={{ event.starts_at|date:'Ymd\THis' }}/{{ end_time|date:'Ymd\THis' }}&amp;ctz=Asia/Dhaka&amp;location={{ event.venue_name|urlencode }}&amp;details={{ share_url|urlencode }}">{% icon "calendar" "w-4 h-4 shrink-0" %}{% translate "Google Calendar" %}</a>
         {% endif %}
         {% if sitecfg.show_share_buttons %}
-        <div class="col-span-2 flex items-center justify-between gap-3 {% if sitecfg.show_calendar_buttons %}mt-2 border-t border-line pt-4{% endif %}">
+        <div class="col-span-2 flex items-center justify-between gap-3 {% if sitecfg.show_calendar_buttons and event.status != "ended" and event.status != "cancelled" %}mt-2 border-t border-line pt-4{% endif %}">
           <span class="text-sm font-medium text-muted">{% translate "Share event" %}</span>
           <div class="flex gap-2">
             <a class="btn-icon" target="_blank" rel="noopener" href="https://wa.me/?text={{ event.title|urlencode }}%20{{ share_url|urlencode }}" aria-label="{% translate 'WhatsApp' %}" title="{% translate 'WhatsApp' %}">{% icon "whatsapp" "w-4 h-4" %}</a>
@@ -121,7 +121,7 @@
         <div class="card mt-4 flex items-center gap-4 p-5">
           <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-brand/15 text-brand-fg">{% icon "pin" "w-5 h-5" %}</span>
           <div class="min-w-0 flex-1">
-            <p class="font-semibold">{{ event.venue_name|default:_("Online event") }}</p>
+            <p class="font-semibold">{{ event.place }}</p>
             <p class="text-sm text-muted">{{ event.venue_address }}{% if event.venue_address %}, {% endif %}{{ event.city }}</p>
           </div>
           {% if event.map_url %}<a href="{{ event.map_url }}" target="_blank" rel="noopener" class="btn-ghost btn-sm shrink-0">{% translate "Map" %}{% icon "external" "w-4 h-4" %}</a>{% endif %}

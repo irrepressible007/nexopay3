@@ -4,7 +4,7 @@
 
 {% translate "Order" %}: {{ order.reference }}
 {% translate "Date" %}: {{ event.starts_at|date:"l, j F Y · g:i A" }}
-{% translate "Venue" %}: {{ event.venue_name|default:_("Online") }}
+{% translate "Venue" %}: {{ event.place }}
 
 {% for t in tickets %}- {{ t.ticket_type.name }} · {{ t.code }}
 {% endfor %}

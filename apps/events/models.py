@@ -137,6 +137,19 @@ class Event(TimeStampedModel):
 
     # --- state helpers -----------------------------------------------------------
     @property
+    def place(self) -> str:
+        """Where it happens, for display: the venue, "Online", or at least the city (never a wrong "Online")."""
+        if self.venue_name:
+            return self.venue_name
+        return str(_("Online")) if self.is_online else self.city
+
+    @property
+    def is_multi_day(self) -> bool:
+        if not self.ends_at:
+            return False
+        return timezone.localtime(self.ends_at).date() != timezone.localtime(self.starts_at).date()
+
+    @property
     def is_purchasable(self) -> bool:
         if self.status != self.Status.ON_SALE:
             return False
