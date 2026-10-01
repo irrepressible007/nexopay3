@@ -21,6 +21,28 @@ def _event_cards(qs, limit):
     )
 
 
+def _hero_posters(limit, now):
+    """
+    The hero deck, in priority order: featured events, then the soonest upcoming ones, so the
+    homepage fills itself as events are published. With nothing upcoming, recent past events
+    (shown as "Ended") keep the page from looking empty. Returns (events, are_past_events).
+    """
+    with_poster = Event.objects.public().exclude(banner="")
+    upcoming = with_poster.exclude(status__in=("ended", "cancelled")).filter(
+        Q(ends_at__gte=now) | Q(ends_at__isnull=True, starts_at__gte=now - timedelta(hours=12))
+    )
+    picked = _event_cards(upcoming.filter(featured=True).order_by("featured_rank", "starts_at"), limit)
+    if len(picked) < limit:
+        picked += _event_cards(
+            upcoming.exclude(pk__in=[e.pk for e in picked]).order_by("starts_at"), limit - len(picked)
+        )
+    if picked:
+        return picked, False
+    recent = with_poster.filter(status="ended", starts_at__gte=now - timedelta(days=365)).order_by("-starts_at")
+    recent = _event_cards(recent, min(limit, 3))
+    return recent, bool(recent)
+
+
 def _section_payload(section: HomeSection, shown: set):
     """What one homepage section shows. `shown` collects the events the hero already displays,
     so the Featured row below doesn't repeat them."""
@@ -32,20 +54,18 @@ def _section_payload(section: HomeSection, shown: set):
         slides = list(HeroSlide.objects.visible().select_related("event"))
         if slides:
             return {"slides": slides}
-        # Headline, search and quick category links beside a deck of featured event posters, the hero
-        # picture or nothing, as chosen in Site settings.
+        # Headline, search and quick category links beside one deck of event posters (or the hero
+        # picture, or nothing, as chosen in Site settings).
         site = SiteSettings.load()
         mode = site.hero_mode
-        posters = []
+        posters, past = [], False
         if mode in (SiteSettings.HeroMode.AUTO, SiteSettings.HeroMode.POSTERS):
-            posters = _event_cards(
-                Event.objects.featured().exclude(banner="").order_by("featured_rank", "starts_at"),
-                site.hero_poster_count,
-            )
+            posters, past = _hero_posters(site.hero_poster_count, now)
         shown.update(e.pk for e in posters)
         return {
             "hero_categories": list(Category.objects.filter(is_active=True, show_in_hero=True)[:8]),
             "posters": posters,
+            "posters_past": past,
             "show_image": mode in (SiteSettings.HeroMode.AUTO, SiteSettings.HeroMode.IMAGE),
             "interval_ms": site.hero_autoplay_seconds * 1000,
             "brand": True,

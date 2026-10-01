@@ -82,7 +82,7 @@
     {# Featured posters as a deck that deals itself forward: flick the top card away on phones, it fans out with depth on large screens. #}
     <div class="poster-stack-in mx-auto w-full min-w-0 max-w-[34rem] pt-7 lg:mx-0 lg:max-w-none lg:pr-[14%] lg:pt-0" data-parallax x-data="posterStack({{ posters|length }}, {{ block.interval_ms|default:0 }})"
          @mouseenter="pause()" @mouseleave="play()" @focusin="pause()" @focusout="play()"
-         aria-roledescription="carousel" aria-label="{% translate 'Featured events' %}">
+         aria-roledescription="carousel" aria-label="{% if block.posters_past %}{% translate 'Recent events' %}{% else %}{% translate 'Featured events' %}{% endif %}">
       <div class="poster-stack aspect-square sm:aspect-[4/3]" x-ref="deck" @dragstart.prevent>
         {# The front poster's own colours, blurred into a soft light behind the stack. #}
         <div class="pointer-events-none absolute -inset-[8%] -z-10 hidden lg:block" aria-hidden="true">
@@ -107,13 +107,17 @@
           <span class="tilt-glare" aria-hidden="true"></span>
           <div class="absolute inset-x-0 bottom-0 z-[3] flex items-end justify-between gap-3 p-4 sm:p-5">
             <div class="min-w-0">
-              <p class="text-[13px] font-semibold text-white/75">{{ e.starts_at|date:"D, j M"|bn_digits }} · {{ e.starts_at|date:"g:i A"|bn_digits }}</p>
+              <p class="text-[13px] font-semibold text-white/75">{% if block.posters_past %}{{ e.starts_at|date:"j M Y"|bn_digits }}{% else %}{{ e.starts_at|date:"D, j M"|bn_digits }} · {{ e.starts_at|date:"g:i A"|bn_digits }}{% endif %}</p>
               <p class="mt-1 line-clamp-3 text-lg font-bold leading-tight text-white sm:line-clamp-2 sm:text-xl xl:text-2xl">{{ e.title }}</p>
               <p class="mt-1 line-clamp-2 text-sm text-white/70">{{ e.place }}</p>
             </div>
+            {% if block.posters_past %}
+            <span class="shrink-0 rounded-full bg-white/15 px-3.5 py-1.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/20 backdrop-blur">{% translate "Ended" %}</span>
+            {% else %}
             <span class="price shrink-0 rounded-full bg-white px-3.5 py-1.5 text-sm font-bold text-ink transition-colors duration-300 group-hover:bg-brand group-hover:text-on-brand">
               {% if e.min_price == 0 %}{% translate "Free" %}{% elif e.min_price %}{{ e.min_price|taka }}{% else %}{% translate "Details" %}{% endif %}
             </span>
+            {% endif %}
           </div>
         </a>
         {% endfor %}
@@ -126,6 +130,13 @@
                 aria-label="{{ e.title }}"></button>
         {% endfor %}
       </div>
+      {% endif %}
+      {% if block.posters_past %}
+      {# Nothing upcoming yet: say so, and point organizers somewhere useful. #}
+      <p class="mt-5 text-center text-sm text-muted lg:text-left">
+        {% translate "Recently on Nexopay. New events are on the way." %}
+        <a href="{% url 'organizers:apply' %}" class="link whitespace-nowrap">{% translate "Host yours" %}</a>
+      </p>
       {% endif %}
     </div>
     {% elif block.show_image and section.image %}

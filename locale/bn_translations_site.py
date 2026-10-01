@@ -27,4 +27,7 @@ TR = {
     "Upload an SVG, PNG, JPG, WebP, GIF or ICO image.": "SVG, PNG, JPG, WebP, GIF বা ICO ছবি আপলোড করুন।",
     "This SVG contains scripts or links to outside content. Export it as a plain image.":
         "এই SVG-তে স্ক্রিপ্ট বা বাইরের কনটেন্টের লিংক আছে। সাধারণ ছবি হিসেবে এক্সপোর্ট করুন।",
+    "Recent events": "সাম্প্রতিক ইভেন্ট",
+    "Recently on Nexopay. New events are on the way.": "সম্প্রতি নেক্সোপেতে হয়েছে। নতুন ইভেন্ট আসছে।",
+    "Host yours": "আপনার ইভেন্ট আয়োজন করুন",
 }

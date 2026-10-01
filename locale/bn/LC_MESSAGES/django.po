@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 18:03+0600\n"
+"POT-Creation-Date: 2026-10-02 00:40+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "Buyers"
 msgstr "ক্রেতা"
 
 #: apps/accounts/admin.py:37 apps/organizers/apps.py:8
-#: nexopay/settings/base.py:292
+#: nexopay/settings/base.py:306
 msgid "Organizers"
 msgstr "আয়োজক"
 
@@ -851,7 +851,7 @@ msgstr "টু-ফ্যাক্টর যাচাই"
 msgid "Sessions"
 msgstr "সেশন"
 
-#: apps/accounts/apps.py:8 nexopay/settings/base.py:290
+#: apps/accounts/apps.py:8 nexopay/settings/base.py:304
 msgid "People"
 msgstr "ব্যবহারকারী"
 
@@ -1420,8 +1420,8 @@ msgstr "ফুটার কলাম"
 msgid "footer columns"
 msgstr "ফুটার কলাম"
 
-#: apps/cms/models.py:371 nexopay/settings/base.py:324
-#: nexopay/settings/base.py:370
+#: apps/cms/models.py:371 nexopay/settings/base.py:338
+#: nexopay/settings/base.py:384
 msgid "Header menu"
 msgstr "হেডার মেনু"
 
@@ -1468,8 +1468,8 @@ msgstr "হেডার মেনু"
 msgid "FAQ item"
 msgstr "প্রশ্নোত্তর"
 
-#: apps/cms/models.py:463 nexopay/settings/base.py:330
-#: nexopay/settings/base.py:373 templates/cms/faq.html:3
+#: apps/cms/models.py:463 nexopay/settings/base.py:344
+#: nexopay/settings/base.py:387 templates/cms/faq.html:3
 msgid "FAQ"
 msgstr "সাধারণ জিজ্ঞাসা"
 
@@ -1630,11 +1630,11 @@ msgstr "খসড়া ইভেন্ট"
 msgid "New event"
 msgstr "নতুন ইভেন্ট"
 
-#: apps/core/admin_dashboard.py:165 nexopay/settings/base.py:320
+#: apps/core/admin_dashboard.py:165 nexopay/settings/base.py:334
 msgid "Homepage sections"
 msgstr "হোমপেজ সেকশন"
 
-#: apps/core/admin_dashboard.py:166 nexopay/settings/base.py:318
+#: apps/core/admin_dashboard.py:166 nexopay/settings/base.py:332
 msgid "Look & settings"
 msgstr "লুক ও সেটিংস"
 
@@ -1646,8 +1646,8 @@ msgstr "ঘোষণা বার"
 msgid "Site texts"
 msgstr "সাইটের লেখা"
 
-#: apps/core/admin_dashboard.py:169 nexopay/settings/base.py:273
-#: nexopay/settings/base.py:411
+#: apps/core/admin_dashboard.py:169 nexopay/settings/base.py:287
+#: nexopay/settings/base.py:425
 msgid "View website"
 msgstr "ওয়েবসাইট দেখুন"
 
@@ -1657,7 +1657,6 @@ msgstr "বাছাই করাগুলো CSV-তে এক্সপোর�
 
 #: apps/core/security.py:61
 #, python-format
-#| msgid "Please upload a file smaller than 5 MB."
 msgid "Please upload a file smaller than %(n)s MB."
 msgstr "%(n)s MB-এর চেয়ে ছোট ফাইল আপলোড করুন।"
 
@@ -1672,7 +1671,6 @@ msgstr "এটি আসল %(type)s ফাইল নয়।"
 
 #: apps/core/security.py:85 apps/core/security.py:118
 #, python-format
-#| msgid "Please upload a file smaller than 5 MB."
 msgid "Please upload an image smaller than %(n)s MB."
 msgstr "%(n)s MB-এর চেয়ে ছোট ছবি আপলোড করুন।"
 
@@ -1827,7 +1825,7 @@ msgstr "কপি করুন"
 msgid "Draft copy created. Change its title and date, then publish it."
 msgstr "খসড়া কপি তৈরি হয়েছে। শিরোনাম ও তারিখ বদলে প্রকাশ করুন।"
 
-#: apps/events/apps.py:8 nexopay/settings/base.py:279
+#: apps/events/apps.py:8 nexopay/settings/base.py:293
 #: templates/events/catalog.html:3
 msgid "Events"
 msgstr "ইভেন্ট"
@@ -1836,7 +1834,7 @@ msgstr "ইভেন্ট"
 msgid "Use a hex colour like #A855F7."
 msgstr "#A855F7 এর মতো হেক্স রং ব্যবহার করুন।"
 
-#: apps/events/models.py:29 apps/events/models.py:178
+#: apps/events/models.py:29 apps/events/models.py:191
 #: apps/support/models.py:36
 msgid "name"
 msgstr "নাম"
@@ -1886,7 +1884,8 @@ msgstr "বিক্রি চলছে"
 msgid "Sold out"
 msgstr "বিক্রি শেষ"
 
-#: apps/events/models.py:78 templates/partials/event_card.html:24
+#: apps/events/models.py:78 templates/cms/sections/hero.html:115
+#: templates/partials/event_card.html:24
 msgid "Ended"
 msgstr "শেষ হয়েছে"
 
@@ -1972,47 +1971,51 @@ msgstr "ইভেন্ট"
 msgid "events"
 msgstr "ইভেন্ট"
 
-#: apps/events/models.py:179
+#: apps/events/models.py:144 templates/partials/event_card.html:30
+msgid "Online"
+msgstr "অনলাইন"
+
+#: apps/events/models.py:192
 msgid "what's included"
 msgstr "যা যা থাকছে"
 
-#: apps/events/models.py:181
+#: apps/events/models.py:194
 msgid "price (BDT)"
 msgstr "মূল্য (টাকা)"
 
-#: apps/events/models.py:183
+#: apps/events/models.py:196
 msgid "total quantity"
 msgstr "মোট সংখ্যা"
 
-#: apps/events/models.py:186
+#: apps/events/models.py:199
 msgid "available for sale"
 msgstr "বিক্রির জন্য উন্মুক্ত"
 
-#: apps/events/models.py:188
+#: apps/events/models.py:201
 msgid "all-access bundle"
 msgstr "অল-অ্যাক্সেস বান্ডেল"
 
-#: apps/events/models.py:188
+#: apps/events/models.py:201
 msgid "Highlight as the all-inclusive tier."
 msgstr "সব-কিছু-সহ টিকিট হিসেবে হাইলাইট করুন।"
 
-#: apps/events/models.py:191
+#: apps/events/models.py:204
 msgid "allow buying more than one"
 msgstr "একাধিক কেনার অনুমতি"
 
-#: apps/events/models.py:193
+#: apps/events/models.py:206
 msgid "By default one email/phone can buy this ticket only once."
 msgstr "ডিফল্টভাবে একটি ইমেইল/ফোন দিয়ে এই টিকিট একবারই কেনা যায়।"
 
-#: apps/events/models.py:195
+#: apps/events/models.py:208
 msgid "max per order"
 msgstr "প্রতি অর্ডারে সর্বোচ্চ"
 
-#: apps/events/models.py:201
+#: apps/events/models.py:214
 msgid "ticket type"
 msgstr "টিকিটের ধরন"
 
-#: apps/events/models.py:202
+#: apps/events/models.py:215
 msgid "ticket types"
 msgstr "টিকিটের ধরন"
 
@@ -2032,8 +2035,8 @@ msgstr "আসন্ন"
 msgid "Items"
 msgstr "আইটেম"
 
-#: apps/orders/admin.py:46 nexopay/settings/base.py:311
-#: nexopay/settings/base.py:383
+#: apps/orders/admin.py:46 nexopay/settings/base.py:325
+#: nexopay/settings/base.py:397
 msgid "Payment attempts"
 msgstr "পেমেন্টের চেষ্টা"
 
@@ -2076,7 +2079,7 @@ msgstr "টিকিট ডাউনলোড (PDF)"
 msgid "Open the event"
 msgstr "ইভেন্টটি খুলুন"
 
-#: apps/orders/apps.py:8 nexopay/settings/base.py:281
+#: apps/orders/apps.py:8 nexopay/settings/base.py:295
 #: templates/accounts/_nav.html:6 templates/accounts/orders.html:3
 #: templates/accounts/orders.html:6 templates/organizers/event_detail.html:53
 #: templates/partials/nav_user.html:13
@@ -2214,7 +2217,7 @@ msgstr ""
 "আপনি কী ধরনের ইভেন্ট আয়োজন করেন, কত বড়, কত ঘন ঘন? আগের ইভেন্টের লিংক দিলে "
 "ভালো হয়।"
 
-#: apps/organizers/forms.py:51 nexopay/settings/base.py:285
+#: apps/organizers/forms.py:51 nexopay/settings/base.py:299
 #: templates/events/catalog.html:51
 msgid "Categories"
 msgstr "ক্যাটাগরি"
@@ -2559,7 +2562,7 @@ msgstr "সমাধান হয়েছে হিসেবে চিহ্ন
 msgid "%(n)s message(s) resolved."
 msgstr "%(n)sটি বার্তার সমাধান হয়েছে।"
 
-#: apps/support/apps.py:8 nexopay/settings/base.py:339
+#: apps/support/apps.py:8 nexopay/settings/base.py:353
 msgid "Support"
 msgstr "সাপোর্ট"
 
@@ -2676,8 +2679,8 @@ msgstr "অর্ডারটি খুলুন"
 msgid "Result"
 msgstr "ফলাফল"
 
-#: apps/tickets/apps.py:8 nexopay/settings/base.py:283
-#: nexopay/settings/base.py:389 templates/events/_ticket_panel.html:4
+#: apps/tickets/apps.py:8 nexopay/settings/base.py:297
+#: nexopay/settings/base.py:403 templates/events/_ticket_panel.html:4
 #: templates/organizers/event_detail.html:21
 #: templates/organizers/event_form.html:59
 msgid "Tickets"
@@ -2727,12 +2730,6 @@ msgstr "অবৈধ কোড"
 msgid "Date & time"
 msgstr "তারিখ ও সময়"
 
-#: apps/tickets/rendering.py:104 templates/cms/sections/featured.html:29
-#: templates/cms/sections/hero.html:112 templates/emails/tickets.html:18
-#: templates/emails/tickets.txt:7 templates/partials/event_card.html:30
-msgid "Online"
-msgstr "অনলাইন"
-
 #: apps/tickets/rendering.py:105 templates/accounts/_pass.html:36
 #: templates/accounts/_pass.html:54 templates/organizers/event_detail.html:32
 #: templates/organizers/event_detail.html:37 templates/tickets/share.html:3
@@ -2778,117 +2775,117 @@ msgstr "বৈধ নেক্সোপে টিকিট নয়"
 msgid "Your tickets for %(event)s"
 msgstr "%(event)s-এর টিকিট"
 
-#: nexopay/settings/base.py:147
+#: nexopay/settings/base.py:161
 msgid "English"
 msgstr "English"
 
-#: nexopay/settings/base.py:147
+#: nexopay/settings/base.py:161
 msgid "Bangla"
 msgstr "বাংলা"
 
-#: nexopay/settings/base.py:272 templates/organizers/apply_status.html:13
+#: nexopay/settings/base.py:286 templates/organizers/apply_status.html:13
 #: templates/organizers/base.html:12 templates/organizers/event_detail.html:3
 msgid "Dashboard"
 msgstr "ড্যাশবোর্ড"
 
-#: nexopay/settings/base.py:277
+#: nexopay/settings/base.py:291
 msgid "Events & sales"
 msgstr "ইভেন্ট ও বিক্রি"
 
-#: nexopay/settings/base.py:294
+#: nexopay/settings/base.py:308
 msgid "Customers & staff"
 msgstr "গ্রাহক ও স্টাফ"
 
-#: nexopay/settings/base.py:296
+#: nexopay/settings/base.py:310
 msgid "Staff roles"
 msgstr "স্টাফের ভূমিকা"
 
-#: nexopay/settings/base.py:298
+#: nexopay/settings/base.py:312
 msgid "Gate staff (scanners)"
 msgstr "গেট স্টাফ (স্ক্যানার)"
 
-#: nexopay/settings/base.py:303
+#: nexopay/settings/base.py:317
 msgid "Money"
 msgstr "টাকা"
 
-#: nexopay/settings/base.py:305 nexopay/settings/base.py:380
+#: nexopay/settings/base.py:319 nexopay/settings/base.py:394
 #: templates/partials/footer.html:43
 msgid "Payment methods"
 msgstr "পেমেন্ট মাধ্যম"
 
-#: nexopay/settings/base.py:307 nexopay/settings/base.py:381
+#: nexopay/settings/base.py:321 nexopay/settings/base.py:395
 msgid "Refunds"
 msgstr "রিফান্ড"
 
-#: nexopay/settings/base.py:309 nexopay/settings/base.py:382
+#: nexopay/settings/base.py:323 nexopay/settings/base.py:396
 msgid "Payouts"
 msgstr "পেআউট"
 
-#: nexopay/settings/base.py:316
+#: nexopay/settings/base.py:330
 msgid "Website"
 msgstr "ওয়েবসাইট"
 
-#: nexopay/settings/base.py:322 nexopay/settings/base.py:369
+#: nexopay/settings/base.py:336 nexopay/settings/base.py:383
 msgid "Hero slides"
 msgstr "হিরো স্লাইড"
 
-#: nexopay/settings/base.py:326 nexopay/settings/base.py:371
+#: nexopay/settings/base.py:340 nexopay/settings/base.py:385
 msgid "Footer"
 msgstr "ফুটার"
 
-#: nexopay/settings/base.py:328 nexopay/settings/base.py:372
+#: nexopay/settings/base.py:342 nexopay/settings/base.py:386
 msgid "Pages"
 msgstr "পেজ"
 
-#: nexopay/settings/base.py:332 nexopay/settings/base.py:374
+#: nexopay/settings/base.py:346 nexopay/settings/base.py:388
 msgid "Partners"
 msgstr "পার্টনার"
 
-#: nexopay/settings/base.py:334
+#: nexopay/settings/base.py:348
 msgid "Site texts & translations"
 msgstr "সাইটের লেখা ও অনুবাদ"
 
-#: nexopay/settings/base.py:341 nexopay/settings/base.py:397
+#: nexopay/settings/base.py:355 nexopay/settings/base.py:411
 msgid "Messages"
 msgstr "বার্তা"
 
-#: nexopay/settings/base.py:343 nexopay/settings/base.py:398
+#: nexopay/settings/base.py:357 nexopay/settings/base.py:412
 msgid "Message routing"
 msgstr "বার্তার গন্তব্য"
 
-#: nexopay/settings/base.py:348
+#: nexopay/settings/base.py:362
 msgid "System"
 msgstr "সিস্টেম"
 
-#: nexopay/settings/base.py:351 nexopay/settings/base.py:391
+#: nexopay/settings/base.py:365 nexopay/settings/base.py:405
 msgid "Scan log"
 msgstr "স্ক্যান লগ"
 
-#: nexopay/settings/base.py:353
+#: nexopay/settings/base.py:367
 msgid "Background tasks"
 msgstr "ব্যাকগ্রাউন্ড কাজ"
 
-#: nexopay/settings/base.py:356
+#: nexopay/settings/base.py:370
 msgid "Email addresses"
 msgstr "ইমেইল ঠিকানা"
 
-#: nexopay/settings/base.py:368
+#: nexopay/settings/base.py:382
 msgid "Homepage"
 msgstr "হোমপেজ"
 
-#: nexopay/settings/base.py:390 templates/organizers/event_detail.html:89
+#: nexopay/settings/base.py:404 templates/organizers/event_detail.html:89
 msgid "Gate staff"
 msgstr "গেট স্টাফ"
 
-#: nexopay/settings/base.py:406
+#: nexopay/settings/base.py:420
 msgid "Control room"
 msgstr "কন্ট্রোল রুম"
 
-#: nexopay/settings/base.py:412
+#: nexopay/settings/base.py:426
 msgid "Events page"
 msgstr "ইভেন্ট পেজ"
 
-#: nexopay/settings/base.py:413
+#: nexopay/settings/base.py:427
 msgid "FAQ page"
 msgstr "প্রশ্নোত্তর পেজ"
 
@@ -3041,11 +3038,6 @@ msgstr "ইভেন্টের বিস্তারিত"
 msgid "Date"
 msgstr "তারিখ"
 
-#: templates/accounts/_pass.html:52 templates/events/detail.html:71
-#: templates/events/detail.html:124
-msgid "Online event"
-msgstr "অনলাইন ইভেন্ট"
-
 #: templates/accounts/_pass.html:53 templates/events/detail.html:72
 msgid "Organized by"
 msgstr "আয়োজনে"
@@ -3061,7 +3053,7 @@ msgid "Show QR code"
 msgstr "QR কোড দেখান"
 
 #: templates/accounts/orders.html:21 templates/cms/sections/featured.html:32
-#: templates/cms/sections/hero.html:115 templates/events/_ticket_panel.html:47
+#: templates/cms/sections/hero.html:118 templates/events/_ticket_panel.html:47
 #: templates/events/detail.html:181 templates/orders/checkout.html:81
 #: templates/orders/detail.html:77 templates/partials/event_card.html:33
 msgid "Free"
@@ -3279,7 +3271,7 @@ msgid "Next"
 msgstr "পরের"
 
 #: templates/cms/sections/featured.html:32
-#: templates/cms/sections/hero.html:115
+#: templates/cms/sections/hero.html:118
 msgid "Details"
 msgstr "বিস্তারিত"
 
@@ -3299,6 +3291,20 @@ msgid ""
 msgstr ""
 "কনসার্ট, উৎসব, প্রতিযোগিতা, কর্মশালা আর আরও অনেক কিছু। বিকাশ, নগদ বা কার্ডে "
 "পেমেন্ট করুন, সাথে সাথে ফোনে QR টিকিট পান।"
+
+#: templates/cms/sections/hero.html:85
+#| msgid "Different event"
+msgid "Recent events"
+msgstr "সাম্প্রতিক ইভেন্ট"
+
+#: templates/cms/sections/hero.html:137
+msgid "Recently on Nexopay. New events are on the way."
+msgstr "সম্প্রতি নেক্সোপেতে হয়েছে। নতুন ইভেন্ট আসছে।"
+
+#: templates/cms/sections/hero.html:138
+#| msgid "Hours"
+msgid "Host yours"
+msgstr "আপনার ইভেন্ট আয়োজন করুন"
 
 #: templates/cms/sections/organizer_cta.html:7
 msgid "Hosting an event?"
