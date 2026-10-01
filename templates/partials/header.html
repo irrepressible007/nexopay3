@@ -1,8 +1,8 @@
 {% load i18n nexo %}{% get_current_language as LANG %}
-<header id="site-header" x-data="{ open: false, scrolled: false }" @scroll.window.throttle.50ms="scrolled = window.scrollY > 8"
+<header id="site-header" x-data="{ open: false, scrolled: window.scrollY > 8 }" @scroll.window="scrolled = window.scrollY > 8" @pageshow.window="scrolled = window.scrollY > 8"
         @keydown.escape.window="open = false"
-        :class="scrolled || open ? 'glass border-line' : 'border-transparent'"
-        class="sticky top-0 z-50 border-b border-transparent transition-colors duration-300">
+        :class="{ 'is-glass': scrolled || open, 'is-open': open }"
+        class="sticky top-0 z-50">
   <div class="container-x flex h-16 items-center gap-3">
     <a href="{% url 'cms:home' %}" class="min-w-0 shrink text-text transition-opacity hover:opacity-85" aria-label="{{ sitecfg.site_name }}">{% include "partials/logo.html" %}</a>
 

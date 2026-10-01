@@ -140,6 +140,23 @@ html:active-view-transition-type(back)::view-transition-new(root) { animation-na
 html.motion-calm::view-transition-old(root) { animation-name: vt-fade-out; }
 html.motion-calm::view-transition-new(root) { animation-name: vt-fade-in; }
 #site-header { view-transition-name: site-header; }
+/* The header's glass is its own layer whose opacity follows the scroll position: the browser draws
+   it in the same frame as the scroll and on the very first paint (a back navigation that restores the
+   scroll included), so bright content never shows through a header that hasn't caught up yet - the
+   old "white flash". Without scroll-driven animations (Firefox), the header's Alpine state sets .is-glass
+   instead: on at once, fading back only at the top. An open phone menu always shows the glass. */
+#site-header::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: color-mix(in oklab, var(--color-ink) 82%, transparent);
+  -webkit-backdrop-filter: blur(12px) saturate(1.5); backdrop-filter: blur(12px) saturate(1.5);
+  border-bottom: 1px solid var(--color-line);
+  opacity: 0; transition: opacity .3s ease;
+}
+#site-header.is-glass::before { opacity: 1; transition: none; }
+@supports (animation-timeline: scroll()) {
+  #site-header:not(.is-open)::before { animation: header-glass linear both; animation-timeline: scroll(root block); animation-range: 0 8px; }
+}
+@keyframes header-glass { from { opacity: 0 } to { opacity: 1 } }
 ::view-transition-group(site-header) { animation: none; }
 ::view-transition-group(event-banner) { animation-duration: .5s; animation-timing-function: var(--ease-out-expo); }
 ::view-transition-old(event-banner), ::view-transition-new(event-banner) { height: 100%; object-fit: cover; overflow: clip; }
