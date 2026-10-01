@@ -67,9 +67,9 @@
       {% if event.summary %}<p class="blur-in mt-3 max-w-2xl text-base leading-relaxed text-muted sm:text-lg" style="--bd: 420ms">{{ event.summary }}</p>{% endif %}
       <ul role="list" class="mt-6 grid gap-4 text-sm sm:grid-cols-3">
         {% with ic="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted ring-1 ring-inset ring-white/[.08]" %}
-        <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "calendar" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="sr-only">{% translate "Date" %}</p><p class="font-semibold">{% if event.is_multi_day %}{{ event.starts_at|date:"j M"|bn_digits }} – {{ event.ends_at|date:"j M Y"|bn_digits }}{% else %}{{ event.starts_at|date:"D, j F Y"|bn_digits }}{% endif %}</p><p class="text-muted">{{ event.starts_at|date:"g:i A"|bn_digits }}{% if event.ends_at %} - {{ event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</p></div></li>
-        <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "pin" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="sr-only">{% translate "Venue" %}</p><p class="font-semibold">{{ event.place }}</p><p class="text-muted">{{ event.city }}</p></div></li>
-        <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "building" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="text-muted">{% translate "Organized by" %}</p><p class="font-semibold">{{ event.organizer.name }}</p></div></li>
+        <li class="hero-in flex min-w-0 items-center gap-3" style="--d: 4"><span class="{{ ic }}">{% icon "calendar" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="sr-only">{% translate "Date" %}</p><p class="font-semibold">{% if event.is_multi_day %}{{ event.starts_at|date:"j M"|bn_digits }} – {{ event.ends_at|date:"j M Y"|bn_digits }}{% else %}{{ event.starts_at|date:"D, j F Y"|bn_digits }}{% endif %}</p><p class="text-muted">{{ event.starts_at|date:"g:i A"|bn_digits }}{% if event.ends_at %} - {{ event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</p></div></li>
+        <li class="hero-in flex min-w-0 items-center gap-3" style="--d: 5"><span class="{{ ic }}">{% icon "pin" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="sr-only">{% translate "Venue" %}</p><p class="font-semibold">{{ event.place }}</p><p class="text-muted">{{ event.city }}</p></div></li>
+        <li class="hero-in flex min-w-0 items-center gap-3" style="--d: 6"><span class="{{ ic }}">{% icon "building" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="text-muted">{% translate "Organized by" %}</p><p class="font-semibold">{{ event.organizer.name }}</p></div></li>
         {% endwith %}
       </ul>
     </header>
@@ -111,14 +111,14 @@
     <div class="min-w-0 space-y-12 lg:col-start-1 lg:row-start-3">
       {% if event.description %}
       <section>
-        <h2 class="text-2xl font-bold tracking-tight">{% translate "About this event" %}</h2>
+        {% translate "About this event" as t %}<h2 class="words-scroll text-2xl font-bold tracking-tight">{{ t|split_words }}</h2>
         <div class="prose-nx mt-4 max-w-[70ch] text-[15px] sm:text-base">{{ event.description|safe }}</div>
       </section>
       {% endif %}
 
       <section>
-        <h2 class="text-2xl font-bold tracking-tight">{% translate "Venue" %}</h2>
-        <div class="card mt-4 flex items-center gap-4 p-5">
+        {% translate "Venue" as t %}<h2 class="words-scroll text-2xl font-bold tracking-tight">{{ t|split_words }}</h2>
+        <div class="reveal-scale card mt-4 flex items-center gap-4 p-5">
           <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-brand/15 text-brand-fg">{% icon "pin" "w-5 h-5" %}</span>
           <div class="min-w-0 flex-1">
             <p class="font-semibold">{{ event.place }}</p>
@@ -129,7 +129,7 @@
       </section>
 
       {% if event.terms_and_conditions %}
-      <section x-data="{ open: false }" class="border-y border-line">
+      <section x-data="{ open: false }" class="reveal border-y border-line">
         <button type="button" id="terms-q" aria-controls="terms-a" @click="open = !open" class="group flex w-full items-center justify-between gap-4 py-5 text-left" :aria-expanded="open">
           <span class="text-lg font-bold transition-colors group-hover:text-brand-fg">{% translate "Event terms & conditions" %}</span>
           <span class="accordion-icon grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted" :class="{ 'rotate-45 !bg-brand !text-on-brand': open }">{% icon "plus" "w-4 h-4" %}</span>
@@ -141,8 +141,8 @@
       {% endif %}
 
       <section>
-        <h2 class="text-2xl font-bold tracking-tight">{% translate "Organizer" %}</h2>
-        <div class="card mt-4 flex flex-col gap-5 p-5 sm:flex-row sm:items-center">
+        {% translate "Organizer" as t %}<h2 class="words-scroll text-2xl font-bold tracking-tight">{{ t|split_words }}</h2>
+        <div class="reveal-scale card mt-4 flex flex-col gap-5 p-5 sm:flex-row sm:items-center">
           <div class="flex min-w-0 flex-1 items-center gap-4">
             {% if event.organizer.logo %}<img src="{{ event.organizer.logo.url }}" alt="" class="h-14 w-14 shrink-0 rounded-full object-cover ring-1 ring-line" loading="lazy">
             {% else %}<span class="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-brand text-xl font-bold text-on-brand">{{ event.organizer.name|slice:":1" }}</span>{% endif %}
@@ -166,7 +166,7 @@
 
 {% if related %}
 <section class="container-x section-gap">
-  <h2 class="mb-6 text-2xl font-bold tracking-tight sm:mb-8 sm:text-[1.875rem]">{% translate "You might also like" %}</h2>
+  {% translate "You might also like" as t %}<h2 class="words-scroll mb-6 text-2xl font-bold tracking-tight sm:mb-8 sm:text-[1.875rem]">{{ t|split_words }}</h2>
   <div class="grid grid-cols-1 gap-x-3 gap-y-8 min-[340px]:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4">
     {% for event in related %}{% include "partials/event_card.html" %}{% endfor %}
   </div>

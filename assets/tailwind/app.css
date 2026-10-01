@@ -331,28 +331,59 @@ html.motion-calm .tilt-glare { display: none; }
 /* Only transform and opacity animate (the graphics chip does those without repainting), hover
    effects need a real mouse, and the reduced-motion rule above switches everything off. */
 
-/* Scroll reveal for card grids. `reveal-ready` is set in <head> (before the first paint, only
-   when motion is welcome); app.js adds `is-in` as each element scrolls into view. If app.js
-   never runs, `reveal-live` is never set and everything fades in after 2.5 s anyway. */
-@keyframes reveal-in { from { opacity: 0; transform: translate3d(0, 12px, 0) } to { opacity: 1; transform: none } }
-.reveal-ready .reveal:not(.is-in) { opacity: 0; }
-.reveal-ready .reveal.is-in { animation: reveal-in .7s var(--ease-out-expo) both; animation-delay: calc(min(var(--i, 0), 8) * 50ms); }
-.reveal-ready:not(.reveal-live) .reveal:not(.is-in) { animation: reveal-in .6s ease 2.5s both; }
+/* Scroll reveals, in a few kinds (each a single keyframe, used tied to the scroll and as the
+   play-once fallback):
+     .reveal        blocks and cards rise and fade in
+     .reveal-text   text rises and sharpens out of a soft blur
+     .reveal-pop    pills and small tiles pop in from slightly smaller
+     .reveal-scale  big panels and banners settle in from a little smaller and lower
+     .reveal-kids   every direct child rises in by itself (long content); so does each block of
+                    .prose-nx text (as .reveal-text), except inside an accordion or an editor
+   Nothing you type into or pay through moves with the scroll: forms and panels holding text
+   fields stay still (a field fading or blurring while you type feels broken).
+   `reveal-ready` is set in <head> (before the first paint, only when motion is welcome); app.js
+   adds `is-in` as each element scrolls into view. If app.js never runs, `reveal-live` is never
+   set and everything fades in after 2.5 s anyway. --i staggers items within a group. */
+.reveal { --rv: rv-rise; }
+.reveal-text, .prose-nx:not([contenteditable]) > * { --rv: rv-text; }
+.reveal-pop { --rv: rv-pop; }
+.reveal-scale { --rv: rv-scale; }
+@keyframes rv-rise { from { opacity: 0; transform: translate3d(0, 28px, 0) } }
+@keyframes rv-text { from { opacity: 0; transform: translate3d(0, 14px, 0); filter: blur(6px) } }
+@keyframes rv-pop { from { opacity: 0; transform: scale(.86) } }
+@keyframes rv-scale { from { opacity: 0; transform: translate3d(0, 24px, 0) scale(.955) } }
+.reveal-ready :is(.reveal, .reveal-text, .reveal-pop, .reveal-scale):not(.is-in) { opacity: 0; }
+.reveal-ready :is(.reveal, .reveal-text, .reveal-pop, .reveal-scale).is-in {
+  animation: var(--rv) .7s var(--ease-out-expo) both; animation-delay: calc(min(var(--i, 0), 8) * 50ms);
+}
+.reveal-ready:not(.reveal-live) :is(.reveal, .reveal-text, .reveal-pop, .reveal-scale):not(.is-in) { animation: var(--rv) .6s ease 2.5s both; }
 
-/* With scroll-driven animations (Chrome, Edge, Safari) the reveal follows the scroll instead of
-   playing once: blocks rise and fade in as they come up the screen, a step apart within a row, and
-   sink back if you scroll up again. Elsewhere the play-once version above stays. */
+/* With scroll-driven animations (Chrome, Edge, Safari) each reveal follows the scroll instead of
+   playing once: it plays out over the first stretch of the element coming up the screen, a step
+   apart within a row, and runs backwards if you scroll up again. Elsewhere the play-once version
+   above stays (and .reveal-kids / .prose-nx blocks simply don't move).
+   A box around a reveal must clip with `overflow: clip`, not `hidden`: `hidden` makes the box its
+   own scroll container, and the reveals inside would follow that (never-moving) box instead of
+   the page and freeze half-faded. */
 @supports (animation-timeline: view()) and (width: mod(3px, 2px)) {
-  .reveal-ready .reveal, .reveal-ready .reveal.is-in, .reveal-ready .reveal:not(.is-in),
-  .reveal-ready:not(.reveal-live) .reveal:not(.is-in) {
+  .reveal-ready :is(.reveal, .reveal-text, .reveal-pop, .reveal-scale),
+  .reveal-ready :is(.reveal, .reveal-text, .reveal-pop, .reveal-scale):is(.is-in, :not(.is-in)),
+  .reveal-ready:not(.reveal-live) :is(.reveal, .reveal-text, .reveal-pop, .reveal-scale):not(.is-in),
+  .reveal-ready :is(.reveal-kids > *, .prose-nx:not([contenteditable]) > *):not(.accordion-panel *) {
     opacity: 1;
-    animation: reveal-scrub linear both;
+    animation: var(--rv, rv-rise) linear both;
     animation-timeline: view();
-    animation-range: entry calc(mod(var(--i, 0), 4) * 6%) cover calc(26% + mod(var(--i, 0), 4) * 4%);
+    animation-range: entry calc(mod(var(--i, 0), 4) * 6%) cover calc(24% + mod(var(--i, 0), 4) * 2%);
     animation-timing-function: cubic-bezier(.22, .61, .36, 1);
   }
+  /* Nothing scrolls past the footer: its columns finish as soon as each is fully on screen. */
+  .reveal-ready footer :is(.reveal, .reveal-text, .reveal-pop, .reveal-scale) { animation-range: entry 0% entry 100%; }
+
+  /* Parallax: a big picture drifts a little slower than the page while it crosses the screen.
+     It moves with `translate` and is enlarged with `transform`, so a hover zoom (`scale`) still adds on. */
+  .reveal-ready .parallax-img { transform: scale(1.14); animation: parallax linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
 }
-@keyframes reveal-scrub { from { opacity: 0; transform: translate3d(0, 28px, 0) } }
+@keyframes parallax { from { translate: 0 -6% } to { translate: 0 6% } }
 
 /* Text reveals. |split_words wraps each word: <span class="sw"> (a mask) > <span class="sw-i">
    (the word, --wi = its number). The mask's padding and matching negative margin keep descenders

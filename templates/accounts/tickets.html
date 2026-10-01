@@ -56,7 +56,7 @@
     </summary>
     <ul class="mt-4 grid gap-3 sm:grid-cols-2">
       {% for event, tickets in past %}
-      <li class="card flex items-center gap-4 p-4 opacity-80">
+      <li class="reveal card flex items-center gap-4 p-4 opacity-80" style="--i: {{ forloop.counter0 }}">
         <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-white/[.06] text-center leading-none"><span><span class="block text-[11px] text-subtle">{{ event.starts_at|date:"M" }}</span><span class="font-bold">{{ event.starts_at|date:"j"|bn_digits }}</span></span></span>
         <div class="min-w-0"><p class="line-clamp-2 font-semibold">{{ event.title }}</p><p class="text-sm text-subtle">{% blocktranslate count n=tickets|length %}{{ n }} ticket{% plural %}{{ n }} tickets{% endblocktranslate %}</p></div>
       </li>

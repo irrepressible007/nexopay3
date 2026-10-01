@@ -8,7 +8,7 @@
   {% if orders %}
   <div class="card divide-y divide-line">
     {% for o in orders %}
-    <a href="{{ o.get_absolute_url }}" class="group flex flex-col gap-2 p-5 transition-colors hover:bg-white/[.03] sm:flex-row sm:items-center sm:gap-6">
+    <a href="{{ o.get_absolute_url }}" style="--i: {{ forloop.counter0 }}" class="reveal group flex flex-col gap-2 p-5 transition-colors hover:bg-white/[.03] sm:flex-row sm:items-center sm:gap-6">
       <div class="min-w-0 flex-1">
         <p class="truncate font-semibold">{{ o.event.title }}</p>
         <p class="mt-0.5 text-sm text-muted"><span class="font-mono">{{ o.reference }}</span> · {{ o.created_at|date:"j M Y"|bn_digits }}</p>

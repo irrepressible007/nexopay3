@@ -5,7 +5,7 @@
   <div class="flex flex-wrap gap-2.5">
     {% for cat in block.categories %}
     <a href="{% url 'events:catalog' %}?category={{ cat.slug }}"
-       class="reveal cat-pill group max-w-full {% if forloop.counter > 8 %}max-sm:hidden{% endif %}" style="--c: {{ cat.accent_color }}; --i: {{ forloop.counter0 }}"
+       class="reveal-pop cat-pill group max-w-full {% if forloop.counter > 8 %}max-sm:hidden{% endif %}" style="--c: {{ cat.accent_color }}; --i: {{ forloop.counter0 }}"
        {% if forloop.counter > 8 %}:class="all && 'max-sm:inline-flex!'"{% endif %}>
       <span class="shrink-0 text-[var(--c)] transition-transform duration-300 ease-out group-hover:-rotate-12 group-hover:scale-110">{% category_icon cat "w-[1.125rem] h-[1.125rem]" %}</span>
       <span class="min-w-0 truncate">{{ cat.name }}</span>

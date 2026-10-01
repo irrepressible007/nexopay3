@@ -11,14 +11,14 @@
 </div>
 
 <div class="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-  <div class="card p-5"><p class="text-sm font-medium text-muted">{% translate "Your earnings" %}</p><p class="mt-2 text-2xl font-bold tabular-nums sm:text-3xl" data-count>{{ stats.net|taka }}</p><p class="mt-1 text-xs text-subtle">{% blocktranslate with g=stats.gross|taka %}{{ g }} gross sales{% endblocktranslate %}</p></div>
-  <div class="card p-5"><p class="text-sm font-medium text-muted">{% translate "Tickets sold" %}</p><p class="mt-2 text-2xl font-bold tabular-nums sm:text-3xl" data-count>{{ stats.tickets|bn_digits }}</p><p class="mt-1 text-xs text-subtle">{% blocktranslate with n=stats.orders %}{{ n }} orders{% endblocktranslate %}</p></div>
-  <div class="card p-5"><p class="text-sm font-medium text-muted">{% translate "Checked in" %}</p><p class="mt-2 text-2xl font-bold tabular-nums sm:text-3xl" data-count>{{ stats.checked_in|bn_digits }}</p><p class="mt-1 text-xs text-subtle">{% translate "across all events" %}</p></div>
-  <div class="card p-5"><p class="text-sm font-medium text-muted">{% translate "Upcoming" %}</p><p class="mt-2 text-2xl font-bold tabular-nums sm:text-3xl" data-count>{{ stats.upcoming|bn_digits }}</p><p class="mt-1 text-xs text-subtle">{% translate "events" %}</p></div>
+  <div class="reveal-pop card p-5" style="--i: 0"><p class="text-sm font-medium text-muted">{% translate "Your earnings" %}</p><p class="mt-2 text-2xl font-bold tabular-nums sm:text-3xl" data-count>{{ stats.net|taka }}</p><p class="mt-1 text-xs text-subtle">{% blocktranslate with g=stats.gross|taka %}{{ g }} gross sales{% endblocktranslate %}</p></div>
+  <div class="reveal-pop card p-5" style="--i: 1"><p class="text-sm font-medium text-muted">{% translate "Tickets sold" %}</p><p class="mt-2 text-2xl font-bold tabular-nums sm:text-3xl" data-count>{{ stats.tickets|bn_digits }}</p><p class="mt-1 text-xs text-subtle">{% blocktranslate with n=stats.orders %}{{ n }} orders{% endblocktranslate %}</p></div>
+  <div class="reveal-pop card p-5" style="--i: 2"><p class="text-sm font-medium text-muted">{% translate "Checked in" %}</p><p class="mt-2 text-2xl font-bold tabular-nums sm:text-3xl" data-count>{{ stats.checked_in|bn_digits }}</p><p class="mt-1 text-xs text-subtle">{% translate "across all events" %}</p></div>
+  <div class="reveal-pop card p-5" style="--i: 3"><p class="text-sm font-medium text-muted">{% translate "Upcoming" %}</p><p class="mt-2 text-2xl font-bold tabular-nums sm:text-3xl" data-count>{{ stats.upcoming|bn_digits }}</p><p class="mt-1 text-xs text-subtle">{% translate "events" %}</p></div>
 </div>
 
 <div class="mt-8 grid gap-6 lg:grid-cols-[1fr_360px]">
-  <section class="card overflow-hidden">
+  <section class="reveal-scale card overflow-hidden">
     <h2 class="border-b border-line px-6 py-4 text-lg font-bold">{% translate "Your events" %}</h2>
     {% if events %}
     <ul class="divide-y divide-line">
@@ -48,7 +48,7 @@
     {% endif %}
   </section>
 
-  <section class="card overflow-hidden">
+  <section class="reveal-scale card overflow-hidden">
     <h2 class="border-b border-line px-6 py-4 text-lg font-bold">{% translate "Latest sales" %}</h2>
     <ul class="divide-y divide-line text-sm">
       {% for o in recent %}

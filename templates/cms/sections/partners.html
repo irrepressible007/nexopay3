@@ -1,7 +1,7 @@
 {% load i18n %}
-<section class="section-gap overflow-hidden">
-  {% if section.title %}<p class="container-x mb-8 text-center text-sm font-medium text-subtle">{{ section.title }}</p>{% endif %}
-  <div class="relative [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
+<section class="section-gap overflow-hidden supports-[overflow:clip]:overflow-clip">
+  {% if section.title %}<p class="reveal-text container-x mb-8 text-center text-sm font-medium text-subtle">{{ section.title }}</p>{% endif %}
+  <div class="reveal relative [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
     <div class="flex w-max animate-marquee items-center gap-14 hover:[animation-play-state:paused]">
       {% for round in "ab" %}{% for p in block.partners %}
       <a href="{{ p.url|default:'#' }}" class="shrink-0 opacity-55 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0" {% if round == "b" %}aria-hidden="true" tabindex="-1"{% endif %}>

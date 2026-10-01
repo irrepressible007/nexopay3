@@ -1,7 +1,7 @@
 {% load i18n nexo %}
 <footer class="mt-20 border-t border-line pb-[env(safe-area-inset-bottom)] sm:mt-28">
   <div class="container-x flex flex-col gap-12 py-14 lg:flex-row lg:gap-16 lg:py-16">
-    <div class="min-w-0 lg:w-80 lg:shrink-0">
+    <div class="reveal min-w-0 lg:w-80 lg:shrink-0">
       <a href="{% url 'cms:home' %}" class="inline-block text-text">{% include "partials/logo.html" %}</a>
       <p class="mt-4 max-w-sm text-sm leading-relaxed text-muted">{{ sitecfg.footer_text|default:sitecfg.tagline }}</p>
       <div class="mt-6 flex flex-wrap gap-2">
@@ -15,7 +15,7 @@
 
     <div class="flex min-w-0 flex-1 flex-wrap gap-x-10 gap-y-10">
       {% for column in footer_columns %}
-      <div class="min-w-0 flex-1 basis-[8.5rem]">
+      <div class="reveal min-w-0 flex-1 basis-[8.5rem]" style="--i: {{ forloop.counter }}">
         <h2 class="text-sm font-semibold text-text">{{ column.title }}</h2>
         <ul class="mt-4 space-y-3 text-sm text-muted">
           {% for link in column.links %}
@@ -25,7 +25,7 @@
       </div>
       {% endfor %}
       {% if sitecfg.contact_email or sitecfg.contact_phone or sitecfg.address %}
-      <div class="min-w-0 max-w-full basis-full sm:basis-auto">
+      <div class="reveal min-w-0 max-w-full basis-full sm:basis-auto" style="--i: 3">
         <h2 class="text-sm font-semibold text-text">{% translate "Get in touch" %}</h2>
         <ul class="mt-4 space-y-3 text-sm text-muted">
           {% if sitecfg.contact_email %}<li class="flex min-w-0 items-start gap-2">{% icon "mail" "w-4 h-4 mt-0.5 shrink-0" %}<a href="mailto:{{ sitecfg.contact_email }}" class="min-w-0 [overflow-wrap:break-word] transition-colors hover:text-text">{{ sitecfg.contact_email }}</a></li>{% endif %}
