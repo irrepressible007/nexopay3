@@ -4,6 +4,7 @@
 #
 #   bash ~/nexopay3/deploy/cutover.sh check      # read-only: what would happen, and any blockers
 #   bash ~/nexopay3/deploy/cutover.sh go         # do it; asks before each step that can't be undone
+#   bash ~/nexopay3/deploy/cutover.sh finish     # if go stopped at its very last check: check again, record it
 #   bash ~/nexopay3/deploy/cutover.sh rollback   # put Nexopay 2 back exactly as it was
 #   bash ~/nexopay3/deploy/cutover.sh status
 #
@@ -43,9 +44,10 @@ main() {
   case "${1:-status}" in
     check) check ;;
     go) go ;;
+    finish) finish ;;
     rollback) rollback ;;
     status) status ;;
-    *) echo "Usage: $0 check|go|rollback|status" >&2; exit 1 ;;
+    *) echo "Usage: $0 check|go|finish|rollback|status" >&2; exit 1 ;;
   esac
 }
 
@@ -116,8 +118,10 @@ cpanel_blocks() {  # the cPanel-generated parts of an .htaccess (PHP version han
 
 origin_curl() {  # curl the live domain on this server directly (skipping Cloudflare) when possible
   local ip
-  for ip in 127.0.0.1 $(hostname -I 2>/dev/null || true); do
-    if curl -sk -m 10 -o /dev/null --resolve "$DOMAIN:443:$ip" "https://$DOMAIN/robots.txt" 2>/dev/null; then
+  for ip in $(hostname -I 2>/dev/null || true) 127.0.0.1; do
+    # Only an address that serves *this* site's stylesheet counts: 127.0.0.1 may be the server's default site.
+    if [ "$(curl -sk -m 10 -o /dev/null -w '%{http_code}' --resolve "$DOMAIN:443:$ip" \
+          "https://$DOMAIN/static/css/app.css" 2>/dev/null)" = 200 ]; then
       curl -sk -m 60 --resolve "$DOMAIN:443:$ip" "$@"
       return
     fi
@@ -216,6 +220,12 @@ go() {
     echo "Already moved on $(state_get TS). To undo: bash $APP_DIR/deploy/cutover.sh rollback"
     exit 0
   fi
+  if [ "$(env_get SITE_URL)" = "https://$DOMAIN" ]; then
+    echo "Nexopay 3 is already set up on https://$DOMAIN - go won't run again."
+    echo "  If the move stopped at its last check:  bash $APP_DIR/deploy/cutover.sh finish"
+    echo "  To undo it:                             bash $APP_DIR/deploy/cutover.sh rollback"
+    exit 1
+  fi
   check || exit 1
 
   local answer admin_path old_site old_host old_media ts backup nested
@@ -309,16 +319,35 @@ go() {
   trap - ERR
   sed -i 's/^DONE=.*/DONE=yes/' "$STATE"
 
+  next_steps
+}
+
+# The move ran, but its last check stopped it (e.g. it tested the wrong local address): check again.
+finish() {
+  [ -f "$STATE" ] || { echo "No move recorded - run check, then go."; exit 1; }
+  if [ "$(state_get DONE)" = yes ]; then next_steps; return; fi
+  [ "$(env_get SITE_URL)" = "https://$DOMAIN" ] || { echo "The move didn't get as far as switching the address - run rollback, then go again."; exit 1; }
+  say "Checking https://$DOMAIN"
+  rm -f "$LIVE_ROOT/nexopay-maintenance.html"
+  smoke_test
+  sed -i 's/^DONE=.*/DONE=yes/' "$STATE"
+  next_steps
+}
+
+next_steps() {
+  local old_host admin_path
+  old_host="$(grep -E '^SITE_URL=' "$(state_get ENV_BACKUP)" 2>/dev/null | cut -d= -f2- | sed 's#^https\?://##; s#/.*##' || true)"
+  admin_path="$(env_get ADMIN_URL)"
   say "✓ Nexopay 3 is live at https://$DOMAIN"
   cat <<NEXT
-  Old site files:   $backup   (its code ~/nexopay2 and database are untouched)
-  Control room:     https://$DOMAIN/$admin_path/
+  Old site files:   $(state_get BACKUP)   (its code ~/nexopay2 and database are untouched)
+  Control room:     https://$DOMAIN/${admin_path%/}/
   Undo everything:  bash $APP_DIR/deploy/cutover.sh rollback
 
   Now, in the Cloudflare dashboard for $DOMAIN:
     • Caching › Configuration › Purge Everything   (drops the old site's cached files)
     • SSL/TLS › Edge Certificates: "Always Use HTTPS" on, "Minimum TLS Version" 1.2
-    • Any cache rule written for $old_host: make it cover $DOMAIN too
+    • Any cache rule written for ${old_host:-the staging address}: make it cover $DOMAIN too
   And with each payment provider (bKash, Nagad, Upay, SSLCommerz merchant panels):
     • the registered website / callback domain must be https://$DOMAIN
 NEXT
