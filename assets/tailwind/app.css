@@ -59,7 +59,7 @@
   --color-line-strong: rgb(255 255 255 / 0.14);
   --color-text: #f2f2f4;
   --color-muted: color-mix(in oklab, var(--color-text) 66%, var(--color-ink));
-  --color-subtle: color-mix(in oklab, var(--color-text) 50%, var(--color-ink));
+  --color-subtle: color-mix(in oklab, var(--color-text) 58%, var(--color-ink));
   --color-success: #3ecf8e;
   --color-warning: #f5b544;
   --color-danger: #f4606c;

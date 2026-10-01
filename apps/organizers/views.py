@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_admins, send_mail
 from django.db import transaction
-from django.db.models import Count, DecimalField, ExpressionWrapper, F, Q, Sum
+from django.db.models import Count, DecimalField, Exists, ExpressionWrapper, F, OuterRef, Q, Sum
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -205,7 +205,11 @@ def event_detail(request, slug):
             "revenue": revenue,
             "checkin": checkin,
             "totals": totals,
-            "orders": orders.prefetch_related("items__ticket_type").order_by("-paid_at")[:100],
+            "orders": orders.prefetch_related("items__ticket_type").annotate(
+                unused=Count("tickets", filter=Q(tickets__status=Ticket.Status.VALID)),
+                refund_open=Exists(Refund.objects.filter(
+                    order=OuterRef("pk"), status__in=(Refund.Status.REQUESTED, Refund.Status.APPROVED))),
+            ).order_by("-paid_at")[:100],
             "query": q,
             "scans": ScanLog.objects.filter(event=event).select_related("ticket__ticket_type", "scanned_by")[:15],
             "staff": ScannerAccess.objects.filter(event=event).select_related("user"),

@@ -22,14 +22,16 @@
       <ul class="divide-y divide-line">
         {% for t in tickets %}
         <li>
-          <a href="{% url 'accounts:ticket' t.code %}" data-vt class="group flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-white/[.03]">
-            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full transition-transform duration-500 ease-[cubic-bezier(.34,1.56,.64,1)] group-hover:-rotate-12 group-hover:scale-110 {% if t.status == 'redeemed' %}bg-white/[.06] text-subtle{% else %}bg-brand/15 text-brand-fg{% endif %}">{% icon "qr" "w-5 h-5" %}</span>
+          <a href="{% url 'accounts:ticket' t.code %}" data-vt class="group flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-white/[.03] sm:gap-4 sm:px-5">
+            <span class="grid h-10 w-10 shrink-0 place-items-center max-[339px]:hidden rounded-full transition-transform duration-500 ease-[cubic-bezier(.34,1.56,.64,1)] group-hover:-rotate-12 group-hover:scale-110 {% if t.status == 'redeemed' %}bg-white/[.06] text-subtle{% else %}bg-brand/15 text-brand-fg{% endif %}">{% icon "qr" "w-5 h-5" %}</span>
             <div class="min-w-0 flex-1">
               <p class="line-clamp-2 font-semibold">{{ t.ticket_type.name }}</p>
-              <p class="font-mono text-xs text-subtle">{{ t.code }}</p>
+              <p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+                {% if t.status == "redeemed" %}<span class="badge bg-white/10 text-muted">{% translate "Checked in" %}</span>
+                {% else %}<span class="badge bg-success/15 text-success">{% translate "Valid" %}</span>{% endif %}
+                <span class="font-mono text-xs text-subtle">{{ t.code }}</span>
+              </p>
             </div>
-            {% if t.status == "redeemed" %}<span class="badge bg-white/10 text-muted">{% translate "Checked in" %}</span>
-            {% else %}<span class="badge bg-success/15 text-success">{% translate "Valid" %}</span>{% endif %}
             <span class="text-subtle transition-transform group-hover:translate-x-0.5">{% icon "chevron-right" "w-4 h-4" %}</span>
           </a>
         </li>

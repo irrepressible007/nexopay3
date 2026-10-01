@@ -147,14 +147,18 @@ class RefundAdmin(ModelAdmin):
 
     @action(description="Approve & send via payment provider API")
     def send_via_provider(self, request, queryset):
-        done, pending = 0, 0
+        done, pending, used = 0, 0, 0
         for refund in queryset.filter(status__in=(Refund.Status.REQUESTED, Refund.Status.APPROVED)):
             refund = process_refund(refund, by=request.user)
             if refund.status == Refund.Status.SUCCEEDED:
                 done += 1
+            elif refund.status == Refund.Status.REJECTED:
+                used += 1
             else:
                 pending += 1
         messages.success(request, f"{done} refunded.")
+        if used:
+            messages.warning(request, f"{used} rejected: a ticket was scanned in at the gate after the refund was requested.")
         if pending:
             messages.warning(request, f"{pending} need manual processing: refund in the provider portal, enter the "
                                       "reference in 'Manual reference', save, then use 'Mark as refunded manually'.")

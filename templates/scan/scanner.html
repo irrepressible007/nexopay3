@@ -15,7 +15,7 @@
 </head>
 <body class="h-dvh overflow-hidden bg-black text-white">
 {% include "partials/icons.html" %}
-<div x-data="scanner()" x-init="start()" class="relative flex h-full flex-col">
+<main x-data="scanner()" x-init="start()" class="relative flex h-full flex-col">
   <!-- top bar -->
   <header class="relative z-20 flex items-center gap-3 bg-gradient-to-b from-black/90 to-transparent px-4 pb-6 pt-[max(env(safe-area-inset-top),12px)]">
     <a href="{% url 'scan:home' %}" class="grid h-10 w-10 place-items-center rounded-full bg-white/10" aria-label="{% translate 'Back' %}">{% icon "chevron-left" "w-5 h-5" %}</a>
@@ -75,7 +75,7 @@
       <p class="mt-8 text-sm opacity-80">{% translate "Tap to scan the next ticket" %}</p>
     </div>
   </div>
-</div>
+</main>
 
 <script>
 function scanner() {

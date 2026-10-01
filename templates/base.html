@@ -42,7 +42,7 @@
   <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-text focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-ink">{% translate "Skip to content" %}</a>
 
   {% if sitecfg.announcement_active %}
-  <div class="relative z-40 flex items-center justify-center gap-3 px-10 py-2 text-center text-sm font-semibold
+  <div role="region" aria-label="{% translate 'Announcement' %}" class="relative z-40 flex items-center justify-center gap-3 px-10 py-2 text-center text-sm font-semibold
               {% if sitecfg.announcement_style == 'accent' %}bg-accent text-on-accent{% elif sitecfg.announcement_style == 'neutral' %}border-b border-line bg-surface-2 text-text{% else %}bg-brand text-on-brand{% endif %}"
        {% if sitecfg.announcement_dismissible %}x-data="announcement('{{ sitecfg.announcement_key }}')" x-show="open" x-transition:leave="transition duration-200 ease-in" x-transition:leave-end="opacity-0 -translate-y-full"{% endif %}>
     {% if sitecfg.announcement_url %}<a href="{{ sitecfg.announcement_url|localize_url }}" class="inline-flex items-center gap-1.5 hover:underline">{{ sitecfg.announcement_text }} {% icon "arrow-right" "w-4 h-4 shrink-0" %}</a>{% else %}<span>{{ sitecfg.announcement_text }}</span>{% endif %}

@@ -1,0 +1,13 @@
+{% load static %}<!doctype html>
+{% comment %}Base for error pages Django renders without the request or the site's context (400, 500, expired form): self-contained.{% endcomment %}
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Nexopay | {% block title %}{% endblock %}</title>
+<link rel="icon" href="{% static 'img/favicon.ico' %}">
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:1.5rem;box-sizing:border-box;background:#0c0c0f;color:#f2f2f4;font-family:ui-sans-serif,system-ui,"Segoe UI","Hind Siliguri",sans-serif;text-align:center}
+main{max-width:30rem}h1{font-size:clamp(1.6rem,5vw,2.2rem);letter-spacing:-.02em;margin:.75rem 0 .5rem}p{color:#a2a2a8;margin:.4rem 0;line-height:1.6}
+.code{font-size:4rem;font-weight:800;color:#a593ff;margin:0;letter-spacing:-.03em}
+a{display:inline-block;margin:1.5rem .3rem 0;padding:.65rem 1.25rem;border-radius:9999px;font-weight:600;text-decoration:none}
+.primary{background:#7351f5;color:#fff}.ghost{background:rgba(255,255,255,.06);color:#f2f2f4;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+</style></head>
+<body><main>{% block main %}{% endblock %}</main></body></html>

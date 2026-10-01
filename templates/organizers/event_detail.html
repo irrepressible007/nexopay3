@@ -67,14 +67,16 @@
           </div>
           <span class="tabular-nums font-semibold">{{ o.subtotal|taka }}</span>
           {% if o.status == "paid" or o.status == "partially_refunded" %}
-          <button type="button" @click="open = !open" class="text-xs font-semibold text-danger hover:underline">{% translate "Refund" %}</button>
+          {% if o.refund_open %}<span class="badge bg-warning/15 text-warning">{% translate "Refund pending" %}</span>
+          {% elif o.unused %}<button type="button" @click="open = !open" :aria-expanded="open" class="text-xs font-semibold text-danger hover:underline">{% translate "Refund" %}</button>
+          {% else %}<span class="badge bg-white/10 text-subtle">{% translate "Checked in" %}</span>{% endif %}
           {% else %}<span class="badge bg-white/10 text-subtle">{{ o.get_status_display }}</span>{% endif %}
         </div>
-        <form x-show="open" x-cloak method="post" action="{% url 'organizers:order_refund' event.slug o.reference %}" class="mt-3 flex gap-2">
+        {% if o.unused and not o.refund_open %}<form x-show="open" x-cloak method="post" action="{% url 'organizers:order_refund' event.slug o.reference %}" class="mt-3 flex gap-2">
           {% csrf_token %}
           <input name="reason" required placeholder="{% translate 'Reason for the refund' %}" class="input !py-2 !text-sm">
           <button class="btn !bg-danger !py-2 text-white">{% if request.organizer.can_issue_refunds %}{% translate "Refund now" %}{% else %}{% translate "Request refund" %}{% endif %}</button>
-        </form>
+        </form>{% endif %}
       </li>
       {% empty %}
       <li class="px-6 py-10 text-center text-muted">{% translate "No orders yet." %}</li>
@@ -96,7 +98,7 @@
       </ul>
       <form method="post" action="{% url 'organizers:scanner_add' event.slug %}" class="mt-4 flex gap-2">
         {% csrf_token %}
-        <input type="email" name="email" required placeholder="{% translate 'staff@email.com' %}" class="input !py-2 !text-sm">
+        <input type="email" name="email" required autocomplete="email" placeholder="{% translate 'staff@email.com' %}" aria-label="{% translate 'Gate staff email' %}" class="input !py-2 !text-sm">
         <button class="btn-ghost !py-2">{% translate "Add" %}</button>
       </form>
     </section>

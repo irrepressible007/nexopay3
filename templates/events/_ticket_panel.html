@@ -28,7 +28,7 @@
     <div class="p-6 text-center text-muted">{% translate "Tickets will be announced soon." %}</div>
   {% else %}
     <form action="{% url 'orders:checkout' event.slug %}" method="get"
-          x-data="ticketPicker([{% for t in ticket_types %}{id: {{ t.pk }}, price: {{ t.price|stringformat:'s' }}, max: {{ t.effective_max_per_order }}, remaining: {% if t.availability == 'available' or t.availability == 'low' %}{{ t.remaining }}{% else %}0{% endif %}}{% if not forloop.last %},{% endif %}{% endfor %}], {{ event.max_tickets_per_order }}, '{{ LANG }}')"
+          x-data="ticketPicker([{% for t in ticket_types %}{id: {{ t.pk }}, price: {{ t.price|stringformat:'s' }}, max: {{ t.effective_max_per_order }}, remaining: {% if t.held_by_me %}0{% elif t.availability == 'available' or t.availability == 'low' %}{{ t.remaining }}{% else %}0{% endif %}}{% if not forloop.last %},{% endif %}{% endfor %}], {{ event.max_tickets_per_order }}, '{{ LANG }}')"
           :data-dirty="count > 0 ? '' : null" @submit="go($event)">
       <ul class="divide-y divide-line lg:max-h-[min(58vh,640px)] lg:overflow-y-auto">
         {% for t in ticket_types %}
@@ -50,7 +50,13 @@
                 {% elif st == "closed" %}<span class="badge bg-white/10 text-muted">{% translate "Not on sale" %}</span>{% endif %}
               </p>
             </div>
-            {% if st == "available" or st == "low" %}
+            {% if t.held_by_me %}
+              {% if t.held_by_me.status == "pending_payment" %}
+              <a href="{% url 'orders:detail' t.held_by_me.reference %}" class="btn-ghost shrink-0 !px-4 !py-2 text-sm">{% icon "clock" "w-4 h-4" %}{% translate "Finish paying" %}</a>
+              {% else %}
+              <a href="{% url 'accounts:tickets' %}" class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-success/15 px-4 py-2 text-sm font-semibold text-success transition hover:bg-success/25">{% icon "check" "w-4 h-4" %}{% translate "You have this" %}</a>
+              {% endif %}
+            {% elif st == "available" or st == "low" %}
               {% if t.effective_max_per_order > 1 %}
               <div class="flex shrink-0 items-center gap-1 rounded-full bg-white/[.05] p-1 ring-1 ring-inset ring-white/10">
                 <button type="button" @click="dec(types[{{ forloop.counter0 }}], $event)" class="grid h-8 w-8 place-items-center rounded-full transition hover:bg-white/10 active:scale-90 disabled:opacity-30" :disabled="q[{{ t.pk }}] === 0" aria-label="{% translate 'Fewer' %}">{% icon "minus" "w-4 h-4" %}</button>

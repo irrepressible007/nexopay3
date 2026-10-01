@@ -16,7 +16,7 @@
     <div class="flex min-w-0 flex-1 flex-wrap gap-x-10 gap-y-10">
       {% for column in footer_columns %}
       <div class="min-w-0 flex-1 basis-[8.5rem]">
-        <h3 class="text-sm font-semibold text-text">{{ column.title }}</h3>
+        <h2 class="text-sm font-semibold text-text">{{ column.title }}</h2>
         <ul class="mt-4 space-y-3 text-sm text-muted">
           {% for link in column.links %}
           <li><a href="{{ link.url|localize_url }}" {% if link.new_tab %}target="_blank" rel="noopener"{% endif %} class="transition-colors hover:text-text">{{ link.label }}</a></li>
@@ -26,7 +26,7 @@
       {% endfor %}
       {% if sitecfg.contact_email or sitecfg.contact_phone or sitecfg.address %}
       <div class="min-w-0 max-w-full basis-full sm:basis-auto">
-        <h3 class="text-sm font-semibold text-text">{% translate "Get in touch" %}</h3>
+        <h2 class="text-sm font-semibold text-text">{% translate "Get in touch" %}</h2>
         <ul class="mt-4 space-y-3 text-sm text-muted">
           {% if sitecfg.contact_email %}<li class="flex min-w-0 items-start gap-2">{% icon "mail" "w-4 h-4 mt-0.5 shrink-0" %}<a href="mailto:{{ sitecfg.contact_email }}" class="min-w-0 [overflow-wrap:break-word] transition-colors hover:text-text">{{ sitecfg.contact_email }}</a></li>{% endif %}
           {% if sitecfg.contact_phone %}<li class="flex min-w-0 items-start gap-2">{% icon "phone" "w-4 h-4 mt-0.5 shrink-0" %}<a href="tel:{{ sitecfg.contact_phone }}" class="min-w-0 transition-colors hover:text-text">{{ sitecfg.contact_phone }}</a></li>{% endif %}
@@ -43,7 +43,7 @@
       <ul class="flex flex-wrap items-center justify-center gap-2" aria-label="{% translate 'Payment methods' %}">
         {% for p in payment_badges %}
         <li>{% if p.logo %}<img src="{{ p.logo }}" alt="{{ p.name }}" class="h-6 w-auto max-w-[5rem] rounded bg-white object-contain px-1" loading="lazy">
-            {% else %}<span class="inline-block max-w-[10rem] truncate rounded-md bg-white/[.06] px-2 py-1 font-semibold" style="color: {{ p.color }}">{{ p.name }}</span>{% endif %}</li>
+            {% else %}<span class="inline-block max-w-[10rem] truncate rounded-md bg-white/[.06] px-2 py-1 font-semibold" style="color: color-mix(in oklab, {{ p.color }} 62%, white)">{{ p.name }}</span>{% endif %}</li>
         {% endfor %}
       </ul>
       {% endif %}

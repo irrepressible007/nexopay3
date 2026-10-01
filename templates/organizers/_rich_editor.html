@@ -8,6 +8,6 @@
     <button type="button" @click="cmd('insertOrderedList')" class="rounded-lg px-2.5 py-1 hover:bg-white/10">1. {% translate "List" %}</button>
     <button type="button" @click="link()" class="rounded-lg px-2.5 py-1 hover:bg-white/10">{% translate "Link" %}</button>
   </div>
-  <div x-ref="area" contenteditable="true" class="prose-nx px-4 py-3 text-text outline-none" style="min-height: {{ height|default:'140px' }}" data-placeholder="{{ placeholder }}"></div>
+  <div x-ref="area" contenteditable="true" role="textbox" aria-multiline="true" aria-label="{{ label|default:field.label }}" class="prose-nx px-4 py-3 text-text outline-none" style="min-height: {{ height|default:'140px' }}"></div>
   {{ field }}
 </div>

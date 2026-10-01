@@ -65,13 +65,13 @@
       </div>
       <h1 class="mt-4 text-[clamp(1.9rem,4.6vw,3.25rem)] font-bold leading-[1.06] tracking-[-0.03em]">{{ event.title }}</h1>
       {% if event.summary %}<p class="mt-3 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{{ event.summary }}</p>{% endif %}
-      <dl class="mt-6 grid gap-4 text-sm sm:grid-cols-3">
+      <ul role="list" class="mt-6 grid gap-4 text-sm sm:grid-cols-3">
         {% with ic="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted ring-1 ring-inset ring-white/[.08]" %}
-        <div class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "calendar" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><dt class="sr-only">{% translate "Date" %}</dt><dd class="font-semibold">{{ event.starts_at|date:"D, j F Y"|bn_digits }}</dd><dd class="text-muted">{{ event.starts_at|date:"g:i A"|bn_digits }}{% if event.ends_at %} - {{ event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</dd></div></div>
-        <div class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "pin" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><dt class="sr-only">{% translate "Venue" %}</dt><dd class="font-semibold">{{ event.venue_name|default:_("Online event") }}</dd><dd class="text-muted">{{ event.city }}</dd></div></div>
-        <div class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "building" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><dt class="text-muted">{% translate "Organized by" %}</dt><dd class="font-semibold">{{ event.organizer.name }}</dd></div></div>
+        <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "calendar" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="sr-only">{% translate "Date" %}</p><p class="font-semibold">{{ event.starts_at|date:"D, j F Y"|bn_digits }}</p><p class="text-muted">{{ event.starts_at|date:"g:i A"|bn_digits }}{% if event.ends_at %} - {{ event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</p></div></li>
+        <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "pin" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="sr-only">{% translate "Venue" %}</p><p class="font-semibold">{{ event.venue_name|default:_("Online event") }}</p><p class="text-muted">{{ event.city }}</p></div></li>
+        <li class="flex min-w-0 items-center gap-3"><span class="{{ ic }}">{% icon "building" "w-[1.125rem] h-[1.125rem]" %}</span><div class="min-w-0"><p class="text-muted">{% translate "Organized by" %}</p><p class="font-semibold">{{ event.organizer.name }}</p></div></li>
         {% endwith %}
-      </dl>
+      </ul>
     </header>
 
     <!-- Ticket panel -->

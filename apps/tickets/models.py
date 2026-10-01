@@ -68,7 +68,7 @@ class Ticket(TimeStampedModel):
             return None
 
     def get_absolute_url(self):
-        return reverse("tickets:detail", kwargs={"code": self.code})
+        return reverse("accounts:ticket", kwargs={"code": self.code})
 
     def get_share_url(self):
         return reverse("tickets:share", kwargs={"token": self.token})

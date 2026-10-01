@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Not allowed" %} | {{ sitecfg.site_name }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block content %}
+<div class="container-x grid min-h-[60vh] place-items-center py-16 text-center">
+  <div class="max-w-lg">
+    <p class="text-7xl font-bold tracking-tight text-brand-fg sm:text-8xl">403</p>
+    <h1 class="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">{% translate "You can't open this page" %}</h1>
+    <p class="mt-3 text-muted">{% translate "It belongs to another account, or your account doesn't have access. Log in with the right account, or contact us if you think this is a mistake." %}</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href="{% url 'cms:home' %}" class="btn-primary">{% translate "Home" %}</a>
+      <a href="{% url 'support:contact' %}" class="btn-ghost">{% translate "Contact us" %}</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

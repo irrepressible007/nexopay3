@@ -9,6 +9,7 @@ from decimal import Decimal
 from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from apps.events.models import Event, TicketType
 from apps.orders.models import Order, PurchaseClaim
@@ -35,18 +36,18 @@ def request_refund(*, order: Order, reason: str, by=None, tickets=None, approve=
     """Create a refund for some or all of an order's valid tickets."""
     order = Order.objects.select_for_update().get(pk=order.pk)
     if order.status not in (Order.Status.PAID, Order.Status.PARTIALLY_REFUNDED):
-        raise RefundError("Only paid orders can be refunded.")
+        raise RefundError(_("Only paid orders can be refunded."))
     valid = order.tickets.select_related("order_item").filter(status=Ticket.Status.VALID)
     if tickets is not None:
         valid = valid.filter(pk__in=[t.pk for t in tickets])
     selected = list(valid)
     if not selected:
-        raise RefundError("There are no refundable (unused) tickets in this order.")
+        raise RefundError(_("There are no refundable (unused) tickets in this order."))
     already_pending = Refund.objects.filter(
         order=order, status__in=(Refund.Status.REQUESTED, Refund.Status.APPROVED), tickets__in=selected
     ).exists()
     if already_pending:
-        raise RefundError("A refund for these tickets is already in progress.")
+        raise RefundError(_("A refund for these tickets is already in progress."))
 
     amount = sum((t.order_item.unit_price for t in selected), Decimal("0"))
     remaining_valid = order.tickets.filter(status=Ticket.Status.VALID).count()
@@ -70,6 +71,12 @@ def process_refund(refund: Refund, by=None) -> Refund:
     with transaction.atomic():
         refund = Refund.objects.select_for_update().select_related("attempt", "order").get(pk=refund.pk)
         if refund.status not in (Refund.Status.REQUESTED, Refund.Status.APPROVED):
+            return refund
+        if refund.tickets.exclude(status=Ticket.Status.VALID).exists():
+            # Scanned in at the gate after the refund was asked for: the buyer used it, no money back.
+            refund.status = Refund.Status.REJECTED
+            refund.raw = {**(refund.raw or {}), "rejected": "a ticket was used at the gate after the request"}
+            refund.save(update_fields=["status", "raw", "updated_at"])
             return refund
         if refund.status == Refund.Status.REQUESTED:
             refund.status = Refund.Status.APPROVED
@@ -119,6 +126,8 @@ def _finalize(refund: Refund, *, provider_refund_id: str, payload) -> Refund:
     refund.save()
 
     tickets = list(refund.tickets.select_related("ticket_type", "event").select_for_update())
+    # A manual refund can be recorded after a ticket was used; that ticket keeps its check-in.
+    tickets = [t for t in tickets if t.status == Ticket.Status.VALID]
     if not tickets:
         return refund  # money-only refund (duplicate / late payment)
 

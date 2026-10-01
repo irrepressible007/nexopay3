@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 11:33+0600\n"
+"POT-Creation-Date: 2026-10-01 13:51+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,15 +40,14 @@ msgid "Blocked"
 msgstr "ব্লক করা"
 
 #: apps/accounts/admin.py:58
-#| msgid "Mobile number"
 msgid "Members"
 msgstr "সদস্য"
 
-#: apps/accounts/admin.py:84
+#: apps/accounts/admin.py:87
 msgid "Person"
 msgstr "ব্যক্তি"
 
-#: apps/accounts/admin.py:88
+#: apps/accounts/admin.py:91
 msgid "Role"
 msgstr "ভূমিকা"
 
@@ -366,7 +365,7 @@ msgid "Re-send Verification"
 msgstr "আবার যাচাই ইমেইল পাঠান"
 
 #: apps/accounts/allauth_texts.py:86 templates/organizers/_ticket_row.html:13
-#: templates/organizers/event_detail.html:93
+#: templates/organizers/event_detail.html:95
 msgid "Remove"
 msgstr "সরান"
 
@@ -897,17 +896,14 @@ msgid "Content editor"
 msgstr "কনটেন্ট এডিটর"
 
 #: apps/accounts/roles.py:15
-#| msgid "Event ended"
 msgid "Event manager"
 msgstr "ইভেন্ট ম্যানেজার"
 
 #: apps/accounts/roles.py:20
-#| msgid "Support"
 msgid "Support agent"
 msgstr "সাপোর্ট এজেন্ট"
 
 #: apps/accounts/roles.py:24
-#| msgid "Cancel"
 msgid "Finance"
 msgstr "হিসাব বিভাগ"
 
@@ -936,7 +932,7 @@ msgstr ""
 "পরিবর্তন সঙ্গে সঙ্গে পুরো সাইটে কার্যকর হয়। বাটনের লেখা নিজে থেকেই সাদা বা "
 "গাঢ় হয় যাতে পড়া যায়; ব্যাকগ্রাউন্ড গাঢ় রাখতে হবে।"
 
-#: apps/cms/admin.py:130
+#: apps/cms/admin.py:130 templates/403.html:12 templates/404.html:18
 msgid "Home"
 msgstr "হোম"
 
@@ -949,17 +945,14 @@ msgstr ""
 "ইভেন্টকে ফিচার্ড করলে তা পোস্টার ডেকে দেখা যায়।"
 
 #: apps/cms/admin.py:134
-#| msgid "Header menu"
 msgid "Header"
 msgstr "হেডার"
 
 #: apps/cms/admin.py:138
-#| msgid "Events"
 msgid "Event pages"
 msgstr "ইভেন্ট পেজ"
 
 #: apps/cms/admin.py:141
-#| msgid "Contact us"
 msgid "Contact"
 msgstr "যোগাযোগ"
 
@@ -1040,7 +1033,6 @@ msgid "Kind"
 msgstr "ধরন"
 
 #: apps/cms/admin.py:326
-#| msgid "Show"
 msgid "Shown"
 msgstr "দেখানো হয়"
 
@@ -1127,7 +1119,6 @@ msgid "Show a maintenance page to non-staff visitors."
 msgstr "স্টাফ ছাড়া অন্য ভিজিটরদের রক্ষণাবেক্ষণ পেজ দেখান।"
 
 #: apps/cms/models.py:89
-#| msgid "Show a maintenance page to non-staff visitors."
 msgid "Shown on the maintenance page. Empty = the standard message."
 msgstr "রক্ষণাবেক্ষণ পেজে দেখানো হয়। খালি = সাধারণ বার্তা।"
 
@@ -1156,7 +1147,6 @@ msgid "font"
 msgstr "ফন্ট"
 
 #: apps/cms/models.py:104
-#| msgid "Pagination"
 msgid "animations"
 msgstr "অ্যানিমেশন"
 
@@ -1169,7 +1159,6 @@ msgstr ""
 "কখনো তা দেখবেন না।"
 
 #: apps/cms/models.py:108
-#| msgid "custom icon"
 msgid "custom CSS"
 msgstr "কাস্টম CSS"
 
@@ -1198,7 +1187,6 @@ msgstr ""
 "হেডারে একটি বাড়তি বাটন, যেমন 'আপনার ইভেন্ট যোগ করুন'। খালি = কোনো বাটন নেই।"
 
 #: apps/cms/models.py:119
-#| msgid "header menu link"
 msgid "header button link"
 msgstr "হেডার বাটনের লিংক"
 
@@ -1207,7 +1195,6 @@ msgid "e.g. /organizers/apply/ or a full https:// address."
 msgstr "যেমন /organizers/apply/ অথবা পূর্ণ https:// ঠিকানা।"
 
 #: apps/cms/models.py:123
-#| msgid "accent colour"
 msgid "Accent colour"
 msgstr "অ্যাকসেন্ট রঙ"
 
@@ -1236,7 +1223,6 @@ msgid "Automatic: featured posters, else the hero picture, else text only"
 msgstr "স্বয়ংক্রিয়: ফিচার্ড পোস্টার, না থাকলে হিরোর ছবি, না থাকলে শুধু লেখা"
 
 #: apps/cms/models.py:140
-#| msgid "Featured events"
 msgid "Featured event posters"
 msgstr "ফিচার্ড ইভেন্টের পোস্টার"
 
@@ -1249,7 +1235,6 @@ msgid "Text and search only"
 msgstr "শুধু লেখা ও সার্চ"
 
 #: apps/cms/models.py:144
-#| msgid "hero slide"
 msgid "hero visual"
 msgstr "হিরোর ভিজ্যুয়াল"
 
@@ -1266,7 +1251,6 @@ msgid "How long each poster stays in front. 0 = don't rotate by itself."
 msgstr "প্রতিটি পোস্টার কতক্ষণ সামনে থাকবে। ০ = নিজে থেকে ঘুরবে না।"
 
 #: apps/cms/models.py:154
-#| msgid "Add to calendar"
 msgid "'Add to calendar' buttons"
 msgstr "'ক্যালেন্ডারে যোগ করুন' বাটন"
 
@@ -1279,17 +1263,14 @@ msgid "organizer email/phone buttons"
 msgstr "আয়োজকের ইমেইল/ফোন বাটন"
 
 #: apps/cms/models.py:158
-#| msgid "You might also like"
 msgid "'You might also like' events"
 msgstr "'আপনার আরও ভালো লাগতে পারে' ইভেন্ট"
 
 #: apps/cms/models.py:159
-#| msgid "homepage section"
 msgid "0 hides the section."
 msgstr "০ দিলে সেকশনটি লুকানো থাকে।"
 
 #: apps/cms/models.py:161
-#| msgid "Show this method in the site footer."
 msgid "payment method badges in the footer"
 msgstr "ফুটারে পেমেন্ট মাধ্যমের ব্যাজ"
 
@@ -1396,12 +1377,10 @@ msgstr ""
 "দেখানো হয়।"
 
 #: apps/cms/models.py:297
-#| msgid "All events"
 msgid "All screens"
 msgstr "সব স্ক্রিনে"
 
 #: apps/cms/models.py:298
-#| msgid "Phone"
 msgid "Phones only"
 msgstr "শুধু ফোনে"
 
@@ -1529,160 +1508,145 @@ msgstr "%(p)s সরান"
 msgid "Placeholders must stay exactly as in the original: %(details)s."
 msgstr "প্লেসহোল্ডারগুলো মূল লেখার মতোই রাখতে হবে: %(details)s।"
 
-#: apps/core/admin_dashboard.py:54
-#| msgid "payment methods"
+#: apps/core/admin_dashboard.py:55
 msgid "Live payment method switched on"
 msgstr "লাইভ পেমেন্ট মাধ্যম চালু আছে"
 
-#: apps/core/admin_dashboard.py:55
+#: apps/core/admin_dashboard.py:56
 msgid "Payment methods: enter merchant details, switch off sandbox, enable."
 msgstr "পেমেন্ট মাধ্যম: মার্চেন্ট তথ্য দিন, স্যান্ডবক্স বন্ধ করুন, চালু করুন।"
 
-#: apps/core/admin_dashboard.py:57
+#: apps/core/admin_dashboard.py:58
 msgid "Ticket emails have a sender address"
 msgstr "টিকিট ইমেইলের প্রেরকের ঠিকানা আছে"
 
-#: apps/core/admin_dashboard.py:58
+#: apps/core/admin_dashboard.py:59
 msgid "Look & settings › Email."
 msgstr "লুক ও সেটিংস › ইমেইল।"
 
-#: apps/core/admin_dashboard.py:59
+#: apps/core/admin_dashboard.py:60
 msgid "Terms, privacy and refund pages written"
 msgstr "শর্তাবলী, গোপনীয়তা ও রিফান্ড পেজ লেখা হয়েছে"
 
-#: apps/core/admin_dashboard.py:60
+#: apps/core/admin_dashboard.py:61
 msgid "Website › Pages."
 msgstr "ওয়েবসাইট › পেজ।"
 
-#: apps/core/admin_dashboard.py:61
-#| msgid "Apply as an organizer"
+#: apps/core/admin_dashboard.py:62
 msgid "At least one approved organizer"
 msgstr "অন্তত একজন অনুমোদিত আয়োজক"
 
-#: apps/core/admin_dashboard.py:63
-#| msgid "Organizers"
+#: apps/core/admin_dashboard.py:64
 msgid "People › Organizers."
 msgstr "মানুষ › আয়োজক।"
 
-#: apps/core/admin_dashboard.py:64
+#: apps/core/admin_dashboard.py:65
 msgid "Featured events with pictures for the home page"
 msgstr "হোম পেজের জন্য ছবিসহ ফিচার্ড ইভেন্ট"
 
-#: apps/core/admin_dashboard.py:65
-#| msgid ""
-#| "Tints the artwork of events that have no picture. Default #CF3573."
+#: apps/core/admin_dashboard.py:66
 msgid "Events: tick 'featured' on events that have a picture."
 msgstr "ইভেন্ট: যেসব ইভেন্টের ছবি আছে সেগুলোতে 'ফিচার্ড' টিক দিন।"
 
-#: apps/core/admin_dashboard.py:67
+#: apps/core/admin_dashboard.py:68
 msgid "Contact email and phone filled in"
 msgstr "যোগাযোগের ইমেইল ও ফোন দেওয়া আছে"
 
-#: apps/core/admin_dashboard.py:68
+#: apps/core/admin_dashboard.py:69
 msgid "Look & settings › Contact."
 msgstr "লুক ও সেটিংস › যোগাযোগ।"
 
-#: apps/core/admin_dashboard.py:69
+#: apps/core/admin_dashboard.py:70
 msgid "Visitor statistics (Google Analytics)"
 msgstr "ভিজিটরের পরিসংখ্যান (গুগল অ্যানালিটিক্স)"
 
-#: apps/core/admin_dashboard.py:70
+#: apps/core/admin_dashboard.py:71
 msgid "Optional. Look & settings › SEO."
 msgstr "ঐচ্ছিক। লুক ও সেটিংস › এসইও।"
 
-#: apps/core/admin_dashboard.py:74
+#: apps/core/admin_dashboard.py:75
 #, python-format
 msgid "%(done)s of %(total)s done"
 msgstr "%(total)sটির মধ্যে %(done)sটি সম্পন্ন"
 
-#: apps/core/admin_dashboard.py:95
+#: apps/core/admin_dashboard.py:101
 msgid "Sales (৳)"
 msgstr "বিক্রি (৳)"
 
-#: apps/core/admin_dashboard.py:111
+#: apps/core/admin_dashboard.py:117
 msgid "Sales today"
 msgstr "আজকের বিক্রি"
 
-#: apps/core/admin_dashboard.py:112 apps/core/admin_dashboard.py:114
+#: apps/core/admin_dashboard.py:118 apps/core/admin_dashboard.py:120
 #: templates/organizers/dashboard.html:15
 #, python-format
 msgid "%(n)s orders"
 msgstr "%(n)sটি অর্ডার"
 
-#: apps/core/admin_dashboard.py:113
+#: apps/core/admin_dashboard.py:119
 msgid "Sales · 30 days"
 msgstr "বিক্রি · ৩০ দিন"
 
-#: apps/core/admin_dashboard.py:115
-#| msgid "Tickets sold"
+#: apps/core/admin_dashboard.py:121
 msgid "Tickets sold · 30 days"
 msgstr "বিক্রিত টিকিট · ৩০ দিন"
 
-#: apps/core/admin_dashboard.py:117
+#: apps/core/admin_dashboard.py:123
 #, python-format
-#| msgid "%(n)s event"
-#| msgid_plural "%(n)s events"
 msgid "%(n)s events on sale"
 msgstr "%(n)sটি ইভেন্টে বিক্রি চলছে"
 
-#: apps/core/admin_dashboard.py:119
+#: apps/core/admin_dashboard.py:125
 msgid "Platform revenue · 30 days"
 msgstr "প্ল্যাটফর্মের আয় · ৩০ দিন"
 
-#: apps/core/admin_dashboard.py:121
+#: apps/core/admin_dashboard.py:127
 #, python-format
 msgid "%(pct)s%% of checkouts paid"
 msgstr "%(pct)s%% চেকআউটে পেমেন্ট সম্পন্ন"
 
-#: apps/core/admin_dashboard.py:122
+#: apps/core/admin_dashboard.py:128
 msgid "commission + service fees"
 msgstr "কমিশন + সার্ভিস ফি"
 
-#: apps/core/admin_dashboard.py:125
-#| msgid "Organizer application"
+#: apps/core/admin_dashboard.py:131
 msgid "Organizer applications"
 msgstr "আয়োজকের আবেদন"
 
-#: apps/core/admin_dashboard.py:128
-#| msgid "Refund requested. Nexopay will review and process it."
+#: apps/core/admin_dashboard.py:134
 msgid "Refunds to review / process"
 msgstr "যাচাই / প্রক্রিয়ার অপেক্ষায় রিফান্ড"
 
-#: apps/core/admin_dashboard.py:131
-#| msgid "contact messages"
+#: apps/core/admin_dashboard.py:137
 msgid "New support messages"
 msgstr "নতুন সাপোর্ট বার্তা"
 
-#: apps/core/admin_dashboard.py:134
-#| msgid "Past events"
+#: apps/core/admin_dashboard.py:140
 msgid "Draft events"
 msgstr "খসড়া ইভেন্ট"
 
-#: apps/core/admin_dashboard.py:158 templates/organizers/base.html:13
+#: apps/core/admin_dashboard.py:164 templates/organizers/base.html:13
 #: templates/organizers/event_form.html:3
 msgid "New event"
 msgstr "নতুন ইভেন্ট"
 
-#: apps/core/admin_dashboard.py:159 nexopay/settings/base.py:319
-#| msgid "homepage sections"
+#: apps/core/admin_dashboard.py:165 nexopay/settings/base.py:319
 msgid "Homepage sections"
 msgstr "হোমপেজ সেকশন"
 
-#: apps/core/admin_dashboard.py:160 nexopay/settings/base.py:317
-#| msgid "site settings"
+#: apps/core/admin_dashboard.py:166 nexopay/settings/base.py:317
 msgid "Look & settings"
 msgstr "লুক ও সেটিংস"
 
-#: apps/core/admin_dashboard.py:161
+#: apps/core/admin_dashboard.py:167
 msgid "Announcement bar"
 msgstr "ঘোষণা বার"
 
-#: apps/core/admin_dashboard.py:162
-#| msgid "site texts"
+#: apps/core/admin_dashboard.py:168
 msgid "Site texts"
 msgstr "সাইটের লেখা"
 
-#: apps/core/admin_dashboard.py:163 nexopay/settings/base.py:272
+#: apps/core/admin_dashboard.py:169 nexopay/settings/base.py:272
 #: nexopay/settings/base.py:410
 msgid "View website"
 msgstr "ওয়েবসাইট দেখুন"
@@ -1700,12 +1664,10 @@ msgid "Colour"
 msgstr "রঙ"
 
 #: apps/events/admin.py:39
-#| msgid "Find events"
 msgid "Live events"
 msgstr "চালু ইভেন্ট"
 
 #: apps/events/admin.py:53
-#| msgid "ticket types"
 msgid "Ticket types"
 msgstr "টিকিটের ধরন"
 
@@ -1719,7 +1681,6 @@ msgid "Basics"
 msgstr "মূল তথ্য"
 
 #: apps/events/admin.py:89
-#| msgid "ticket sales open"
 msgid "Date & ticket sales"
 msgstr "তারিখ ও টিকিট বিক্রি"
 
@@ -1730,7 +1691,6 @@ msgid "Venue"
 msgstr "ভেন্যু"
 
 #: apps/events/admin.py:93
-#| msgid "description"
 msgid "Picture & description"
 msgstr "ছবি ও বিবরণ"
 
@@ -1762,22 +1722,18 @@ msgid ""
 msgstr "এখনো ছবি নেই: ছবিসহ ইভেন্ট হোম পেজের পোস্টার ডেকে দেখা যেতে পারে।"
 
 #: apps/events/admin.py:130
-#| msgid "Not on sale"
 msgid "Put on sale"
 msgstr "বিক্রি শুরু করুন"
 
 #: apps/events/admin.py:132
-#| msgid "On sale"
 msgid "on sale"
 msgstr "বিক্রি চলছে"
 
 #: apps/events/admin.py:134
-#| msgid "Coming soon"
 msgid "Mark as coming soon"
 msgstr "শীঘ্রই আসছে হিসেবে চিহ্নিত করুন"
 
 #: apps/events/admin.py:136
-#| msgid "Coming soon"
 msgid "coming soon"
 msgstr "শীঘ্রই আসছে"
 
@@ -1786,7 +1742,6 @@ msgid "Mark as ended"
 msgstr "শেষ হিসেবে চিহ্নিত করুন"
 
 #: apps/events/admin.py:140
-#| msgid "Ended"
 msgid "ended"
 msgstr "শেষ"
 
@@ -2037,7 +1992,6 @@ msgstr "আইটেম"
 
 #: apps/orders/admin.py:46 nexopay/settings/base.py:310
 #: nexopay/settings/base.py:382
-#| msgid "Payment methods"
 msgid "Payment attempts"
 msgstr "পেমেন্টের চেষ্টা"
 
@@ -2046,7 +2000,6 @@ msgid "Buyer"
 msgstr "ক্রেতা"
 
 #: apps/orders/admin.py:100 apps/orders/admin.py:117
-#| msgid "Email (again)"
 msgid "Email the tickets again"
 msgstr "টিকিট আবার ইমেইল করুন"
 
@@ -2066,7 +2019,6 @@ msgstr "%(n)sটি রিফান্ড অনুমোদিত: টাকা
 
 #: apps/orders/admin.py:121 apps/tickets/admin.py:63
 #, python-format
-#| msgid "My ticket for %(e)s:"
 msgid "Tickets queued for %(email)s."
 msgstr "%(email)s-এর জন্য টিকিট পাঠানোর তালিকায়।"
 
@@ -2075,12 +2027,10 @@ msgid "Only paid orders have tickets to send."
 msgstr "শুধু পরিশোধিত অর্ডারেরই পাঠানোর মতো টিকিট থাকে।"
 
 #: apps/orders/admin.py:126
-#| msgid "Download PDF"
 msgid "Download tickets (PDF)"
 msgstr "টিকিট ডাউনলোড (PDF)"
 
 #: apps/orders/admin.py:130
-#| msgid "Online event"
 msgid "Open the event"
 msgstr "ইভেন্টটি খুলুন"
 
@@ -2203,7 +2153,6 @@ msgid "Organizer"
 msgstr "আয়োজক"
 
 #: apps/organizers/admin.py:43 apps/organizers/admin.py:47
-#| msgid "Your events"
 msgid "Their events"
 msgstr "তাঁদের ইভেন্ট"
 
@@ -2395,33 +2344,33 @@ msgstr "ইভেন্ট প্রকাশিত হয়েছে!"
 msgid "Saved."
 msgstr "সংরক্ষিত।"
 
-#: apps/organizers/views.py:244
+#: apps/organizers/views.py:248
 msgid "No Nexopay account uses that email. Ask them to sign up first."
 msgstr "এই ইমেইলে কোনো নেক্সোপে অ্যাকাউন্ট নেই। আগে সাইন আপ করতে বলুন।"
 
-#: apps/organizers/views.py:247
+#: apps/organizers/views.py:251
 #, python-format
 msgid "%(email)s can now scan tickets for this event."
 msgstr "%(email)s এখন এই ইভেন্টের টিকিট স্ক্যান করতে পারবেন।"
 
-#: apps/organizers/views.py:256
+#: apps/organizers/views.py:260
 msgid "Scanner access removed."
 msgstr "স্ক্যানার অ্যাক্সেস সরানো হয়েছে।"
 
-#: apps/organizers/views.py:265
+#: apps/organizers/views.py:269
 msgid "Refund requested by the organizer"
 msgstr "আয়োজকের অনুরোধে রিফান্ড"
 
-#: apps/organizers/views.py:275
+#: apps/organizers/views.py:279
 #, python-format
 msgid "Refund issued for %(ref)s."
 msgstr "%(ref)s-এর রিফান্ড দেওয়া হয়েছে।"
 
-#: apps/organizers/views.py:277
+#: apps/organizers/views.py:281
 msgid "Refund approved — our team will complete it shortly."
 msgstr "রিফান্ড অনুমোদিত — আমাদের টিম শীঘ্রই সম্পন্ন করবে।"
 
-#: apps/organizers/views.py:279
+#: apps/organizers/views.py:283
 msgid "Refund requested. Nexopay will review and process it."
 msgstr "রিফান্ডের অনুরোধ করা হয়েছে। নেক্সোপে পর্যালোচনা করে সম্পন্ন করবে।"
 
@@ -2493,6 +2442,18 @@ msgstr "ম্যানুয়ালি পাঠানো রিফান্�
 msgid "e.g. Bank transfer, bKash"
 msgstr "যেমন: ব্যাংক ট্রান্সফার, বিকাশ"
 
+#: apps/payments/refunds.py:39
+msgid "Only paid orders can be refunded."
+msgstr "শুধু পরিশোধিত অর্ডারই রিফান্ড করা যায়।"
+
+#: apps/payments/refunds.py:45
+msgid "There are no refundable (unused) tickets in this order."
+msgstr "এই অর্ডারে রিফান্ডযোগ্য (অব্যবহৃত) কোনো টিকিট নেই।"
+
+#: apps/payments/refunds.py:50
+msgid "A refund for these tickets is already in progress."
+msgstr "এই টিকিটগুলোর রিফান্ড ইতিমধ্যে প্রক্রিয়াধীন।"
+
 #: apps/payments/tasks.py:19
 #, python-format
 msgid "Your refund for %(event)s"
@@ -2543,7 +2504,6 @@ msgid "Reply by email"
 msgstr "ইমেইলে উত্তর দিন"
 
 #: apps/support/admin.py:42
-#| msgid "In progress"
 msgid "Mark as in progress"
 msgstr "চলমান হিসেবে চিহ্নিত করুন"
 
@@ -2553,7 +2513,6 @@ msgid "%(n)s message(s) assigned to you."
 msgstr "%(n)sটি বার্তা আপনাকে দেওয়া হয়েছে।"
 
 #: apps/support/admin.py:47
-#| msgid "Scanner access removed."
 msgid "Mark as resolved"
 msgstr "সমাধান হয়েছে হিসেবে চিহ্নিত করুন"
 
@@ -2664,12 +2623,10 @@ msgid "Tickets queued for %(n)s order(s)."
 msgstr "%(n)sটি অর্ডারের টিকিট পাঠানোর তালিকায়।"
 
 #: apps/tickets/admin.py:48
-#| msgid "Download PDF"
 msgid "Download (PDF)"
 msgstr "ডাউনলোড (PDF)"
 
 #: apps/tickets/admin.py:57
-#| msgid "Email (again)"
 msgid "Email the ticket again"
 msgstr "টিকিটটি আবার ইমেইল করুন"
 
@@ -2696,6 +2653,7 @@ msgstr "বৈধ"
 #: templates/accounts/_pass.html:25 templates/accounts/tickets.html:31
 #: templates/organizers/dashboard.html:16
 #: templates/organizers/event_detail.html:22
+#: templates/organizers/event_detail.html:72
 msgid "Checked in"
 msgstr "প্রবেশ করেছেন"
 
@@ -2796,7 +2754,6 @@ msgid "Dashboard"
 msgstr "ড্যাশবোর্ড"
 
 #: nexopay/settings/base.py:276
-#| msgid "Event details"
 msgid "Events & sales"
 msgstr "ইভেন্ট ও বিক্রি"
 
@@ -2809,7 +2766,6 @@ msgid "Staff roles"
 msgstr "স্টাফের ভূমিকা"
 
 #: nexopay/settings/base.py:297
-#| msgid "Gate staff"
 msgid "Gate staff (scanners)"
 msgstr "গেট স্টাফ (স্ক্যানার)"
 
@@ -2823,7 +2779,6 @@ msgid "Payment methods"
 msgstr "পেমেন্ট মাধ্যম"
 
 #: nexopay/settings/base.py:306 nexopay/settings/base.py:380
-#| msgid "Refund"
 msgid "Refunds"
 msgstr "রিফান্ড"
 
@@ -2832,17 +2787,14 @@ msgid "Payouts"
 msgstr "পেআউট"
 
 #: nexopay/settings/base.py:315
-#| msgid "Website content"
 msgid "Website"
 msgstr "ওয়েবসাইট"
 
 #: nexopay/settings/base.py:321 nexopay/settings/base.py:368
-#| msgid "Hero slider"
 msgid "Hero slides"
 msgstr "হিরো স্লাইড"
 
 #: nexopay/settings/base.py:325 nexopay/settings/base.py:370
-#| msgid "Footer column"
 msgid "Footer"
 msgstr "ফুটার"
 
@@ -2851,7 +2803,6 @@ msgid "Pages"
 msgstr "পেজ"
 
 #: nexopay/settings/base.py:331 nexopay/settings/base.py:373
-#| msgid "Partner logos"
 msgid "Partners"
 msgstr "পার্টনার"
 
@@ -2860,7 +2811,6 @@ msgid "Site texts & translations"
 msgstr "সাইটের লেখা ও অনুবাদ"
 
 #: nexopay/settings/base.py:340 nexopay/settings/base.py:396
-#| msgid "Messages:"
 msgid "Messages"
 msgstr "বার্তা"
 
@@ -2873,7 +2823,6 @@ msgid "System"
 msgstr "সিস্টেম"
 
 #: nexopay/settings/base.py:350 nexopay/settings/base.py:390
-#| msgid "Check-in log"
 msgid "Scan log"
 msgstr "স্ক্যান লগ"
 
@@ -2882,7 +2831,6 @@ msgid "Background tasks"
 msgstr "ব্যাকগ্রাউন্ড কাজ"
 
 #: nexopay/settings/base.py:355
-#| msgid "email addresses"
 msgid "Email addresses"
 msgstr "ইমেইল ঠিকানা"
 
@@ -2890,7 +2838,7 @@ msgstr "ইমেইল ঠিকানা"
 msgid "Homepage"
 msgstr "হোমপেজ"
 
-#: nexopay/settings/base.py:389 templates/organizers/event_detail.html:87
+#: nexopay/settings/base.py:389 templates/organizers/event_detail.html:89
 msgid "Gate staff"
 msgstr "গেট স্টাফ"
 
@@ -2899,14 +2847,64 @@ msgid "Control room"
 msgstr "কন্ট্রোল রুম"
 
 #: nexopay/settings/base.py:411
-#| msgid "Events"
 msgid "Events page"
 msgstr "ইভেন্ট পেজ"
 
 #: nexopay/settings/base.py:412
-#| msgid "FAQ teaser"
 msgid "FAQ page"
 msgstr "প্রশ্নোত্তর পেজ"
+
+#: templates/403.html:3
+msgid "Not allowed"
+msgstr "অনুমতি নেই"
+
+#: templates/403.html:9
+msgid "You can't open this page"
+msgstr "এই পেজটি আপনি খুলতে পারবেন না"
+
+#: templates/403.html:10
+msgid ""
+"It belongs to another account, or your account doesn't have access. Log in "
+"with the right account, or contact us if you think this is a mistake."
+msgstr ""
+"পেজটি অন্য একটি অ্যাকাউন্টের, অথবা আপনার অ্যাকাউন্টের এখানে প্রবেশাধিকার "
+"নেই। সঠিক অ্যাকাউন্টে লগইন করুন, আর ভুল মনে হলে আমাদের সাথে যোগাযোগ করুন।"
+
+#: templates/403.html:13 templates/support/contact.html:3
+msgid "Contact us"
+msgstr "যোগাযোগ"
+
+#: templates/404.html:3
+msgid "Page not found"
+msgstr "পেজ পাওয়া যায়নি"
+
+#: templates/404.html:9
+msgid "This page isn't here"
+msgstr "পেজটি এখানে নেই"
+
+#: templates/404.html:10
+msgid ""
+"The link may be old, or the event may have ended. Try searching, or start "
+"from the events page."
+msgstr ""
+"লিংকটি পুরোনো হতে পারে, অথবা ইভেন্টটি শেষ হয়ে গেছে। খুঁজে দেখুন, অথবা "
+"ইভেন্ট পেজ থেকে শুরু করুন।"
+
+#: templates/404.html:13 templates/cms/sections/hero.html:66
+#: templates/events/catalog.html:9
+msgid "Search events…"
+msgstr "ইভেন্ট খুঁজুন…"
+
+#: templates/404.html:13 templates/404.html:14
+#: templates/cms/sections/hero.html:66 templates/cms/sections/hero.html:67
+#: templates/events/catalog.html:9 templates/partials/header.html:21
+#: templates/partials/header.html:57
+msgid "Search"
+msgstr "খুঁজুন"
+
+#: templates/404.html:17
+msgid "Browse events"
+msgstr "ইভেন্ট দেখুন"
 
 #: templates/account/login.html:3 templates/account/login.html:29
 #: templates/account/signup.html:23 templates/partials/header.html:65
@@ -3125,7 +3123,6 @@ msgstr "শীর্ষ ইভেন্ট · ৩০ দিন"
 
 #: templates/admin/index.html:56
 #, python-format
-#| msgid "%(n)s orders"
 msgid "%(n)s order"
 msgid_plural "%(n)s orders"
 msgstr[0] "%(n)sটি অর্ডার"
@@ -3136,31 +3133,26 @@ msgid "No sales in the last 30 days yet."
 msgstr "গত ৩০ দিনে এখনো কোনো বিক্রি নেই।"
 
 #: templates/admin/index.html:60
-#| msgid "Payment methods"
 msgid "Payment methods · 30 days"
 msgstr "পেমেন্ট মাধ্যম · ৩০ দিন"
 
 #: templates/admin/index.html:65
-#| msgid "Local payments"
 msgid "No payments yet."
 msgstr "এখনো কোনো পেমেন্ট নেই।"
 
 #: templates/admin/index.html:70
-#| msgid "Latest sales"
 msgid "Latest orders"
 msgstr "সর্বশেষ অর্ডার"
 
-#: templates/admin/index.html:77 templates/organizers/event_detail.html:80
+#: templates/admin/index.html:77 templates/organizers/event_detail.html:82
 msgid "No orders yet."
 msgstr "এখনো কোনো অর্ডার নেই।"
 
 #: templates/admin/index.html:80
-#| msgid "Questions?"
 msgid "Quick actions"
 msgstr "দ্রুত কাজ"
 
 #: templates/admin/index.html:88
-#| msgid "Discover upcoming events"
 msgid "Upcoming events"
 msgstr "আসন্ন ইভেন্ট"
 
@@ -3169,13 +3161,16 @@ msgid "sold"
 msgstr "বিক্রি"
 
 #: templates/admin/index.html:96
-#| msgid "Discover upcoming events"
 msgid "No upcoming events."
 msgstr "কোনো আসন্ন ইভেন্ট নেই।"
 
 #: templates/base.html:43
 msgid "Skip to content"
 msgstr "মূল কনটেন্টে যান"
+
+#: templates/base.html:46
+msgid "Announcement"
+msgstr "ঘোষণা"
 
 #: templates/base.html:50 templates/events/catalog.html:33
 #: templates/partials/messages.html:9
@@ -3266,16 +3261,6 @@ msgid ""
 msgstr ""
 "কনসার্ট, উৎসব, প্রতিযোগিতা, কর্মশালা আর আরও অনেক কিছু। বিকাশ, নগদ বা কার্ডে "
 "পেমেন্ট করুন, সাথে সাথে ফোনে QR টিকিট পান।"
-
-#: templates/cms/sections/hero.html:66 templates/events/catalog.html:9
-msgid "Search events…"
-msgstr "ইভেন্ট খুঁজুন…"
-
-#: templates/cms/sections/hero.html:66 templates/cms/sections/hero.html:67
-#: templates/events/catalog.html:9 templates/partials/header.html:21
-#: templates/partials/header.html:57
-msgid "Search"
-msgstr "খুঁজুন"
 
 #: templates/cms/sections/organizer_cta.html:7
 msgid "Hosting an event?"
@@ -3462,35 +3447,44 @@ msgstr "মাত্র %(n)sটি বাকি"
 msgid "Not on sale"
 msgstr "বিক্রি হচ্ছে না"
 
-#: templates/events/_ticket_panel.html:56
+#: templates/events/_ticket_panel.html:55
+msgid "Finish paying"
+msgstr "পেমেন্ট সম্পন্ন করুন"
+
+#: templates/events/_ticket_panel.html:57
+#| msgid "You have signed out."
+msgid "You have this"
+msgstr "এটি আপনার আছে"
+
+#: templates/events/_ticket_panel.html:62
 msgid "Fewer"
 msgstr "কম"
 
-#: templates/events/_ticket_panel.html:58
+#: templates/events/_ticket_panel.html:64
 msgid "More"
 msgstr "বেশি"
 
-#: templates/events/_ticket_panel.html:64
+#: templates/events/_ticket_panel.html:70
 msgid "Select"
 msgstr "বাছুন"
 
-#: templates/events/_ticket_panel.html:65
+#: templates/events/_ticket_panel.html:71
 msgid "Added"
 msgstr "যোগ হয়েছে"
 
-#: templates/events/_ticket_panel.html:76
+#: templates/events/_ticket_panel.html:82
 msgid "ticket(s)"
 msgstr "টি টিকিট"
 
-#: templates/events/_ticket_panel.html:76
+#: templates/events/_ticket_panel.html:82
 msgid "Select tickets"
 msgstr "টিকিট বাছুন"
 
-#: templates/events/_ticket_panel.html:80
+#: templates/events/_ticket_panel.html:86
 msgid "Continue to checkout"
 msgstr "চেকআউটে যান"
 
-#: templates/events/_ticket_panel.html:82
+#: templates/events/_ticket_panel.html:88
 msgid "Secure payment · Instant QR tickets"
 msgstr "নিরাপদ পেমেন্ট · সাথে সাথে QR টিকিট"
 
@@ -3999,42 +3993,50 @@ msgstr[0] "%(n)sটি রিফান্ডের অনুরোধ নেক�
 msgstr[1] "%(n)sটি রিফান্ডের অনুরোধ নেক্সোপের পর্যালোচনার অপেক্ষায়"
 
 #: templates/organizers/event_detail.html:70
+msgid "Refund pending"
+msgstr "রিফান্ড প্রক্রিয়াধীন"
+
+#: templates/organizers/event_detail.html:71
 msgid "Refund"
 msgstr "রিফান্ড"
 
-#: templates/organizers/event_detail.html:75
+#: templates/organizers/event_detail.html:77
 msgid "Reason for the refund"
 msgstr "রিফান্ডের কারণ"
 
-#: templates/organizers/event_detail.html:76
+#: templates/organizers/event_detail.html:78
 msgid "Refund now"
 msgstr "এখনই রিফান্ড"
 
-#: templates/organizers/event_detail.html:76
+#: templates/organizers/event_detail.html:78
 msgid "Request refund"
 msgstr "রিফান্ডের অনুরোধ"
 
-#: templates/organizers/event_detail.html:88
+#: templates/organizers/event_detail.html:90
 msgid "People who can scan tickets for this event."
 msgstr "যারা এই ইভেন্টের টিকিট স্ক্যান করতে পারবেন।"
 
-#: templates/organizers/event_detail.html:95
+#: templates/organizers/event_detail.html:97
 msgid "Only you can scan right now."
 msgstr "এখন শুধু আপনি স্ক্যান করতে পারবেন।"
 
-#: templates/organizers/event_detail.html:99
+#: templates/organizers/event_detail.html:101
 msgid "staff@email.com"
 msgstr "staff@email.com"
 
-#: templates/organizers/event_detail.html:100
+#: templates/organizers/event_detail.html:101
+msgid "Gate staff email"
+msgstr "গেট স্টাফের ইমেইল"
+
+#: templates/organizers/event_detail.html:102
 msgid "Add"
 msgstr "যোগ করুন"
 
-#: templates/organizers/event_detail.html:105
+#: templates/organizers/event_detail.html:107
 msgid "Check-in log"
 msgstr "প্রবেশের লগ"
 
-#: templates/organizers/event_detail.html:113
+#: templates/organizers/event_detail.html:115
 msgid "Scans appear here on event day."
 msgstr "ইভেন্টের দিন স্ক্যানগুলো এখানে দেখা যাবে।"
 
@@ -4189,10 +4191,6 @@ msgstr ""
 #: templates/scan/scanner.html:144
 msgid "Connection problem, try again"
 msgstr "সংযোগে সমস্যা, আবার চেষ্টা করুন"
-
-#: templates/support/contact.html:3
-msgid "Contact us"
-msgstr "যোগাযোগ"
 
 #: templates/support/contact.html:8
 msgid "How can we"

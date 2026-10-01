@@ -46,14 +46,14 @@
         <div class="pass-holo" aria-hidden="true"></div>
         <p class="relative text-sm font-semibold text-brand-fg">{% translate "Event details" %}</p>
         <h2 class="relative mt-1 text-xl font-bold leading-tight">{{ ticket.event.title }}</h2>
-        <dl class="relative mt-6 space-y-5 text-sm">
+        <ul role="list" class="relative mt-6 space-y-5 text-sm">
           {% with ic="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/[.06] text-muted" %}
-          <div class="flex items-start gap-3"><span class="{{ ic }}">{% icon "calendar" "w-4 h-4" %}</span><div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Date" %}</dt><dd class="font-semibold">{{ ticket.event.starts_at|date:"l, j F Y"|bn_digits }}</dd><dd class="text-muted">{{ ticket.event.starts_at|date:"g:i A"|bn_digits }}{% if ticket.event.ends_at %} - {{ ticket.event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</dd></div></div>
-          <div class="flex items-start gap-3"><span class="{{ ic }}">{% icon "pin" "w-4 h-4" %}</span><div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Venue" %}</dt><dd class="font-semibold">{{ ticket.event.venue_name|default:_("Online event") }}</dd><dd class="text-muted">{{ ticket.event.venue_address }}{% if ticket.event.venue_address %}, {% endif %}{{ ticket.event.city }}</dd></div></div>
-          <div class="flex items-start gap-3"><span class="{{ ic }}">{% icon "building" "w-4 h-4" %}</span><div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Organized by" %}</dt><dd class="font-semibold">{{ ticket.event.organizer.name }}</dd>{% if ticket.event.organizer.contact_phone %}<dd><a href="tel:{{ ticket.event.organizer.contact_phone }}" class="link text-sm" :tabindex="flipped ? null : -1">{{ ticket.event.organizer.contact_phone }}</a></dd>{% endif %}</div></div>
-          <div class="flex items-start gap-3"><span class="{{ ic }}">{% icon "ticket" "w-4 h-4" %}</span><div class="min-w-0"><dt class="text-xs text-subtle">{% translate "Ticket" %}</dt><dd class="font-semibold">{{ ticket.ticket_type.name }}</dd><dd class="font-mono text-muted">{{ ticket.code }}</dd></div></div>
+          <li class="flex items-start gap-3"><span class="{{ ic }}">{% icon "calendar" "w-4 h-4" %}</span><div class="min-w-0"><p class="text-xs text-subtle">{% translate "Date" %}</p><p class="font-semibold">{{ ticket.event.starts_at|date:"l, j F Y"|bn_digits }}</p><p class="text-muted">{{ ticket.event.starts_at|date:"g:i A"|bn_digits }}{% if ticket.event.ends_at %} - {{ ticket.event.ends_at|date:"g:i A"|bn_digits }}{% endif %}</p></div></li>
+          <li class="flex items-start gap-3"><span class="{{ ic }}">{% icon "pin" "w-4 h-4" %}</span><div class="min-w-0"><p class="text-xs text-subtle">{% translate "Venue" %}</p><p class="font-semibold">{{ ticket.event.venue_name|default:_("Online event") }}</p><p class="text-muted">{{ ticket.event.venue_address }}{% if ticket.event.venue_address %}, {% endif %}{{ ticket.event.city }}</p></div></li>
+          <li class="flex items-start gap-3"><span class="{{ ic }}">{% icon "building" "w-4 h-4" %}</span><div class="min-w-0"><p class="text-xs text-subtle">{% translate "Organized by" %}</p><p class="font-semibold">{{ ticket.event.organizer.name }}</p>{% if ticket.event.organizer.contact_phone %}<p><a href="tel:{{ ticket.event.organizer.contact_phone }}" class="link text-sm" :tabindex="flipped ? null : -1">{{ ticket.event.organizer.contact_phone }}</a></p>{% endif %}</div></li>
+          <li class="flex items-start gap-3"><span class="{{ ic }}">{% icon "ticket" "w-4 h-4" %}</span><div class="min-w-0"><p class="text-xs text-subtle">{% translate "Ticket" %}</p><p class="font-semibold">{{ ticket.ticket_type.name }}</p><p class="font-mono text-muted">{{ ticket.code }}</p></div></li>
           {% endwith %}
-        </dl>
+        </ul>
         <p class="relative mt-auto pt-6 text-xs leading-relaxed text-subtle">{% translate "Turn your screen brightness up at the gate. Each ticket scans only once." %}</p>
       </div>
     </div>

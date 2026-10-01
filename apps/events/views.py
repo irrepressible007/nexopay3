@@ -134,10 +134,23 @@ def _render_detail(request, event, preview=False):
 def ticket_panel(request, slug):
     """Live availability + selection form. Never cached — it reflects stock right now."""
     event, _public = _get_visible_event(request, slug)
+    ticket_types = list(event.ticket_types.all())
+    if request.user.is_authenticated:
+        # One-per-person tickets this buyer already holds: say so here instead of failing at checkout.
+        from apps.orders.models import Order, PurchaseClaim
+
+        held = dict(
+            PurchaseClaim.objects.filter(order__user=request.user, ticket_type__event=event)
+            .filter(order__status__in=(Order.Status.PAID, Order.Status.PARTIALLY_REFUNDED, Order.Status.PENDING_PAYMENT))
+            .values_list("ticket_type_id", "order_id")
+        )
+        orders = {o.pk: o for o in Order.objects.filter(pk__in=set(held.values()))}
+        for t in ticket_types:
+            t.held_by_me = orders.get(held.get(t.pk))
     return render(
         request,
         "events/_ticket_panel.html",
-        {"event": event, "ticket_types": list(event.ticket_types.all()), "now": timezone.now()},
+        {"event": event, "ticket_types": ticket_types, "now": timezone.now()},
     )
 
 

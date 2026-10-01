@@ -81,6 +81,9 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
     add_fieldsets = ((None, {"classes": ("wide",), "fields": ("email", "password1", "password2")}),)
     formfield_overrides = {}
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("organizer_profile")  # the Role column
+
     @display(description=_("Person"), header=True, ordering="email")
     def person(self, obj):
         return [obj.full_name or obj.email, obj.email if obj.full_name else "", (obj.full_name or obj.email)[:1]]

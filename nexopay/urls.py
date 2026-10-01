@@ -15,7 +15,7 @@ urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
     path("payments/", include("apps.payments.urls")),
     path("sitemap.xml", sitemap, {"sitemaps": SITEMAPS}, name="sitemap"),
-    path("favicon.ico", lambda request: redirect(static_url("img/favicon.svg"), permanent=True)),
+    path("favicon.ico", lambda request: redirect(static_url("img/favicon.ico"), permanent=True)),
     path("site.webmanifest", cms_views.webmanifest, name="webmanifest"),
     path("private-media/<path:path>", core_views.private_media, name="private_media"),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),

@@ -1,0 +1,8 @@
+{% extends "errors/standalone.html" %}
+{% block title %}Please try again{% endblock %}
+{% block main %}
+<h1>This page was open for a while</h1>
+<p>For your security the form expired. Go back, reload the page and send it again. Nothing was charged.</p>
+<p lang="bn">নিরাপত্তার জন্য ফর্মটির মেয়াদ শেষ হয়েছে। পেছনে গিয়ে পেজটি রিলোড করুন এবং আবার পাঠান। কোনো টাকা কাটা হয়নি।</p>
+<a class="primary" href="javascript:history.back()">Go back</a><a class="ghost" href="/">Home</a>
+{% endblock %}

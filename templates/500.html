@@ -1,0 +1,9 @@
+{% extends "errors/standalone.html" %}
+{% block title %}Something went wrong{% endblock %}
+{% block main %}
+<p class="code">500</p>
+<h1>Something went wrong on our side</h1>
+<p>We've been notified. Please try again in a minute. If you were paying, don't pay twice: your tickets appear under My tickets as soon as the payment is confirmed.</p>
+<p lang="bn">আমাদের দিকে একটি সমস্যা হয়েছে। এক মিনিট পরে আবার চেষ্টা করুন। পেমেন্ট করে থাকলে আবার পেমেন্ট করবেন না: নিশ্চিত হলেই টিকিট "আমার টিকিট"-এ দেখা যাবে।</p>
+<a class="primary" href="/">Home</a><a class="ghost" href="/account/tickets/">My tickets</a>
+{% endblock %}

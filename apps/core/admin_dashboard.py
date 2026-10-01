@@ -3,6 +3,7 @@ import json
 from datetime import timedelta
 
 from django.db.models import Count, Q, Sum
+from django.db.models.functions import TruncDate
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -85,13 +86,18 @@ def dashboard_callback(request, context):
     started = Order.objects.filter(created_at__gte=now - timedelta(days=30)).count()
     conversion = round(last30["n"] / started * 100) if started else None
 
-    # Daily sales for the chart (30 days).
+    # Daily sales for the chart (30 days), in one grouped query.
+    first_day = today - timedelta(days=29)
+    per_day = {
+        row["day"]: row["v"] for row in paid.filter(paid_at__gte=first_day)
+        .annotate(day=TruncDate("paid_at", tzinfo=timezone.get_current_timezone()))
+        .values("day").annotate(v=Sum("total"))
+    }
     labels, values = [], []
     for i in range(29, -1, -1):
-        start = today - timedelta(days=i)
-        v = paid.filter(paid_at__gte=start, paid_at__lt=start + timedelta(days=1)).aggregate(v=Sum("total"))["v"]
-        labels.append(start.strftime("%d %b"))
-        values.append(float(v or 0))
+        day = (today - timedelta(days=i)).date()
+        labels.append(day.strftime("%d %b"))
+        values.append(float(per_day.get(day) or 0))
     chart = {"labels": labels, "datasets": [{"label": _("Sales (৳)"), "data": values, "backgroundColor": BRAND,
                                              "borderColor": BRAND, "borderRadius": 6, "maxBarThickness": 22}]}
 
