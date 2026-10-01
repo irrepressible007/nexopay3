@@ -48,8 +48,8 @@
     {# event-banner: an event card's picture morphs into this on the way in (see app.css / app.js). #}
     <div class="vt-banner min-w-0 overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-inset ring-white/[.07] lg:col-start-1 lg:row-start-1">
       {% if event.banner_renditions %}
-      <img src="{{ event.banner_renditions|rendition:960 }}" srcset="{{ event.banner_renditions|srcset }}" sizes="(min-width:1280px) 820px, (min-width:1024px) 62vw, 100vw" alt="{{ event.title }}" fetchpriority="high" class="aspect-[16/9] w-full object-cover" width="960" height="540">
-      {% elif event.banner %}<img src="{{ event.banner.url }}" alt="{{ event.title }}" class="aspect-[16/9] w-full object-cover">
+      <img src="{{ event.banner_renditions|rendition:960 }}" srcset="{{ event.banner_renditions|srcset }}" sizes="(min-width:1280px) 820px, (min-width:1024px) 62vw, 100vw" alt="{{ event.title }}" fetchpriority="high" class="scroll-zoom aspect-[16/9] w-full object-cover" width="960" height="540">
+      {% elif event.banner %}<img src="{{ event.banner.url }}" alt="{{ event.title }}" class="scroll-zoom aspect-[16/9] w-full object-cover">
       {% else %}<div class="poster-fallback grid aspect-[16/9] place-items-center">{% with cat=event.categories.all.0 %}<span class="text-white/75" style="color: {{ cat.accent_color|default:'' }}">{% category_icon cat "w-16 h-16" %}</span>{% endwith %}</div>{% endif %}
     </div>
 

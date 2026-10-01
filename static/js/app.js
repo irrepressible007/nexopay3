@@ -369,16 +369,47 @@ window.nxWakeLock = async () => {
   const root = document.documentElement;
   const motion = !reduceMotion;
 
-  /* Scroll reveal: `.reveal` elements fade up as they come into view (see app.css). */
+  /* Scroll reveal: blocks play their entrance as they come up into view (see app.css). Blocks that
+     arrive together follow one another, top to bottom and left to right, 70 ms apart and never
+     more than 0.42 s late (a fast flick or a jump brings many at once); blocks already reaching
+     past the top of the screen start at once. A block that drops back below the screen is reset,
+     so it plays again when it comes back up. */
   if (root.classList.contains("reveal-ready")) {
-    const io = new IntersectionObserver((entries) => {
-      for (const e of entries) if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
-    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.08 });
-    // (Where the browser ties these to the scroll itself, app.css ignores is-in.)
-    const scan = (scope) => scope.querySelectorAll(":is(.reveal, .reveal-text, .reveal-pop, .reveal-scale, .words-scroll):not(.is-in)").forEach((el) => io.observe(el));
+    const SEL = ".reveal, .reveal-text, .reveal-pop, .reveal-scale, .words-scroll, .reveal-kids > *, .prose-nx:not([contenteditable], .prose-lead) > *, .prose-lead > :nth-child(n+7)";
+    const enter = new IntersectionObserver((entries) => {
+      let k = 0;
+      entries
+        .filter((e) => e.isIntersecting && !e.target.classList.contains("is-in"))
+        .sort((a, b) => Math.round((a.boundingClientRect.top - b.boundingClientRect.top) / 12) || a.boundingClientRect.left - b.boundingClientRect.left)
+        .forEach((e) => {
+          e.target.style.setProperty("--rd", e.boundingClientRect.top < 0 ? "0ms" : `${Math.min(k++, 6) * 70}ms`);
+          e.target.classList.add("is-in");
+        });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    // The "leave" area reaches far above the screen, so a block only leaves it by dropping below the
+    // screen, even when the page jumps (Home key, a link to the top) straight past it.
+    const leave = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting && e.rootBounds && e.boundingClientRect.top >= e.rootBounds.bottom) e.target.classList.remove("is-in", "rv-now");
+      }
+    }, { rootMargin: "100000px 0px 0px 0px" });
+    const scan = (scope) => scope.querySelectorAll(SEL).forEach((el) => {
+      if (el.closest(".accordion-panel")) return;
+      enter.observe(el);
+      leave.observe(el);
+    });
     scan(document);
     root.classList.add("reveal-live");
-    document.addEventListener("htmx:afterSettle", (e) => scan(e.target));
+    document.addEventListener("htmx:afterSettle", (e) => {
+      // Filter results that land on screen show at once, so the view transition glides them into place.
+      if (root.classList.contains("vt-filter")) {
+        e.target.querySelectorAll(SEL).forEach((el) => {
+          const r = el.getBoundingClientRect();
+          if (r.bottom > 0 && r.top < innerHeight) el.classList.add("is-in", "rv-now");
+        });
+      }
+      scan(e.target);
+    });
   }
 
   /* Page to page, the picture you clicked travels with you: an event card's picture morphs into the

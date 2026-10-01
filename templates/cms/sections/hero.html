@@ -54,7 +54,7 @@
 <section class="relative">
   <div class="container-x grid grid-cols-1 items-center gap-10 pb-6 pt-8 sm:pt-14 lg:gap-14 lg:pb-2 lg:pt-14 xl:gap-20
               {% if visual %}lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]{% else %}justify-items-center pb-4 pt-16 text-center sm:pt-24{% endif %}">
-    <div class="w-full min-w-0 {% if visual %}max-w-[40rem]{% else %}max-w-3xl{% endif %}">
+    <div class="scroll-lift w-full min-w-0 {% if visual %}max-w-[40rem]{% else %}max-w-3xl{% endif %}">
       <h1 class="words-in text-[clamp(2.4rem,5.2vw,3.75rem)] font-bold leading-[1.04] tracking-[-0.035em]">
         {% if section.title %}{{ section.title|highlight|split_words }}{% else %}{{ sitecfg.tagline|highlight|split_words }}{% endif %}
       </h1>
@@ -80,7 +80,7 @@
 
     {% if posters %}
     {# Featured posters as a deck that deals itself forward: flick the top card away on phones, it fans out with depth on large screens. #}
-    <div class="poster-stack-in mx-auto w-full min-w-0 max-w-[34rem] pt-7 lg:mx-0 lg:max-w-none lg:pr-[14%] lg:pt-0" data-parallax x-data="posterStack({{ posters|length }}, {{ block.interval_ms|default:0 }})"
+    <div class="poster-stack-in scroll-sink mx-auto w-full min-w-0 max-w-[34rem] pt-7 lg:mx-0 lg:max-w-none lg:pr-[14%] lg:pt-0" data-parallax x-data="posterStack({{ posters|length }}, {{ block.interval_ms|default:0 }})"
          @mouseenter="pause()" @mouseleave="play()" @focusin="pause()" @focusout="play()"
          aria-roledescription="carousel" aria-label="{% if block.posters_past %}{% translate 'Recent events' %}{% else %}{% translate 'Featured events' %}{% endif %}">
       <div class="poster-stack aspect-square sm:aspect-[4/3]" x-ref="deck" @dragstart.prevent>
