@@ -37,16 +37,19 @@ class FakeNexopay2:
         self.files = {"events/covers/steam.png": png_bytes(), "partners/buet.png": png_bytes(),
                       "partners/evil.svg": b'<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"/>'}
         self._users = [
-            {"id": 1, "name": "Rahim Uddin", "email": "Rahim@Example.com", "email_verified_at": datetime(2026, 6, 10),
+            {"id": 1, "name": "Rahim Uddin", "email": "Rahim@Nexopay-Fans.org", "email_verified_at": datetime(2026, 6, 10),
              "password": laravel_hash("old-secret-1"), "global_role": "user",
              "profile_data": json.dumps({"Phone Number": "01712-345678", "Institution": "BUET"}),
              "created_at": datetime(2026, 6, 10, 8, 0)},
-            {"id": 2, "name": "Karim", "email": "karim@example.com", "email_verified_at": None,
+            {"id": 2, "name": "Karim", "email": "karim@nexopay-fans.org", "email_verified_at": None,
              "password": laravel_hash("old-secret-2"), "global_role": "Admin", "profile_data": None,
              "created_at": datetime(2026, 6, 11)},
-            {"id": 3, "name": "Already Here", "email": "taken@example.com", "email_verified_at": datetime(2026, 6, 1),
+            {"id": 3, "name": "Already Here", "email": "taken@nexopay-fans.org", "email_verified_at": datetime(2026, 6, 1),
              "password": laravel_hash("x"), "global_role": "user", "profile_data": None, "created_at": datetime(2026, 6, 1)},
-            {"id": 4, "name": "Odd Hash", "email": "odd@example.com", "email_verified_at": None,
+            {"id": 5, "name": "Seed Admin", "email": "admin@nexopay.test", "email_verified_at": None,
+             "password": laravel_hash("password"), "global_role": "Admin", "profile_data": None,
+             "created_at": datetime(2026, 6, 2)},
+            {"id": 4, "name": "Odd Hash", "email": "odd@nexopay-fans.org", "email_verified_at": None,
              "password": "not-a-bcrypt-hash", "global_role": "user", "profile_data": '{"mobile": "12345"}',
              "created_at": datetime(2026, 6, 12)},
         ]
@@ -93,8 +96,8 @@ def old_site(monkeypatch, settings, tmp_path):
     settings.PASSWORD_HASHERS = BCRYPT_FIRST
     fake = FakeNexopay2()
     monkeypatch.setattr(import_nexopay2.Command, "get_source", lambda self, options: fake)
-    UserFactory(email="taken@example.com", full_name="Kept As Is")
-    UserFactory(is_staff=True, is_superuser=True, email="owner@example.com")
+    UserFactory(email="taken@nexopay-fans.org", full_name="Kept As Is")
+    UserFactory(is_staff=True, is_superuser=True, email="owner@nexopay-fans.org")
     return fake
 
 
@@ -110,7 +113,9 @@ def test_dry_run_changes_nothing(old_site):
     before = (User.objects.count(), Event.objects.count(), Page.objects.count(), Partner.objects.count())
     out = run()
     assert "3  accounts" in out and "Nothing was changed" in out
-    assert "karim@example.com (Admin)" in out
+    assert "test addresses that can't receive email: admin@nexopay.test" in out
+    assert "admin@nexopay.test (Admin)" not in out
+    assert "karim@nexopay-fans.org (Admin)" in out
     assert (User.objects.count(), Event.objects.count(), Page.objects.count(), Partner.objects.count()) == before
 
 
@@ -118,22 +123,22 @@ def test_accounts_keep_their_passwords_and_verification(old_site, client):
     from apps.accounts.models import User
 
     run("--yes")
-    rahim = User.objects.get(email="rahim@example.com")
+    rahim = User.objects.get(email="rahim@nexopay-fans.org")
     assert rahim.full_name == "Rahim Uddin" and rahim.phone == "+8801712345678"
     assert rahim.password.startswith("bcrypt$$2y$")
     assert EmailAddress.objects.get(user=rahim).verified
-    assert not EmailAddress.objects.get(email="karim@example.com").verified
-    assert not User.objects.get(email="karim@example.com").is_staff  # old Admin role isn't carried over
-    assert not User.objects.get(email="odd@example.com").has_usable_password()
-    assert User.objects.get(email="taken@example.com").full_name == "Kept As Is"  # never overwritten
+    assert not EmailAddress.objects.get(email="karim@nexopay-fans.org").verified
+    assert not User.objects.get(email="karim@nexopay-fans.org").is_staff  # old Admin role isn't carried over
+    assert not User.objects.get(email="odd@nexopay-fans.org").has_usable_password()
+    assert User.objects.get(email="taken@nexopay-fans.org").full_name == "Kept As Is"  # never overwritten
 
     # The old password works on the new login page, and is re-saved in the new format.
-    response = client.post(reverse("account_login"), {"login": "rahim@example.com", "password": "old-secret-1"})
+    response = client.post(reverse("account_login"), {"login": "rahim@nexopay-fans.org", "password": "old-secret-1"})
     assert response.status_code == 302
     rahim.refresh_from_db()
     assert rahim.password.startswith("pbkdf2_sha256$")
     client.logout()
-    assert client.post(reverse("account_login"), {"login": "rahim@example.com", "password": "wrong"}).status_code == 200
+    assert client.post(reverse("account_login"), {"login": "rahim@nexopay-fans.org", "password": "wrong"}).status_code == 200
 
 
 def test_past_event_becomes_an_archive(old_site, client):
@@ -145,7 +150,7 @@ def test_past_event_becomes_an_archive(old_site, client):
     assert "Segment Details" in event.description
     assert {c.slug for c in event.categories.all()} >= {"competitions", "festivals"}
     assert event.banner and event.banner.name.startswith(f"org/{event.organizer_id}/event/")
-    assert event.organizer.user.email == "owner@example.com" and event.organizer.is_approved
+    assert event.organizer.user.email == "owner@nexopay-fans.org" and event.organizer.is_approved
     assert not Event.objects.filter(slug="half-made").exists()  # old drafts stay behind
     # The old address now lands on it.
     response = client.get("/event/national-steam-carnival-6a2318de50c6a")
@@ -196,3 +201,22 @@ def test_missing_source_env_is_a_clear_error(tmp_path):
 
     with pytest.raises(CommandError, match="settings file was not found"):
         call_command("import_nexopay2", "--source-env", str(tmp_path / "nope.env"))
+
+
+def test_first_login_of_a_moved_account_confirms_the_email(old_site, client, settings, mailoutbox):
+    """The old site never verified emails: on the live site (mandatory verification) people confirm once."""
+    from apps.accounts.models import User
+
+    settings.ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+    run("--yes")
+    assert not User.objects.filter(email="admin@nexopay.test").exists()
+    response = client.post(reverse("account_login"), {"login": "karim@nexopay-fans.org", "password": "old-secret-2"})
+    assert response.status_code == 302 and "confirm" in response["Location"]
+    assert len(mailoutbox) == 1 and mailoutbox[0].to == ["karim@nexopay-fans.org"]
+    link = next(line for line in mailoutbox[0].body.splitlines() if "/accounts/confirm-email/" in line).strip()
+    path = link[link.index("/accounts/confirm-email/"):]
+    client.post(path)
+    assert EmailAddress.objects.get(email="karim@nexopay-fans.org").verified
+    response = client.post(reverse("account_login"), {"login": "karim@nexopay-fans.org", "password": "old-secret-2"})
+    assert response.status_code == 302 and "confirm" not in response["Location"]
+    assert User.objects.get(email="karim@nexopay-fans.org").password.startswith("pbkdf2_sha256$")

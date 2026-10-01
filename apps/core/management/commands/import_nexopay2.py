@@ -41,6 +41,8 @@ from apps.events.models import Category, Event
 from apps.organizers.models import OrganizerProfile
 
 LARAVEL_BCRYPT = re.compile(r"^\$2[aby]\$\d\d\$[./A-Za-z0-9]{53}$")
+# Addresses that can never receive mail (RFC 2606/6761): the old site's seed/test accounts.
+UNDELIVERABLE = re.compile(r"@(?:[^@]+\.)?(?:test|example|invalid|localhost|local)$|@example\.(?:com|net|org)$", re.I)
 PHONE_KEYS = re.compile(r"phone|mobile|contact|whatsapp|number", re.I)
 CATEGORY_HINTS = [  # (words in the title/description, our category slug)
     (r"olympiad|competition|contest|hackathon|quiz|championship", "competitions"),
@@ -181,10 +183,13 @@ class Command(BaseCommand):
         User = get_user_model()
         existing = set(User.objects.values_list("email", flat=True))
         taken_phones = set(User.objects.exclude(phone=None).values_list("phone", flat=True))
-        new, skipped, staff_roles, seen = [], [], [], set()
+        new, skipped, staff_roles, test_addresses, seen = [], [], [], [], set()
         for row in rows:
             email = (row.get("email") or "").strip().lower()
             if not email or "@" not in email:
+                continue
+            if UNDELIVERABLE.search(email):
+                test_addresses.append(email)
                 continue
             if email in existing or email in seen:
                 skipped.append(email)
@@ -199,7 +204,7 @@ class Command(BaseCommand):
             if role.lower() in ("admin", "finance"):
                 staff_roles.append(f"{email} ({role})")
             new.append({**row, "_email": email, "_phone": phone})
-        return {"new": new, "skipped": skipped, "staff_roles": staff_roles}
+        return {"new": new, "skipped": skipped, "staff_roles": staff_roles, "test_addresses": test_addresses}
 
     @staticmethod
     def phone_from_profile(profile):
@@ -394,7 +399,9 @@ class Command(BaseCommand):
             w(f"         venue for the events: {self.venue}")
         elif events["new"]:
             w("         no --venue given: the event page will show the city (Dhaka) as the place")
-        skipped = [("accounts already here", users["skipped"]), ("events already here", events["skipped"]),
+        skipped = [("accounts already here", users["skipped"]),
+                   ("test addresses that can't receive email", users["test_addresses"]),
+                   ("events already here", events["skipped"]),
                    ("pages already here (kept as they are)", pages["skipped"]),
                    ("partners already here", partners["skipped"])]
         for label, items in skipped:
