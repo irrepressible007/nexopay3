@@ -4,53 +4,96 @@
 {% block branding %}{% include "unfold/helpers/site_branding.html" %}{% endblock %}
 
 {% block content %}
-<div class="flex flex-col gap-6">
-  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+<div class="nx-dash">
+  {# Sales at a glance, compared with the 30 days before. #}
+  <div class="nx-grid nx-cols-4">
     {% for k in kpis %}
       {% component "unfold/components/card.html" %}
-        {% component "unfold/components/text.html" %}{{ k.label }}{% endcomponent %}
-        {% component "unfold/components/title.html" %}{{ k.value }}{% endcomponent %}
-        {% component "unfold/components/text.html" with class="opacity-70" %}{{ k.sub }}{% endcomponent %}
+        <div class="nx-muted" style="display:flex;align-items:center;gap:.4rem"><span class="nx-icon">{{ k.icon }}</span>{{ k.label }}</div>
+        <div class="nx-kpi-value">{{ k.value }}{% if k.change %}<span class="nx-change {% if k.change.up %}up{% else %}down{% endif %}">{{ k.change.text }}</span>{% endif %}</div>
+        <div class="nx-muted">{{ k.sub }}</div>
       {% endcomponent %}
     {% endfor %}
   </div>
 
-  <div class="grid gap-4 lg:grid-cols-3">
+  {# What needs someone's attention. #}
+  <div class="nx-grid nx-cols-4">
     {% for q in queues %}
       {% component "unfold/components/card.html" with href=q.url %}
-        {% component "unfold/components/text.html" %}{{ q.label }}{% endcomponent %}
-        {% component "unfold/components/title.html" %}{{ q.count }}{% if q.count %} <span class="text-sm font-normal text-primary-600">→ review</span>{% endif %}{% endcomponent %}
+        <div class="nx-queue {% if q.count %}has-items{% endif %}">
+          <span class="nx-icon" style="font-size:1.6rem">{{ q.icon }}</span>
+          <div class="nx-grow"><div class="nx-count">{{ q.count }}</div><div class="nx-muted">{{ q.label }}</div></div>
+        </div>
       {% endcomponent %}
     {% endfor %}
   </div>
 
-  <div class="grid gap-4 lg:grid-cols-3">
-    <div class="lg:col-span-2">
-    {% component "unfold/components/card.html" with title="Sales · last 14 days" %}
-      <div style="display:flex;align-items:flex-end;gap:6px;height:190px">
-        {% for d in daily %}
-        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:4px" title="{{ d.label }}: ৳{{ d.value|floatformat:0 }}">
-          <span style="font-size:10px;opacity:.7">{% if d.value %}৳{{ d.value|floatformat:0 }}{% endif %}</span>
-          <div style="width:100%;height:{{ d.pct }}%;min-height:2px;border-radius:6px 6px 0 0;background:linear-gradient(180deg,#c084fc,#9333ea)"></div>
-          <span style="font-size:10px;opacity:.6;white-space:nowrap">{{ d.label }}</span>
-        </div>
+  <div class="nx-grid nx-cols-3-1">
+    {% trans "Sales · last 30 days" as t_sales %}
+    {% component "unfold/components/card.html" with title=t_sales %}
+      {% component "unfold/components/chart/bar.html" with data=chart options=chart_options height=260 %}{% endcomponent %}
+    {% endcomponent %}
+
+    {% trans "Getting the site ready" as t_setup %}
+    {% component "unfold/components/card.html" with title=t_setup %}
+      {% component "unfold/components/progress.html" with title=setup.label value=setup.pct %}{% endcomponent %}
+      <div style="margin-top:.75rem">
+        {% for item in setup.items %}
+        <a href="{{ item.url }}" class="nx-row" title="{{ item.hint }}">
+          <span class="nx-check {% if item.ok %}ok{% else %}todo{% endif %}">{% if item.ok %}✓{% else %}!{% endif %}</span>
+          <span class="nx-grow"><span style="display:block;font-weight:600;font-size:.875rem">{{ item.label }}</span>
+          {% if not item.ok %}<span class="nx-muted nx-ellipsis" style="display:block">{{ item.hint }}</span>{% endif %}</span>
+        </a>
         {% endfor %}
       </div>
     {% endcomponent %}
-    </div>
-    {% component "unfold/components/card.html" with title="Control the website" %}
-      <ul class="flex flex-col gap-2">
-        {% for label, url in quick_links %}<li><a href="{{ url }}" class="text-primary-600 hover:underline">{{ label }} →</a></li>{% endfor %}
-      </ul>
+  </div>
+
+  <div class="nx-grid nx-cols-3-1">
+    {% trans "Top events · 30 days" as t_top %}
+    {% component "unfold/components/card.html" with title=t_top %}
+      {% for e in top_events %}
+        <a href="{{ e.url }}" class="nx-row"><span class="nx-grow nx-ellipsis" style="font-weight:600">{{ e.title }}</span><span class="nx-muted">{% blocktrans count n=e.n %}{{ n }} order{% plural %}{{ n }} orders{% endblocktrans %}</span><strong>{{ e.gross }}</strong></a>
+      {% empty %}<p class="nx-muted">{% trans "No sales in the last 30 days yet." %}</p>{% endfor %}
+    {% endcomponent %}
+
+    {% trans "Payment methods · 30 days" as t_methods %}
+    {% component "unfold/components/card.html" with title=t_methods %}
+      {% for m in methods %}
+        <div class="nx-row" style="flex-wrap:wrap"><span class="nx-grow" style="font-weight:600">{{ m.name }}</span><strong>{{ m.total }}</strong>
+          <span class="nx-bar" style="flex-basis:100%"><span style="width:{{ m.pct }}%"></span></span></div>
+      {% empty %}<p class="nx-muted">{% trans "No payments yet." %}</p>{% endfor %}
     {% endcomponent %}
   </div>
 
-  {% component "unfold/components/card.html" with title="Upcoming events" %}
-    <div class="flex flex-col gap-4">
+  <div class="nx-grid nx-cols-3-1">
+    {% trans "Latest orders" as t_recent %}
+    {% component "unfold/components/card.html" with title=t_recent %}
+      {% for o in recent %}
+        <a href="{{ o.url }}" class="nx-row">
+          <span class="nx-grow"><span class="nx-ellipsis" style="display:block;font-weight:600">{{ o.who }}</span><span class="nx-muted nx-ellipsis" style="display:block">{{ o.event }} · {{ o.ref }}</span></span>
+          <span class="nx-muted">{{ o.when|timesince }}</span><strong>{{ o.total }}</strong>
+        </a>
+      {% empty %}<p class="nx-muted">{% trans "No orders yet." %}</p>{% endfor %}
+    {% endcomponent %}
+
+    {% trans "Quick actions" as t_quick %}
+    {% component "unfold/components/card.html" with title=t_quick %}
+      <div class="nx-actions">
+        {% for a in quick_actions %}<a href="{{ a.url }}" class="nx-action"{% if a.url == "/" %} target="_blank"{% endif %}><span class="nx-icon">{{ a.icon }}</span>{{ a.label }}</a>{% endfor %}
+      </div>
+    {% endcomponent %}
+  </div>
+
+  {% trans "Upcoming events" as t_upcoming %}
+  {% component "unfold/components/card.html" with title=t_upcoming %}
+    <div style="display:flex;flex-direction:column;gap:1rem">
       {% for e in upcoming %}
+        <a href="{{ e.url }}">
         {% component "unfold/components/progress.html" with title=e.title description=e.when|date:"j M, g:i A" value=e.pct %}{% endcomponent %}
-        <p class="-mt-3 text-xs opacity-60">{{ e.org }} · {{ e.sold }} / {{ e.cap }} sold · {{ e.status }}</p>
-      {% empty %}<p class="opacity-70">No upcoming events.</p>{% endfor %}
+        </a>
+        <p class="nx-muted" style="margin-top:-.6rem">{{ e.org }} · {{ e.sold }} / {{ e.cap }} {% trans "sold" %} · {{ e.status }}</p>
+      {% empty %}<p class="nx-muted">{% trans "No upcoming events." %}</p>{% endfor %}
     </div>
   {% endcomponent %}
 </div>

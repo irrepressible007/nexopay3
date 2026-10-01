@@ -8,10 +8,11 @@ from django.db import models
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
 from unfold.admin import ModelAdmin, TabularInline
 from unfold.decorators import action, display
-from unfold.widgets import UnfoldAdminPasswordToggleWidget
+from unfold.widgets import UnfoldAdminColorInputWidget, UnfoldAdminPasswordToggleWidget
 
 from .models import (
     FaqItem, FooterColumn, HeaderLink, HeroSlide, HomeSection, MenuItem, Page, Partner, SiteSettings, SiteText,
@@ -43,6 +44,8 @@ class SiteSettingsForm(forms.ModelForm):
     class Meta:
         model = SiteSettings
         fields = "__all__"
+        widgets = {f: UnfoldAdminColorInputWidget for f in ("primary_color", "secondary_color", "accent_color",
+                                                             "background_color")}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -57,6 +60,9 @@ class SiteSettingsForm(forms.ModelForm):
 
     def clean(self):
         data = super().clean()
+        for f in ("primary_color", "secondary_color", "accent_color", "background_color"):
+            if data.get(f):
+                data[f] = data[f].upper()  # the colour picker sends lowercase; keep one spelling
         host = (data.get("email_host") or "").strip().lower()
         if not host:  # the server's own mail configuration is used
             return data
@@ -111,28 +117,66 @@ def explain_mail_error(exc: Exception) -> str:
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(ModelAdmin, TranslationAdmin):
     form = SiteSettingsForm
+    warn_unsaved_form = True
+    readonly_fields = ["palette_preview"]
     fieldsets = (
-        ("Brand", {"fields": ("site_name", "tagline", "logo", "logo_on_color", "favicon", "og_image"),
-                   "description": "Empty logo fields use the built-in Nexopay logo."}),
-        ("Colours", {"fields": ("primary_color", "secondary_color", "accent_color", "background_color"),
-                     "description": "Hex colours used across the whole site; changes apply instantly. Panels and "
-                                    "muted text are mixed from these, and text on buttons switches between white and "
-                                    "dark by itself so it stays readable. The background must stay dark."}),
-        ("Announcement bar", {"fields": ("announcement_enabled", "announcement_text", "announcement_url")}),
-        ("Contact & social", {"fields": ("contact_email", "contact_phone", "address", "facebook_url", "instagram_url",
-                                          "youtube_url", "tiktok_url", "linkedin_url", "footer_text")}),
-        ("SEO", {"fields": ("meta_description",)}),
-        ("Checkout", {"fields": ("hold_minutes", "default_commission_pct", "default_buyer_fee_pct",
-                                 "default_buyer_fee_flat"),
-                      "description": "Default fees apply to organizers without their own fee settings."}),
-        ("Outgoing email", {"fields": ("email_from_name", "email_from_address", "email_host", "email_port",
-                                       "email_use_ssl", "email_use_tls", "email_username", "email_password"),
-                            "description": "Leave “Email host” empty to send through this server's own mail system "
-                                           "(recommended on cPanel: no password needed) - just set the from address, "
-                                           "a mailbox that exists in cPanel › Email Accounts. Fill in the host only "
-                                           "to use an outside mail service instead."}),
-        ("Operations", {"fields": ("maintenance_mode",)}),
+        (_("Brand"), {"classes": ["tab"], "fields": ("site_name", "tagline", "logo", "logo_on_color", "favicon"),
+                      "description": _("Empty logo fields use the built-in Nexopay logo.")}),
+        (_("Style"), {"classes": ["tab"], "fields": (
+            "palette_preview", ("primary_color", "accent_color"), ("secondary_color", "background_color"),
+            "font_choice", "motion_level"),
+            "description": _("Changes apply to the whole site at once. Text on buttons switches between white and "
+                             "dark by itself so it stays readable; the background must stay dark.")}),
+        (_("Home"), {"classes": ["tab"], "fields": ("hero_mode", ("hero_poster_count", "hero_autoplay_seconds")),
+                          "description": _("The order and content of the home page sections are edited under "
+                                           "Website › Homepage sections. Mark events as featured to put them in "
+                                           "the poster deck.")}),
+        (_("Header"), {"classes": ["tab"], "fields": (
+            ("show_header_search", "show_language_switch"), ("header_cta_label", "header_cta_url"),
+            "announcement_enabled", "announcement_text", "announcement_url",
+            ("announcement_style", "announcement_dismissible"), ("announcement_starts_at", "announcement_ends_at"))}),
+        (_("Event pages"), {"classes": ["tab"], "fields": (
+            ("show_calendar_buttons", "show_share_buttons", "show_organizer_contact"), "related_events_count",
+            "footer_text", "show_payment_badges")}),
+        (_("Contact"), {"classes": ["tab"], "fields": (
+            "contact_email", "contact_phone", "address", "facebook_url", "instagram_url", "youtube_url",
+            "tiktok_url", "linkedin_url")}),
+        (_("SEO"), {"classes": ["tab"], "fields": (
+            "meta_description", "og_image", "google_analytics_id", "meta_pixel_id", "google_site_verification")}),
+        (_("Fees"), {"classes": ["tab"], "fields": (
+            "hold_minutes", ("default_commission_pct", "default_buyer_fee_pct", "default_buyer_fee_flat")),
+            "description": _("Default fees apply to organizers without their own fee settings.")}),
+        (_("Email"), {"classes": ["tab"], "fields": (
+            ("email_from_name", "email_from_address"), "email_host", ("email_port", "email_use_ssl", "email_use_tls"),
+            "email_username", "email_password"),
+            "description": _("Leave \u201cEmail host\u201d empty to send through this server's own mail system "
+                             "(recommended on cPanel: no password needed) - just set the from address, a mailbox "
+                             "that exists in cPanel \u203a Email Accounts. Fill in the host only to use an outside "
+                             "mail service instead.")}),
+        (_("Advanced"), {"classes": ["tab"], "fields": ("maintenance_mode", "maintenance_message", "custom_css")}),
     )
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super().get_readonly_fields(request, obj))
+        if not request.user.is_superuser:
+            fields.append("custom_css")  # page-wide CSS: superusers only
+        return fields
+
+    @display(description=_("Preview"))
+    def palette_preview(self, obj):
+        if not obj or not obj.pk:
+            return "-"
+        return format_html(
+            '<div class="nx-preview" style="background:{bg}">'
+            '<span class="nx-btn" style="background:{brand};color:{on_brand}">{buy}</span>'
+            '<span class="nx-btn" style="background:{accent};color:{on_accent}">{soon}</span>'
+            '<span style="color:#f2f2f4;font-weight:600">{text}</span>'
+            '<span class="nx-swatch" style="background:{brand2}" title="{art}"></span></div>',
+            bg=obj.background_color, brand=obj.primary_color, on_brand=obj.on_brand_color, accent=obj.accent_color,
+            on_accent=obj.on_accent_color, brand2=obj.secondary_color, buy=_("Get tickets"), soon=_("Coming soon"),
+            text=_("Text on the page"), art=_("Artwork tint"),
+        )
+
     actions_detail = ["send_test_email"]
 
     @action(description="Send a test email", url_path="send-test-email", permissions=["change"])
@@ -258,25 +302,60 @@ class SiteTextAdmin(ModelAdmin):
 # --- Homepage & navigation ------------------------------------------------------------
 @admin.register(HomeSection)
 class HomeSectionAdmin(ModelAdmin, TranslationAdmin):
-    list_display = ["__str__", "kind", "sort_order", "is_enabled", "starts_at", "ends_at"]
-    list_editable = ["sort_order", "is_enabled"]
-    list_filter = ["kind", "is_enabled"]
-    fields = ["kind", "title", "subtitle", "category", "image", "link_url", "cta_label", "item_limit", "sort_order",
-              "is_enabled", "starts_at", "ends_at"]
+    list_display = ["__str__", "kind_label", "show_on", "is_enabled", "schedule"]
+    list_editable = ["is_enabled", "show_on"]
+    list_filter = ["kind", "is_enabled", "show_on"]
+    ordering_field = "sort_order"  # drag rows to reorder the home page
+    hide_ordering_field = True
+    actions_list = ["preview_home"]
+    actions_detail = ["preview_home_detail"]
+    fieldsets = (
+        (None, {"fields": ("kind", "title", "subtitle", "is_enabled", "show_on")}),
+        (_("Content"), {"fields": ("category", "image", "link_url", "cta_label", "item_limit"),
+                        "description": _("Which of these apply depends on the kind: Category spotlight uses the "
+                                         "category; Promo banner uses the picture, link and button text; the hero uses "
+                                         "the picture as its fallback; event lists use the number of events.")}),
+        (_("Schedule"), {"fields": (("starts_at", "ends_at"),),
+                         "description": _("Optional: show the section only between these moments.")}),
+    )
+
+    @display(description=_("Kind"), label=True)
+    def kind_label(self, obj):
+        return obj.get_kind_display()
+
+    @display(description=_("Shown"))
+    def schedule(self, obj):
+        if not obj.starts_at and not obj.ends_at:
+            return _("Always")
+        start = obj.starts_at.strftime("%d %b") if obj.starts_at else "…"
+        end = obj.ends_at.strftime("%d %b") if obj.ends_at else "…"
+        return f"{start} - {end}"
+
+    @action(description=_("Preview the home page"), url_path="preview", icon="visibility")
+    def preview_home(self, request):
+        return redirect("/")
+
+    @action(description=_("Preview the home page"), url_path="preview-detail", icon="visibility")
+    def preview_home_detail(self, request, object_id):
+        return redirect("/")
 
 
 @admin.register(HeroSlide)
 class HeroSlideAdmin(ModelAdmin, TranslationAdmin):
-    list_display = ["title", "event", "sort_order", "is_enabled", "starts_at", "ends_at"]
-    list_editable = ["sort_order", "is_enabled"]
+    list_display = ["title", "event", "is_enabled", "starts_at", "ends_at"]
+    list_editable = ["is_enabled"]
     autocomplete_fields = ["event"]
+    ordering_field = "sort_order"
+    hide_ordering_field = True
 
 
 @admin.register(HeaderLink)
 class HeaderMenuAdmin(ModelAdmin, TranslationAdmin):
-    list_display = ["label", "url", "sort_order", "is_enabled", "open_in_new_tab"]
-    list_editable = ["sort_order", "is_enabled"]
-    fields = ["label", "url", "open_in_new_tab", "sort_order", "is_enabled"]
+    list_display = ["label", "url", "is_enabled", "open_in_new_tab"]
+    list_editable = ["is_enabled", "open_in_new_tab"]
+    fields = ["label", "url", "open_in_new_tab", "is_enabled"]
+    ordering_field = "sort_order"
+    hide_ordering_field = True
 
     def get_queryset(self, request):
         return super().get_queryset(request).filter(location=MenuItem.Location.HEADER)
@@ -291,14 +370,18 @@ class FooterLinkInline(TabularInline, TranslationTabularInline):
     model = MenuItem
     fk_name = "column"
     extra = 0
-    fields = ["label", "url", "open_in_new_tab", "sort_order", "is_enabled"]
+    fields = ["label", "url", "open_in_new_tab", "is_enabled", "sort_order"]
+    ordering_field = "sort_order"
+    hide_ordering_field = True
 
 
 @admin.register(FooterColumn)
 class FooterColumnAdmin(ModelAdmin, TranslationAdmin):
-    list_display = ["title", "link_count", "sort_order", "is_enabled"]
-    list_editable = ["sort_order", "is_enabled"]
+    list_display = ["title", "link_count", "is_enabled"]
+    list_editable = ["is_enabled"]
     inlines = [FooterLinkInline]
+    ordering_field = "sort_order"
+    hide_ordering_field = True
 
     @display(description="Links")
     def link_count(self, obj):
@@ -314,15 +397,28 @@ class FooterColumnAdmin(ModelAdmin, TranslationAdmin):
 
 @admin.register(Partner)
 class PartnerAdmin(ModelAdmin):
-    list_display = ["name", "url", "sort_order", "is_enabled"]
-    list_editable = ["sort_order", "is_enabled"]
+    list_display = ["logo_preview", "name", "url", "is_enabled"]
+    list_editable = ["is_enabled"]
+    ordering_field = "sort_order"
+    hide_ordering_field = True
+
+    @display(description=_("Logo"))
+    def logo_preview(self, obj):
+        return format_html('<img src="{}" alt="" style="height:24px;width:auto">', obj.logo.url) if obj.logo else "-"
 
 
 @admin.register(Page)
 class PageAdmin(ModelAdmin, TranslationAdmin):
-    list_display = ["title", "slug", "is_published", "has_content", "sort_order", "updated_at"]
-    list_editable = ["is_published", "sort_order"]
+    list_display = ["title", "slug", "is_published", "has_content", "updated_at"]
+    list_editable = ["is_published"]
     prepopulated_fields = {"slug": ("title_en",)}
+    ordering_field = "sort_order"
+    hide_ordering_field = True
+    actions_row = ["row_view"]
+
+    @action(description=_("View on site"), url_path="view")
+    def row_view(self, request, object_id):
+        return redirect(Page.objects.get(pk=object_id).get_absolute_url())
 
     @display(description="Written", boolean=True)
     def has_content(self, obj):
@@ -331,5 +427,8 @@ class PageAdmin(ModelAdmin, TranslationAdmin):
 
 @admin.register(FaqItem)
 class FaqItemAdmin(ModelAdmin, TranslationAdmin):
-    list_display = ["question", "show_on_home", "is_published", "sort_order"]
-    list_editable = ["show_on_home", "is_published", "sort_order"]
+    list_display = ["question", "show_on_home", "is_published"]
+    list_editable = ["show_on_home", "is_published"]
+    search_fields = ["question_en", "question_bn"]
+    ordering_field = "sort_order"
+    hide_ordering_field = True

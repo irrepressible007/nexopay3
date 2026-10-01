@@ -250,13 +250,170 @@ NEXOPAY = {
 # --- Admin (django-unfold) ------------------------------------------------------
 ADMIN_URL = env("ADMIN_URL", default="control-room/")
 
+def _admin(name):
+    """Lazy admin URL, e.g. _admin("events_event_changelist")."""
+    from django.urls import reverse_lazy
+
+    return reverse_lazy(f"admin:{name}")
+
+
+def _perm(*codenames):
+    from apps.core.admin_nav import perm
+
+    return perm(*codenames)
+
+
+# The control room's menu: grouped by job, with live counters on what needs attention. Each item only
+# shows for staff whose role lets them view that part (see Staff roles).
+ADMIN_NAVIGATION = [
+    {
+        "items": [
+            {"title": _("Dashboard"), "icon": "space_dashboard", "link": _admin("index")},
+            {"title": _("View website"), "icon": "open_in_new", "link": "/"},
+        ],
+    },
+    {
+        "title": _("Events & sales"),
+        "items": [
+            {"title": _("Events"), "icon": "event", "link": _admin("events_event_changelist"),
+             "badge_fn": "apps.core.admin_nav.events_on_sale", "permission": _perm("events.view_event")},
+            {"title": _("Orders"), "icon": "receipt_long", "link": _admin("orders_order_changelist"),
+             "badge_fn": "apps.core.admin_nav.orders_today", "permission": _perm("orders.view_order")},
+            {"title": _("Tickets"), "icon": "confirmation_number", "link": _admin("tickets_ticket_changelist"),
+             "permission": _perm("tickets.view_ticket")},
+            {"title": _("Categories"), "icon": "category", "link": _admin("events_category_changelist"),
+             "permission": _perm("events.view_category")},
+        ],
+    },
+    {
+        "title": _("People"),
+        "items": [
+            {"title": _("Organizers"), "icon": "storefront", "link": _admin("organizers_organizerprofile_changelist"),
+             "badge_fn": "apps.core.admin_nav.pending_organizers", "permission": _perm("organizers.view_organizerprofile")},
+            {"title": _("Customers & staff"), "icon": "group", "link": _admin("accounts_user_changelist"),
+             "permission": _perm("accounts.view_user")},
+            {"title": _("Staff roles"), "icon": "admin_panel_settings", "link": _admin("auth_group_changelist"),
+             "permission": _perm("auth.view_group")},
+            {"title": _("Gate staff (scanners)"), "icon": "qr_code_scanner", "link": _admin("tickets_scanneraccess_changelist"),
+             "permission": _perm("tickets.view_scanneraccess")},
+        ],
+    },
+    {
+        "title": _("Money"),
+        "items": [
+            {"title": _("Payment methods"), "icon": "payments", "link": _admin("payments_paymentprovidersetting_changelist"),
+             "permission": _perm("payments.view_paymentprovidersetting")},
+            {"title": _("Refunds"), "icon": "currency_exchange", "link": _admin("payments_refund_changelist"),
+             "badge_fn": "apps.core.admin_nav.open_refunds", "permission": _perm("payments.view_refund")},
+            {"title": _("Payouts"), "icon": "account_balance_wallet", "link": _admin("payments_payout_changelist"),
+             "permission": _perm("payments.view_payout")},
+            {"title": _("Payment attempts"), "icon": "receipt", "link": _admin("payments_paymentattempt_changelist"),
+             "permission": _perm("payments.view_paymentattempt")},
+        ],
+    },
+    {
+        "title": _("Website"),
+        "items": [
+            {"title": _("Look & settings"), "icon": "tune", "link": _admin("cms_sitesettings_changelist"),
+             "permission": _perm("cms.view_sitesettings")},
+            {"title": _("Homepage sections"), "icon": "view_quilt", "link": _admin("cms_homesection_changelist"),
+             "permission": _perm("cms.view_homesection")},
+            {"title": _("Hero slides"), "icon": "slideshow", "link": _admin("cms_heroslide_changelist"),
+             "permission": _perm("cms.view_heroslide")},
+            {"title": _("Header menu"), "icon": "menu", "link": _admin("cms_headerlink_changelist"),
+             "permission": _perm("cms.view_headerlink")},
+            {"title": _("Footer"), "icon": "call_to_action", "link": _admin("cms_footercolumn_changelist"),
+             "permission": _perm("cms.view_footercolumn")},
+            {"title": _("Pages"), "icon": "article", "link": _admin("cms_page_changelist"),
+             "permission": _perm("cms.view_page")},
+            {"title": _("FAQ"), "icon": "quiz", "link": _admin("cms_faqitem_changelist"),
+             "permission": _perm("cms.view_faqitem")},
+            {"title": _("Partners"), "icon": "handshake", "link": _admin("cms_partner_changelist"),
+             "permission": _perm("cms.view_partner")},
+            {"title": _("Site texts & translations"), "icon": "translate", "link": _admin("cms_sitetext_changelist"),
+             "permission": _perm("cms.view_sitetext")},
+        ],
+    },
+    {
+        "title": _("Support"),
+        "items": [
+            {"title": _("Messages"), "icon": "mail", "link": _admin("support_contactmessage_changelist"),
+             "badge_fn": "apps.core.admin_nav.new_messages", "permission": _perm("support.view_contactmessage")},
+            {"title": _("Message routing"), "icon": "alt_route", "link": _admin("support_supportroute_changelist"),
+             "permission": _perm("support.view_supportroute")},
+        ],
+    },
+    {
+        "title": _("System"),
+        "collapsible": True,
+        "items": [
+            {"title": _("Scan log"), "icon": "history", "link": _admin("tickets_scanlog_changelist"),
+             "permission": _perm("tickets.view_scanlog")},
+            {"title": _("Background tasks"), "icon": "pending_actions",
+             "link": _admin("django_tasks_database_dbtaskresult_changelist"),
+             "permission": _perm("django_tasks_database.view_dbtaskresult")},
+            {"title": _("Email addresses"), "icon": "alternate_email", "link": _admin("account_emailaddress_changelist"),
+             "permission": _perm("account.view_emailaddress")},
+        ],
+    },
+]
+
+# Tabs across the top of related lists, so neighbouring screens are one click apart.
+ADMIN_TABS = [
+    {
+        "models": ["cms.homesection", "cms.heroslide", "cms.headerlink", "cms.footercolumn", "cms.page", "cms.faqitem",
+                   "cms.partner"],
+        "items": [
+            {"title": _("Homepage"), "link": _admin("cms_homesection_changelist")},
+            {"title": _("Hero slides"), "link": _admin("cms_heroslide_changelist")},
+            {"title": _("Header menu"), "link": _admin("cms_headerlink_changelist")},
+            {"title": _("Footer"), "link": _admin("cms_footercolumn_changelist")},
+            {"title": _("Pages"), "link": _admin("cms_page_changelist")},
+            {"title": _("FAQ"), "link": _admin("cms_faqitem_changelist")},
+            {"title": _("Partners"), "link": _admin("cms_partner_changelist")},
+        ],
+    },
+    {
+        "models": ["payments.paymentprovidersetting", "payments.refund", "payments.payout", "payments.paymentattempt"],
+        "items": [
+            {"title": _("Payment methods"), "link": _admin("payments_paymentprovidersetting_changelist")},
+            {"title": _("Refunds"), "link": _admin("payments_refund_changelist")},
+            {"title": _("Payouts"), "link": _admin("payments_payout_changelist")},
+            {"title": _("Payment attempts"), "link": _admin("payments_paymentattempt_changelist")},
+        ],
+    },
+    {
+        "models": ["tickets.ticket", "tickets.scanneraccess", "tickets.scanlog"],
+        "items": [
+            {"title": _("Tickets"), "link": _admin("tickets_ticket_changelist")},
+            {"title": _("Gate staff"), "link": _admin("tickets_scanneraccess_changelist")},
+            {"title": _("Scan log"), "link": _admin("tickets_scanlog_changelist")},
+        ],
+    },
+    {
+        "models": ["support.contactmessage", "support.supportroute"],
+        "items": [
+            {"title": _("Messages"), "link": _admin("support_contactmessage_changelist")},
+            {"title": _("Message routing"), "link": _admin("support_supportroute_changelist")},
+        ],
+    },
+]
+
 UNFOLD = {
     "SITE_TITLE": "Nexopay Admin",
     "SITE_HEADER": "Nexopay",
+    "SITE_SUBHEADER": _("Control room"),
     "SITE_ICON": lambda request: static("img/icon-192.png"),
     "SITE_LOGO": lambda request: static("img/logo-on-dark.png"),
     "SITE_FAVICONS": [{"rel": "icon", "sizes": "48x48", "type": "image/png", "href": lambda request: static("img/favicon-48.png")}],
+    "SITE_DROPDOWN": [
+        {"icon": "public", "title": _("View website"), "link": "/", "attrs": {"target": "_blank"}},
+        {"icon": "event", "title": _("Events page"), "link": "/events/", "attrs": {"target": "_blank"}},
+        {"icon": "help", "title": _("FAQ page"), "link": "/faq/", "attrs": {"target": "_blank"}},
+    ],
     "THEME": "dark",
+    "SHOW_BACK_BUTTON": True,
+    "STYLES": [lambda request: static("css/admin.css")],
     "COLORS": {
         # The site's violet (#7351F5 at 500), so the admin matches the public pages.
         "primary": {
@@ -266,7 +423,10 @@ UNFOLD = {
             "900": "55 33 128", "950": "34 20 82",
         },
     },
-    "SIDEBAR": {"show_search": True, "show_all_applications": True},
+    "COMMAND": {"search_models": True, "show_history": True},
+    "SIDEBAR": {"show_search": True, "command_search": True, "show_all_applications": True,
+                "navigation": "apps.core.admin_nav.navigation"},  # ADMIN_NAVIGATION, with live counters
+    "TABS": ADMIN_TABS,
     "DASHBOARD_CALLBACK": "apps.core.admin_dashboard.dashboard_callback",
     "ENVIRONMENT": "apps.core.admin_dashboard.environment_callback",
 }

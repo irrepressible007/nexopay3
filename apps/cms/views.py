@@ -21,9 +21,6 @@ def _event_cards(qs, limit):
     )
 
 
-HERO_POSTERS = 4  # featured events shown as the hero's poster stack
-
-
 def _section_payload(section: HomeSection, shown: set):
     """What one homepage section shows. `shown` collects the events the hero already displays,
     so the Featured row below doesn't repeat them."""
@@ -35,14 +32,22 @@ def _section_payload(section: HomeSection, shown: set):
         slides = list(HeroSlide.objects.visible().select_related("event"))
         if slides:
             return {"slides": slides}
-        # Headline, search and quick category links beside a stack of featured event posters.
-        posters = _event_cards(
-            Event.objects.featured().exclude(banner="").order_by("featured_rank", "starts_at"), HERO_POSTERS
-        )
+        # Headline, search and quick category links beside a deck of featured event posters, the hero
+        # picture or nothing, as chosen in Site settings.
+        site = SiteSettings.load()
+        mode = site.hero_mode
+        posters = []
+        if mode in (SiteSettings.HeroMode.AUTO, SiteSettings.HeroMode.POSTERS):
+            posters = _event_cards(
+                Event.objects.featured().exclude(banner="").order_by("featured_rank", "starts_at"),
+                site.hero_poster_count,
+            )
         shown.update(e.pk for e in posters)
         return {
             "hero_categories": list(Category.objects.filter(is_active=True, show_in_hero=True)[:8]),
             "posters": posters,
+            "show_image": mode in (SiteSettings.HeroMode.AUTO, SiteSettings.HeroMode.IMAGE),
+            "interval_ms": site.hero_autoplay_seconds * 1000,
             "brand": True,
         }
     if kind == K.FEATURED:

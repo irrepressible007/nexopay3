@@ -18,9 +18,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         base = Path(settings.BASE_DIR) / "locale"
         module = self._load(base / "bn_translations.py")
-        extra = base / "bn_translations_accounts.py"
-        if extra.exists():
-            module.TR.update(self._load(extra).TR)
+        for extra in sorted(base.glob("bn_translations_*.py")):  # accounts, admin, ...
+            more = self._load(extra)
+            module.TR.update(more.TR)
+            module.PLURALS.update(getattr(more, "PLURALS", {}))
 
         po_path = base / "bn" / "LC_MESSAGES" / "django.po"
         po = polib.pofile(str(po_path))

@@ -114,6 +114,12 @@ _HIGHLIGHT = re.compile(r"\*([^*]+)\*")
 
 
 @register.filter
+def css_block(css):
+    """Admin CSS for a <style> element: "</" is escaped so it can never end the element early."""
+    return mark_safe((css or "").replace("</", "<\\/"))
+
+
+@register.filter
 def highlight(text):
     """Admins wrap words in *asterisks* to show them in the accent colour."""
     from django.utils.html import escape

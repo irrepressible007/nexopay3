@@ -101,6 +101,8 @@ def _detail_public(request, event):
 
 
 def _render_detail(request, event, preview=False):
+    from apps.cms.models import SiteSettings
+
     related = (
         Event.objects.public()
         .exclude(pk=event.pk)
@@ -109,7 +111,7 @@ def _render_detail(request, event, preview=False):
         .distinct()
         .select_related("organizer")
         .annotate(min_price=Min("ticket_types__price", filter=Q(ticket_types__is_available=True)))
-        .order_by("starts_at")[:4]
+        .order_by("starts_at")[: SiteSettings.load().related_events_count]
     )
     ticket_types = list(event.ticket_types.all())
     prices = [t.price for t in ticket_types if t.is_available]

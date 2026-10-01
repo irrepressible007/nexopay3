@@ -85,11 +85,15 @@
         </div>
       </div>
 
+      {% if sitecfg.show_calendar_buttons or sitecfg.show_share_buttons %}
       <div class="mt-4 grid grid-cols-2 gap-2" x-data="share('{{ share_url|escapejs }}', '{{ event.title|escapejs }}')">
+        {% if sitecfg.show_calendar_buttons %}
         <a class="btn-ghost btn-sm" href="{% url 'events:ics' event.slug %}">{% icon "download" "w-4 h-4 shrink-0" %}{% translate "Add to calendar" %}</a>
         <a class="btn-ghost btn-sm" target="_blank" rel="noopener"
            href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text={{ event.title|urlencode }}&amp;dates={{ event.starts_at|date:'Ymd\THis' }}/{{ end_time|date:'Ymd\THis' }}&amp;ctz=Asia/Dhaka&amp;location={{ event.venue_name|urlencode }}&amp;details={{ share_url|urlencode }}">{% icon "calendar" "w-4 h-4 shrink-0" %}{% translate "Google Calendar" %}</a>
-        <div class="col-span-2 mt-2 flex items-center justify-between gap-3 border-t border-line pt-4">
+        {% endif %}
+        {% if sitecfg.show_share_buttons %}
+        <div class="col-span-2 flex items-center justify-between gap-3 {% if sitecfg.show_calendar_buttons %}mt-2 border-t border-line pt-4{% endif %}">
           <span class="text-sm font-medium text-muted">{% translate "Share event" %}</span>
           <div class="flex gap-2">
             <a class="btn-icon" target="_blank" rel="noopener" href="https://wa.me/?text={{ event.title|urlencode }}%20{{ share_url|urlencode }}" aria-label="{% translate 'WhatsApp' %}" title="{% translate 'WhatsApp' %}">{% icon "whatsapp" "w-4 h-4" %}</a>
@@ -99,7 +103,9 @@
             </button>
           </div>
         </div>
+        {% endif %}
       </div>
+      {% endif %}
     </aside>
 
     <div class="min-w-0 space-y-12 lg:col-start-1 lg:row-start-3">
@@ -143,11 +149,13 @@
               {% if event.organizer.about %}<p class="line-clamp-4 text-sm text-muted">{{ event.organizer.about }}</p>{% endif %}
             </div>
           </div>
+          {% if sitecfg.show_organizer_contact %}
           <div class="flex flex-wrap gap-2">
             <a href="mailto:{{ event.organizer.contact_email }}" class="btn-ghost btn-sm">{% icon "mail" "w-4 h-4" %}{% translate "Email" %}</a>
             <a href="tel:{{ event.organizer.contact_phone }}" class="btn-ghost btn-sm">{% icon "phone" "w-4 h-4" %}{% translate "Call" %}</a>
             {% if event.organizer.facebook_url %}<a href="{{ event.organizer.facebook_url }}" target="_blank" rel="noopener" class="btn-icon" aria-label="Facebook">{% icon "facebook" "w-4 h-4" %}</a>{% endif %}
           </div>
+          {% endif %}
         </div>
       </section>
     </div>

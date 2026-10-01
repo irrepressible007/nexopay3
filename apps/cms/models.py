@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.core.cache import cache
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 from django.db.models import Q
 from django.urls import reverse
@@ -12,6 +12,8 @@ from apps.core.utils import sanitize_html
 from apps.events.models import hex_color
 
 PERCENT = [MinValueValidator(Decimal("0")), MaxValueValidator(Decimal("100"))]
+GA_ID = RegexValidator(r"^G-[A-Z0-9]{4,20}$", _("A Google Analytics 4 ID looks like G-ABC123XYZ."))
+PIXEL_ID = RegexValidator(r"^[0-9]{6,20}$", _("A Meta (Facebook) Pixel ID is a number, e.g. 123456789012345."))
 SITE_SETTINGS_CACHE_KEY = "cms:site-settings"
 
 
@@ -83,6 +85,90 @@ class SiteSettings(models.Model):
     email_from_address = models.EmailField(blank=True, help_text=_("e.g. tickets@nexopay.com.bd"))
 
     maintenance_mode = models.BooleanField(default=False, help_text=_("Show a maintenance page to non-staff visitors."))
+    maintenance_message = models.CharField(
+        max_length=300, blank=True, help_text=_("Shown on the maintenance page. Empty = the standard message.")
+    )
+
+    # --- Look & feel -------------------------------------------------------------------
+    class Font(models.TextChoices):
+        SATOSHI = "satoshi", _("Satoshi (the brand font)")
+        SYSTEM = "system", _("The phone's or computer's own font (fastest)")
+
+    class Motion(models.TextChoices):
+        FULL = "full", _("Full: every animation")
+        CALM = "calm", _("Calm: no 3D tilt, parallax or looping effects")
+        OFF = "off", _("Off: no animations")
+
+    font_choice = models.CharField(_("font"), max_length=10, choices=Font.choices, default=Font.SATOSHI)
+    motion_level = models.CharField(
+        _("animations"), max_length=10, choices=Motion.choices, default=Motion.FULL,
+        help_text=_("Visitors who switched animations off on their device never see them, whatever is chosen here."),
+    )
+    custom_css = models.TextField(
+        _("custom CSS"), blank=True,
+        help_text=_("Advanced: extra CSS added to every page. Only superusers can change it."),
+    )
+
+    # --- Header & announcement ---------------------------------------------------------------
+    show_header_search = models.BooleanField(_("search box in the header"), default=True)
+    show_language_switch = models.BooleanField(_("language switch (EN / বাং)"), default=True)
+    header_cta_label = models.CharField(
+        _("header button text"), max_length=40, blank=True,
+        help_text=_("An extra button in the header, e.g. 'List your event'. Empty = no button."),
+    )
+    header_cta_url = models.CharField(_("header button link"), max_length=300, blank=True,
+                                      help_text=_("e.g. /organizers/apply/ or a full https:// address."))
+
+    class AnnouncementStyle(models.TextChoices):
+        BRAND = "brand", _("Accent colour")
+        ACCENT = "accent", _("Highlight colour")
+        NEUTRAL = "neutral", _("Quiet (dark grey)")
+
+    announcement_style = models.CharField(max_length=10, choices=AnnouncementStyle.choices,
+                                          default=AnnouncementStyle.BRAND)
+    announcement_dismissible = models.BooleanField(
+        default=True, help_text=_("Visitors can close it; it comes back when the text changes.")
+    )
+    announcement_starts_at = models.DateTimeField(null=True, blank=True,
+                                                  help_text=_("Optional: show it only from this moment."))
+    announcement_ends_at = models.DateTimeField(null=True, blank=True,
+                                                help_text=_("Optional: hide it automatically after this moment."))
+
+    # --- Home page hero -----------------------------------------------------------------------
+    class HeroMode(models.TextChoices):
+        AUTO = "auto", _("Automatic: featured posters, else the hero picture, else text only")
+        POSTERS = "posters", _("Featured event posters")
+        IMAGE = "image", _("The hero section's picture")
+        TEXT = "text", _("Text and search only")
+
+    hero_mode = models.CharField(_("hero visual"), max_length=10, choices=HeroMode.choices, default=HeroMode.AUTO)
+    hero_poster_count = models.PositiveSmallIntegerField(
+        _("posters in the hero"), default=4, validators=[MinValueValidator(1), MaxValueValidator(8)]
+    )
+    hero_autoplay_seconds = models.PositiveSmallIntegerField(
+        _("seconds per poster"), default=6, validators=[MaxValueValidator(30)],
+        help_text=_("How long each poster stays in front. 0 = don't rotate by itself."),
+    )
+
+    # --- Event pages & footer ------------------------------------------------------------------
+    show_calendar_buttons = models.BooleanField(_("'Add to calendar' buttons"), default=True)
+    show_share_buttons = models.BooleanField(_("share buttons"), default=True)
+    show_organizer_contact = models.BooleanField(_("organizer email/phone buttons"), default=True)
+    related_events_count = models.PositiveSmallIntegerField(
+        _("'You might also like' events"), default=4, validators=[MaxValueValidator(12)],
+        help_text=_("0 hides the section."),
+    )
+    show_payment_badges = models.BooleanField(_("payment method badges in the footer"), default=True)
+
+    # --- SEO & tracking ---------------------------------------------------------------------------
+    google_analytics_id = models.CharField(_("Google Analytics 4 ID"), max_length=30, blank=True, validators=[GA_ID],
+                                           help_text=_("e.g. G-ABC123XYZ. Empty = no Google Analytics."))
+    meta_pixel_id = models.CharField(_("Meta (Facebook) Pixel ID"), max_length=30, blank=True, validators=[PIXEL_ID],
+                                     help_text=_("Empty = no Meta Pixel."))
+    google_site_verification = models.CharField(
+        _("Google Search Console code"), max_length=100, blank=True,
+        help_text=_("Only the code from the HTML-tag method (content=\"...\"), to verify the site with Google."),
+    )
 
     class Meta:
         verbose_name = _("site settings")
@@ -112,6 +198,24 @@ class SiteSettings(models.Model):
             from django.core.exceptions import ValidationError
 
             raise ValidationError(errors)
+
+    @property
+    def announcement_active(self) -> bool:
+        """The announcement bar is switched on, has text and is inside its optional time window."""
+        if not (self.announcement_enabled and self.announcement_text):
+            return False
+        now = timezone.now()
+        if self.announcement_starts_at and now < self.announcement_starts_at:
+            return False
+        return not (self.announcement_ends_at and now > self.announcement_ends_at)
+
+    @property
+    def announcement_key(self) -> str:
+        """Changes whenever the announcement does, so a visitor who closed it sees a new one."""
+        import hashlib
+
+        raw = "|".join(str(getattr(self, f, "")) for f in ("announcement_text_en", "announcement_text_bn", "announcement_url"))
+        return hashlib.sha1(raw.encode()).hexdigest()[:10]
 
     @property
     def on_brand_color(self) -> str:
@@ -149,6 +253,9 @@ class SiteSettings(models.Model):
     @classmethod
     def load(cls) -> "SiteSettings":
         obj = cache.get(SITE_SETTINGS_CACHE_KEY)
+        # A copy cached before a deploy added fields lacks them: load a fresh one.
+        if obj is not None and any(f.attname not in obj.__dict__ for f in cls._meta.concrete_fields):
+            obj = None
         if obj is None:
             obj, _ = cls.objects.get_or_create(pk=1)
             cache.set(SITE_SETTINGS_CACHE_KEY, obj, 3600)
@@ -185,6 +292,13 @@ class HomeSection(models.Model):
     link_url = models.CharField(max_length=300, blank=True)
     cta_label = models.CharField(max_length=60, blank=True)
     item_limit = models.PositiveSmallIntegerField(default=8)
+
+    class Screens(models.TextChoices):
+        ALL = "all", _("All screens")
+        PHONES = "phones", _("Phones only")
+        LARGE = "large", _("Tablets and computers only")
+
+    show_on = models.CharField(_("show on"), max_length=10, choices=Screens.choices, default=Screens.ALL)
     sort_order = models.PositiveIntegerField(default=0, db_index=True)
     is_enabled = models.BooleanField(default=True)
     starts_at = models.DateTimeField(null=True, blank=True)

@@ -5,7 +5,8 @@ from .models import FaqItem, FooterColumn, HeaderLink, HeroSlide, HomeSection, M
 
 @register(SiteSettings)
 class SiteSettingsTR(TranslationOptions):
-    fields = ("tagline", "address", "footer_text", "meta_description", "announcement_text")
+    fields = ("tagline", "address", "footer_text", "meta_description", "announcement_text", "header_cta_label",
+              "maintenance_message")
 
 
 @register(HomeSection)

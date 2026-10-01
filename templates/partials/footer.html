@@ -39,7 +39,7 @@
   <div class="border-t border-line">
     <div class="container-x flex flex-col items-center justify-between gap-4 py-6 text-center text-xs text-subtle md:flex-row md:text-left">
       <p>© {% now "Y" %} {{ sitecfg.site_name }}. {% translate "All rights reserved." %}</p>
-      {% if payment_badges %}
+      {% if payment_badges and sitecfg.show_payment_badges %}
       <ul class="flex flex-wrap items-center justify-center gap-2" aria-label="{% translate 'Payment methods' %}">
         {% for p in payment_badges %}
         <li>{% if p.logo %}<img src="{{ p.logo }}" alt="{{ p.name }}" class="h-6 w-auto max-w-[5rem] rounded bg-white object-contain px-1" loading="lazy">

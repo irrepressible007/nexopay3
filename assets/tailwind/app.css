@@ -133,6 +133,14 @@
 ::view-transition-group(event-banner) { animation-duration: .5s; animation-timing-function: var(--ease-out-expo); }
 ::view-transition-old(event-banner), ::view-transition-new(event-banner) { height: 100%; object-fit: cover; overflow: clip; }
 
+html.motion-off *, html.motion-off *::before, html.motion-off *::after {
+  animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important;
+}
+html.motion-off::view-transition-group(*), html.motion-off::view-transition-old(*), html.motion-off::view-transition-new(*) { animation: none !important; }
+html.motion-calm [data-tilt] { transform: none !important; }
+html.motion-calm .btn-alive::after, html.motion-calm .btn-alive > svg, html.motion-calm .pass-holo::before, html.motion-calm .animate-float-y { animation: none !important; }
+html.motion-calm .tilt-glare { display: none; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }

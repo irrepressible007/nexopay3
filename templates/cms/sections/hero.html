@@ -50,7 +50,7 @@
 </section>
 {% else %}
 {% with posters=block.posters %}
-{% if posters or section.image %}{% firstof "1" as visual %}{% endif %}
+{% if posters or block.show_image and section.image %}{% firstof "1" as visual %}{% endif %}
 <section class="relative">
   <div class="container-x grid grid-cols-1 items-center gap-10 pb-6 pt-8 sm:pt-14 lg:gap-14 lg:pb-2 lg:pt-14 xl:gap-20
               {% if visual %}lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]{% else %}justify-items-center pb-4 pt-16 text-center sm:pt-24{% endif %}">
@@ -80,7 +80,7 @@
 
     {% if posters %}
     {# Featured posters as a deck that deals itself forward: flick the top card away on phones, it fans out with depth on large screens. #}
-    <div class="poster-stack-in mx-auto w-full min-w-0 max-w-[34rem] pt-7 lg:mx-0 lg:max-w-none lg:pr-[14%] lg:pt-0" data-parallax x-data="posterStack({{ posters|length }})"
+    <div class="poster-stack-in mx-auto w-full min-w-0 max-w-[34rem] pt-7 lg:mx-0 lg:max-w-none lg:pr-[14%] lg:pt-0" data-parallax x-data="posterStack({{ posters|length }}, {{ block.interval_ms|default:0 }})"
          @mouseenter="pause()" @mouseleave="play()" @focusin="pause()" @focusout="play()"
          aria-roledescription="carousel" aria-label="{% translate 'Featured events' %}">
       <div class="poster-stack aspect-square sm:aspect-[4/3]" x-ref="deck" @dragstart.prevent>
@@ -128,7 +128,7 @@
       </div>
       {% endif %}
     </div>
-    {% elif section.image %}
+    {% elif block.show_image and section.image %}
     <div class="poster-stack-in min-w-0">
       <img src="{{ section.image.url }}" alt="" fetchpriority="high" class="aspect-[4/3] w-full rounded-2xl object-cover ring-1 ring-inset ring-white/10">
     </div>

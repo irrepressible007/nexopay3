@@ -1,7 +1,10 @@
 /* Nexopay - small Alpine components and the motion layer. Loaded before Alpine (both deferred). */
 const EXPO = "cubic-bezier(.16, 1, .3, 1)";
 const SPRING = "cubic-bezier(.34, 1.56, .64, 1)";
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* Motion level: the visitor's own reduce-motion setting, or "off"/"calm" chosen in Site settings. */
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  || document.documentElement.classList.contains("motion-off");
+const calmMotion = reduceMotion || document.documentElement.classList.contains("motion-calm");
 
 /* A short buzz on Android phones for moments that matter (a ticket picked, a card flipped). */
 const haptic = (ms = 8) => { try { if (!reduceMotion && navigator.vibrate) navigator.vibrate(ms); } catch (_) {} };
@@ -85,7 +88,7 @@ document.addEventListener("alpine:init", () => {
     depth(n) { return (n - this.i + count) % count; },
     front() { return this.$refs.deck && this.$refs.deck.querySelector('.poster-card[data-depth="0"]'); },
     play() {
-      if (count < 2 || reduceMotion || !this.visible || this.held) return;
+      if (count < 2 || !interval || reduceMotion || !this.visible || this.held) return;
       this.pause();
       this.timer = setInterval(() => this.show((this.i + 1) % count), interval);
     },
@@ -142,7 +145,7 @@ document.addEventListener("alpine:init", () => {
       // A drag is not a tap: don't open the event the card was flicked from.
       deck.addEventListener("click", (e) => { if (blockClick) { e.preventDefault(); e.stopPropagation(); blockClick = false; } }, true);
       // Touch screens: the first time the deck comes into view, the top card wiggles to show it moves.
-      if (!reduceMotion && window.matchMedia("(pointer: coarse)").matches) {
+      if (!calmMotion && window.matchMedia("(pointer: coarse)").matches) {
         let hinted = false;
         try { hinted = sessionStorage.getItem("nx-deck-hint") === "1"; } catch (_) {}
         if (!hinted && "IntersectionObserver" in window) {
@@ -200,7 +203,7 @@ document.addEventListener("alpine:init", () => {
       this.$watch("count", (n, before) => {
         const btn = this.$refs.go;
         if (!btn || reduceMotion) return;
-        btn.classList.toggle("btn-alive", n > 0);
+        btn.classList.toggle("btn-alive", n > 0 && !calmMotion);
         if (n > 0 && !before) { btn.classList.remove("btn-attn"); void btn.offsetWidth; btn.classList.add("btn-attn"); }
       });
       // Back from checkout (page restored from the back/forward cache): ready to go again.
@@ -269,6 +272,13 @@ document.addEventListener("alpine:init", () => {
       if (!target || !("IntersectionObserver" in window)) return;
       new IntersectionObserver(([entry]) => { this.show = !entry.isIntersecting; }, { threshold: 0.05 }).observe(target);
     },
+  }));
+
+  /* Announcement bar a visitor can close; it stays closed until its text changes (`key`). */
+  Alpine.data("announcement", (key) => ({
+    open: true,
+    init() { try { this.open = localStorage.getItem("nx-announcement") !== key; } catch (_) {} },
+    close() { this.open = false; try { localStorage.setItem("nx-announcement", key); } catch (_) {} },
   }));
 
   /* Share / copy helpers */
@@ -357,7 +367,7 @@ window.nxWakeLock = async () => {
 /* Motion & polish. Each part is independent and does nothing where it isn't supported. */
 (() => {
   const root = document.documentElement;
-  const motion = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+  const motion = !reduceMotion;
 
   /* Scroll reveal: `.reveal` elements fade up as they come into view (see app.css). */
   if (root.classList.contains("reveal-ready")) {
@@ -404,7 +414,7 @@ window.nxWakeLock = async () => {
   /* Real mouse only: pictures tilt toward the pointer with a soft light following it ([data-tilt]),
      and the hero poster stack leans toward it, the cards further back moving more
      ([data-parallax]). One update per frame; everything settles back when the mouse leaves. */
-  if (motion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  if (!calmMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
     let frame = 0, last = null, tilted = null, stack = null;
     const settle = (el) => {
       el.classList.remove("is-tilting");

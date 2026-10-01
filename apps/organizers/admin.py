@@ -1,10 +1,15 @@
 from django.conf import settings
 from django.contrib import admin, messages
 from django.core.mail import send_mail
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import TranslationAdmin
 from unfold.admin import ModelAdmin
 from unfold.decorators import action, display
+
+from apps.core.admin_utils import export_csv
 
 from .models import OrganizerProfile
 
@@ -18,12 +23,30 @@ def _email(org, subject, body):
 
 @admin.register(OrganizerProfile)
 class OrganizerProfileAdmin(ModelAdmin, TranslationAdmin):
-    list_display = ["name", "user", "status_badge", "event_count", "commission_pct", "created_at"]
+    list_display = ["organizer_header", "status_badge", "event_count", "commission_pct", "can_issue_refunds",
+                    "created_at"]
     list_filter = ["status", "can_issue_refunds"]
     search_fields = ["name", "user__email", "contact_email", "contact_phone", "trade_license_no"]
     readonly_fields = ["user", "reviewed_at", "reviewed_by", "document_link", "created_at"]
     prepopulated_fields = {"slug": ("name",)}
-    actions = ["approve", "reject"]
+    actions = ["approve", "reject", export_csv]
+    actions_row = ["row_events"]
+    actions_detail = ["detail_events"]
+    export_fields = ["name", "user", "contact_email", "contact_phone", "status", "event_count", "commission_pct",
+                     "created_at"]
+
+    @display(description=_("Organizer"), header=True, ordering="name")
+    def organizer_header(self, obj):
+        logo = {"path": obj.logo.url, "squared": True, "borderless": True} if obj.logo else None
+        return [obj.name, obj.user.email if obj.user_id else obj.contact_email, obj.name[:1], logo]
+
+    @action(description=_("Their events"), url_path="events")
+    def row_events(self, request, object_id):
+        return redirect(reverse("admin:events_event_changelist") + f"?organizer__id__exact={object_id}")
+
+    @action(description=_("Their events"), url_path="detail-events", icon="event")
+    def detail_events(self, request, object_id):
+        return self.row_events(request, object_id)
     fieldsets = (
         ("Review", {"fields": ("status", "review_note", "reviewed_at", "reviewed_by")}),
         ("Public profile", {"fields": ("user", "name", "slug", "logo", "about", "contact_email", "contact_phone",
@@ -34,9 +57,10 @@ class OrganizerProfileAdmin(ModelAdmin, TranslationAdmin):
                                 "description": "Leave fees empty to use the platform defaults from Site settings."}),
     )
 
-    @display(description="Status", label={"pending_review": "warning", "approved": "success", "rejected": "danger"})
+    @display(description=_("Status"), ordering="status",
+             label={"pending_review": "warning", "approved": "success", "rejected": "danger"})
     def status_badge(self, obj):
-        return obj.status
+        return obj.status, obj.get_status_display()
 
     @display(description="Events")
     def event_count(self, obj):
