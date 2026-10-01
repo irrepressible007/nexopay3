@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.forms import StyledFormMixin
+from apps.core.security import check_document, check_image_size
 from apps.core.utils import normalize_phone
 from apps.events.models import Category, Event, TicketType
 
@@ -38,10 +39,10 @@ class OrganizerApplicationForm(StyledFormMixin, forms.ModelForm):
         return normalize_phone(self.cleaned_data["contact_phone"]).replace("+88", "")
 
     def clean_verification_document(self):
-        doc = self.cleaned_data.get("verification_document")
-        if doc and hasattr(doc, "size") and doc.size > 5 * 1024 * 1024:
-            raise forms.ValidationError(_("Please upload a file smaller than 5 MB."))
-        return doc
+        return check_document(self.cleaned_data.get("verification_document"))
+
+    def clean_logo(self):
+        return check_image_size(self.cleaned_data.get("logo"), max_mb=2)
 
 
 class EventForm(StyledFormMixin, forms.ModelForm):
@@ -95,6 +96,9 @@ class EventForm(StyledFormMixin, forms.ModelForm):
             self.add_error("starts_at", _("The event date is in the past."))
         return data
 
+    def clean_banner(self):
+        return check_image_size(self.cleaned_data.get("banner"), max_mb=8)
+
     def save(self, commit=True):
         event = super().save(commit=False)
         if not event.slug:
@@ -145,7 +149,9 @@ class BaseTicketTypeFormSet(forms.BaseInlineFormSet):
         if not live:
             raise forms.ValidationError(_("Add at least one ticket type."))
         for form in self.forms:
-            if form.cleaned_data.get("DELETE") and form.instance.pk and form.instance.sold_count:
+            if form.cleaned_data.get("DELETE") and form.instance.pk and (
+                form.instance.sold_count or form.instance.held_count or form.instance.order_items.exists()
+            ):
                 raise forms.ValidationError(
                     _("“%(name)s” has sales and can't be deleted — mark it unavailable instead.")
                     % {"name": form.instance.name}

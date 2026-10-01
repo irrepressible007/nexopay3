@@ -15,6 +15,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
+from apps.core.admin_utils import csv_safe
 from apps.core.http import private_no_store
 from apps.events.models import Event
 from apps.orders.models import Order, OrderItem
@@ -228,12 +229,12 @@ def attendees_csv(request, slug):
     writer = csv.writer(response)
     writer.writerow(["Ticket code", "Ticket type", "Status", "Name", "Email", "Phone", "Order", "Paid at", "Checked in at"])
     for t in Ticket.objects.filter(event=event).select_related("ticket_type", "order").order_by("order__paid_at"):
-        writer.writerow([
+        writer.writerow([csv_safe(cell) for cell in [
             t.code, t.ticket_type.name, t.get_status_display(), t.holder_name or t.order.buyer_name,
             t.order.delivery_email, t.order.buyer_phone, t.order.reference,
             timezone.localtime(t.order.paid_at).strftime("%Y-%m-%d %H:%M") if t.order.paid_at else "",
             timezone.localtime(t.redeemed_at).strftime("%Y-%m-%d %H:%M") if t.redeemed_at else "",
-        ])
+        ]])
     return response
 
 

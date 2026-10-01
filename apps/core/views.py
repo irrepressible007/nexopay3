@@ -15,4 +15,7 @@ def private_media(request, path):
     response = FileResponse(storage.open(path, "rb"), content_type=content_type or "application/octet-stream")
     response["Cache-Control"] = "private, no-store"
     response["X-Content-Type-Options"] = "nosniff"
+    response["Content-Security-Policy"] = "sandbox; default-src 'none'; img-src 'self'; style-src 'unsafe-inline'"
+    if content_type not in ("application/pdf", "image/jpeg", "image/png", "image/webp"):
+        response["Content-Disposition"] = "attachment"
     return response

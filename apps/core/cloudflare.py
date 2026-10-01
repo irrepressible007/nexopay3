@@ -7,6 +7,7 @@ Cloudflare, use the visitor address Cloudflare reports.
 Ranges: https://www.cloudflare.com/ips/ (they change rarely).
 """
 import ipaddress
+import json
 
 CLOUDFLARE_RANGES = [
     ipaddress.ip_network(net)
@@ -33,8 +34,17 @@ class CloudflareRealIPMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        from_cloudflare = is_cloudflare(request.META.get("REMOTE_ADDR", ""))
+        if from_cloudflare:
+            # CF-Visitor: {"scheme":"http"} — what the visitor typed, even if the origin hop is https.
+            try:
+                scheme = json.loads(request.META.get("HTTP_CF_VISITOR", "{}")).get("scheme")
+            except (ValueError, AttributeError):
+                scheme = None
+            if scheme in ("http", "https"):
+                request.META["HTTP_X_FORWARDED_PROTO"] = scheme
         visitor = request.META.get("HTTP_CF_CONNECTING_IP", "").strip()
-        if visitor and is_cloudflare(request.META.get("REMOTE_ADDR", "")):
+        if visitor and from_cloudflare:
             try:
                 ipaddress.ip_address(visitor)
             except ValueError:

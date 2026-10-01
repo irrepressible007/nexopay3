@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import TimeStampedModel
+from apps.core.security import validate_artwork
 from apps.core.utils import sanitize_html
 
 hex_color = RegexValidator(r"^#[0-9A-Fa-f]{6}$", _("Use a hex colour like #A855F7."))
@@ -29,7 +30,7 @@ class Category(models.Model):
     slug = models.SlugField(max_length=70, unique=True)
     icon = models.CharField(_("icon"), max_length=40, choices=ICON_CHOICES, default="ticket")
     icon_image = models.FileField(
-        _("custom icon"), upload_to="categories/", blank=True,
+        _("custom icon"), upload_to="categories/", blank=True, validators=[validate_artwork],
         help_text=_("Optional SVG/PNG. Replaces the built-in icon."),
     )
     accent_color = models.CharField(_("accent colour"), max_length=7, default="#A855F7", validators=[hex_color])

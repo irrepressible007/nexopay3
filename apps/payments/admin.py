@@ -16,6 +16,8 @@ class ProviderSettingForm(forms.ModelForm):
     """Adds one field per credential the provider needs; secrets are write-only."""
 
     clear_credentials = forms.BooleanField(required=False, label="Remove all saved credentials")
+    # Merchant credentials decide where the money goes: superusers only (set per request by the admin).
+    manage_credentials = True
 
     class Meta:
         model = PaymentProviderSetting
@@ -25,7 +27,11 @@ class ProviderSettingForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         cls = provider_class(self.instance.provider) if self.instance.pk else None
-        self.credential_specs = list(getattr(cls, "CREDENTIALS", []))
+        self.credential_specs = list(getattr(cls, "CREDENTIALS", [])) if self.manage_credentials else []
+        if not self.manage_credentials:
+            self.fields.pop("clear_credentials", None)
+            if "is_sandbox" in self.fields:  # sandbox "payments" would issue real tickets
+                self.fields["is_sandbox"].disabled = True
         saved = self.instance.get_credentials() if self.instance.pk else {}
         for spec in self.credential_specs:
             name = f"cred_{spec.name}"
@@ -46,6 +52,10 @@ class ProviderSettingForm(forms.ModelForm):
 
     def save(self, commit=True):
         obj = super().save(commit=False)
+        if not self.manage_credentials:
+            if commit:
+                obj.save()
+            return obj
         creds = {} if self.cleaned_data.get("clear_credentials") else obj.get_credentials()
         for spec in self.credential_specs:
             value = (self.cleaned_data.get(f"cred_{spec.name}") or "").strip()
@@ -63,7 +73,7 @@ class ProviderSettingForm(forms.ModelForm):
 class PaymentProviderSettingAdmin(ModelAdmin, TranslationAdmin):
     form = ProviderSettingForm
     list_display = ["provider", "display_name", "is_enabled", "is_sandbox", "credentials_status", "sort_order"]
-    list_editable = ["is_enabled", "is_sandbox", "sort_order"]
+    list_editable = ["is_enabled", "sort_order"]
     readonly_fields = ["provider"]
 
     def has_add_permission(self, request):
@@ -71,9 +81,10 @@ class PaymentProviderSettingAdmin(ModelAdmin, TranslationAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         # Declare this provider's credential fields so the admin accepts them in fieldsets.
-        specs = getattr(provider_class(obj.provider), "CREDENTIALS", []) if obj else []
+        manage = request.user.is_superuser
+        specs = getattr(provider_class(obj.provider), "CREDENTIALS", []) if obj and manage else []
         declared = {f"cred_{s.name}": forms.CharField(required=False) for s in specs}
-        kwargs["form"] = type("ProviderSettingForm", (ProviderSettingForm,), declared)
+        kwargs["form"] = type("ProviderSettingForm", (ProviderSettingForm,), {**declared, "manage_credentials": manage})
         return super().get_form(request, obj, **kwargs)
 
     def get_fieldsets(self, request, obj=None):
@@ -82,7 +93,7 @@ class PaymentProviderSettingAdmin(ModelAdmin, TranslationAdmin):
             ("Appearance", {"fields": ["logo", "brand_color", "show_in_footer", "sort_order"]}),
         ]
         cls = provider_class(obj.provider) if obj else None
-        specs = getattr(cls, "CREDENTIALS", [])
+        specs = getattr(cls, "CREDENTIALS", []) if request.user.is_superuser else []
         if specs:
             base.append(("Merchant credentials", {
                 "fields": [f"cred_{s.name}" for s in specs] + ["clear_credentials"],

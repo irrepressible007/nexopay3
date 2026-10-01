@@ -1,0 +1,9 @@
+{% extends "errors/standalone.html" %}
+{% block title %}Too many attempts{% endblock %}
+{% block main %}
+<p class="code">429</p>
+<h1>Too many attempts</h1>
+<p>For your security, logging in is paused for a few minutes. Wait a little and try again.</p>
+<p lang="bn">নিরাপত্তার জন্য কয়েক মিনিট লগইন বন্ধ রাখা হয়েছে। একটু অপেক্ষা করে আবার চেষ্টা করুন।</p>
+<a class="primary" href="/">Home</a>
+{% endblock %}

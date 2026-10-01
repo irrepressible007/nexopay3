@@ -73,9 +73,14 @@ def absolute(context, path):
     return settings.SITE_URL + path
 
 
+_JSON_ESCAPES = {ord("<"): "\\u003c", ord(">"): "\\u003e", ord("&"): "\\u0026", ord("'"): "\\u0027",
+                 0x2028: "\\u2028", 0x2029: "\\u2029"}
+
+
 @register.filter
 def json_script_safe(value):
-    return mark_safe(json.dumps(value, ensure_ascii=False).replace("</", "<\\u002f"))
+    """JSON that is safe inside <script> and inside single-quoted attributes (JSON-LD, Alpine)."""
+    return mark_safe(json.dumps(value, ensure_ascii=False).translate(_JSON_ESCAPES))
 
 
 @register.filter

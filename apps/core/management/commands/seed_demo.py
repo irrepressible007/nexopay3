@@ -107,7 +107,9 @@ class Command(BaseCommand):
         user, _ = User.objects.get_or_create(
             email="demo-organizer@nexopay.com.bd", defaults={"full_name": "Demo Organizer", "phone": "+8801700000001"}
         )
-        user.set_password("demo12345!")
+        # Showcase content only: nobody logs in as this organizer (a known password on a live site
+        # would let anyone publish events). Staff manage the demo events from the control room.
+        user.set_unusable_password()
         user.save()
         org, _ = OrganizerProfile.objects.update_or_create(
             user=user,

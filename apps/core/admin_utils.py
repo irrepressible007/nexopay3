@@ -11,6 +11,14 @@ from django.utils.translation import gettext_lazy as _
 from unfold.decorators import action
 
 _SPACES = re.compile(r"\s+")
+_FORMULA_START = ("=", "+", "-", "@", "\t", "\r")
+
+
+def csv_safe(value):
+    """Stop spreadsheet apps from running a cell as a formula (=HYPERLINK(...), +cmd, @SUM…)."""
+    if isinstance(value, str) and value.startswith(_FORMULA_START):
+        return "'" + value
+    return value
 
 
 def _plain(value) -> str:
@@ -48,7 +56,7 @@ def export_csv(modeladmin, request, queryset):
     response.write("﻿")  # BOM: Excel then reads Bangla correctly
     writer = csv.writer(response)
     for row in export_rows(modeladmin, request, queryset):
-        writer.writerow(row)
+        writer.writerow([csv_safe(cell) for cell in row])
     return response
 
 

@@ -10,6 +10,7 @@ from unfold.admin import ModelAdmin
 from unfold.decorators import action, display
 
 from apps.core.admin_utils import export_csv
+from apps.core.security import can_manage_money
 
 from .models import OrganizerProfile
 
@@ -28,7 +29,12 @@ class OrganizerProfileAdmin(ModelAdmin, TranslationAdmin):
     list_filter = ["status", "can_issue_refunds"]
     search_fields = ["name", "user__email", "contact_email", "contact_phone", "trade_license_no"]
     readonly_fields = ["user", "reviewed_at", "reviewed_by", "document_link", "created_at"]
+    money_fields = ["commission_pct", "buyer_fee_pct", "buyer_fee_flat", "can_issue_refunds"]
     prepopulated_fields = {"slug": ("name",)}
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super().get_readonly_fields(request, obj))
+        return fields if can_manage_money(request.user) else fields + self.money_fields
     actions = ["approve", "reject", export_csv]
     actions_row = ["row_events"]
     actions_detail = ["detail_events"]

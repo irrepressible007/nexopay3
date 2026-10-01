@@ -75,7 +75,7 @@ class NagadProvider(BasePaymentProvider):
         return json.loads(self._merchant_private_key().decrypt(base64.b64decode(value), padding.PKCS1v15()))
 
     def _headers(self, request=None):
-        ip = (request.META.get("HTTP_CF_CONNECTING_IP") or request.META.get("REMOTE_ADDR")) if request else "127.0.0.1"
+        ip = request.META.get("REMOTE_ADDR") if request else "127.0.0.1"  # already the visitor's (core.cloudflare)
         return {"X-KM-Api-Version": "v-0.2.0", "X-KM-IP-V4": ip or "127.0.0.1", "X-KM-Client-Type": "PC_WEB",
                 "Content-Type": "application/json"}
 

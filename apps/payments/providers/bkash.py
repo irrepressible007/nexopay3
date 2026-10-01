@@ -138,7 +138,7 @@ class BkashProvider(BasePaymentProvider):
         if status == "Initiated":
             # Created but never executed: execute now if the buyer had approved it.
             executed = self._post("/tokenized/checkout/execute", {"paymentID": attempt.provider_ref})
-            if executed.get("transactionStatus") == "Completed":
+            if executed.get("transactionStatus") == "Completed" and Decimal(str(executed.get("amount", "0"))) == attempt.amount:
                 return VerifyResult(PaymentAttempt.Status.SUCCEEDED, executed.get("trxID", ""), executed)
         if status in ("Failed", "Cancelled", "Expired"):
             return VerifyResult(PaymentAttempt.Status.FAILED, payload=data)

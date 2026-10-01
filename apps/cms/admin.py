@@ -19,6 +19,7 @@ from .models import (
 )
 from apps.core.cache import bump_content_version
 from apps.core.mail import MailProgramError
+from apps.core.security import can_manage_money
 
 from .sitetext import bump_version
 
@@ -49,6 +50,8 @@ class SiteSettingsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if "email_host" not in self.fields:  # mail settings are read-only for this staff member
+            return
         self.fields["email_host"].help_text = ("Empty = this server's own mail system (recommended). "
                                                "Only for an outside mail service, e.g. smtp.gmail.com.")
         self.fields["email_username"].widget.attrs["autocomplete"] = "off"
@@ -63,6 +66,8 @@ class SiteSettingsForm(forms.ModelForm):
         for f in ("primary_color", "secondary_color", "accent_color", "background_color"):
             if data.get(f):
                 data[f] = data[f].upper()  # the colour picker sends lowercase; keep one spelling
+        if "email_host" not in self.fields:
+            return data
         host = (data.get("email_host") or "").strip().lower()
         if not host:  # the server's own mail configuration is used
             return data
@@ -119,6 +124,10 @@ class SiteSettingsAdmin(ModelAdmin, TranslationAdmin):
     form = SiteSettingsForm
     warn_unsaved_form = True
     readonly_fields = ["palette_preview"]
+    money_fields = ["hold_minutes", "default_commission_pct", "default_buyer_fee_pct", "default_buyer_fee_flat"]
+    # Whoever controls the mail server can read every password-reset link: superusers only.
+    mail_fields = ["email_from_name", "email_from_address", "email_host", "email_port", "email_use_ssl",
+                   "email_use_tls", "email_username"]
     fieldsets = (
         (_("Brand"), {"classes": ["tab"], "fields": ("site_name", "tagline", "logo", "logo_on_color", "favicon"),
                       "description": _("Empty logo fields use the built-in Nexopay logo.")}),
@@ -159,8 +168,24 @@ class SiteSettingsAdmin(ModelAdmin, TranslationAdmin):
     def get_readonly_fields(self, request, obj=None):
         fields = list(super().get_readonly_fields(request, obj))
         if not request.user.is_superuser:
-            fields.append("custom_css")  # page-wide CSS: superusers only
+            fields += ["custom_css", *self.mail_fields]  # page-wide CSS and the mail server: superusers only
+        if not can_manage_money(request.user):
+            fields += self.money_fields
         return fields
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+        if request.user.is_superuser:
+            return fieldsets
+        # The password has no read-only form; it simply isn't offered.
+        return [(name, {**opts, "fields": tuple(f for f in opts["fields"] if f != "email_password")})
+                for name, opts in fieldsets]
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if not request.user.is_superuser:
+            form.base_fields.pop("email_password", None)  # declared field: survives "readonly", so drop it
+        return form
 
     @display(description=_("Preview"))
     def palette_preview(self, obj):

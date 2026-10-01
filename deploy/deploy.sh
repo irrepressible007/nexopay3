@@ -55,6 +55,7 @@ main() {
   echo "→ Collecting static files"
   python manage.py collectstatic --noinput --verbosity 0
   web_readable
+  guard_uploads
 
   echo "→ Checking configuration"
   python manage.py check --deploy --fail-level ERROR
@@ -72,6 +73,28 @@ web_readable() {
     dir="$(grep -E "^$var=" .env | cut -d= -f2- || true)"
     if [ -n "$dir" ] && [ -d "$dir" ]; then chmod -R go+rX "$dir"; fi
   done
+}
+
+# When uploads live under public_html, Apache serves them itself. Make sure an uploaded file can
+# never run as a script (.php etc.), folders aren't listed, and SVG/HTML can't run JavaScript.
+guard_uploads() {
+  local dir
+  dir="$(grep -E "^MEDIA_ROOT=" .env | cut -d= -f2- || true)"
+  [ -n "$dir" ] && [ -d "$dir" ] || return 0
+  cat > "$dir/.htaccess" <<'HTACCESS'
+# Written by deploy/deploy.sh: uploaded files are data, never code. Edits here are overwritten.
+Options -Indexes
+<FilesMatch "\.(?i:php[0-9]?|phtml|phar|pht|phps|pl|py|pyc|cgi|fcgi|sh|bash|asp|aspx|jsp|shtml|htaccess|htpasswd|ini|env|log|sql)$">
+  Require all denied
+</FilesMatch>
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  <FilesMatch "\.(?i:svg|xml|html?)$">
+    Header set Content-Security-Policy "default-src 'none'; img-src data:; style-src 'unsafe-inline'; sandbox"
+  </FilesMatch>
+</IfModule>
+HTACCESS
+  chmod 644 "$dir/.htaccess"
 }
 
 main "$@"

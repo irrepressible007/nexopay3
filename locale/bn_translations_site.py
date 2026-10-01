@@ -18,4 +18,13 @@ TR = {
     "A refund for these tickets is already in progress.": "এই টিকিটগুলোর রিফান্ড ইতিমধ্যে প্রক্রিয়াধীন।",
     "Finish paying": "পেমেন্ট সম্পন্ন করুন",
     "You have this": "এটি আপনার আছে",
+    "Please upload a file smaller than %(n)s MB.": "%(n)s MB-এর চেয়ে ছোট ফাইল আপলোড করুন।",
+    "Upload a PDF, JPG, PNG or WebP file.": "PDF, JPG, PNG বা WebP ফাইল আপলোড করুন।",
+    "This file isn't a real %(type)s.": "এটি আসল %(type)s ফাইল নয়।",
+    "Please upload an image smaller than %(n)s MB.": "%(n)s MB-এর চেয়ে ছোট ছবি আপলোড করুন।",
+    "This image is too large (%(w)s×%(h)s). Please use one under 8000×5000 pixels.":
+        "ছবিটি অনেক বড় (%(w)s×%(h)s)। ৮০০০×৫০০০ পিক্সেলের চেয়ে ছোট ছবি ব্যবহার করুন।",
+    "Upload an SVG, PNG, JPG, WebP, GIF or ICO image.": "SVG, PNG, JPG, WebP, GIF বা ICO ছবি আপলোড করুন।",
+    "This SVG contains scripts or links to outside content. Export it as a plain image.":
+        "এই SVG-তে স্ক্রিপ্ট বা বাইরের কনটেন্টের লিংক আছে। সাধারণ ছবি হিসেবে এক্সপোর্ট করুন।",
 }

@@ -7,6 +7,8 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from PIL import Image, ImageOps
 
+from .security import too_many_pixels
+
 logger = logging.getLogger(__name__)
 
 RENDITION_WIDTHS = (480, 960, 1600)
@@ -25,6 +27,9 @@ def build_renditions(field_file, widths=RENDITION_WIDTHS) -> dict[str, str]:
     try:
         field_file.open("rb")
         with Image.open(field_file) as img:
+            if too_many_pixels(*img.size):
+                logger.warning("Skipping renditions for %s: %sx%s is too many pixels", field_file.name, *img.size)
+                return {}
             img = ImageOps.exif_transpose(img)
             if img.mode not in ("RGB", "RGBA"):
                 img = img.convert("RGB")

@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.security import validate_artwork
 from apps.core.utils import sanitize_html
 from apps.events.models import hex_color
 
@@ -31,12 +32,13 @@ class SiteSettings(models.Model):
 
     site_name = models.CharField(max_length=60, default="Nexopay")
     tagline = models.CharField(max_length=160, default="Tickets to everything worth going to")
-    logo = models.FileField(upload_to="site/", blank=True, help_text=_("SVG or PNG, shown on dark backgrounds."))
+    logo = models.FileField(upload_to="site/", blank=True, validators=[validate_artwork],
+                            help_text=_("SVG or PNG, shown on dark backgrounds."))
     logo_on_color = models.FileField(
-        upload_to="site/", blank=True,
+        upload_to="site/", blank=True, validators=[validate_artwork],
         help_text=_("All-white PNG used on coloured backgrounds: email headers and PDF tickets."),
     )
-    favicon = models.FileField(upload_to="site/", blank=True)
+    favicon = models.FileField(upload_to="site/", blank=True, validators=[validate_artwork])
     og_image = models.ImageField(upload_to="site/", blank=True, help_text=_("Default social share image."))
 
     # Brand colours → CSS custom properties. Poster-first dark design: a neutral near-black page so
@@ -410,7 +412,7 @@ class HeaderLink(MenuItem):
 
 class Partner(models.Model):
     name = models.CharField(max_length=100)
-    logo = models.FileField(upload_to="partners/")
+    logo = models.FileField(upload_to="partners/", validators=[validate_artwork])
     url = models.URLField(blank=True)
     sort_order = models.PositiveIntegerField(default=0)
     is_enabled = models.BooleanField(default=True)

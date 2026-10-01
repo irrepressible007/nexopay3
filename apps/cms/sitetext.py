@@ -80,12 +80,21 @@ def placeholder_set(text: str) -> set[str]:
     return set(_PLACEHOLDER.findall(text or ""))
 
 
+# Translations of template literals are output unescaped (Django treats them as safe), and
+# they also land inside HTML attributes and Alpine/JS strings. An admin override must never be
+# able to close a quote or start markup there, so plain texts swap those characters for their
+# typographic look-alikes and can't start an HTML character reference (&quot; …).
+_PLAIN_SWAPS = str.maketrans({"'": "’", '"': "”", "`": "ˋ", "<": "‹", ">": "›", "\\": "∖"})
+_CHAR_REF = re.compile(r"&(?=[#A-Za-z0-9])")
+
+
 def clean_override(value: str, allow_html: bool) -> str:
     value = value.strip()
     if allow_html:
         return nh3.clean(value, tags={"strong", "b", "em", "i", "br", "span", "a"},
-                         attributes={"span": {"class"}, "strong": {"class"}, "a": {"href"}})
-    return strip_tags(value)
+                         attributes={"span": {"class"}, "strong": {"class"}, "a": {"href"}},
+                         url_schemes={"http", "https", "mailto", "tel"})
+    return _CHAR_REF.sub("＆", strip_tags(value)).translate(_PLAIN_SWAPS)
 
 
 # --- sync from the .po catalogue ------------------------------------------------------
@@ -195,6 +204,9 @@ def _apply(languages):
             catalog[key] = value
 
         for msgid, msgid_plural, text_en, text_en_plural, text_bn in rows:
+            # Re-clean on apply too: rows can be written without the admin form (shell, imports).
+            html = "<" in msgid
+            text_en, text_en_plural, text_bn = (clean_override(v, html) if v else v for v in (text_en, text_en_plural, text_bn))
             if lang == "en":
                 singular, plural = text_en, text_en_plural or text_en
             else:

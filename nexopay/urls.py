@@ -9,7 +9,10 @@ from django.views.generic import TemplateView
 
 from apps.cms import views as cms_views
 from apps.core import views as core_views
+from apps.core.security import throttle_login
 from apps.core.sitemaps import SITEMAPS
+
+admin.site.login = throttle_login(admin.site.login)
 
 urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),

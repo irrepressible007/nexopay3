@@ -100,6 +100,8 @@ class BasePaymentProvider:
     def refund(self, attempt: PaymentAttempt, amount, reason: str) -> RefundResult:
         return RefundResult(ok=False, message="Refund API not supported; refund manually.")
 
-    @staticmethod
-    def attempt_for(tran_id: str) -> PaymentAttempt | None:
-        return PaymentAttempt.objects.select_related("order").filter(tran_id=tran_id).first()
+    def attempt_for(self, tran_id: str) -> PaymentAttempt | None:
+        """The attempt this provider created, never one belonging to another payment method."""
+        if not tran_id:
+            return None
+        return PaymentAttempt.objects.select_related("order").filter(tran_id=tran_id, provider=self.code).first()

@@ -84,6 +84,22 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("organizer_profile")  # the Role column
 
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super().get_readonly_fields(request, obj))
+        if not request.user.is_superuser:
+            fields += ["is_staff", "is_superuser", "groups", "user_permissions"]
+        return fields
+
+    def has_change_permission(self, request, obj=None):
+        if obj is not None and obj.is_superuser and not request.user.is_superuser:
+            return False
+        return super().has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj is not None and obj.is_superuser and not request.user.is_superuser:
+            return False
+        return super().has_delete_permission(request, obj)
+
     @display(description=_("Person"), header=True, ordering="email")
     def person(self, obj):
         return [obj.full_name or obj.email, obj.email if obj.full_name else "", (obj.full_name or obj.email)[:1]]
