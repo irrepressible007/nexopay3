@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "apps.core.cloudflare.CloudflareRealIPMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "apps.core.middleware.PermissionsPolicyMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",

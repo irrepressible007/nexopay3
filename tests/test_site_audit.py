@@ -146,3 +146,8 @@ def test_ticket_panel_marks_tickets_the_buyer_already_has(client, buyer, ticket,
     assert f'name="q_{ticket_type.pk}"' in html  # the row stays, only the picker is replaced
     client.logout()
     assert owned not in client.get(reverse("events:ticket_panel", args=[event.slug])).content.decode()
+
+
+def test_permissions_policy_allows_camera_only_for_our_pages(client):
+    policy = client.get("/").headers["Permissions-Policy"]
+    assert "camera=(self)" in policy and "geolocation=()" in policy

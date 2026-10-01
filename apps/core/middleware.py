@@ -3,6 +3,20 @@ from django.shortcuts import render
 
 from apps.cms.models import SiteSettings
 
+# Browser features the site may use: the camera only on our own pages (gate scanner); the rest are off.
+PERMISSIONS_POLICY = "camera=(self), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()"
+
+
+class PermissionsPolicyMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        response.headers.setdefault("Permissions-Policy", PERMISSIONS_POLICY)
+        return response
+
+
 # Payment callbacks must keep working during maintenance so no payment is lost.
 ALWAYS_OPEN = ("/static/", "/media/", "/payments/", "/i18n/", "/accounts/login/")
 
