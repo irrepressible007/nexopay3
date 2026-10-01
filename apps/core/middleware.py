@@ -1,10 +1,29 @@
+from urllib.parse import urlsplit
+
 from django.conf import settings
+from django.http import HttpResponsePermanentRedirect
 from django.shortcuts import render
 
 from apps.cms.models import SiteSettings
 
 # Browser features the site may use: the camera only on our own pages (gate scanner); the rest are off.
 PERMISSIONS_POLICY = "camera=(self), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()"
+
+
+class CanonicalHostMiddleware:
+    """www.<site> → <site> in one permanent hop (straight to https), so search engines see one site."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+        canonical = urlsplit(settings.SITE_URL)
+        self.scheme, self.host = canonical.scheme or "https", (canonical.hostname or "").lower()
+
+    def __call__(self, request):
+        if self.host and not self.host.startswith("www.") and request.method in ("GET", "HEAD"):
+            host = request.get_host().split(":", 1)[0].lower()
+            if host == f"www.{self.host}":
+                return HttpResponsePermanentRedirect(f"{self.scheme}://{self.host}{request.get_full_path()}")
+        return self.get_response(request)
 
 
 class PermissionsPolicyMiddleware:

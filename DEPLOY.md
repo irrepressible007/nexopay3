@@ -129,7 +129,27 @@ Also: Speed › Optimization → enable Brotli; Caching › Configuration → Br
 bash ~/nexopay3/deploy/deploy.sh     # pull, install, migrate, collectstatic, check, restart
 ```
 
-## 7. Going live checklist
+## 7. Moving from new.nexopay.com.bd to nexopay.com.bd
+
+The main domain still serves Nexopay 2 (Laravel) from `~/public_html`. `deploy/cutover.sh` swaps it
+for Nexopay 3 and can put Nexopay 2 back at any time. `~/nexopay2` and its database are never touched.
+
+```bash
+bash ~/nexopay3/deploy/deploy.sh             # latest code on staging first
+bash ~/nexopay3/deploy/cutover.sh check      # read-only: what will move, payments, test data, blockers
+bash ~/nexopay3/deploy/cutover.sh go         # the move (a few minutes of "back soon" page)
+bash ~/nexopay3/deploy/cutover.sh rollback   # undo: Nexopay 2 back exactly as it was
+```
+
+`go` backs up the database, moves the old site's files to `~/nexopay2-public_html-<time>` (keeping
+`.well-known`, `cgi-bin` and PHP settings), pauses the old site's cron jobs, points `.env` at the main
+domain with the test gateway off, deploys, offers to clear demo/test data
+(`manage.py purge_test_data`, shown first, only on `DELETE`) and connects the bridge.
+Old Nexopay 2 links (`/login`, `/register`, `/event/<slug>`, …) redirect to their new pages;
+`www.` redirects to the bare domain. Afterwards in Cloudflare: Purge Everything, Always Use HTTPS,
+Minimum TLS 1.2, and register `https://nexopay.com.bd` with each payment provider.
+
+## 8. Going live checklist
 
 - [ ] `python manage.py check --deploy` clean; `DEBUG=False`; admin URL changed; strong superuser password
 - [ ] Sandbox purchase with every enabled provider on staging → email + PDF arrive, QR shows in My tickets,

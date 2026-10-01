@@ -22,6 +22,7 @@ urlpatterns = [
     path("site.webmanifest", cms_views.webmanifest, name="webmanifest"),
     path("private-media/<path:path>", core_views.private_media, name="private_media"),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
+    path("", include("apps.core.legacy")),  # old Nexopay 2 addresses
 ]
 
 urlpatterns += i18n_patterns(
