@@ -81,3 +81,9 @@ class TestPurge:
     def test_unknown_event_to_keep_stops_everything(self, world):
         call_command("purge_test_data", "--yes", "--keep-event", "no-such-event")
         assert Order.objects.exists()
+
+
+def test_unknown_host_is_refused_quietly(client, mailoutbox, settings):
+    settings.ADMINS = [("Ops", "ops@example.com")]
+    assert client.get("/", HTTP_HOST="evil.example.com").status_code == 400
+    assert mailoutbox == []

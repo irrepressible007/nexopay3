@@ -456,5 +456,7 @@ LOGGING = {
         "apps.payments": {"level": "INFO"},
         "django.db.backends": {"level": "WARNING"},
         "fontTools": {"level": "WARNING"},
+        # Bots probing the shared server IP with made-up host names get a 400; don't email admins about each one.
+        "django.security.DisallowedHost": {"handlers": [], "level": "CRITICAL", "propagate": False},
     },
 }
